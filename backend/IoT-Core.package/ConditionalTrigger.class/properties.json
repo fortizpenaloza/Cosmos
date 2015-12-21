@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-Core-Trigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"action",
+		"condition",
+		"triggeringPolicy" ],
+	"name" : "ConditionalTrigger",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

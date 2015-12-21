@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-Trigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"currentValue" ],
+	"name" : "DataStreamCurrentValueConditionTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

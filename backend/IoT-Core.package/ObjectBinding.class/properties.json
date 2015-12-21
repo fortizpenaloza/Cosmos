@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Common",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"object" ],
+	"name" : "ObjectBinding",
+	"pools" : [
+		 ],
+	"super" : "ObjectBindingBehaviour",
+	"type" : "normal" }

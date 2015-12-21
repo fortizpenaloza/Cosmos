@@ -1,0 +1,14 @@
+{
+	"class" : {
+		"subsystemOf:" : "FranciscoOrtizPenaloza 9/19/2014 19:26" },
+	"instance" : {
+		"dataStreamIdentifiedBy:of:" : "FranciscoOrtizPenaloza 12/8/2014 02:54",
+		"feedIdentifiedBy:" : "FranciscoOrtizPenaloza 9/24/2014 19:09",
+		"feeds" : "FranciscoOrtizPenaloza 9/15/2014 16:26",
+		"initializeSubsystemOf:" : "FranciscoOrtizPenaloza 9/26/2014 19:32",
+		"register:" : "FranciscoOrtizPenaloza 9/26/2014 19:44",
+		"register:to:" : "FranciscoOrtizPenaloza 12/8/2014 03:02",
+		"register:to:of:" : "FranciscoOrtizPenaloza 11/29/2014 19:18",
+		"registerFeedNamed:describedAs:" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
+		"timeSystem" : "FranciscoOrtizPenaloza 9/19/2014 19:31",
+		"triggerSystem" : "FranciscoOrtizPenaloza 9/19/2014 19:57" } }

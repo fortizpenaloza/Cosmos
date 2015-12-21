@@ -1,0 +1,10 @@
+{
+	"class" : {
+		"subsystemOf:" : "FranciscoOrtizPenaloza 9/19/2014 19:25" },
+	"instance" : {
+		"initializeSubsystemOf:" : "FranciscoOrtizPenaloza 11/26/2014 00:55",
+		"notifyDataPointRegistrationOn:of:" : "FranciscoOrtizPenaloza 11/21/2014 23:55",
+		"notifyHavePassed:" : "FranciscoOrtizPenaloza 11/26/2014 00:58",
+		"register:" : "FranciscoOrtizPenaloza 11/21/2014 23:44",
+		"registerToTriggerOnDataPointRegistration:on:" : "FranciscoOrtizPenaloza 11/21/2014 23:54",
+		"registerToTriggerPeriodically:every:" : "FranciscoOrtizPenaloza 11/26/2014 00:55" } }

@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Trigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"timePeriod" ],
+	"name" : "PeriodicalTriggeringPolicy",
+	"pools" : [
+		 ],
+	"super" : "TriggeringPolicy",
+	"type" : "normal" }

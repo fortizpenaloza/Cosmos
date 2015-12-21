@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Common",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/18/2014 14:37",
+	"instvars" : [
+		 ],
+	"name" : "ObjectIsUnbound",
+	"pools" : [
+		 ],
+	"super" : "Exception",
+	"type" : "normal" }

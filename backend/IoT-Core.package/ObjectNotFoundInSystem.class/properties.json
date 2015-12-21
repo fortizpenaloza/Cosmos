@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Common",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/18/2014 14:40",
+	"instvars" : [
+		 ],
+	"name" : "ObjectNotFoundInSystem",
+	"pools" : [
+		 ],
+	"super" : "Exception",
+	"type" : "normal" }

@@ -1,0 +1,18 @@
+{
+	"category" : "IoT-Core-Feed",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"name",
+		"description",
+		"dateTime",
+		"identifier",
+		"dataStreams" ],
+	"name" : "Feed",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Tests-TriggerSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"rootSystem",
+		"timeSource" ],
+	"name" : "TriggerSystemTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

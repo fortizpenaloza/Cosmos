@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-TimeSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"timeSource" ],
+	"name" : "TimeSystem",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

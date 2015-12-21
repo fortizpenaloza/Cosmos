@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Trigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/28/2014 12:02",
+	"instvars" : [
+		"value" ],
+	"name" : "IsEqualsToCondition",
+	"pools" : [
+		 ],
+	"super" : "Condition",
+	"type" : "normal" }

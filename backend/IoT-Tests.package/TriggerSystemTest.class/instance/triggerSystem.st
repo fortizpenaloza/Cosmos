@@ -1,0 +1,4 @@
+systems
+triggerSystem
+
+	^ rootSystem triggerSystem

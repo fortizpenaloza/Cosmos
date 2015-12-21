@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-Common",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/18/2014 14:36",
+	"instvars" : [
+		 ],
+	"name" : "ObjectAlreadyInSystem",
+	"pools" : [
+		 ],
+	"super" : "Exception",
+	"type" : "normal" }

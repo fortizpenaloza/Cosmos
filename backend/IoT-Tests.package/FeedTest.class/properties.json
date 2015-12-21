@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-Feed",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "FeedTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

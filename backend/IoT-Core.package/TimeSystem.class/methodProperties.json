@@ -1,0 +1,7 @@
+{
+	"class" : {
+		"subsystemOf:using:" : "FranciscoOrtizPenaloza 9/19/2014 19:15" },
+	"instance" : {
+		"dateTime" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
+		"initializeSubsystemOf:using:" : "FranciscoOrtizPenaloza 9/19/2014 19:30",
+		"timeOfDay" : "FranciscoOrtizPenaloza 9/24/2014 18:17" } }

@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-FeedSystem",
+	"classinstvars" : [
+		"last" ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		 ],
+	"name" : "SequentialNumberProvider",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

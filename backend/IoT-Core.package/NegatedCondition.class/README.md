@@ -1,0 +1,1 @@
+A NegatedCondition is xxxxxxxxx.

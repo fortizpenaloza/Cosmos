@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-Trigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"timeOfDay" ],
+	"name" : "TimeIntervalConditionTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

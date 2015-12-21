@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-Core-FeedSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"feeds",
+		"numbering",
+		"parentSystem" ],
+	"name" : "FeedSystem",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }
