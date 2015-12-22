@@ -11,7 +11,7 @@ baseline: spec
 					loads: #('Core');
 					repository: 'github://mtaborda/chalten:master/repository' ].
 			spec
-				package: 'IoT-Core';
+				package: 'IoT-Core' requires: 'Chalten';
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ].
 			spec
 				group: 'Development' with: #('IoT-Core' 'IoT-Tests');
