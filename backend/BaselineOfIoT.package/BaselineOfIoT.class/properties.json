@@ -1,0 +1,14 @@
+{
+	"category" : "BaselineOfIoT",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "BaselineOfIoT",
+	"pools" : [
+		 ],
+	"super" : "BaselineOf",
+	"type" : "normal" }
