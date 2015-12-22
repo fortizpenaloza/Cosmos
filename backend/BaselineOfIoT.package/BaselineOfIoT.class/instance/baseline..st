@@ -4,8 +4,13 @@ baseline: spec
 	
 	spec
 		for: #common
-		do:
-			[ spec
+		do:  [ 
+		
+			spec baseline: 'Chalten' with: [
+				spec
+					loads: #('Core');
+					repository: 'github://mtaborda/chalten:master/repository' ].
+			spec
 				package: 'IoT-Core';
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ].
 			spec
