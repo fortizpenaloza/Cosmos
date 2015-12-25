@@ -4,14 +4,20 @@ baseline: spec
 	
 	spec
 		for: #common
-		do:  [ 
-		
-			spec baseline: 'Chalten' with: [
+		do:  [ 		
+			spec configuration: 'Chalten' with: [
 				spec
 					loads: #('Core');
-					repository: 'github://mtaborda/chalten:master/repository' ].
+					repository: 'github://mtaborda/chalten:master/repository'].
+				
+			spec configuration: 'ZincHTTPComponents' with: [ 
+				spec
+					loads: #('REST' 'WebSocket');
+					versionString: #'stable';
+					repository: 'http://mc.stfx.eu/ZincHTTPComponets' ].
+				
 			spec
-				package: 'IoT-Core' with: [ spec requires: 'Chalten' ];
+				package: 'IoT-Core' with: [ spec requires: #('Chalten' 'ZincHTTPComponents') ];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ].
 			spec
 				group: 'Development' with: #('IoT-Core' 'IoT-Tests');

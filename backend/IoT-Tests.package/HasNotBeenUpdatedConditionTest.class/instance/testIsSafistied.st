@@ -3,7 +3,7 @@ testIsSafistied
 
 	| condition |
 
-	condition := DatastreamHasNotBeenUpdatedCondition 
+	condition := DataStreamHasNotBeenUpdatedCondition 
 		querying: self
 		toCheckIf: self
 		hasNotBeenUpdatedForMoreThan: (TimeUnits minute with: 10).
