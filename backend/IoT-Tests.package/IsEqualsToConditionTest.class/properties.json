@@ -1,12 +1,12 @@
 {
-	"category" : "IoT-Tests-Trigger",
+	"category" : "IoT-Tests-Condition",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"currentValue" ],
+		 ],
 	"name" : "IsEqualsToConditionTest",
 	"pools" : [
 		 ],

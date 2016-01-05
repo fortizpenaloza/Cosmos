@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-ConditionalTriggersSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"task",
+		"timePeriod" ],
+	"name" : "ScheduledTask",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

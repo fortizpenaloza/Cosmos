@@ -1,12 +1,12 @@
 {
-	"category" : "IoT-Core-FeedSystem",
+	"category" : "IoT-Core-FeedsSystem",
 	"classinstvars" : [
-		"last" ],
+		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "<historical>",
 	"instvars" : [
-		 ],
+		"last" ],
 	"name" : "SequentialNumberProvider",
 	"pools" : [
 		 ],

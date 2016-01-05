@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-ConditionalTriggersSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"name",
+		"block" ],
+	"name" : "Task",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

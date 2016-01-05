@@ -1,4 +1,4 @@
 registering
-registerTo: aTriggerSystem 
+registerTo: aConditionalTriggerSystem 
 
-	triggeringPolicy register: self to: aTriggerSystem
+	triggeringPolicy register: self to: aConditionalTriggerSystem

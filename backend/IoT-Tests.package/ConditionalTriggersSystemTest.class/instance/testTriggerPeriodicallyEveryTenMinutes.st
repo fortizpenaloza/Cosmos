@@ -1,0 +1,18 @@
+test
+testTriggerPeriodicallyEveryTenMinutes
+
+	| triggered condition triggeringPolicy trigger |
+
+	triggered := false.		
+	condition := AlwaysTriggerCondition new.
+	triggeringPolicy := PeriodicalTriggeringPolicy every: self tenMinutes.
+
+	trigger := ConditionalTrigger 
+		firing: [ triggered := true ] 
+		when: condition 
+		accordingTo: triggeringPolicy.	
+	self triggerSystem register: trigger.
+	self deny: triggered.	
+		
+	self triggerSystem notifyHavePassed: self tenMinutes.
+	self assert: triggered

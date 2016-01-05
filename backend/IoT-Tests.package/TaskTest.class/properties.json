@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-ConditionalTriggersSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "TaskTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

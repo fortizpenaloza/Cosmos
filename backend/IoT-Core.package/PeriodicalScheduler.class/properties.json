@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-ConditionalTriggersSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"delayScheduler",
+		"scheduledTasks" ],
+	"name" : "PeriodicalScheduler",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

@@ -1,0 +1,18 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"feedsSystem" : "fortizpenaloza 1/2/2016 19:20",
+		"fiveMinutes" : "fortizpenaloza 12/28/2015 11:51",
+		"septemberTenthOf2014AtNoon" : "FranciscoOrtizPenaloza 9/24/2014 18:30",
+		"setUp" : "fortizpenaloza 1/2/2016 15:51",
+		"tenMinutes" : "FranciscoOrtizPenaloza 9/24/2014 17:00",
+		"testPeriodically3" : "fortizpenaloza 1/2/2016 19:26",
+		"testTriggerOnDataPointRegistration" : "fortizpenaloza 1/2/2016 19:27",
+		"testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition" : "fortizpenaloza 1/2/2016 19:25",
+		"testTriggerPeriodicallyEveryTenMinutes" : "fortizpenaloza 1/2/2016 19:27",
+		"testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated" : "fortizpenaloza 1/2/2016 19:26",
+		"timeSystem" : "FranciscoOrtizPenaloza 9/24/2014 16:52",
+		"triggerSystem" : "FranciscoOrtizPenaloza 9/19/2014 19:36",
+		"twentyHours" : "FranciscoOrtizPenaloza 9/24/2014 16:51",
+		"twentyOneHours" : "FranciscoOrtizPenaloza 9/24/2014 16:51" } }

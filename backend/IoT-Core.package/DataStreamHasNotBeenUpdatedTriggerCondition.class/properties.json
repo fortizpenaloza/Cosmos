@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-Core-ConditionalTrigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"timeSystem",
+		"datastream",
+		"timePeriod" ],
+	"name" : "DataStreamHasNotBeenUpdatedTriggerCondition",
+	"pools" : [
+		 ],
+	"super" : "TriggerCondition",
+	"type" : "normal" }

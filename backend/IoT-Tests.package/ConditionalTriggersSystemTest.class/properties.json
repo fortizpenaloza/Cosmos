@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Tests-ConditionalTriggersSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"rootSystem",
+		"timeSource" ],
+	"name" : "ConditionalTriggersSystemTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

@@ -1,0 +1,18 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"feedsSystem" : "fortizpenaloza 1/2/2016 19:19",
+		"setUp" : "fortizpenaloza 1/2/2016 15:51",
+		"should:raise:withDescription:" : "FranciscoOrtizPenaloza 9/24/2014 19:39",
+		"testQueryDataStreamByIdentifier" : "fortizpenaloza 1/2/2016 19:19",
+		"testQueryFeedByIdentifier" : "fortizpenaloza 1/2/2016 19:19",
+		"testQueryFeedByIdentifierDoesntExistsFails" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterDataPoint" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterDataStream" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterDataStreamAlreadyExistsFails" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterFeed" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterFeedAlreadyExistsFails" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterFeedFromNameAndDescription" : "fortizpenaloza 1/2/2016 19:19",
+		"testRegisterFeedMustAssignSequentialNumberAsIdentifier" : "fortizpenaloza 1/2/2016 19:19",
+		"timeSystem" : "FranciscoOrtizPenaloza 9/19/2014 20:17" } }
