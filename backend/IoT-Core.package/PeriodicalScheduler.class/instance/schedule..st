@@ -1,10 +1,19 @@
-starting
+scheduling
 schedule: aScheduledTask
 
-	[ | delay |
+	| process |
+	process := [ | delay |
 		delay := Delay forDuration: (self durationFrom: aScheduledTask timePeriod).
 		delayScheduler schedule: delay.
 		delay wait.
 		aScheduledTask execute.
-		self schedule: aScheduledTask 
-	] forkAt: Processor lowestPriority named: aScheduledTask name
+		self schedule: aScheduledTask ] newProcess.
+	
+	runningProcesses add: process.
+	
+	process
+		name: aScheduledTask name;
+		priority: Processor lowestPriority;
+		resume.
+	
+	^ process

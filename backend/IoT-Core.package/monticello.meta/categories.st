@@ -6,4 +6,5 @@ SystemOrganization addCategory: 'IoT-Core-ConditionalTriggersSystem'!
 SystemOrganization addCategory: 'IoT-Core-Feed'!
 SystemOrganization addCategory: 'IoT-Core-FeedsSystem'!
 SystemOrganization addCategory: 'IoT-Core-IoTSystem'!
+SystemOrganization addCategory: 'IoT-Core-PeriodicalScheduler'!
 SystemOrganization addCategory: 'IoT-Core-TimeSystem'!

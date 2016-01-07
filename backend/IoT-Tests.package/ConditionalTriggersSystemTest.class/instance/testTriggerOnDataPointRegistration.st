@@ -8,7 +8,7 @@ testTriggerOnDataPointRegistration
 	feed := self feedsSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
 	dataStream := self feedsSystem register: (DataStream identifiedBy: 'test') to: feed.
 	
-	condition := AlwaysTriggerCondition new.
+	condition := NullTriggerCondition new.
 	triggeringPolicy := DataPointRegistrationTriggeringPolicy on: dataStream.
 
 	trigger := ConditionalTrigger

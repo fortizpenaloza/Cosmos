@@ -1,10 +1,11 @@
 tests
-testInstanceCreation
+testExcecution
 
 	| wasExecuted task |
 	
 	wasExecuted := false.
 	task := Task named: 'Change boolean to true' do: [ wasExecuted := true ].
+	self deny: wasExecuted.
 	
-	self assert: task name equals: 'Change boolean to true'.
-	self deny: wasExecuted
+	task execute.
+	self assert: wasExecuted

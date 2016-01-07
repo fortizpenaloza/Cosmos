@@ -1,5 +1,5 @@
 {
-	"category" : "IoT-Tests-ConditionalTriggersSystem",
+	"category" : "IoT-Tests-PeriodicalScheduler",
 	"classinstvars" : [
 		 ],
 	"classvars" : [

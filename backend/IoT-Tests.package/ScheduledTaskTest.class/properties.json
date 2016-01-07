@@ -1,13 +1,13 @@
 {
-	"category" : "IoT-Tests-ConditionalTriggersSystem",
+	"category" : "IoT-Tests-PeriodicalScheduler",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
-	"commentStamp" : "",
+	"commentStamp" : "<historical>",
 	"instvars" : [
 		 ],
-	"name" : "PeriodicalTriggerSchedulerTest",
+	"name" : "ScheduledTaskTest",
 	"pools" : [
 		 ],
 	"super" : "TestCase",

@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Core-PeriodicalScheduler",
+	"category" : "IoT-Tests-PeriodicalScheduler",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"name",
-		"block" ],
-	"name" : "Task",
+		 ],
+	"name" : "PeriodicalSchedulerTest",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "TestCase",
 	"type" : "normal" }

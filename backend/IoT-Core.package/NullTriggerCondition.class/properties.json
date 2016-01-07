@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-ConditionalTrigger",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 1/2/2016 19:30",
+	"instvars" : [
+		 ],
+	"name" : "NullTriggerCondition",
+	"pools" : [
+		 ],
+	"super" : "TriggerCondition",
+	"type" : "normal" }

@@ -4,10 +4,10 @@
 		 ],
 	"classvars" : [
 		 ],
-	"commentStamp" : "fortizpenaloza 1/2/2016 19:30",
+	"commentStamp" : "",
 	"instvars" : [
 		 ],
-	"name" : "AlwaysTriggerCondition",
+	"name" : "AndCompositeTriggerCondition",
 	"pools" : [
 		 ],
 	"super" : "TriggerCondition",
