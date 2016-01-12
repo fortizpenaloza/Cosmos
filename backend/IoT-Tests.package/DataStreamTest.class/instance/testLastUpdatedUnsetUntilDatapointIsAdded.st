@@ -9,7 +9,7 @@ testLastUpdatedUnsetUntilDatapointIsAdded
 	self
 		should: [dataStream lastUpdate]
 		raise: ObjectIsUnbound
-		description: 'Last update date and time is not yet defined.'.
-	
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Last update date and time has not been initialized.' ].
+			
 	dataStream add: dataPoint.
 	self assert: dataStream lastUpdate equals: dataPoint timestamp

@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-CommandManagementSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"identifierProvider",
+		"timeSystem" ],
+	"name" : "CommandManagementSystem",
+	"pools" : [
+		 ],
+	"super" : "Subsystem",
+	"type" : "normal" }

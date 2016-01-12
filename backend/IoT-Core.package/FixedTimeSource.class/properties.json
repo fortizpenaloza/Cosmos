@@ -10,5 +10,5 @@
 	"name" : "FixedTimeSource",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "TimeSource",
 	"type" : "normal" }

@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-System",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"subsystems",
+		"name" ],
+	"name" : "CompositeSystem",
+	"pools" : [
+		 ],
+	"super" : "System",
+	"type" : "normal" }

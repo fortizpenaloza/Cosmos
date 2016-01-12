@@ -9,7 +9,7 @@ testCurrentValueUnsetUntilDatapointIsAdded
 	self
 		should: [dataStream currentValue]
 		raise: ObjectIsUnbound
-		description: 'Current value hasn''t been set'.
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Current value has not been initialized.' ].
 	
 	dataStream add: dataPoint.
 	self assert: dataStream currentValue equals: dataPoint value

@@ -5,19 +5,19 @@ testIsSafistied
 
 	condition := TimeIntervalTriggerCondition
 		querying: self
-		toBeBetween: ((TimeOfDay hours: 20) to: (TimeOfDay hours: 22)).
+		toBeBetween: (self eightPM to: self tenPM).
 		
-	timeOfDay := TimeOfDay hours: 20.
+	timeOfDay := self eightPM.
 	self assert: condition isSatisfied.
 	
-	timeOfDay := TimeOfDay hours: 19.
+	timeOfDay := self sevenPM.
 	self deny: condition isSatisfied.
 	
 	timeOfDay := TimeOfDay hours: 20 minutes: 01.
 	self assert: condition isSatisfied.
 	
-	timeOfDay := TimeOfDay hours: 22.
+	timeOfDay := self tenPM.
 	self assert: condition isSatisfied.
-
+	
 	timeOfDay := TimeOfDay hours: 22 minutes: 00 seconds: 01.
 	self deny: condition isSatisfied

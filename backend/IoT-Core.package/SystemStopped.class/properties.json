@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-System",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"system" ],
+	"name" : "SystemStopped",
+	"pools" : [
+		 ],
+	"super" : "SystemState",
+	"type" : "normal" }

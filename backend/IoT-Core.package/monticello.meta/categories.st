@@ -1,10 +1,13 @@
 SystemOrganization addCategory: #'IoT-Core'!
-SystemOrganization addCategory: 'IoT-Core-Common'!
+SystemOrganization addCategory: 'IoT-Core-Command'!
+SystemOrganization addCategory: 'IoT-Core-CommandManagementSystem'!
 SystemOrganization addCategory: 'IoT-Core-Condition'!
 SystemOrganization addCategory: 'IoT-Core-ConditionalTrigger'!
-SystemOrganization addCategory: 'IoT-Core-ConditionalTriggersSystem'!
+SystemOrganization addCategory: 'IoT-Core-ConditionalTriggerManagementSystem'!
 SystemOrganization addCategory: 'IoT-Core-Feed'!
-SystemOrganization addCategory: 'IoT-Core-FeedsSystem'!
-SystemOrganization addCategory: 'IoT-Core-IoTSystem'!
+SystemOrganization addCategory: 'IoT-Core-FeedRegistrationSystem'!
+SystemOrganization addCategory: 'IoT-Core-ObjectBinding'!
 SystemOrganization addCategory: 'IoT-Core-PeriodicalScheduler'!
+SystemOrganization addCategory: 'IoT-Core-PriorityQueue'!
+SystemOrganization addCategory: 'IoT-Core-System'!
 SystemOrganization addCategory: 'IoT-Core-TimeSystem'!

@@ -1,4 +1,0 @@
-systems
-triggerSystem
-
-	^ rootSystem triggerSystem

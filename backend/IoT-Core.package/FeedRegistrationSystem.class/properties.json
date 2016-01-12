@@ -1,0 +1,17 @@
+{
+	"category" : "IoT-Core-FeedRegistrationSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"feeds",
+		"identifierProvider",
+		"timeSystem",
+		"conditionalTriggerManagementSystem" ],
+	"name" : "FeedRegistrationSystem",
+	"pools" : [
+		 ],
+	"super" : "Subsystem",
+	"type" : "normal" }

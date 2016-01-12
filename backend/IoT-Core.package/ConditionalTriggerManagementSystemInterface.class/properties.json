@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-ConditionalTriggerManagementSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "ConditionalTriggerManagementSystemInterface",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

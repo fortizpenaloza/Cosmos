@@ -1,4 +1,0 @@
-systems
-triggerSystem
-	
-	^ parentSystem triggerSystem

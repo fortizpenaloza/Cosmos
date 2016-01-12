@@ -1,4 +1,4 @@
 accessing
 boundedObject
 
-	^ object
+	self subclassResponsibility 

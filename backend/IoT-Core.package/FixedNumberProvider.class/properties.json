@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-FeedRegistrationSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"identifier" ],
+	"name" : "FixedNumberProvider",
+	"pools" : [
+		 ],
+	"super" : "IdentifierProvider",
+	"type" : "normal" }

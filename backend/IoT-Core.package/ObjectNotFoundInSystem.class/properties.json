@@ -1,5 +1,5 @@
 {
-	"category" : "IoT-Core-Common",
+	"category" : "IoT-Core-System",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
@@ -10,5 +10,5 @@
 	"name" : "ObjectNotFoundInSystem",
 	"pools" : [
 		 ],
-	"super" : "Exception",
+	"super" : "Error",
 	"type" : "normal" }

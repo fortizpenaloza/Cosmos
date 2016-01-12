@@ -1,0 +1,4 @@
+accessing
+dateTime
+
+	self interfaceImplementorResponsibility 

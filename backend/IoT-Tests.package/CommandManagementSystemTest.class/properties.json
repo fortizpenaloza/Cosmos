@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-CommandManagementSystem",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"commandsSystem" ],
+	"name" : "CommandManagementSystemTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

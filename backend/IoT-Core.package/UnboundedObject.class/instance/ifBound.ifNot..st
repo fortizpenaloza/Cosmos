@@ -1,4 +1,4 @@
 testing
-ifBound: aMonadicBlock ifNot: aNyladicBlock
+ifBound: aMonadicBlock ifNot: aNiladicBlock
 
-	^ aMonadicBlock value: value
+	^ aNiladicBlock value

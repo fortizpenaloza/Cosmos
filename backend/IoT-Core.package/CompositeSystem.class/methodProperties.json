@@ -1,0 +1,12 @@
+{
+	"class" : {
+		"named:" : "fortizpenaloza 1/11/2016 03:08" },
+	"instance" : {
+		"initializeNamed:" : "fortizpenaloza 1/11/2016 02:50",
+		"register:" : "fortizpenaloza 1/11/2016 00:36",
+		"resolveDependecies" : "fortizpenaloza 1/11/2016 23:21",
+		"shutDown" : "fortizpenaloza 1/11/2016 02:51",
+		"startUp" : "fortizpenaloza 1/11/2016 02:51",
+		"systemImplementing:" : "fortizpenaloza 1/11/2016 00:17",
+		"systemImplementing:ifFound:ifNone:" : "fortizpenaloza 1/11/2016 03:04",
+		"systemImplementing:ifNone:" : "fortizpenaloza 1/11/2016 00:17" } }

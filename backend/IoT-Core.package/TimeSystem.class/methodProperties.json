@@ -1,7 +1,9 @@
 {
 	"class" : {
-		"subsystemOf:using:" : "FranciscoOrtizPenaloza 9/19/2014 19:15" },
+		"using:" : "fortizpenaloza 1/11/2016 01:11" },
 	"instance" : {
 		"dateTime" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
-		"initializeSubsystemOf:using:" : "FranciscoOrtizPenaloza 9/19/2014 19:30",
+		"implementedInterface" : "fortizpenaloza 1/11/2016 02:00",
+		"initializeUsing:" : "fortizpenaloza 1/11/2016 01:51",
+		"resolveDependecies" : "fortizpenaloza 1/11/2016 23:21",
 		"timeOfDay" : "FranciscoOrtizPenaloza 9/24/2014 18:17" } }

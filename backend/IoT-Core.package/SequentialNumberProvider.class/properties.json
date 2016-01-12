@@ -1,5 +1,5 @@
 {
-	"category" : "IoT-Core-FeedsSystem",
+	"category" : "IoT-Core-FeedRegistrationSystem",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
@@ -10,5 +10,5 @@
 	"name" : "SequentialNumberProvider",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "IdentifierProvider",
 	"type" : "normal" }

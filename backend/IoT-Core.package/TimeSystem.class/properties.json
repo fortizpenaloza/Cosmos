@@ -10,5 +10,5 @@
 	"name" : "TimeSystem",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "Subsystem",
 	"type" : "normal" }
