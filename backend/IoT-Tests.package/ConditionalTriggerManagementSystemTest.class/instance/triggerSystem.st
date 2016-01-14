@@ -1,4 +1,4 @@
 systems
 triggerSystem
 
-	^ rootSystem systemImplementing: ConditionalTriggerManagementSystemInterface 
+	^ rootSystem systemImplementing: 'Conditional Trigger Management System Interface' 

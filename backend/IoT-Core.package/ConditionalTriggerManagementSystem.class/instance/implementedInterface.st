@@ -1,4 +1,4 @@
 system specification
 implementedInterface
 
-	^ ConditionalTriggerManagementSystemInterface
+	^ Interface named: 'Conditional Trigger Management System Interface' offering: #()

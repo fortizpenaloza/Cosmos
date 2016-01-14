@@ -1,4 +1,4 @@
 testing
 implements: aSubsystemInterface
 
-	^ self implementedInterface == aSubsystemInterface 
+	^ self implementedInterface name = aSubsystemInterface 

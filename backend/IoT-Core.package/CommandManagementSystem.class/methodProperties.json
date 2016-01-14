@@ -2,5 +2,8 @@
 	"class" : {
 		"using:" : "fortizpenaloza 1/12/2016 01:46" },
 	"instance" : {
-		"initializeUsing:" : "fortizpenaloza 1/12/2016 01:47",
-		"registerCommandsQueueNamed:" : "fortizpenaloza 1/12/2016 01:55" } }
+		"commandQueueIdentifiedBy:" : "fortizpenaloza 1/13/2016 20:27",
+		"initializeUsing:" : "fortizpenaloza 1/14/2016 19:06",
+		"register:" : "fortizpenaloza 1/13/2016 20:25",
+		"registerCommandQueueNamed:" : "fortizpenaloza 1/13/2016 20:23",
+		"resolveDependecies" : "fortizpenaloza 1/14/2016 19:06" } }

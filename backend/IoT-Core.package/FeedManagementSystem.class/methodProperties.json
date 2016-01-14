@@ -1,0 +1,16 @@
+{
+	"class" : {
+		"using:" : "fortizpenaloza 1/11/2016 01:22" },
+	"instance" : {
+		"conditionalTriggerManagementSystem" : "fortizpenaloza 1/11/2016 02:05",
+		"dataStreamIdentifiedBy:of:" : "FranciscoOrtizPenaloza 12/8/2014 02:54",
+		"feedIdentifiedBy:" : "fortizpenaloza 1/13/2016 20:27",
+		"feeds" : "FranciscoOrtizPenaloza 9/15/2014 16:26",
+		"implementedInterface" : "fortizpenaloza 1/14/2016 18:55",
+		"initializeUsing:" : "fortizpenaloza 1/14/2016 18:58",
+		"register:" : "FranciscoOrtizPenaloza 9/26/2014 19:44",
+		"register:to:" : "FranciscoOrtizPenaloza 12/8/2014 03:02",
+		"register:to:of:" : "fortizpenaloza 1/11/2016 02:05",
+		"registerFeedNamed:describedAs:" : "fortizpenaloza 1/11/2016 01:15",
+		"resolveDependecies" : "fortizpenaloza 1/14/2016 18:58",
+		"timeSystem" : "fortizpenaloza 1/11/2016 02:02" } }

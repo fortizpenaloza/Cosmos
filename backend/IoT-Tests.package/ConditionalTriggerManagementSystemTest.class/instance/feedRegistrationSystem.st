@@ -1,4 +1,4 @@
 systems
 feedRegistrationSystem
 	
-	^ rootSystem systemImplementing: FeedRegistrationSystemInterface 
+	^ rootSystem systemImplementing: 'Feed Management System Interface'

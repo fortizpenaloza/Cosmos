@@ -1,4 +1,12 @@
 initialize-release
 initializeUsing: anIdentifierProvider  
 
-	identifierProvider := anIdentifierProvider 
+	super initialize.
+	timeSystem := self unresolvedSystemDependencyTo: 'Time System Interface'.
+
+	identifierProvider := anIdentifierProvider.
+	commandQueues := Dictionary new.
+	
+
+
+	

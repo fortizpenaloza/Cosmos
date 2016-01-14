@@ -1,12 +1,13 @@
 {
-	"category" : "IoT-Core-System",
+	"category" : "IoT-Core-SystemModel",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		 ],
+		"name",
+		"messages" ],
 	"name" : "Interface",
 	"pools" : [
 		 ],

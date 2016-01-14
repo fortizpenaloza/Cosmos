@@ -3,5 +3,5 @@
 		 },
 	"instance" : {
 		"testInstanceCreation" : "fortizpenaloza 1/10/2016 19:47",
-		"testTopMustRemoveElementsAsLIFOWhenShareSamePriority" : "fortizpenaloza 1/10/2016 20:33",
-		"testTopMustRemoveElementsInOrderAccordingItsPriority" : "fortizpenaloza 1/10/2016 20:33" } }
+		"testTopRemovesElementAccordingItsPriority" : "fortizpenaloza 1/12/2016 19:07",
+		"testTopRemovesFirstElementOnSamePriority" : "fortizpenaloza 1/12/2016 19:09" } }

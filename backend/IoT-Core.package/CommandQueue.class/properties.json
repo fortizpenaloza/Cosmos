@@ -1,0 +1,17 @@
+{
+	"category" : "IoT-Core-CommandModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"identifier",
+		"name",
+		"dateTime",
+		"commands" ],
+	"name" : "CommandQueue",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

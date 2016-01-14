@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-FeedManagementSystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"rootSystem" ],
+	"name" : "FeedManagementSystemTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

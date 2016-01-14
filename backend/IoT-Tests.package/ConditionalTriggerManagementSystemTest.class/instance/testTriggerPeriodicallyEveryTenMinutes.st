@@ -5,7 +5,7 @@ testTriggerPeriodicallyEveryTenMinutes
 
 	triggered := false.
 
-	condition := NullTriggerCondition new.
+	condition := AlwaysTriggerCondition new.
 	triggeringPolicy := PeriodicalTriggeringPolicy every: self tenMinutes.
 	trigger := ConditionalTrigger
 		firing: [ triggered := true ]

@@ -10,4 +10,4 @@ testInstanceCreation
 	self
 		assert: scheduledTask name equals: 'Change boolean to true';
 		assert: scheduledTask timePeriod equals: self oneMinute;
-		deny: wasExecuted 
+		deny: wasExecuted

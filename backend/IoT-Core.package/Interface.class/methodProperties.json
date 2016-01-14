@@ -1,5 +1,7 @@
 {
 	"class" : {
-		"new" : "fortizpenaloza 1/11/2016 03:12" },
+		"named:offering:" : "fortizpenaloza 1/14/2016 18:49" },
 	"instance" : {
-		"interfaceImplementorResponsibility" : "fortizpenaloza 1/11/2016 03:11" } }
+		"initializeNamed:offering:" : "fortizpenaloza 1/14/2016 18:51",
+		"interfaceImplementorResponsibility" : "fortizpenaloza 1/11/2016 03:11",
+		"name" : "fortizpenaloza 1/14/2016 19:10" } }

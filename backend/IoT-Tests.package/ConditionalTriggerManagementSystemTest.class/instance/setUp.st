@@ -10,7 +10,7 @@ setUp
 	(OrderedCollection
 		with: (TimeSystem using: timeSource)
 		with: ConditionalTriggerManagementSystem new
-		with: (FeedRegistrationSystem using: SequentialNumberProvider new))
+		with: (FeedManagementSystem using: SequentialNumberProvider new))
 		do: [ :subsystem | rootSystem register: subsystem ].
 	
 	rootSystem startUp
