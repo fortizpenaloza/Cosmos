@@ -11,5 +11,5 @@
 	"name" : "ConditionalTriggerManagementSystemTest",
 	"pools" : [
 		 ],
-	"super" : "TestCase",
+	"super" : "IoTTestCase",
 	"type" : "normal" }

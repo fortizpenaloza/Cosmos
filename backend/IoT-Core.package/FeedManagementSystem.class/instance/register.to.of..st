@@ -1,7 +1,7 @@
-managing-private
+managing
 register: aValue to: aDataStream of: aFeed
 
-	aDataStream add: (DataPoint on: self timeSystem dateTime holding: aValue).
+	aDataStream add: (DataPoint on: timeSystem dateTime holding: aValue).
 
-	self conditionalTriggerManagementSystem notifyDataPointRegistrationOn: aDataStream of: aFeed.
+	conditionalTriggerManagementSystem notifyDataPointRegistrationOn: aDataStream of: aFeed.
 	

@@ -1,4 +1,4 @@
-managing-private
+managing
 register: aDataStream to: aFeed
 
 	^ (aFeed dataStreams includes: aDataStream)

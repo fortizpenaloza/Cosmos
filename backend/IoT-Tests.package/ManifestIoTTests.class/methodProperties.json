@@ -1,0 +1,6 @@
+{
+	"class" : {
+		"ruleRBOnlyReadOrWrittenVariableRuleV1FalsePositive" : "fortizpenaloza 1/16/2016 22:17",
+		"ruleRBUnreferencedVariablesRuleV1FalsePositive" : "fortizpenaloza 1/16/2016 22:17" },
+	"instance" : {
+		 } }

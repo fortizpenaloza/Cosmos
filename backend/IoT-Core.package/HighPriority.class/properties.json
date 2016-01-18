@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-CommandModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "HighPriority",
+	"pools" : [
+		 ],
+	"super" : "CommandPriority",
+	"type" : "normal" }

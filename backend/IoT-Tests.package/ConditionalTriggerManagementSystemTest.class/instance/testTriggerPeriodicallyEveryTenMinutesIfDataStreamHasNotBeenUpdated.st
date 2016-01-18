@@ -5,8 +5,8 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 
 	triggered := false.
 
-	feed := self feedRegistrationSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
-	dataStream := self feedRegistrationSystem register: (DataStream identifiedBy: 'test') to: feed.
+	feed := self feedManagementSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
+	dataStream := self feedManagementSystem register: (DataStream identifiedBy: 'test') to: feed.
 
 	condition := DataStreamHasNotBeenUpdatedTriggerCondition
 		querying: timeSource
@@ -19,7 +19,7 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 	self triggerSystem register: trigger.
 	self deny: triggered.
 
-	self feedRegistrationSystem register: 1 to: dataStream of: feed.
+	self feedManagementSystem register: 1 to: dataStream of: feed.
 	self deny: triggered.
 
 	self triggerSystem notifyHavePassed: self fiveMinutes.

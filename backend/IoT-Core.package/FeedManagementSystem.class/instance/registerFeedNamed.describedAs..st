@@ -7,7 +7,7 @@ registerFeedNamed: aName describedAs: aDescription
 		identifiedBy: identifierProvider next
 		named: aName
 		describedAs: aDescription
-		createdOn: self timeSystem dateTime.
+		createdOn: timeSystem dateTime.
 		
 	self register: feed.
 	

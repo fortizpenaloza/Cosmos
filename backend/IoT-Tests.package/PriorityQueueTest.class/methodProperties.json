@@ -2,6 +2,6 @@
 	"class" : {
 		 },
 	"instance" : {
-		"testInstanceCreation" : "fortizpenaloza 1/10/2016 19:47",
-		"testTopRemovesElementAccordingItsPriority" : "fortizpenaloza 1/12/2016 19:07",
-		"testTopRemovesFirstElementOnSamePriority" : "fortizpenaloza 1/12/2016 19:09" } }
+		"testPoppingElementRespectsItsPriority" : "fortizpenaloza 1/17/2016 23:52",
+		"testPoppingElementWithSamePriorityFollowsPushingOrder" : "fortizpenaloza 1/17/2016 23:52",
+		"testPoppingWhenEmptyRaisesError" : "fortizpenaloza 1/17/2016 23:45" } }

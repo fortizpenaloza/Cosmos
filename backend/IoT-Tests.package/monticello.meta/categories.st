@@ -1,10 +1,9 @@
 SystemOrganization addCategory: #'IoT-Tests'!
 SystemOrganization addCategory: 'IoT-Tests-CommandManagementSystemModel'!
-SystemOrganization addCategory: 'IoT-Tests-CommandQueueModel'!
+SystemOrganization addCategory: 'IoT-Tests-CommandModel'!
 SystemOrganization addCategory: 'IoT-Tests-ConditionModel'!
 SystemOrganization addCategory: 'IoT-Tests-ConditionalTriggerManagementSystemModel'!
 SystemOrganization addCategory: 'IoT-Tests-ConditionalTriggerModel'!
 SystemOrganization addCategory: 'IoT-Tests-FeedManagementSystemModel'!
 SystemOrganization addCategory: 'IoT-Tests-FeedModel'!
 SystemOrganization addCategory: 'IoT-Tests-PeriodicalSchedulerModel'!
-SystemOrganization addCategory: 'IoT-Tests-PriorityQueueModel'!

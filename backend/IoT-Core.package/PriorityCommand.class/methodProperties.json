@@ -1,0 +1,7 @@
+{
+	"class" : {
+		"holding:with:" : "fortizpenaloza 1/16/2016 11:15" },
+	"instance" : {
+		"command" : "fortizpenaloza 1/16/2016 22:16",
+		"initializeHolding:with:" : "fortizpenaloza 1/16/2016 11:16",
+		"pushInto:" : "fortizpenaloza 1/16/2016 12:15" } }

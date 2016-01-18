@@ -3,9 +3,9 @@ testQueryDataStreamByIdentifier
 
 	|  dataStream feed |
 
-	feed := self feedRegistrationSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
+	feed := self feedManagementSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
 	dataStream := DataStream identifiedBy: 'x'.
 	
-	self feedRegistrationSystem register: dataStream to: feed.
+	self feedManagementSystem register: dataStream to: feed.
 	
-	self assert: (self feedRegistrationSystem dataStreamIdentifiedBy: 'x' of: feed) equals: dataStream
+	self assert: (self feedManagementSystem dataStreamIdentifiedBy: 'x' of: feed) equals: dataStream

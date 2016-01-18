@@ -9,7 +9,8 @@
 		"identifier",
 		"name",
 		"dateTime",
-		"commands" ],
+		"commands",
+		"priorityQueue" ],
 	"name" : "CommandQueue",
 	"pools" : [
 		 ],

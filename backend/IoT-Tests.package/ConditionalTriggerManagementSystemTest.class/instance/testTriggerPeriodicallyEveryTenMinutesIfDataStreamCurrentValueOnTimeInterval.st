@@ -5,10 +5,10 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamCurrentValueOnTimeInterval
 
 	triggered := false.
 
-	feed := self feedRegistrationSystem
+	feed := self feedManagementSystem
 		registerFeedNamed: 'Feed'
 		describedAs: 'Feed for tests'.
-	dataStream := self feedRegistrationSystem
+	dataStream := self feedManagementSystem
 		register: (DataStream identifiedBy: 'test')
 		to: feed.
 

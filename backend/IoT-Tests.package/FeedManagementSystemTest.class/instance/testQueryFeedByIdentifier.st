@@ -10,5 +10,5 @@ testQueryFeedByIdentifier
 		describedAs: 'Test feed'
 		createdOn: self timeSystem dateTime.
 		
-	self feedRegistrationSystem register: feed.
-	self assert: (self feedRegistrationSystem feedIdentifiedBy: identifier) equals: feed
+	self feedManagementSystem register: feed.
+	self assert: (self feedManagementSystem feedIdentifiedBy: identifier) equals: feed

@@ -5,6 +5,7 @@ initializeIdentifiedBy: anIdentifier named: aName createdOn: aDateTime
 	name := aName.
 	dateTime := aDateTime.
 	
-	commands := OrderedCollection new
+	commands := OrderedCollection new.
+	priorityQueue := PriorityCommandQueue empty
 	
 	

@@ -5,8 +5,8 @@ testTriggerOnDataPointRegistration
 
 	triggered := false.
 		
-	feed := self feedRegistrationSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
-	dataStream := self feedRegistrationSystem register: (DataStream identifiedBy: 'test') to: feed.
+	feed := self feedManagementSystem registerFeedNamed: 'Feed' describedAs: 'Feed for tests'.
+	dataStream := self feedManagementSystem register: (DataStream identifiedBy: 'test') to: feed.
 	
 	condition := AlwaysTriggerCondition new.
 	triggeringPolicy := DataPointRegistrationTriggeringPolicy on: dataStream.
@@ -19,5 +19,5 @@ testTriggerOnDataPointRegistration
 
 	self deny: triggered.
 
-	self feedRegistrationSystem register: 1 to: dataStream of: feed.
+	self feedManagementSystem register: 1 to: dataStream of: feed.
 	self assert: triggered

@@ -1,4 +1,4 @@
-managing-private
+managing
 register: aFeed
 
 	feeds
