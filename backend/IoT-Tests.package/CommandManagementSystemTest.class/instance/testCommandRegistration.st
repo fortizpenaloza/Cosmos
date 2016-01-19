@@ -1,17 +1,16 @@
 tests
 testCommandRegistration
 
-	| nextCommand commandQueue |
+	| nextCommand commandPriorityQueue |
 
-	self commandManagementSystem registerCommandPriorityQueue.
+	commandPriorityQueue := self commandManagementSystem registerCommandPriorityQueue.
+	
 	self commandManagementSystem
-		register: 'TURN_ON_LED'
+		push: 'TURN_ON_LED'
 		with: CommandPriority high
-		toQueueIdentifiedBy: 1.
-		
-	commandQueue := self commandManagementSystem commandPriorityQueueIdentifiedBy: 1.
-	self deny: commandQueue isEmpty.
+		to: commandPriorityQueue.		
+	self deny: commandPriorityQueue isEmpty.
 	
 	nextCommand := self commandManagementSystem nextCommandFromCommandQueueIdentifiedBy: 1.
 	self assert: nextCommand equals: 'TURN_ON_LED'.
-	self assert: commandQueue isEmpty
+	self assert: commandPriorityQueue isEmpty

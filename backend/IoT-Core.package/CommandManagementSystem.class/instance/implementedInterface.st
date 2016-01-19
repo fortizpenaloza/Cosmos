@@ -6,6 +6,6 @@ implementedInterface
 		offering:
 			(OrderedCollection new
 				add: #registerCommandPriorityQueue;
-				add: #register:with:toQueueIdentifiedBy:;
+				add: #push:with:toPriorityQueueIdentifiedBy:;
 				add: #nextCommandFromCommandQueueIdentifiedBy:;
 				yourself)
