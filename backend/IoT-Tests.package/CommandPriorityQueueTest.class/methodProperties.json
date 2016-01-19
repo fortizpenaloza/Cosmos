@@ -1,0 +1,9 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"testInstanceCreation" : "fortizpenaloza 1/19/2016 01:49",
+		"testPoppingElementRespectsItsPriority" : "fortizpenaloza 1/19/2016 01:51",
+		"testPoppingElementWithSamePriorityFollowsPushingOrder" : "fortizpenaloza 1/19/2016 01:56",
+		"testPoppingWhenEmptyRaisesError" : "fortizpenaloza 1/19/2016 01:48",
+		"testQueringCommandsFollowsPushingOrder" : "fortizpenaloza 1/19/2016 02:14" } }

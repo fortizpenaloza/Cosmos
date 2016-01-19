@@ -1,6 +1,9 @@
 managing
-register: aCommandQueue 
+register: aCommandPriorityQueue
 
-	commandQueues at: aCommandQueue identifier
-		ifPresent: [:feed | ObjectAlreadyInSystem signal: 'Command queue already exists in system.']
-		ifAbsent: [commandQueues at: aCommandQueue identifier put: aCommandQueue] 
+	priorityCommandQueues
+		at: aCommandPriorityQueue identifier
+		ifPresent:
+			[ :commandPriorityQueue | ObjectAlreadyInSystem signal: 'Command queue already exists in system.' ]
+		ifAbsent:
+			[ priorityCommandQueues at: aCommandPriorityQueue identifier put: aCommandPriorityQueue ]

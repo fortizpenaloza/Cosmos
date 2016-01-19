@@ -7,8 +7,8 @@
 	"commentStamp" : "",
 	"instvars" : [
 		"identifierProvider",
-		"timeSystem",
-		"commandQueues" ],
+		"priorityCommandQueues",
+		"timeSystem" ],
 	"name" : "CommandManagementSystem",
 	"pools" : [
 		 ],

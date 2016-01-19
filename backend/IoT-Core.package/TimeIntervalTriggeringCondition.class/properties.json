@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-ConditionalTriggerModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/24/2014 20:03",
+	"instvars" : [
+		"timeSystem",
+		"timeInterval" ],
+	"name" : "TimeIntervalTriggeringCondition",
+	"pools" : [
+		 ],
+	"super" : "TriggeringCondition",
+	"type" : "normal" }

@@ -2,11 +2,11 @@
 	"class" : {
 		"using:" : "fortizpenaloza 1/12/2016 01:46" },
 	"instance" : {
-		"commandQueueIdentifiedBy:" : "fortizpenaloza 1/13/2016 20:27",
-		"implementedInterface" : "fortizpenaloza 1/18/2016 00:05",
-		"initializeUsing:" : "fortizpenaloza 1/14/2016 19:06",
-		"nextCommandFromCommandQueueIdentifiedBy:" : "fortizpenaloza 1/16/2016 22:16",
-		"register:" : "fortizpenaloza 1/13/2016 20:25",
-		"register:with:to:" : "fortizpenaloza 1/16/2016 14:39",
-		"registerCommandQueueNamed:" : "fortizpenaloza 1/13/2016 20:23",
+		"commandPriorityQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 02:15",
+		"implementedInterface" : "fortizpenaloza 1/19/2016 01:08",
+		"initializeUsing:" : "fortizpenaloza 1/19/2016 01:59",
+		"nextCommandFromCommandQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 01:58",
+		"register:" : "fortizpenaloza 1/19/2016 02:15",
+		"register:with:toQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 01:30",
+		"registerCommandPriorityQueue" : "fortizpenaloza 1/19/2016 01:48",
 		"resolveDependecies" : "fortizpenaloza 1/14/2016 19:06" } }

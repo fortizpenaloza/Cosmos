@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Core-CommandModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 1/19/2016 00:42",
+	"instvars" : [
+		 ],
+	"name" : "QueueIsEmpty",
+	"pools" : [
+		 ],
+	"super" : "Error",
+	"type" : "normal" }

@@ -1,4 +1,4 @@
 pushing-popping
-push: aPriorityCommand to: aPriorityQueue 
+push: aCommand to: aPriorityQueue 
 
-	aPriorityQueue pushWithLowPriority: aPriorityCommand 
+	aPriorityQueue pushWithLowPriority: aCommand 

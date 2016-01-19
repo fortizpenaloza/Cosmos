@@ -1,4 +1,4 @@
-starting/stopping
+starting-stopping
 startUp
 	
-	state startUp
+	self resolveDependecies.

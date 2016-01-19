@@ -5,7 +5,7 @@ implementedInterface
 		named: 'Command Management System Interface'
 		offering:
 			(OrderedCollection new
-				add: #registerCommandQueueNamed:
-				add: #register:with:do:;
+				add: #registerCommandPriorityQueue;
+				add: #register:with:toQueueIdentifiedBy:;
 				add: #nextCommandFromCommandQueueIdentifiedBy:;
 				yourself)

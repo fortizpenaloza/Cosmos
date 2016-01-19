@@ -12,7 +12,10 @@ testDataPointRegistration
 
 	self feedManagementSystem register: feed.
 	self feedManagementSystem register: dataStream to: feed.
+
 	self feedManagementSystem register: 10 to: dataStream of: feed.
-	
-	self assert: feed dataStreams first dataPoints size equals: 1.
-	self assert: feed dataStreams first dataPoints first value equals: 10.
+	self assert: dataStream currentValue equals: 10;
+		assert: dataStream lastUpdate equals: self timeSystem dateTime;
+		withTheOnlyOneIn: dataStream dataPoints do: [ :dataPoint | 
+				self assert: dataPoint value equals: 10;
+				assert: dataPoint timestamp equals: self timeSystem dateTime ]

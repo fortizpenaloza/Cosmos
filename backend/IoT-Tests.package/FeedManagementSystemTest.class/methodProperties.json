@@ -4,14 +4,14 @@
 	"instance" : {
 		"feedManagementSystem" : "fortizpenaloza 1/18/2016 00:16",
 		"setUp" : "fortizpenaloza 1/12/2016 17:19",
-		"testDataPointRegistration" : "fortizpenaloza 1/18/2016 00:16",
+		"testDataPointRegistration" : "fortizpenaloza 1/18/2016 22:53",
 		"testDataStreamRegistration" : "fortizpenaloza 1/18/2016 00:16",
 		"testDataStreamRegistrationFailsWhenIdentifierAlreadyExists" : "fortizpenaloza 1/18/2016 00:18",
 		"testFeedRegistration" : "fortizpenaloza 1/18/2016 00:16",
 		"testFeedRegistrationFailsWhenIdentifierAlreadyExists" : "fortizpenaloza 1/18/2016 00:23",
+		"testFeedRegistrationFromNameAndDescription" : "fortizpenaloza 1/18/2016 00:48",
 		"testQueryDataStreamByIdentifier" : "fortizpenaloza 1/18/2016 00:16",
 		"testQueryFeedByIdentifier" : "fortizpenaloza 1/18/2016 00:16",
 		"testQueryFeedByIdentifierFailsIfDoesntExists" : "fortizpenaloza 1/18/2016 00:21",
-		"testRegisterFeedFromNameAndDescription" : "fortizpenaloza 1/18/2016 00:16",
-		"testRegisterFeedMustAssignSequentialNumberAsIdentifier" : "fortizpenaloza 1/18/2016 00:16",
+		"testRegisterFeedMustAssignSequentialNumberAsIdentifier" : "fortizpenaloza 1/18/2016 23:05",
 		"timeSystem" : "fortizpenaloza 1/14/2016 18:57" } }

@@ -1,0 +1,4 @@
+testing
+isEmpty
+	
+	^priorizedCommands isEmpty

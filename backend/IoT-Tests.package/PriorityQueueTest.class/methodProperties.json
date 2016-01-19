@@ -1,7 +1,0 @@
-{
-	"class" : {
-		 },
-	"instance" : {
-		"testPoppingElementRespectsItsPriority" : "fortizpenaloza 1/17/2016 23:52",
-		"testPoppingElementWithSamePriorityFollowsPushingOrder" : "fortizpenaloza 1/17/2016 23:52",
-		"testPoppingWhenEmptyRaisesError" : "fortizpenaloza 1/17/2016 23:45" } }

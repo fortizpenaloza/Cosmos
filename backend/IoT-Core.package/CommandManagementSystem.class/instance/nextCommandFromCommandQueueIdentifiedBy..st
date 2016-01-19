@@ -1,8 +1,8 @@
 querying
 nextCommandFromCommandQueueIdentifiedBy: anIdentifier
 
-	| commandQueue priorityCommand |
+	| priorityCommandQueue priorityCommand |
 	
-	commandQueue := self commandQueueIdentifiedBy: anIdentifier.
-	priorityCommand := commandQueue pop.
+	priorityCommandQueue := self commandPriorityQueueIdentifiedBy: anIdentifier.
+	priorityCommand := priorityCommandQueue pop.
 	^ priorityCommand command

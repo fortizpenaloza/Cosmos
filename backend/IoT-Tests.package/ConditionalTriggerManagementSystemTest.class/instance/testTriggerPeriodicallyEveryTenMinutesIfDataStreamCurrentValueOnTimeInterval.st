@@ -12,10 +12,10 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamCurrentValueOnTimeInterval
 		register: (DataStream identifiedBy: 'test')
 		to: feed.
 
-	triggerCondition := AndCompositeTriggerCondition
-		with: (DataStreamCurrentValueTriggerCondition of: dataStream isLessThan: 11)
+	triggerCondition := AndCompositeTriggeringCondition
+		with: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11)
 		with:
-			(TimeIntervalTriggerCondition
+			(TimeIntervalTriggeringCondition
 				querying: self timeSystem
 				toBeBetween: (self eightPM to: self ninePM)).
 

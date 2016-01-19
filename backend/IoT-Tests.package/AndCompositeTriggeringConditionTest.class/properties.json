@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Tests-ConditionalTriggerModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"timeOfDay",
+		"currentValue" ],
+	"name" : "AndCompositeTriggeringConditionTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }
