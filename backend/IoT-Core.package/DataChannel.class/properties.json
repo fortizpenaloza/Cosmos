@@ -7,13 +7,9 @@
 	"commentStamp" : "<historical>",
 	"instvars" : [
 		"identifier",
-		"currentValue",
-		"lastUpdate",
-		"dataPoints",
-		"dataChannel",
 		"name",
-		"creationDateTime" ],
-	"name" : "DataStream",
+		"dateTime" ],
+	"name" : "DataChannel",
 	"pools" : [
 		 ],
 	"super" : "Object",

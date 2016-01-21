@@ -1,12 +1,11 @@
-test
+tests
 testAddingDataPoint
 
-	| datastream datapoint |
+	| dataStream |
 
-	datapoint := DataPoint on: self septemberTenthOf2014AtNoon holding: 10.
-	datastream := DataStream identifiedBy: 'temp'.
-
-	self assert: datastream dataPoints isEmpty.
-	datastream add: datapoint.
-	self deny: datastream dataPoints isEmpty.
-	self assert: datastream dataPoints size equals: 1
+	dataStream := DataStream named: 'Temperature' createdOn: (October first , 2015) atMidnight belongingTo: self dataChannel.
+	self assert: dataStream dataPoints isEmpty.
+	
+	dataStream add: (DataPoint on: self septemberSixthOf2015AtNoon holding: 10).
+	self deny: dataStream dataPoints isEmpty;
+		assert: dataStream dataPoints size equals: 1

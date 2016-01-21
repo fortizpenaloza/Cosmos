@@ -1,13 +1,14 @@
 {
-	"category" : "IoT-Tests-DataModel",
+	"category" : "IoT-Tests-DataManagementSystemModel",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		 ],
-	"name" : "DataStreamTest",
+		"rootSystem",
+		"identifierProvider" ],
+	"name" : "DataManagementSystemTest",
 	"pools" : [
 		 ],
 	"super" : "IoTTestCase",

@@ -1,10 +1,12 @@
 {
 	"class" : {
-		"identifiedBy:" : "FranciscoOrtizPenaloza 9/11/2014 23:08" },
+		"named:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04" },
 	"instance" : {
 		"add:" : "fortizpenaloza 1/10/2016 23:28",
+		"creationDateTime" : "fortizpenaloza 1/19/2016 20:04",
 		"currentValue" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
+		"dataChannel" : "fortizpenaloza 1/21/2016 12:32",
 		"dataPoints" : "FranciscoOrtizPenaloza 9/26/2014 19:43",
-		"identifier" : "FranciscoOrtizPenaloza 9/26/2014 19:41",
-		"initializeIdentifiedBy:" : "fortizpenaloza 1/10/2016 00:29",
-		"lastUpdate" : "FranciscoOrtizPenaloza 9/24/2014 20:05" } }
+		"initializeNamed:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04",
+		"lastUpdate" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
+		"name" : "fortizpenaloza 1/19/2016 20:00" } }

@@ -2,11 +2,9 @@
 	"class" : {
 		 },
 	"instance" : {
-		"septemberTenthOf2014AtNoon" : "FranciscoOrtizPenaloza 9/11/2014 23:11",
-		"testAddingDataPoint" : "FranciscoOrtizPenaloza 9/28/2014 11:46",
-		"testAddingDataPointSetsCurrentValueToDataPointsValue" : "fortizpenaloza 12/27/2015 13:03",
-		"testAddingDataPointSetsLastUpdateToDataPointsTimestamp" : "FranciscoOrtizPenaloza 9/28/2014 11:48",
-		"testCreation" : "FranciscoOrtizPenaloza 9/28/2014 11:48",
-		"testCurrentValueUnsetUntilDatapointIsAdded" : "fortizpenaloza 1/10/2016 00:28",
-		"testLastUpdatedUnsetUntilDatapointIsAdded" : "fortizpenaloza 1/10/2016 00:28",
-		"testOnCreationDataPointsIsEmpty" : "FranciscoOrtizPenaloza 9/28/2014 11:50" } }
+		"dataChannel" : "fortizpenaloza 1/21/2016 14:47",
+		"septemberSixthOf2015AtNoon" : "fortizpenaloza 1/21/2016 16:14",
+		"testAccessingCurrentValue" : "fortizpenaloza 1/21/2016 14:42",
+		"testAccessingLastUpdate" : "fortizpenaloza 1/21/2016 14:41",
+		"testAddingDataPoint" : "fortizpenaloza 1/21/2016 16:14",
+		"testInstanceCreationAndAccessing" : "fortizpenaloza 1/21/2016 14:23" } }

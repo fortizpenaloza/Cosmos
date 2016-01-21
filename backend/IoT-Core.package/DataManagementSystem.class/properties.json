@@ -1,0 +1,17 @@
+{
+	"category" : "IoT-Core-DataManagementSystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"feeds",
+		"identifierProvider",
+		"timeSystem",
+		"conditionalTriggerManagementSystem" ],
+	"name" : "DataManagementSystem",
+	"pools" : [
+		 ],
+	"super" : "Subsystem",
+	"type" : "normal" }
