@@ -1,4 +1,0 @@
-querying
-feeds
-	
-	^ feeds values

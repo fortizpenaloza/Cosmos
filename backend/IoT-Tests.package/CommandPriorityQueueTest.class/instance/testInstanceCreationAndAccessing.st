@@ -1,5 +1,5 @@
 tests
-testInstanceCreation
+testInstanceCreationAndAccessing
 
 	| commandPriorityQueue |
 

@@ -1,7 +1,7 @@
 managing-private
-register: aFeed
+register: aDataChannel
 
 	feeds
-		at: aFeed identifier
+		at: aDataChannel identifier
 		ifPresent: [:feed | ObjectAlreadyInSystem signal: 'Feed already exists in system']
-		ifAbsent: [feeds at: aFeed identifier put: aFeed]
+		ifAbsent: [feeds at: aDataChannel identifier put: aDataChannel]

@@ -1,4 +1,4 @@
-pushing-popping
+pushing-popping private
 popIfEmptyDo: aBlock
 
 	^ highPriority
