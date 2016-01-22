@@ -9,7 +9,9 @@
 		"feeds",
 		"identifierProvider",
 		"timeSystem",
-		"conditionalTriggerManagementSystem" ],
+		"conditionalTriggerManagementSystem",
+		"dataStreams",
+		"dataChannels" ],
 	"name" : "DataManagementSystem",
 	"pools" : [
 		 ],

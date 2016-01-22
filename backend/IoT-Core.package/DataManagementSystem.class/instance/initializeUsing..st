@@ -7,4 +7,5 @@ initializeUsing: anIdentifierProvider
 	conditionalTriggerManagementSystem := self unresolvedSystemDependencyTo: 'Conditional Trigger Management System Interface'.
 	
 	identifierProvider := SequentialNumberProvider new.
-	feeds := Dictionary new.
+	dataChannels := Set new.
+	dataStreams := OrderedCollection new.

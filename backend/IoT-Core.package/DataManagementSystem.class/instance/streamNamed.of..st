@@ -1,6 +1,6 @@
 querying
-streamNamed: aName of: aChannel
+streamNamed: aName of: aDataChannel
 
-	^ aChannel dataStreams
+	^ aDataChannel dataStreams
 		detect: [ :dataStream | dataStream identifier = aName ]
 		ifNone: [ ObjectNotFoundInSystem signal: 'Data stream does not exists in system' ]
