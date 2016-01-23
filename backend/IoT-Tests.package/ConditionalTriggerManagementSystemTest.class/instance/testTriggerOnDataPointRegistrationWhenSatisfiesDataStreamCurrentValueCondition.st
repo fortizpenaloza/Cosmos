@@ -1,6 +1,8 @@
 test
 testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition
+
 	| triggered feed dataStream condition triggeringPolicy trigger |
+
 	triggered := false.
 	feed := self feedManagementSystem registerChannelNamed: 'Feed'.
 	dataStream := self feedManagementSystem
@@ -17,7 +19,7 @@ testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition
 		accordingTo: triggeringPolicy.
 	self triggerSystem register: trigger.
 	self deny: triggered.
-	self feedManagementSystem register: 12 to: dataStream of: feed.
+	self feedManagementSystem register: 12 to: dataStream.
 	self deny: triggered.
-	self feedManagementSystem register: 10 to: dataStream of: feed.
+	self feedManagementSystem register: 10 to: dataStream.
 	self assert: triggered

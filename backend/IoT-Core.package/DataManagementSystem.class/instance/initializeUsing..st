@@ -6,6 +6,6 @@ initializeUsing: anIdentifierProvider
 	timeSystem := self unresolvedSystemDependencyTo: 'Time System Interface'.
 	conditionalTriggerManagementSystem := self unresolvedSystemDependencyTo: 'Conditional Trigger Management System Interface'.
 	
-	identifierProvider := SequentialNumberProvider new.
+	identifierProvider := anIdentifierProvider.
 	dataChannels := Set new.
 	dataStreams := OrderedCollection new.

@@ -1,5 +1,6 @@
 test
 testDataPointRegistration
+
 	| dataChannel dataStream |
 	
 	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.

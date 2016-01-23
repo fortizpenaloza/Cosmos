@@ -3,7 +3,11 @@ testAddingDataPoint
 
 	| dataStream |
 
-	dataStream := DataStream named: 'Temperature' createdOn: self septemberSixthOf2015AtNoon  belongingTo: self dataChannel.
+	dataStream := DataStream 
+		named: 'Temperature' 
+		createdOn: self septemberSixthOf2015AtNoon 
+		belongingTo: self dataChannel.
+				
 	self assert: dataStream dataPoints isEmpty.
 	
 	dataStream add: (DataPoint on: self octoberFirstOf2015AtMidnight holding: 10).

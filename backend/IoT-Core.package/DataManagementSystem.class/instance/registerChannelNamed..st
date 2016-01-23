@@ -1,11 +1,13 @@
 managing
 registerChannelNamed: aName
 
-	| dataChannel |
+	| dataChannel | 
 	
 	dataChannel := DataChannel
 		identifiedBy: identifierProvider next
 		named: aName
-		createdOn: self timeSystem dateTime.
-	self register: dataChannel.
-	^ dataChannel
+		createdOn: timeSystem dateTime.
+
+	self registerChannel: dataChannel.
+	
+	^ dataChannel 

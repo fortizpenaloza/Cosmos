@@ -3,7 +3,10 @@ testAccessingLastUpdate
 
 	| dataStream dataPoint |
 
-	dataStream := DataStream named: 'Temperature' createdOn: self septemberSixthOf2015AtNoon belongingTo: self dataChannel.
+	dataStream := DataStream 
+		named: 'Temperature' 
+		createdOn: self septemberSixthOf2015AtNoon 
+		belongingTo: self dataChannel.
 	
 	self
 		should: [dataStream lastUpdate]

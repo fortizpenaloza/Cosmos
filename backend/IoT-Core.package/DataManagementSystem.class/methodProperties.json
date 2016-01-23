@@ -2,16 +2,14 @@
 	"class" : {
 		"using:" : "fortizpenaloza 1/11/2016 01:22" },
 	"instance" : {
-		"channelIdentifiedBy:ifFound:ifNot:" : "fortizpenaloza 1/22/2016 18:45",
-		"conditionalTriggerManagementSystem" : "fortizpenaloza 1/11/2016 02:05",
+		"channelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54",
 		"implementedInterface" : "fortizpenaloza 1/19/2016 19:46",
-		"initializeUsing:" : "fortizpenaloza 1/22/2016 18:43",
-		"register:" : "fortizpenaloza 1/22/2016 18:43",
-		"register:to:" : "FranciscoOrtizPenaloza 12/8/2014 03:02",
-		"register:to:of:" : "fortizpenaloza 1/11/2016 02:05",
-		"register:toStreamNamed:ofChannelIdentifiedBy:" : "fortizpenaloza 1/22/2016 19:01",
-		"registerChannelNamed:" : "fortizpenaloza 1/21/2016 17:45",
-		"registerStreamNamed:toChannelIdentifiedBy:" : "fortizpenaloza 1/22/2016 18:49",
+		"initializeUsing:" : "fortizpenaloza 1/23/2016 02:29",
+		"register:toStreamNamed:ofChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:16",
+		"registerChannel:" : "fortizpenaloza 1/23/2016 02:11",
+		"registerChannelNamed:" : "fortizpenaloza 1/23/2016 02:05",
+		"registerPoint:to:" : "fortizpenaloza 1/23/2016 02:15",
+		"registerStream:" : "fortizpenaloza 1/23/2016 02:11",
+		"registerStreamNamed:toChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:10",
 		"resolveDependecies" : "fortizpenaloza 1/14/2016 18:58",
-		"streamNamed:of:" : "fortizpenaloza 1/22/2016 17:15",
-		"timeSystem" : "fortizpenaloza 1/11/2016 02:02" } }
+		"streamNamed:ofChannelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54" } }

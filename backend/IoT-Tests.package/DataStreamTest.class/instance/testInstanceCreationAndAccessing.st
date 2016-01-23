@@ -3,7 +3,10 @@ testInstanceCreationAndAccessing
 
 	| dataStream |
 
-	dataStream := DataStream named: 'Temperature' createdOn: self octoberFirstOf2015AtMidnight  belongingTo: self dataChannel.
+	dataStream := DataStream 
+		named: 'Temperature' 
+		createdOn: self octoberFirstOf2015AtMidnight 
+		belongingTo: self dataChannel.
 
 	self
 		assert: dataStream name equals: 'Temperature';

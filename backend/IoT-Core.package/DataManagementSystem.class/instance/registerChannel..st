@@ -1,7 +1,7 @@
 managing-private
-register: aDataChannel
+registerChannel: aDataChannel
 
-	^ self
+	self
 		channelIdentifiedBy: aDataChannel identifier 
 		ifFound: [ :dataChannel | ObjectAlreadyInSystem signal: 'Data channel already exists in system' ]
-		ifNot: [ dataChannels add: aDataChannel ]
+		ifNone: [ dataChannels add: aDataChannel ]

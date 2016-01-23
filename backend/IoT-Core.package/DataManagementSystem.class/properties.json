@@ -6,12 +6,11 @@
 		 ],
 	"commentStamp" : "<historical>",
 	"instvars" : [
-		"feeds",
 		"identifierProvider",
-		"timeSystem",
-		"conditionalTriggerManagementSystem",
 		"dataStreams",
-		"dataChannels" ],
+		"dataChannels",
+		"timeSystem",
+		"conditionalTriggerManagementSystem" ],
 	"name" : "DataManagementSystem",
 	"pools" : [
 		 ],
