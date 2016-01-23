@@ -5,7 +5,7 @@ testInstanceCreationAndAccessing
 
 	identifier := 1.
 	name := 'Channel #1'.
-	creationDateTime := (September eleventh , 2014) atNoon.
+	creationDateTime := (September sixth , 2015) atNoon.
 
 	dataChannel := DataChannel identifiedBy: identifier named: name createdOn: creationDateTime.
 
