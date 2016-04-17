@@ -5,7 +5,7 @@ testIsSafisfiedWhenDataStreamHasntBeenInitialized
 
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
 		querying: self
-		toCheckIf: (DataStream identifiedBy: 'test')
+		toCheckIf: (DataStream named: 'Test' createdOn: self septemberSixthOf2015AtNoon belongingTo: self dataChannel)
 		hasNotBeenUpdatedForMoreThan: (TimeUnits minute with: 10).
 		
 	self

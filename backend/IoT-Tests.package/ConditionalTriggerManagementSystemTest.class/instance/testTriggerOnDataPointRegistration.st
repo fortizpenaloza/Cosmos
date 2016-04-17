@@ -1,13 +1,13 @@
 test
 testTriggerOnDataPointRegistration
 
-	| triggered feed dataStream condition triggeringPolicy trigger |
+	| triggered dataChannel dataStream condition triggeringPolicy trigger |
 
 	triggered := false.
-	feed := self feedManagementSystem registerChannelNamed: 'Feed'.
-	dataStream := self feedManagementSystem
-		register: (DataStream identifiedBy: 'test')
-		to: feed.
+	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
+	dataStream := self dataManagementSystem
+		registerStreamNamed: 'test' toChannelIdentifiedBy: dataChannel identifier.
+
 	condition := AlwaysTriggeringCondition new.
 	triggeringPolicy := DataPointRegistrationTriggeringPolicy
 		on: dataStream.
@@ -15,7 +15,9 @@ testTriggerOnDataPointRegistration
 		firing: [ triggered := true ]
 		when: condition
 		accordingTo: triggeringPolicy.
+
 	self triggerSystem register: trigger.
 	self deny: triggered.
-	self feedManagementSystem register: 1 to: dataStream.
+	
+	self dataManagementSystem register: 1 toStreamNamed: dataStream name ofChannelIdentifiedBy: dataChannel identifier.
 	self assert: triggered

@@ -1,11 +1,13 @@
 test
 testTriggerPeriodicallyEveryTenMinutesIfDataStreamCurrentValueOnTimeInterval
-	| triggered feed dataStream triggerCondition triggeringPolicy trigger |
+
+	| triggered dataChannel dataStream triggerCondition triggeringPolicy trigger |
+
 	triggered := false.
-	feed := self feedManagementSystem registerChannelNamed: 'Feed'.
-	dataStream := self feedManagementSystem
-		register: (DataStream identifiedBy: 'test')
-		to: feed.
+	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
+	dataStream := self dataManagementSystem
+		registerStreamNamed: 'test' toChannelIdentifiedBy: dataChannel identifier.
+		
 	triggerCondition := AndCompositeTriggeringCondition
 		with:
 			(DataStreamCurrentValueTriggeringCondition
@@ -20,10 +22,13 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamCurrentValueOnTimeInterval
 		firing: [ triggered := true ]
 		when: triggerCondition
 		accordingTo: triggeringPolicy.
+	
 	self triggerSystem register: trigger.
 	self deny: triggered.
+	
 	self triggerSystem notifyHavePassed: self tenMinutes.
 	self deny: triggered.
+	
 	timeSource setTimeTo: self eightPM.
 	self triggerSystem notifyHavePassed: self tenMinutes.
 	self assert: triggered

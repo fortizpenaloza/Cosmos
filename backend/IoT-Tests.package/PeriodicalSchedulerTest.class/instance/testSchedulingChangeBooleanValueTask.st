@@ -11,7 +11,7 @@ testSchedulingChangeBooleanValueTask
 	self deny: wasExecuted.
 	
 	scheduler start.
-	(Delay forSeconds: 1) wait.
+	(Delay forSeconds: 4) wait.
 	self assert: wasExecuted.
 	
 	scheduler stop

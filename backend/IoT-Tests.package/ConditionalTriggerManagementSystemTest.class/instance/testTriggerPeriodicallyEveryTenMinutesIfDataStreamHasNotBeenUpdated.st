@@ -1,13 +1,13 @@
 test
 testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 
-	| triggered feed dataStream condition triggeringPolicy trigger |
+	| triggered dataChannel dataStream condition triggeringPolicy trigger |
 
 	triggered := false.
-	feed := self feedManagementSystem registerChannelNamed: 'Feed'.
-	dataStream := self feedManagementSystem
-		register: (DataStream identifiedBy: 'test')
-		to: feed.
+	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
+	dataStream := self dataManagementSystem
+		registerStreamNamed: 'test' toChannelIdentifiedBy: dataChannel identifier.
+		
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
 		querying: timeSource
 		toCheckIf: dataStream
@@ -18,14 +18,16 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 		when: condition
 		accordingTo: triggeringPolicy.
 	self triggerSystem register: trigger.
+
 	self deny: triggered.
-	self feedManagementSystem register: 1 to: dataStream.
+	
+	self dataManagementSystem register: 12 toStreamNamed: dataStream name ofChannelIdentifiedBy: dataChannel identifier.
 	self deny: triggered.
+
+	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
 	self triggerSystem notifyHavePassed: self fiveMinutes.
-	timeSource
-		setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
 	self deny: triggered.
-	timeSource
-		setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
+	
+	timeSource	setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
 	self triggerSystem notifyHavePassed: self tenMinutes.
 	self assert: triggered
