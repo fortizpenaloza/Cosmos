@@ -8,6 +8,6 @@ On Pharo 4 or 5 open Playground and evaluate:
 ```smalltalk
 Metacello new
   baseline: 'IoT';
-  repository: 'github://fortizpenaloza/IoT:master/backend';
+  repository: 'github://iot-uca/IoT:master/backend';
   load: ('Development').
   ```
