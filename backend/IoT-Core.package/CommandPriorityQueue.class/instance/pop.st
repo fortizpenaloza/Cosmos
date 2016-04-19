@@ -1,8 +1,8 @@
 pushing-popping
 pop
 
-	| priorizedCommand |
+	| prioritizedCommand  |
 
-	priorizedCommand := self popIfEmptyDo: [ QueueIsEmpty signal: 'Queue is empty' ].
-	priorizedCommands remove: priorizedCommand.
-	^ priorizedCommand
+	prioritizedCommand := priorityQueue pop element.
+	prioritizedCommands remove: prioritizedCommand.
+	^ prioritizedCommand

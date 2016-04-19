@@ -7,5 +7,5 @@ implementedInterface
 			(OrderedCollection new
 				add: #registerCommandPriorityQueue;
 				add: #push:with:toPriorityQueueIdentifiedBy:;
-				add: #nextCommandFromCommandQueueIdentifiedBy:;
+				add: #popFromQueueIdentifiedBy:;
 				yourself)

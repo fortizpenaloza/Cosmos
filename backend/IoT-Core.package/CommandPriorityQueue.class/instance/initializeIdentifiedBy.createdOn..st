@@ -2,12 +2,8 @@ initialize-release
 initializeIdentifiedBy: anIdentifier createdOn: aDateTime 
 	
 	identifier := anIdentifier.
-	dateTime := aDateTime.
+	creationDateTime := aDateTime.
 	
-	priorizedCommands := OrderedCollection new.
-
-	lowPriority := OrderedCollection new.
-	mediumPriority := OrderedCollection new.
-	highPriority := OrderedCollection new
-	
+	prioritizedCommands := OrderedCollection new.
+	priorityQueue := PriorityQueue empty.	
 	

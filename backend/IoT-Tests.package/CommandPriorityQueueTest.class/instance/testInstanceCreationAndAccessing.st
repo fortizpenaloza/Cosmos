@@ -9,4 +9,4 @@ testInstanceCreationAndAccessing
 
 	self assert: commandPriorityQueue isEmpty;
 		assert: commandPriorityQueue identifier equals: 1;
-		assert: commandPriorityQueue dateTime equals: (July twentyfourth , 2015) atMidnight
+		assert: commandPriorityQueue creationDateTime equals: (July twentyfourth , 2015) atMidnight

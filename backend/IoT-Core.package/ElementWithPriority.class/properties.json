@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-PriorityQueueModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"element",
+		"priority" ],
+	"name" : "ElementWithPriority",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

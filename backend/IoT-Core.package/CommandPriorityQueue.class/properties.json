@@ -7,12 +7,9 @@
 	"commentStamp" : "",
 	"instvars" : [
 		"identifier",
-		"name",
-		"dateTime",
-		"priorizedCommands",
-		"highPriority",
-		"lowPriority",
-		"mediumPriority" ],
+		"creationDateTime",
+		"prioritizedCommands",
+		"priorityQueue" ],
 	"name" : "CommandPriorityQueue",
 	"pools" : [
 		 ],

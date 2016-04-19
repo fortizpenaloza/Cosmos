@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-CommandModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "PrioritizedCommandTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

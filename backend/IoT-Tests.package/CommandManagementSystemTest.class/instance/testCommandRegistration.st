@@ -7,10 +7,10 @@ testCommandRegistration
 	
 	self commandManagementSystem
 		push: 'TURN_ON_LED'
-		with: CommandPriority high
-		to: commandPriorityQueue.		
+		with: QueuePriority high
+		toPriorityQueueIdentifiedBy: commandPriorityQueue identifier.
 	self deny: commandPriorityQueue isEmpty.
 	
-	nextCommand := self commandManagementSystem nextCommandFromCommandQueueIdentifiedBy: 1.
+	nextCommand := self commandManagementSystem popFromQueueIdentifiedBy: 1.
 	self assert: nextCommand equals: 'TURN_ON_LED'.
 	self assert: commandPriorityQueue isEmpty

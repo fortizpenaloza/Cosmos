@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Tests-PriorityQueueModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "PriotityQueueTest",
+	"pools" : [
+		 ],
+	"super" : "IoTTestCase",
+	"type" : "normal" }

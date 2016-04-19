@@ -6,7 +6,5 @@ initializeUsing: anIdentifierProvider
 
 	identifierProvider := anIdentifierProvider.
 	priorityCommandQueues := Dictionary new.
-	
-
 
 	

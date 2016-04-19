@@ -9,24 +9,24 @@ testPoppingElementRespectsItsPriority
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 2
-				with: CommandPriority low
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority low
+				on: (July twentyfourth , 2015) atMidnight).
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 3
-				with: CommandPriority medium
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority medium
+				on: (July twentyfourth , 2015) atMidnight).
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 4
-				with: CommandPriority high
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority high
+				on: (July twentyfourth , 2015) atMidnight).
 
 	
 	self assert: commandPriorityQueue pop command equals: 4.

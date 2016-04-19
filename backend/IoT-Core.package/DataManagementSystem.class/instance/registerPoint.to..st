@@ -1,6 +1,7 @@
 managing-private
-registerPoint: aDataPoint to: dataStream
+registerPoint: aDataPoint to: aDataStream
 
-	dataStream add: aDataPoint.
-	
-	conditionalTriggerManagementSystem notifyDataPointRegistrationOn: dataStream of: dataStream 
+	aDataStream add: aDataPoint.
+
+	conditionalTriggerManagementSystem
+		notifyDataPointRegistrationOn: aDataStream

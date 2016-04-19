@@ -1,5 +1,5 @@
 {
-	"category" : "IoT-Core-CommandModel",
+	"category" : "IoT-Core-PriorityQueueModel",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
@@ -10,5 +10,5 @@
 	"name" : "HighPriority",
 	"pools" : [
 		 ],
-	"super" : "CommandPriority",
+	"super" : "QueuePriority",
 	"type" : "normal" }

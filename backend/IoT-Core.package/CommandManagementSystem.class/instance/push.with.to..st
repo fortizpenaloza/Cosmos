@@ -3,9 +3,9 @@ push: aCommand with: aPriority to: aCommandPriorityQueue
 
 	| priorizedCommand |
 
-	priorizedCommand := PriorizedCommand
+	priorizedCommand := PrioritizedCommand
 		holding: aCommand
 		with: aPriority
-		createdOn: timeSystem dateTime.
+		on: timeSystem dateTime.
 		
 	aCommandPriorityQueue push: priorizedCommand

@@ -1,5 +1,8 @@
 pushing-popping
-push: aPriorizedCommand 
+push: aPrioritizedCommand
 
-	priorizedCommands add: aPriorizedCommand.
-	aPriorizedCommand pushInto: self
+	priorityQueue
+		push: (ElementWithPriority 
+			holding: aPrioritizedCommand 
+			with: aPrioritizedCommand priority).
+	prioritizedCommands add: aPrioritizedCommand

@@ -4,7 +4,7 @@ setUp
 	| timeSource |
 	
 	timeSource := FixedTimeSource
-		on: September tenth , 2014
+		on: September tenth , 2015
 		at: TimeOfDay noon.
 
 	rootSystem := CompositeSystem named: 'IoT for testing'.

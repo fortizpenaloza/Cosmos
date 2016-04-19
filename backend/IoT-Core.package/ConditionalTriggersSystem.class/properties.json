@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-ConditionalTriggersSystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 4/17/2015 01:40",
+	"instvars" : [
+		"triggersToFireOnDataPointRegistration",
+		"triggersToFirePeriodically" ],
+	"name" : "ConditionalTriggersSystem",
+	"pools" : [
+		 ],
+	"super" : "Subsystem",
+	"type" : "normal" }

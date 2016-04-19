@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-Core-CommandModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 4/18/2016 19:50",
+	"instvars" : [
+		"command",
+		"priority",
+		"prioritizationDateTime" ],
+	"name" : "PrioritizedCommand",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

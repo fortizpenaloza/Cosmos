@@ -3,4 +3,4 @@ resolveDependecies
 
 	timeSystem := self resolveSystemDependencyTo: 'Time System Interface'.
 	conditionalTriggerManagementSystem := self
-		resolveSystemDependencyTo: 'Conditional Trigger Management System Interface'
+		resolveSystemDependencyTo: 'Conditional Triggers System Interface'

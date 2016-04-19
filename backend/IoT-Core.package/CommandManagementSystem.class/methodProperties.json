@@ -3,11 +3,11 @@
 		"using:" : "fortizpenaloza 1/12/2016 01:46" },
 	"instance" : {
 		"commandPriorityQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 02:15",
-		"implementedInterface" : "fortizpenaloza 1/19/2016 02:50",
-		"initializeUsing:" : "fortizpenaloza 1/19/2016 01:59",
-		"nextCommandFromCommandQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 01:58",
-		"push:with:to:" : "fortizpenaloza 1/19/2016 02:48",
-		"push:with:toPriorityQueueIdentifiedBy:" : "fortizpenaloza 1/19/2016 02:50",
-		"register:" : "fortizpenaloza 1/19/2016 02:15",
+		"implementedInterface" : "fortizpenaloza 4/18/2016 22:26",
+		"initializeUsing:" : "fortizpenaloza 4/18/2016 03:52",
+		"popFromQueueIdentifiedBy:" : "fortizpenaloza 4/18/2016 22:26",
+		"push:with:to:" : "fortizpenaloza 4/18/2016 03:00",
+		"push:with:toPriorityQueueIdentifiedBy:" : "fortizpenaloza 4/18/2016 03:54",
+		"register:" : "fortizpenaloza 4/18/2016 03:54",
 		"registerCommandPriorityQueue" : "fortizpenaloza 1/19/2016 01:48",
 		"resolveDependecies" : "fortizpenaloza 1/14/2016 19:06" } }

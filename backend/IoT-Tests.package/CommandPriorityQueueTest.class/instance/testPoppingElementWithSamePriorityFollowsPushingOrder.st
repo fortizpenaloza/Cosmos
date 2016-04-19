@@ -9,24 +9,24 @@ testPoppingElementWithSamePriorityFollowsPushingOrder
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 2
-				with: CommandPriority low
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority low
+				on: (July twentyfourth , 2015) atMidnight).
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 3
-				with: CommandPriority low
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority low
+				on: (July twentyfourth , 2015) atMidnight).
 
 	commandPriorityQueue
 		push:
-			(PriorizedCommand
+			(PrioritizedCommand
 				holding: 4
-				with: CommandPriority low
-				createdOn: (July twentyfourth , 2015) atMidnight).
+				with: QueuePriority low
+				on: (July twentyfourth , 2015) atMidnight).
 
 	
 	self assert: commandPriorityQueue pop command equals: 2.
