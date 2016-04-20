@@ -3,6 +3,6 @@ pop
 
 	| prioritizedCommand  |
 
-	prioritizedCommand := priorityQueue pop element.
+	prioritizedCommand := priorityQueue pop.
 	prioritizedCommands remove: prioritizedCommand.
 	^ prioritizedCommand
