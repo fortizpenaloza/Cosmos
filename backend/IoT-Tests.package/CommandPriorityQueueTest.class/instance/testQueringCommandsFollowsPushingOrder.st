@@ -21,9 +21,9 @@ testQueringCommandsFollowsPushingOrder
 		on: (July twentyfourth , 2015) atMidnight.
 
 	commandPriorityQueue 
-		push: firstCommand;
-		push: secondCommand;
-		push: thirdCommand.
+		push: firstCommand command with: firstCommand priority on: firstCommand prioritizationDateTime;
+		push: secondCommand command with: secondCommand priority on: secondCommand prioritizationDateTime;
+		push: thirdCommand command with: thirdCommand priority on: thirdCommand prioritizationDateTime.
 
 	self
 		assert: commandPriorityQueue prioritizedCommands

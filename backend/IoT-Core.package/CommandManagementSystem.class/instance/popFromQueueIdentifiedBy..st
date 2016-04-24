@@ -1,8 +1,7 @@
-pushing-popping
+managing
 popFromQueueIdentifiedBy: anIdentifier
 
-	| priorityCommandQueue prioritizedCommand |
-	
-	priorityCommandQueue := self commandPriorityQueueIdentifiedBy: anIdentifier.
-	prioritizedCommand := priorityCommandQueue pop.
-	^ prioritizedCommand command
+	^ self
+		queueIdentifiedBy: anIdentifier
+		ifFound: [ :commandQueue | commandQueue pop command ]
+		ifNone: [ ObjectNotFoundInSystem signal: 'Command queue does not exists in system' ]

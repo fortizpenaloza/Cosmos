@@ -7,7 +7,7 @@
 		"setUp" : "fortizpenaloza 4/18/2016 00:10",
 		"testDataChannelRegistration" : "fortizpenaloza 1/21/2016 18:02",
 		"testDataChannelRegistrationFailsIfAlreadyExists" : "fortizpenaloza 1/23/2016 02:26",
-		"testDataPointRegistration" : "fortizpenaloza 1/23/2016 02:08",
+		"testDataPointRegistration" : "fortizpenaloza 4/24/2016 11:23",
 		"testDataStreamRegistration" : "fortizpenaloza 1/22/2016 18:49",
 		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 1/23/2016 02:31",
 		"testQueryingDataChannelByIdentifier" : "fortizpenaloza 1/23/2016 02:46",

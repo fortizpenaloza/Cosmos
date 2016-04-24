@@ -1,5 +1,5 @@
 tests
-testPoppingElementWithSamePriorityFollowsPushingOrder
+testPoppingWhenCommandsHasTheSamePriorityFollowsPushingOrder
 
 	| priorityQueue |
 

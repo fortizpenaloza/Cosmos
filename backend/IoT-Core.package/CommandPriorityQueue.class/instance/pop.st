@@ -1,4 +1,4 @@
-pushing-popping
+popping
 pop
 
 	| prioritizedCommand  |

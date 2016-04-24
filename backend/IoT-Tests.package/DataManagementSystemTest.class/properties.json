@@ -11,5 +11,5 @@
 	"name" : "DataManagementSystemTest",
 	"pools" : [
 		 ],
-	"super" : "IoTTestCase",
+	"super" : "TestCase",
 	"type" : "normal" }

@@ -10,5 +10,5 @@
 	"name" : "DataStreamTest",
 	"pools" : [
 		 ],
-	"super" : "IoTTestCase",
+	"super" : "TestCase",
 	"type" : "normal" }

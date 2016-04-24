@@ -10,5 +10,5 @@
 	"name" : "PriotityQueueTest",
 	"pools" : [
 		 ],
-	"super" : "IoTTestCase",
+	"super" : "TestCase",
 	"type" : "normal" }

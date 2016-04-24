@@ -7,6 +7,7 @@ testDataPointRegistration
 	dataStream := self dataManagementSystem
 		registerStreamNamed: 'Temperature'
 		toChannelIdentifiedBy: dataChannel identifier.
+		
 	self dataManagementSystem
 		register: 10
 		toStreamNamed: dataStream name

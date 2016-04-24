@@ -1,4 +1,4 @@
 accessing
 oneMinute
-	
-	^TimeUnits minute with: 1
+
+	^ TimeUnits minute with: 1

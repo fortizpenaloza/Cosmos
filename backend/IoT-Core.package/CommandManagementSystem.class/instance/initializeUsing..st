@@ -5,6 +5,6 @@ initializeUsing: anIdentifierProvider
 	timeSystem := self unresolvedSystemDependencyTo: 'Time System Interface'.
 
 	identifierProvider := anIdentifierProvider.
-	priorityCommandQueues := Dictionary new.
+	commandPriorityQueues := Dictionary new.
 
 	

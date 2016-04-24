@@ -1,4 +1,4 @@
-asserting
+*IoT-Tests
 should: aBlock raise: anException withDescription: aDescription
 
 	^ self

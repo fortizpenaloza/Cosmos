@@ -3,7 +3,9 @@
 		 },
 	"instance" : {
 		"commandManagementSystem" : "fortizpenaloza 1/18/2016 23:09",
-		"setUp" : "fortizpenaloza 4/18/2016 03:38",
-		"testCommandPriorityQueueRegistration" : "fortizpenaloza 4/18/2016 03:57",
-		"testCommandRegistration" : "fortizpenaloza 4/18/2016 22:26",
+		"setUp" : "fortizpenaloza 4/23/2016 00:07",
+		"testCommandPriorityQueueRegistration" : "fortizpenaloza 4/20/2016 23:55",
+		"testPoppingCommandFailsFromEmptyQueue" : "fortizpenaloza 4/24/2016 11:28",
+		"testPushingCommand" : "fortizpenaloza 4/24/2016 11:26",
+		"testPushingCommandFailsIfQueueNotFound" : "fortizpenaloza 4/24/2016 11:25",
 		"timeSystem" : "fortizpenaloza 1/19/2016 02:16" } }

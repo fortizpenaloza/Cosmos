@@ -8,4 +8,5 @@ registerCommandPriorityQueue
 		createdOn: timeSystem dateTime.
 		
 	self register: commandQueue.
+	
 	^ commandQueue
