@@ -10,6 +10,7 @@
 		"testDataPointRegistration" : "fortizpenaloza 4/24/2016 11:23",
 		"testDataStreamRegistration" : "fortizpenaloza 1/22/2016 18:49",
 		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 1/23/2016 02:31",
+		"testDataStreamRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/25/2016 10:01",
 		"testQueryingDataChannelByIdentifier" : "fortizpenaloza 1/23/2016 02:46",
 		"testQueryingDataStreamByNameAndChannelIdentifier" : "fortizpenaloza 1/23/2016 02:39",
 		"timeSystem" : "fortizpenaloza 1/14/2016 18:57" } }
