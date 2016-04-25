@@ -1,5 +1,5 @@
 managing
-registerToTriggerOnDataPointRegistration: aConditionalTrigger on: aDataStream
+register: aConditionalTrigger toTriggerOnDataPointRegistrationOn: aDataStream
 
 	triggersToFireOnDataPointRegistration
 		add: (Association key: aDataStream value: aConditionalTrigger)

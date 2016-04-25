@@ -1,4 +1,4 @@
-as yet unclassified
+comparing
 = anObject
 
-	^ self == anObject or: [ self class == anObject class ]
+	^ self == anObject or: [ self class = anObject class ]

@@ -2,7 +2,8 @@ test
 testDataChannelRegistration
 
 	| dataChannel |
-
+	
+	identifierProvider setNextTo: 1.
 	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
 
 	self

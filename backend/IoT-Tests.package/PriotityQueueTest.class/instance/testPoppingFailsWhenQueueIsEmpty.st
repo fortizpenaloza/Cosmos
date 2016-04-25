@@ -1,5 +1,5 @@
 tests
-testPoppingWhenEmptyRaisesQueueIsEmpty
+testPoppingFailsWhenQueueIsEmpty
 
 	| priorityQueue |
 

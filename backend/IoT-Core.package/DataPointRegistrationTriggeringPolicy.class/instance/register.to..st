@@ -1,4 +1,4 @@
 registering
 register: aConditionalTrigger to: aTriggerSystem 
 
-	aTriggerSystem registerToTriggerOnDataPointRegistration: aConditionalTrigger on: dataStream 
+	aTriggerSystem register: aConditionalTrigger toTriggerOnDataPointRegistrationOn: dataStream 

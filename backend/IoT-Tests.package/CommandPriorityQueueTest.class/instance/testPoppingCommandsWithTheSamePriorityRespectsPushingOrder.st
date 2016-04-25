@@ -1,5 +1,5 @@
 tests
-testPoppingWhenCommandsHasTheSamePriorityFollowsPushingOrder
+testPoppingCommandsWithTheSamePriorityRespectsPushingOrder
 
 	| commandPriorityQueue |
 

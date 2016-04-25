@@ -3,6 +3,6 @@
 		 },
 	"instance" : {
 		"testIsEmptyAfterCreation" : "fortizpenaloza 4/18/2016 02:43",
-		"testPoppingCommandRespectsItsPriority" : "fortizpenaloza 4/23/2016 00:32",
-		"testPoppingWhenCommandsHasTheSamePriorityFollowsPushingOrder" : "fortizpenaloza 4/23/2016 00:33",
-		"testPoppingWhenEmptyRaisesQueueIsEmpty" : "fortizpenaloza 4/18/2016 03:34" } }
+		"testPoppingFailsWhenQueueIsEmpty" : "fortizpenaloza 4/24/2016 15:48",
+		"testPoppingRepectsPushingOrderWhenQueueHasElementsWithSamePriority" : "fortizpenaloza 4/24/2016 16:00",
+		"testPoppingRespectsPushedElementPriority" : "fortizpenaloza 4/24/2016 15:59" } }

@@ -1,9 +1,9 @@
 tests
-testPushingCommandFailsIfQueueNotFound
+testPushingFromQueueFailsIfNotFound
 
 	self
 		should: [ self commandManagementSystem
-				push: 'TURN_ON_LED'
+				push: self turnOnLedCommand
 				with: QueuePriority high
 				toQueueIdentifiedBy: 1 ]
 		raise: ObjectNotFoundInSystem

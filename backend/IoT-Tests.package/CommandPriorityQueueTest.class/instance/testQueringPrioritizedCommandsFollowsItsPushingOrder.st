@@ -1,5 +1,5 @@
 tests
-testQueringCommandsFollowsPushingOrder
+testQueringPrioritizedCommandsFollowsItsPushingOrder
 
 	| commandPriorityQueue firstCommand secondCommand thirdCommand |
 

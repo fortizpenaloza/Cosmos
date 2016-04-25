@@ -1,5 +1,5 @@
 registering
 register: aConditionalTrigger to: aTriggerSystem 
 
-	aTriggerSystem registerToTriggerPeriodically: aConditionalTrigger every: timePeriod
+	aTriggerSystem register: aConditionalTrigger triggerPeriodicallyEvery: timePeriod
 	

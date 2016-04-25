@@ -1,5 +1,5 @@
 tests
-testPoppingCommandRespectsItsPriority
+testPoppingRespectsPushedElementPriority
 
 	| priorityQueue |
 

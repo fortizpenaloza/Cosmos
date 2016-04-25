@@ -1,17 +1,17 @@
 tests
-testPushingCommand
+testPushingAndThenPoppingCommand
 
 	| commandPriorityQueue |
 
 	commandPriorityQueue := self commandManagementSystem registerCommandPriorityQueue.
 
 	self commandManagementSystem
-		push: 'TURN_ON_LED'
+		push: self turnOnLedCommand
 		with: QueuePriority high
 		toQueueIdentifiedBy: commandPriorityQueue identifier.
 	self deny: commandPriorityQueue isEmpty.
 
 	self
 		assert: (self commandManagementSystem popFromQueueIdentifiedBy: commandPriorityQueue identifier)
-		equals: 'TURN_ON_LED'.
+		equals: self turnOnLedCommand.
 	self assert: commandPriorityQueue isEmpty

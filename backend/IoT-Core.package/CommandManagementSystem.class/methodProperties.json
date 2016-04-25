@@ -2,6 +2,7 @@
 	"class" : {
 		"using:" : "fortizpenaloza 1/12/2016 01:46" },
 	"instance" : {
+		"commandsFromQueueIdentifiedBy:" : "fortizpenaloza 4/25/2016 00:08",
 		"implementedInterface" : "fortizpenaloza 4/20/2016 23:39",
 		"initializeUsing:" : "fortizpenaloza 4/20/2016 23:17",
 		"popFromQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
