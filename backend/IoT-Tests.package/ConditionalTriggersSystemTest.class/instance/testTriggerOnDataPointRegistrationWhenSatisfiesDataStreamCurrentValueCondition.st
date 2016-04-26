@@ -4,16 +4,13 @@ testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition
 	| triggered dataChannel dataStream conditionalTrigger |
 
 	triggered := false.
-	
+
 	dataChannel := self registerDataChannel.
 	dataStream := self registerDataStreamTo: dataChannel.
 
 	conditionalTrigger := ConditionalTrigger
 		firing: [ triggered := true ]
-		whenMeets:
-			(DataStreamCurrentValueTriggeringCondition
-				of: dataStream
-				isLessThan: 11)
+		whenMeets: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11)
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream).
 
 	self conditionalTriggersSystem register: conditionalTrigger.

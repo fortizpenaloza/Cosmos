@@ -1,16 +1,15 @@
 running
 setUp
+
 	| timeSource |
+
 	timeSource := FixedTimeSource on: self septemberSixth2015AtNoon.
-	
-	identifierProvider := FixedNumberProvider providing: 1.
-	
+	identifierProvider := FixedNumberProvider providing: self identifier.
 	rootSystem := CompositeSystem named: 'IoT for testing'.
-	
+
 	(OrderedCollection
 		with: (TimeSystem using: timeSource)
 		with: (DataManagementSystem using: identifierProvider)
-		with: ConditionalTriggersSystem new)
-		do: [ :subsystem | rootSystem register: subsystem ].
-	
+		with: ConditionalTriggersSystem new) do: [ :subsystem | rootSystem register: subsystem ].
+
 	rootSystem startUp

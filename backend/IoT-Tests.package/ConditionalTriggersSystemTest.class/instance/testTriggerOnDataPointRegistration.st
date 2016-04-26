@@ -11,7 +11,7 @@ testTriggerOnDataPointRegistration
 	conditionalTrigger := ConditionalTrigger
 		firing: [ triggered := true ]
 		whenMeets: AlwaysTriggeringCondition new
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream).		
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream).
 
 	self conditionalTriggersSystem register: conditionalTrigger.
 	self deny: triggered.

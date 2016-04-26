@@ -13,5 +13,5 @@ testPushingAndThenPoppingCommand
 
 	self
 		assert: (self commandManagementSystem popFromQueueIdentifiedBy: commandPriorityQueue identifier)
-		equals: self turnOnLedCommand.
-	self assert: commandPriorityQueue isEmpty
+			equals: self turnOnLedCommand;
+		assert: commandPriorityQueue isEmpty

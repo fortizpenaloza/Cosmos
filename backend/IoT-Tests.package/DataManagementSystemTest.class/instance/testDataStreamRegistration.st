@@ -1,8 +1,8 @@
-test
+tests
 testDataStreamRegistration
 
 	| dataChannel dataStream |
-	
+
 	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
 	dataStream := self dataManagementSystem
 		registerStreamNamed: 'Temperature'

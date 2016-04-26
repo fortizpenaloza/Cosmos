@@ -1,4 +1,4 @@
-test
+tests
 testInstanceCreationAndAccessing
 
 	| dataChannel identifier name creationDateTime |
