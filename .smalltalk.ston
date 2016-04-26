@@ -5,5 +5,8 @@ SmalltalkCISpec {
       #directory : 'backend',
       #platforms : [ #pharo ]
     } 
-  ]
+  ], 
+  #testing: {
+   #categories : [ 'IoT-Tests' ]
+ }
 }
