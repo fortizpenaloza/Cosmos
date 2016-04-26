@@ -1,9 +1,9 @@
 SmalltalkCISpec {
-	#loading : [
-	SCIMetacelloLoadSpec {
-		#baseline : 'IoT',
-		#directory : 'backend',
-		#platforms : [ #pharo }
-	} 
-	]
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'IoT',
+      #directory : 'backend',
+      #platforms : [ #pharo ]
+    } 
+  ]
 }
