@@ -15,7 +15,9 @@ testQueryingPrioritizedCommands
 		toQueueIdentifiedBy: commandPriorityQueue identifier.
 
 	self
-		assert: (self commandManagementSystem commandsFromQueueIdentifiedBy: commandPriorityQueue identifier)
+		assert:
+			(self commandManagementSystem
+				commandsFromQueueIdentifiedBy: commandPriorityQueue identifier)
 		hasTheSameElementsInTheSameOrderThat:
 			(OrderedCollection
 				with:

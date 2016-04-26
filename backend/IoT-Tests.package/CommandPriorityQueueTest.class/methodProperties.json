@@ -2,8 +2,17 @@
 	"class" : {
 		 },
 	"instance" : {
-		"testInstanceCreationAndAccessing" : "fortizpenaloza 4/24/2016 15:52",
-		"testPoppingCommandsWithTheSamePriorityRespectsPushingOrder" : "fortizpenaloza 4/24/2016 23:30",
+		"julyTwentyfourth2015AtMidnight" : "fortizpenaloza 4/25/2016 22:59",
+		"push:to:" : "fortizpenaloza 4/25/2016 23:04",
+		"testInstanceCreationAndAccessing" : "fortizpenaloza 4/25/2016 23:01",
+		"testPoppingCommandsWithTheSamePriorityRespectsPushingOrder" : "fortizpenaloza 4/25/2016 23:15",
 		"testPoppingFailsWhenQueueIsEmpty" : "fortizpenaloza 4/24/2016 15:48",
-		"testPoppingRespectsPushedElementPriority" : "fortizpenaloza 4/24/2016 15:59",
-		"testQueringPrioritizedCommandsFollowsItsPushingOrder" : "fortizpenaloza 4/24/2016 23:28" } }
+		"testPoppingRespectsPushedElementPriority" : "fortizpenaloza 4/25/2016 23:13",
+		"testQueringPrioritizedCommandsFollowsItsPushingOrder" : "fortizpenaloza 4/25/2016 23:15",
+		"turnOffLedCommand" : "fortizpenaloza 4/25/2016 23:00",
+		"turnOffLedWithHighPriority" : "fortizpenaloza 4/25/2016 23:00",
+		"turnOnLedCommand" : "fortizpenaloza 4/25/2016 23:01",
+		"turnOnLedWithLowPriority" : "fortizpenaloza 4/25/2016 23:01",
+		"turnOnLedWithMediumPriority" : "fortizpenaloza 4/25/2016 23:09",
+		"turnOnMotorCommand" : "fortizpenaloza 4/25/2016 23:01",
+		"turnOnMotorWithMediumPriority" : "fortizpenaloza 4/25/2016 23:01" } }

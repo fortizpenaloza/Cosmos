@@ -5,8 +5,9 @@ testInstanceCreationAndAccessing
 
 	commandPriorityQueue := CommandPriorityQueue
 		identifiedBy: 1
-		createdOn: (July twentyfourth , 2015) atMidnight.
+		createdOn: self julyTwentyfourth2015AtMidnight.
 
 	self assert: commandPriorityQueue isEmpty;
 		assert: commandPriorityQueue identifier equals: 1;
-		assert: commandPriorityQueue creationDateTime equals: (July twentyfourth , 2015) atMidnight
+		assert: commandPriorityQueue creationDateTime
+			equals: self julyTwentyfourth2015AtMidnight

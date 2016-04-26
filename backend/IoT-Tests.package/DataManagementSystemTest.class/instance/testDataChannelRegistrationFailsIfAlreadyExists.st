@@ -1,7 +1,5 @@
-test
+tests
 testDataChannelRegistrationFailsIfAlreadyExists
-
-	identifierProvider setNextTo: 1.
 
 	self dataManagementSystem registerChannelNamed: 'Channel #1'.
 	self 

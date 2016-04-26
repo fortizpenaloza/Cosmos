@@ -4,7 +4,7 @@ testTriggerPeriodicallyEveryTenMinutes
 	| triggered conditionalTrigger |
 
 	triggered := false.
-	
+
 	conditionalTrigger := ConditionalTrigger
 		firing: [ triggered := true ]
 		whenMeets: AlwaysTriggeringCondition new

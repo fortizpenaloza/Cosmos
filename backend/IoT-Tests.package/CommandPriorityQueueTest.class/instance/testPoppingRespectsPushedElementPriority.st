@@ -1,28 +1,22 @@
 tests
 testPoppingRespectsPushedElementPriority
 
-	| commandPriorityQueue |
+	| commandPriorityQueue prioritizedCommands |
 
 	commandPriorityQueue := CommandPriorityQueue
 		identifiedBy: 1
 		createdOn: (July twentyfourth , 2015) atMidnight.
 
-	commandPriorityQueue
-		push: 2
-		with: QueuePriority low
-		on: (July twentyfourth , 2015) atMidnight.
+	prioritizedCommands := OrderedCollection new
+		add: self turnOnLedWithLowPriority;
+		add: self turnOffLedWithHighPriority;
+		add: self turnOnMotorWithMediumPriority;
+		yourself.
 
-	commandPriorityQueue
-		push: 3
-		with: QueuePriority medium
-		on: (July twentyfourth , 2015) atMidnight.
+	self push: prioritizedCommands to: commandPriorityQueue.
 
-	commandPriorityQueue
-		push: 4
-		with: QueuePriority high
-		on: (July twentyfourth , 2015) atMidnight.
-
-
-	self assert: commandPriorityQueue pop command equals: 4.
-	self assert: commandPriorityQueue pop command equals: 3.
-	self assert: commandPriorityQueue pop command equals: 2
+	self
+		assert: commandPriorityQueue pop equals: self turnOffLedWithHighPriority;
+		assert: commandPriorityQueue pop equals: self turnOnMotorWithMediumPriority;
+		assert: commandPriorityQueue pop equals: self turnOnLedWithLowPriority;
+		assert: commandPriorityQueue isEmpty

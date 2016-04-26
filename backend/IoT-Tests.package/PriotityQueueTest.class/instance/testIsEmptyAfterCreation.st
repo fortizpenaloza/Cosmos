@@ -4,5 +4,4 @@ testIsEmptyAfterCreation
 	| priorityQueue |
 
 	priorityQueue := PriorityQueue empty.
-	
-	self assert: priorityQueue isEmpty.
+	self assert: priorityQueue isEmpty
