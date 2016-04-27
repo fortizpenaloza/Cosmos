@@ -6,7 +6,7 @@ SmalltalkCISpec {
       #platforms : [ #pharo ]
     } 
   ], 
-  #testing: {
+  #testing : {
    #categories : [ 'IoT-Tests' ]
  }
 }
