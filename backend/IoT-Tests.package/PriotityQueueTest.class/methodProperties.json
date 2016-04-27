@@ -2,7 +2,7 @@
 	"class" : {
 		 },
 	"instance" : {
-		"testIsEmptyAfterCreation" : "FranciscoOrtizPeÃaloza 4/26/2016 08:41:47",
-		"testPoppingFailsWhenQueueIsEmpty" : "FranciscoOrtizPeÃaloza 4/26/2016 08:41:47",
-		"testPoppingRepectsPushingOrderWhenQueueHasElementsWithSamePriority" : "FranciscoOrtizPeÃaloza 4/26/2016 08:41:47",
-		"testPoppingRespectsPushedElementPriority" : "FranciscoOrtizPeÃaloza 4/26/2016 08:41:47" } }
+		"testIsEmptyAfterCreation" : "fortizpenaloza 4/26/2016 08:40",
+		"testPoppingFailsWhenQueueIsEmpty" : "fortizpenaloza 4/24/2016 15:48",
+		"testPoppingRepectsPushingOrderWhenQueueHasElementsWithSamePriority" : "fortizpenaloza 4/24/2016 16:00",
+		"testPoppingRespectsPushedElementPriority" : "fortizpenaloza 4/24/2016 15:59" } }
