@@ -5,10 +5,10 @@ baseline: spec
 	spec
 		for: #common
 		do:  [ 		
-			spec configuration: 'Chalten' with: [
+			spec baseline: 'Chalten' with: [
 				spec
-					loads: #('Core');
-					repository: 'github://mtaborda/chalten:v5.0.0/repository'].
+					repository: 'github://mtaborda/chalten:v5.0.0/repository';
+					loads: #('Core')].
 				
 			spec configuration: 'ZincHTTPComponents' with: [ 
 				spec
