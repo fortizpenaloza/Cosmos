@@ -8,7 +8,7 @@ baseline: spec
 			spec configuration: 'Chalten' with: [
 				spec
 					loads: #('Core');
-					repository: 'github://mtaborda/chalten:master/repository'].
+					repository: 'github://mtaborda/chalten:v5.0.0/repository'].
 				
 			spec configuration: 'ZincHTTPComponents' with: [ 
 				spec
