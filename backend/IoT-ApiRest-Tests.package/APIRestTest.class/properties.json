@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-ApiRest-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"identifierProvider",
+		"rootSystem" ],
+	"name" : "APIRestTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }
