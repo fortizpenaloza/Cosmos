@@ -1,0 +1,7 @@
+{
+	"name":"Data Channel #1",
+	"data_streams":[
+    {"name":"Temperature", "current_value":"21"},
+    {"name":"Pressure", "current_value":"1024 Hp"},
+    {"name":"Humidity", "current_value":"70%"}
+]}
