@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-ApiRest",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"dataChannel",
+		"dataStreams" ],
+	"name" : "DataChannelCurrentStatus",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }
