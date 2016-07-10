@@ -1,7 +1,7 @@
 tests
 testDataChannelSuccesfulQuery
 
-	| dataChannel temperatureStream  humidityStream atmosphericPressureStream teapot writer response |
+	| dataChannel temperatureStream  humidityStream atmosphericPressureStream teapot writer response localTimeString |
 	
 	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
 	
@@ -57,7 +57,9 @@ testDataChannelSuccesfulQuery
 	
 	response:= ZnEasy get: 'http://localhost:8010/dataChannel/', (dataChannel identifier asString).
 
+	localTimeString:= TimeZones local asString.
+	
 	self assert: response code equals: 200.
-	self assert: response contents equals: '{"name":"Channel #1","dataStreams":[{"name":"Temperature","currentValue":16,"lastUpdate":"September 6, 2015 12:00:00 {(GMT-03:00) Local Time}"},{"name":"Pressure","currentValue":1016,"lastUpdate":"September 6, 2015 12:00:00 {(GMT-03:00) Local Time}"},{"name":"Humidity","currentValue":72,"lastUpdate":"September 6, 2015 12:00:00 {(GMT-03:00) Local Time}"}]}'.
+	self assert: response contents equals: '{"name":"Channel #1","dataStreams":[{"name":"Temperature","currentValue":16,"lastUpdate":"September 6, 2015 12:00:00 {',localTimeString,'}"},{"name":"Pressure","currentValue":1016,"lastUpdate":"September 6, 2015 12:00:00 {',localTimeString,'}"},{"name":"Humidity","currentValue":72,"lastUpdate":"September 6, 2015 12:00:00 {',localTimeString,'}"}]}'.
 	
 	teapot stop.
