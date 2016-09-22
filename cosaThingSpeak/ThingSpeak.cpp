@@ -19,6 +19,8 @@
  */
 
 #include "ThingSpeak.hh"
+#include "Cosa/Trace.hh"
+
 
 // ThingSpeak server network address
 #define API_THINGSPEAK_COM 10,42,0,1
@@ -55,7 +57,7 @@ int
 ThingSpeak::Client::connect()
 {
   uint8_t server[4] = { API_THINGSPEAK_COM };
-  int res = m_sock->connect(server, 8080);
+  int res = m_sock->connect(server, 8085);
   if (UNLIKELY(res != 0)) return (res);
   while ((res = m_sock->is_connected()) == 0) delay(16);
   if (UNLIKELY(res < 0)) return (-2);
@@ -87,20 +89,41 @@ ThingSpeak::Channel::post(const char* entry, str_P status)
   size_t length = strlen(entry);
   if (status != NULL) length += strlen_P(status) + 8;
 
+  //TRACE("\n Trying to connect to server...= ");
   // Connect to the server
   int res = m_client->connect();
+  //TRACE(res);
   if (UNLIKELY(res < 0)) goto error;
 
-
+  //TRACE("\n No error: doing GET.");
+  
   // Generate the http post request with entry and status
-  page << PSTR("GET /update HTTP/1.1") << CRLF << CRLF;
-       // << PSTR("Host:10.42.0.1:8080") << CRLF
-       // << PSTR("Connection:close") << CRLF << CRLF;
-       // << PSTR("X-THINGSPEAKAPIKEY: ") << m_key << CRLF;
-       // << PSTR("Content-Type: application/x-www-form-urlencoded") << CRLF
-       // << PSTR("Content-Length: ") << strlen(entry) << CRLF
-       // << CRLF
-       // << (char*) entry;
+  //CLRF makes noise -> without it, the GET works fine
+  
+  //GET request working
+  //page << PSTR("GET /update HTTP/1.1");
+  //Original GET request ending with CRLF
+  //page << PSTR("GET /update HTTP/1.1") << CRLF;
+  
+  //POST request
+  page << PSTR("POST /update HTTP/1.1\r\n")// << CRLF << CRLF;
+  //page << PSTR("POST /update")// << CRLF << CRLF;
+       << PSTR("Host:10.42.0.1:8085\r\n") //<< CRLF
+        << PSTR("Connection:close\r\n") // << CRLF << CRLF
+    //    << PSTR("X-THINGSPEAKAPIKEY: ") << m_key << CRLF
+       << PSTR("Content-Type: application/x-www-form-urlencoded\r\n") // << CRLF
+       // << PSTR("Content-Type: text/plain\r\n")
+        << PSTR("Content-Length: ") << strlen(entry) << "\r\n"// << CRLF
+        <<"\r\n"
+        //    << CRLF
+        << (char*) entry;
+    //    << PSTR(" HTTP/1.1");
+   
+    //Weird POST request working fine
+    // page << PSTR("POST /update")
+    //    << (char*) entry
+    //    << PSTR(" HTTP/1.1");
+    
   if (status != NULL) page << PSTR("&status=") << status;
   sock->flush();
 
