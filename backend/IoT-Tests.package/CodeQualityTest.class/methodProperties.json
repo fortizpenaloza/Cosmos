@@ -1,0 +1,9 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"descriptionFrom:" : "fortizpenaloza 9/25/2016 20:02",
+		"packagesToBeChecked" : "fortizpenaloza 9/25/2016 19:18",
+		"runRule:" : "fortizpenaloza 9/25/2016 21:19",
+		"testInstanceVariableNotReferenced" : "fortizpenaloza 9/25/2016 21:17",
+		"testMessageImplementedButNotSent" : "fortizpenaloza 9/25/2016 20:20" } }

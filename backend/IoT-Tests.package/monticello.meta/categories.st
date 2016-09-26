@@ -1,4 +1,5 @@
 SystemOrganization addCategory: #'IoT-Tests'!
+SystemOrganization addCategory: 'IoT-Tests-CodeQuality'!
 SystemOrganization addCategory: 'IoT-Tests-CommandManagementSystemModel'!
 SystemOrganization addCategory: 'IoT-Tests-CommandModel'!
 SystemOrganization addCategory: 'IoT-Tests-ConditionModel'!

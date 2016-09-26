@@ -1,3 +1,4 @@
 accessing
 identifier
-	^1
+
+	^ 1

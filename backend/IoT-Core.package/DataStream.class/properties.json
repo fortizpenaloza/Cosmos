@@ -6,13 +6,12 @@
 		 ],
 	"commentStamp" : "<historical>",
 	"instvars" : [
-		"identifier",
+		"name",
+		"creationDateTime",
+		"dataChannel",
 		"currentValue",
 		"lastUpdate",
-		"dataPoints",
-		"dataChannel",
-		"name",
-		"creationDateTime" ],
+		"dataPoints" ],
 	"name" : "DataStream",
 	"pools" : [
 		 ],
