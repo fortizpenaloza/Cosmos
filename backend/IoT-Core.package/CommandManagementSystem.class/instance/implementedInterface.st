@@ -1,7 +1,7 @@
 system specification
 implementedInterface
 
-	^ Interface
+	^ SystemInterface
 		named: 'Command Management System Interface'
 		offering:
 			(OrderedCollection new

@@ -1,5 +1,5 @@
 system specification
 implementedInterface
 
-	^ Interface named: 'Time System Interface'
+	^ SystemInterface named: 'Time System Interface'
 		offering: #(#dateTime #timeOfDay) 

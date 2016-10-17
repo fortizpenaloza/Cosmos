@@ -1,4 +1,4 @@
 initialize-release
-initializeTo: aSubsystemInterface
+initializeTo: aSystemInterface
 
-	interface := aSubsystemInterface 
+	interface := aSystemInterface 

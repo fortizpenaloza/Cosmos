@@ -1,5 +1,5 @@
-starting/stopping
+starting-stopping
 shutDown
 
 	super shutDown.
-	subsystems do: [ :system | system shutDown ]
+	systems do: [ :system | system shutDown ]

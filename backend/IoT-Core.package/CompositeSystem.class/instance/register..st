@@ -1,6 +1,6 @@
 subsystem management
 register: aSubsystem
 
-	subsystems add: aSubsystem.
+	systems add: aSubsystem.
 	aSubsystem parent: self.
 	^ aSubsystem

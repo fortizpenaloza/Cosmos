@@ -2,11 +2,9 @@
 	"class" : {
 		"named:" : "fortizpenaloza 1/11/2016 03:08" },
 	"instance" : {
-		"initializeNamed:" : "fortizpenaloza 1/11/2016 02:50",
-		"register:" : "fortizpenaloza 1/11/2016 00:36",
-		"resolveDependecies" : "fortizpenaloza 1/11/2016 23:21",
-		"shutDown" : "fortizpenaloza 1/11/2016 02:51",
-		"startUp" : "fortizpenaloza 1/11/2016 02:51",
-		"systemImplementing:" : "fortizpenaloza 1/11/2016 00:17",
-		"systemImplementing:ifFound:ifNone:" : "fortizpenaloza 1/11/2016 03:04",
-		"systemImplementing:ifNone:" : "fortizpenaloza 1/11/2016 00:17" } }
+		"initializeNamed:" : "fortizpenaloza 10/9/2016 00:10",
+		"register:" : "fortizpenaloza 10/9/2016 00:10",
+		"shutDown" : "fortizpenaloza 10/14/2016 00:44",
+		"startUp" : "fortizpenaloza 10/14/2016 00:45",
+		"systemImplementing:" : "fortizpenaloza 10/8/2016 21:18",
+		"systemImplementing:ifNone:" : "fortizpenaloza 10/9/2016 00:10" } }

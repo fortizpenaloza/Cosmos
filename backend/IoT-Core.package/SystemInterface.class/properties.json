@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Core-SystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"name",
+		"messages" ],
+	"name" : "SystemInterface",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

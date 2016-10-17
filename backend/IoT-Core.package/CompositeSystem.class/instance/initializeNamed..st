@@ -4,4 +4,4 @@ initializeNamed: aName
 	super initialize.
 	
 	name := aName.
-	subsystems := OrderedCollection new
+	systems := OrderedCollection new

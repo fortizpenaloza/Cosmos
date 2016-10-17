@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-REST-API-FormatterModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"dateFormatter",
+		"timeOfDayFormatter" ],
+	"name" : "ISO8601DateTimeFormatter",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

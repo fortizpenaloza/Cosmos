@@ -6,9 +6,9 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		 ],
+		"parentHolder" ],
 	"name" : "System",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "SystemImplementation",
 	"type" : "normal" }

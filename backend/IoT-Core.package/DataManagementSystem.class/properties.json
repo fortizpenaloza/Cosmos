@@ -14,5 +14,5 @@
 	"name" : "DataManagementSystem",
 	"pools" : [
 		 ],
-	"super" : "Subsystem",
+	"super" : "System",
 	"type" : "normal" }

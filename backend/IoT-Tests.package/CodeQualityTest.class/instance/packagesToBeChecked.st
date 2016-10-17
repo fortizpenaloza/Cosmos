@@ -1,4 +1,4 @@
 accessing
 packagesToBeChecked
 
-	^ #('IoT-Core')
+	^ #('IoT-Core' 'IoT-Tests')

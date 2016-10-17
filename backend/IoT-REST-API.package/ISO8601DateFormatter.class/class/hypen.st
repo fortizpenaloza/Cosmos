@@ -1,0 +1,4 @@
+accessing
+hypen
+
+	^ BoundObject to: $-

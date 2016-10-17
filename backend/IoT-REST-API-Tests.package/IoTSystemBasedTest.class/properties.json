@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-REST-API-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"timeSource",
+		"identifierProvider",
+		"rootSystem" ],
+	"name" : "IoTSystemBasedTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

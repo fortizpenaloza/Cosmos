@@ -1,0 +1,13 @@
+{
+	"class" : {
+		"configuredToUse:" : "fortizpenaloza 10/16/2016 19:49",
+		"hypen" : "fortizpenaloza 10/16/2016 19:48",
+		"usingExtendedFormat" : "fortizpenaloza 10/16/2016 19:47" },
+	"instance" : {
+		"format:" : "fortizpenaloza 10/17/2016 00:54",
+		"initializeConfiguredToUse:" : "fortizpenaloza 10/16/2016 19:50",
+		"put:paddedLeftToTwoWithZeroOn:" : "fortizpenaloza 10/16/2016 19:54",
+		"putHoursOf:on:" : "fortizpenaloza 10/16/2016 19:53",
+		"putMinutesOf:on:" : "fortizpenaloza 10/16/2016 19:56",
+		"putSecondsOf:on:" : "fortizpenaloza 10/16/2016 19:56",
+		"putSeparatorOn:" : "fortizpenaloza 10/16/2016 19:55" } }

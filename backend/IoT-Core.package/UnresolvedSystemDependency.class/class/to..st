@@ -1,4 +1,4 @@
 instance creation
-to: aSubsystemInterface 
+to: aSystemInterface 
 
-	^ self new initializeTo: aSubsystemInterface
+	^ self new initializeTo: aSystemInterface

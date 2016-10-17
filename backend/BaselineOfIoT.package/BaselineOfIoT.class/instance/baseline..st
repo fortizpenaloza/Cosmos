@@ -23,10 +23,10 @@ baseline: spec
 				
 			spec
 				package: 'IoT-Core' with: [ spec requires: #('Chalten' 'ZincHTTPComponents') ];
-				package: 'IoT-ApiRest' with: [ spec requires: 'Teapot' ];
+				package: 'IoT-REST-API' with: [ spec requires: 'Teapot' ];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ];
-				package: 'IoT-ApiRest-Tests' with: [ spec requires: 'IoT-ApiRest' ].
+				package: 'IoT-REST-API-Tests' with: [ spec requires: 'IoT-REST-API' ].
 			spec
-				group: 'Development' with: #('IoT-Core' 'IoT-ApiRest' 'IoT-Tests' 'IoT-ApiRest-Tests');
-				group: 'Deployment' with: #('IoT-Core' 'IoT-ApiRest');
+				group: 'Development' with: #('IoT-Core' 'IoT-REST-API' 'IoT-Tests' 'IoT-REST-API-Tests');
+				group: 'Deployment' with: #('IoT-Core' 'IoT-REST-API');
 				group: 'default' with: #('Deployment') ]

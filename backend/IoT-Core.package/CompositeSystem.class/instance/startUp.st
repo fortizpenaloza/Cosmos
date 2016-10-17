@@ -1,5 +1,4 @@
-starting/stopping
+starting-stopping
 startUp
 
-	super startUp.
-	subsystems do: [ :system | system startUp ]
+	systems do: [ :system | system startUp ]

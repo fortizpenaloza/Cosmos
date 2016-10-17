@@ -12,5 +12,5 @@
 	"name" : "CommandManagementSystem",
 	"pools" : [
 		 ],
-	"super" : "Subsystem",
+	"super" : "System",
 	"type" : "normal" }

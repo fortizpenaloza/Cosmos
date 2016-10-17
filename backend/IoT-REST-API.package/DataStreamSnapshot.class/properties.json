@@ -1,0 +1,16 @@
+{
+	"category" : "IoT-REST-API-DataModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"timestamp",
+		"value",
+		"name" ],
+	"name" : "DataStreamSnapshot",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

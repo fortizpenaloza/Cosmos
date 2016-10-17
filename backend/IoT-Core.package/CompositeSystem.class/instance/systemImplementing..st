@@ -3,4 +3,4 @@ systemImplementing: aSystemInterface
 
 	^ self
 		systemImplementing: aSystemInterface
-		ifNone: [ InterfaceImplementationNotFound signalFor: aSystemInterface ]
+		ifNone: [ SystemImplementationNotFound signalFor: aSystemInterface ]

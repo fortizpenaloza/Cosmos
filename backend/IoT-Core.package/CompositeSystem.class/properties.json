@@ -6,10 +6,10 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"subsystems",
-		"name" ],
+		"name",
+		"systems" ],
 	"name" : "CompositeSystem",
 	"pools" : [
 		 ],
-	"super" : "System",
+	"super" : "SystemImplementation",
 	"type" : "normal" }

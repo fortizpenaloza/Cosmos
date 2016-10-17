@@ -1,7 +1,6 @@
 subsystem lookup
-systemImplementing: aSystemInterface ifNone: anExceptionalBlock
+systemImplementing: aSystemInterface ifNone: aNoneBlock
 
-	^ self
-		systemImplementing: aSystemInterface
-		ifFound: [ :implementor | implementor ]
-		ifNone: anExceptionalBlock
+	^ systems
+		detect: [ :subsystem | subsystem implements: aSystemInterface ]
+		ifNone: aNoneBlock
