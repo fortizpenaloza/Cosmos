@@ -1,8 +1,8 @@
 {
 	"class" : {
-		"named:" : "fortizpenaloza 1/11/2016 03:08" },
+		"empty" : "fortizpenaloza 10/20/2016 01:20" },
 	"instance" : {
-		"initializeNamed:" : "fortizpenaloza 10/9/2016 00:10",
+		"initialize" : "fortizpenaloza 10/20/2016 01:09",
 		"register:" : "fortizpenaloza 10/9/2016 00:10",
 		"shutDown" : "fortizpenaloza 10/14/2016 00:44",
 		"startUp" : "fortizpenaloza 10/14/2016 00:45",

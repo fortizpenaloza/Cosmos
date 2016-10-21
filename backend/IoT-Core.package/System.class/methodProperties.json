@@ -1,8 +1,7 @@
 {
 	"class" : {
-		 },
+		"implementedInterface" : "fortizpenaloza 10/20/2016 18:43" },
 	"instance" : {
-		"implementedInterface" : "fortizpenaloza 1/11/2016 02:42",
 		"initialize" : "fortizpenaloza 1/11/2016 03:00",
 		"parent" : "fortizpenaloza 1/11/2016 02:59",
 		"parent:" : "fortizpenaloza 1/11/2016 02:59",

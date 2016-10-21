@@ -1,0 +1,11 @@
+{
+	"class" : {
+		"implementedInterface" : "fortizpenaloza 10/20/2016 18:44" },
+	"instance" : {
+		"assertNotAlreadyExists:subscribedTo:" : "fortizpenaloza 10/20/2016 00:59",
+		"initialize" : "fortizpenaloza 10/18/2016 19:53",
+		"notify:" : "fortizpenaloza 10/20/2016 00:38",
+		"resolveDependecies" : "fortizpenaloza 10/20/2016 01:25",
+		"revokeSubscriptionTo:of:" : "fortizpenaloza 10/20/2016 01:07",
+		"subscribe:to:toBeNotifiedSending:" : "fortizpenaloza 10/20/2016 09:31",
+		"subscriptions" : "fortizpenaloza 10/18/2016 19:53" } }

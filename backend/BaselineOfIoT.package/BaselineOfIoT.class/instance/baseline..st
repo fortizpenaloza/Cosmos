@@ -23,10 +23,13 @@ baseline: spec
 				
 			spec
 				package: 'IoT-Core' with: [ spec requires: #('Chalten' 'ZincHTTPComponents') ];
+				package: 'IoT-Notifications-Core' with: [ spec requires: 'IoT-Core' ];
 				package: 'IoT-REST-API' with: [ spec requires: 'Teapot' ];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ];
+				package: 'IoT-Notifications-Tests' with: [ spec requires: 'IoT-Notifications-Core' ];
 				package: 'IoT-REST-API-Tests' with: [ spec requires: 'IoT-REST-API' ].
 			spec
-				group: 'Development' with: #('IoT-Core' 'IoT-REST-API' 'IoT-Tests' 'IoT-REST-API-Tests');
-				group: 'Deployment' with: #('IoT-Core' 'IoT-REST-API');
+				group: 'Deployment' with: #('IoT-Core' 'IoT-REST-API' 'IoT-Notifications-Core');
+				group: 'Tests' with: #('IoT-Tests' 'IoT-REST-API-Tests' 'IoT-Notifications-Tests');	
+				group: 'Development' with: #('Deployment' 'Tests');			
 				group: 'default' with: #('Deployment') ]

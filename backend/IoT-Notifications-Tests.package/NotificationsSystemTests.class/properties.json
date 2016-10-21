@@ -1,0 +1,15 @@
+{
+	"category" : "IoT-Notifications-Tests-SystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"hasBeenNotified",
+		"eventsNotificationSystem" ],
+	"name" : "NotificationsSystemTests",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

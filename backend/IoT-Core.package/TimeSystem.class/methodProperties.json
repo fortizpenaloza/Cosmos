@@ -1,9 +1,9 @@
 {
 	"class" : {
+		"implementedInterface" : "fortizpenaloza 10/20/2016 18:45",
 		"using:" : "fortizpenaloza 1/11/2016 01:11" },
 	"instance" : {
 		"dateTime" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
-		"implementedInterface" : "fortizpenaloza 10/8/2016 01:09",
 		"initializeUsing:" : "fortizpenaloza 1/11/2016 01:51",
 		"resolveDependecies" : "fortizpenaloza 1/11/2016 23:21",
 		"timeOfDay" : "FranciscoOrtizPenaloza 9/24/2014 18:17" } }

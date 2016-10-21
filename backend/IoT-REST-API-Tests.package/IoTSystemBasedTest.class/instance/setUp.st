@@ -3,7 +3,7 @@ setUp
 
 	timeSource := FixedTimeSource on: self septemberSixth2015AtNoon.
 	identifierProvider := FixedNumberProvider providing: self identifier.
-	rootSystem := CompositeSystem named: 'IoT for testing'.
+	rootSystem := CompositeSystem empty.
 
 	(OrderedCollection
 		with: (TimeSystem using: timeSource)

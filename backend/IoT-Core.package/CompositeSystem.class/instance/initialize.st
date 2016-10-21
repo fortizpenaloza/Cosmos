@@ -1,7 +1,5 @@
 initialize-release
-initializeNamed: aName
-	
+initialize
+
 	super initialize.
-	
-	name := aName.
 	systems := OrderedCollection new

@@ -1,4 +1,4 @@
 instance creation
-named: aName offering: aCollectionOfMessages
+named: aName offering: aMessageCollection
 
-	^ self new initializeNamed: aName offering: aCollectionOfMessages 
+	^ self new initializeNamed: aName offering: aMessageCollection 

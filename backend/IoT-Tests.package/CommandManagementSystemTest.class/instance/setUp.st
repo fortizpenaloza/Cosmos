@@ -9,7 +9,7 @@ setUp
 		
 	identifierProvider := FixedNumberProvider providing: 1.
 
-	rootSystem := CompositeSystem named: 'IoT for testing'.
+	rootSystem := CompositeSystem empty.
 
 	(OrderedCollection
 		with: (TimeSystem using: timeSource)

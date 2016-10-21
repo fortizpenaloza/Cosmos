@@ -1,9 +1,9 @@
 {
 	"class" : {
+		"implementedInterface" : "fortizpenaloza 10/20/2016 23:15",
 		"using:" : "fortizpenaloza 1/11/2016 01:22" },
 	"instance" : {
 		"channelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54",
-		"implementedInterface" : "fortizpenaloza 10/8/2016 01:09",
 		"initializeUsing:" : "fortizpenaloza 1/23/2016 02:29",
 		"register:toStreamNamed:ofChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:16",
 		"registerChannel:" : "fortizpenaloza 1/23/2016 02:11",

@@ -3,7 +3,7 @@
 		 },
 	"instance" : {
 		"commandManagementSystem" : "fortizpenaloza 1/18/2016 23:09",
-		"setUp" : "fortizpenaloza 4/25/2016 00:35",
+		"setUp" : "fortizpenaloza 10/20/2016 01:20",
 		"testCommandPriorityQueueRegistration" : "fortizpenaloza 4/25/2016 23:13",
 		"testPoppingCommandsFollowsItsPriority" : "fortizpenaloza 4/25/2016 00:41",
 		"testPoppingFromQueueFailsIfEmpty" : "fortizpenaloza 4/24/2016 23:44",

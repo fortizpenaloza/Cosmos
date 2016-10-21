@@ -5,7 +5,7 @@ setUp
 		on: September tenth , 2015
 		at: TimeOfDay noon.
 
-	rootSystem := CompositeSystem named: 'IoT for testing'.
+	rootSystem := CompositeSystem empty.
 
 	(OrderedCollection
 		with: (TimeSystem using: timeSource)

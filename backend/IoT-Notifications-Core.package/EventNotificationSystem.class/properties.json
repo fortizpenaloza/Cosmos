@@ -1,0 +1,14 @@
+{
+	"category" : "IoT-Notifications-Core-SystemModel",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"subscriptions" ],
+	"name" : "EventNotificationSystem",
+	"pools" : [
+		 ],
+	"super" : "System",
+	"type" : "normal" }
