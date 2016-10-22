@@ -3,6 +3,6 @@
 		 },
 	"instance" : {
 		"testQueryingNotValidStream" : "fortizpenaloza 10/17/2016 01:33",
-		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "fortizpenaloza 10/17/2016 01:16",
+		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "julianSaavedra 10/21/2016 22:24",
 		"testQueryingSnapshotOfChannelNotValid" : "fortizpenaloza 10/15/2016 14:33",
-		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins" : "fortizpenaloza 10/17/2016 01:18" } }
+		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins" : "julianSaavedra 10/21/2016 22:24" } }
