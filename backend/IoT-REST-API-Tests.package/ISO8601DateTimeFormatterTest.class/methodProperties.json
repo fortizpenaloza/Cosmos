@@ -2,5 +2,6 @@
 	"class" : {
 		 },
 	"instance" : {
-		"testLocalTimeFormattingUsingExtendedFormat" : "fortizpenaloza 10/16/2016 20:20",
-		"testUTCFormattingUsingExtendedFormat" : "fortizpenaloza 10/17/2016 01:05" } }
+		"septemberSixthAtNoonUTC" : "julianSaavedra 10/21/2016 23:42",
+		"testLocalTimeFormattingUsingExtendedFormat" : "julianSaavedra 10/21/2016 23:43",
+		"testUTCFormattingUsingExtendedFormat" : "julianSaavedra 10/21/2016 23:42" } }
