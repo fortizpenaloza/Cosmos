@@ -1,4 +1,4 @@
 tests support
-notify
+setHasBeenNotifiedToTrue
 
 	hasBeenNotified := true

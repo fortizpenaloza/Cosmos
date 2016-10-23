@@ -6,9 +6,8 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"hasBeenNotified",
-		"eventsNotificationSystem" ],
-	"name" : "NotificationsSystemTests",
+		"hasBeenNotified" ],
+	"name" : "EventNotificationSystemTests",
 	"pools" : [
 		 ],
 	"super" : "TestCase",

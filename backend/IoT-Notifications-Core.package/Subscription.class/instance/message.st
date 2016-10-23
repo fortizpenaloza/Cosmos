@@ -1,4 +1,4 @@
 accessing
 message
 	
-	^ messageToSend 
+	^ message 

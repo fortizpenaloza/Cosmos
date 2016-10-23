@@ -1,4 +1,4 @@
-as yet unclassified
+tests
 testLocalTimeFormattingUsingExtendedFormat
 
 	self

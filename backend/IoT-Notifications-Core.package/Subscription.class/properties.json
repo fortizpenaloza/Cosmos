@@ -8,9 +8,9 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"subject",
 		"eventType",
-		"messageToSend" ],
+		"subscriber",
+		"message" ],
 	"name" : "Subscription",
 	"pools" : [
 		 ],

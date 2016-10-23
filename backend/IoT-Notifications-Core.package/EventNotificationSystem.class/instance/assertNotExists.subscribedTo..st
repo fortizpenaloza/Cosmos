@@ -1,9 +1,9 @@
 subscribing-private
-assertNotAlreadyExists: aSubjectOfInterest subscribedTo: anEventType
+assertNotExists: aSubscriber subscribedTo: anEventType
 
 	subscriptions
 		detect: [ :subscription | 
-			subscription subject = aSubjectOfInterest
+			subscription subscriber = aSubscriber
 				and: [ subscription eventType = anEventType ] ]
 		ifFound: [ ObjectAlreadyInSystem
 				signal: 'Object already subscribed to this event type.' ]

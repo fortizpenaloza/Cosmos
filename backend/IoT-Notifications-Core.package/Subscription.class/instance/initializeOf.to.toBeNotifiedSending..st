@@ -1,6 +1,6 @@
 initialize-release
-initializeOf: aSubjectOfInterest to: anEventType toBeNotifiedSending: aMessage 
+initializeOf: aSubscriber to: anEventType toBeNotifiedSending: aMessage 
 	
-	subject := aSubjectOfInterest.
+	subscriber := aSubscriber.
 	eventType := anEventType.
-	messageToSend := aMessage 
+	message := aMessage 

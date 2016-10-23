@@ -1,7 +1,7 @@
 subscribing
-subscribe: aSubjectOfInterest to: anEventType toBeNotifiedSending: aMessage
+subscribe: aSubscriber to: anEventType toBeNotifiedSending: aMessage
 
-	self assertNotAlreadyExists: aSubjectOfInterest subscribedTo: anEventType. 
+	self assertNotExists: aSubscriber subscribedTo: anEventType. 
 
 	subscriptions
-		add: (Subscription of: aSubjectOfInterest to: anEventType toBeNotifiedSending: aMessage)
+		add: (Subscription of: aSubscriber to: anEventType toBeNotifiedSending: aMessage)

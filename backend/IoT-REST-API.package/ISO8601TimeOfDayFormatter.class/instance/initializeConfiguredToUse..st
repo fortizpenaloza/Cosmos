@@ -1,4 +1,4 @@
-initialize-re
+initialize-release
 initializeConfiguredToUse: aSeparator 
 	
 	separator := aSeparator 

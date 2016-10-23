@@ -1,4 +1,4 @@
-as yet unclassified
+running
 setUp
 
 	timeSource := FixedTimeSource on: self septemberSixth2015AtNoon.

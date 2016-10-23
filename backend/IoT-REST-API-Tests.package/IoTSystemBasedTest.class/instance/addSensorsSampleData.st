@@ -1,4 +1,4 @@
-as yet unclassified
+running
 addSensorsSampleData
 
 	| dataChannel temperatureStream atmosphericPressureStream humidityStream |

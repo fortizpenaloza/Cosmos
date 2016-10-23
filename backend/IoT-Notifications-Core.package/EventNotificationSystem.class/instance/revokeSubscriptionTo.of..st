@@ -1,9 +1,9 @@
 subscribing
-revokeSubscriptionTo: anEventType of: aSubjectOfInterest
+revokeSubscriptionTo: anEventType of: aSubscriber
 
 	subscriptions
 		detect: [ :subscription | 
-			subscription subject = aSubjectOfInterest
+			subscription subscriber = aSubscriber
 				and: [ subscription eventType = anEventType ] ]
-		ifFound: [ :foundSubscription | subscriptions remove: foundSubscription ]
-		ifNone: [ ObjectNotFoundInSystem signal: 'lala' ]
+		ifFound: [ :subscription | subscriptions remove: subscription ]
+		ifNone: [ ObjectNotFoundInSystem signal: 'No subscription was found to this event type.' ]
