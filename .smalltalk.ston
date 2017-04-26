@@ -8,6 +8,11 @@ SmalltalkCISpec {
     } 
   ], 
   #testing : {
-    #packages : [ 'IoT.*' ]
- }
+    #coverage : {
+      #packages : [ 'IoT.*' ]
+    },
+    #include : {  
+      #packages : [ 'IoT.*' ]
+    }    
+  }
 }
