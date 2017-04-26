@@ -1,4 +1,6 @@
-# IoT [![Build Status](https://travis-ci.org/iot-uca/IoT.svg?branch=master)](https://travis-ci.org/iot-uca/IoT)
+# IoT 
+[![Build Status](https://travis-ci.org/iot-uca/IoT.svg?branch=master)](https://travis-ci.org/iot-uca/IoT)
+[![Coverage Status](https://coveralls.io/repos/github/iot-uca/IoT/badge.svg?branch=master)](https://coveralls.io/github/iot-uca/IoT?branch=master)
 
 Internet of Things platform
 
