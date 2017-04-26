@@ -4,6 +4,9 @@
 
 Internet of Things platform
 
+## License
+The project source code is [MIT](LICENSE) licensed. Any contribution submitted to the code repository is considered to be under the same license.
+
 ## Get started!
 
 On Pharo 4 or 5 open Playground and evaluate:
