@@ -17,3 +17,6 @@ Metacello new
   repository: 'github://iot-uca/IoT:master/backend';
   load: ('Development').
   ```
+
+## Download Pharo + IoT-UCA!
+You may prefer to get a fresh new Pharo image and put IoT-UCA in it. You can use the [script](https://github.com/iot-uca/IoT/wiki/IoT-UCA-instalation-script): it will get the last Pharo image+VM, install IoT-UCA code and give you a warming welcome!
