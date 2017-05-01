@@ -1,7 +1,10 @@
 {
-	"class" : {
-		"named:do:" : "fortizpenaloza 1/4/2016 02:07" },
 	"instance" : {
 		"execute" : "fortizpenaloza 1/4/2016 02:10",
-		"initializeNamed:do:" : "fortizpenaloza 1/4/2016 02:08",
-		"name" : "fortizpenaloza 1/4/2016 02:09" } }
+		"name" : "fortizpenaloza 1/4/2016 02:09",
+		"initializeNamed:do:" : "fortizpenaloza 1/4/2016 02:08"
+	},
+	"class" : {
+		"named:do:" : "fortizpenaloza 1/4/2016 02:07"
+	}
+}

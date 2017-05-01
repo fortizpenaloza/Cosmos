@@ -1,6 +1,9 @@
 {
-	"class" : {
-		"comparingWith:" : "FranciscoOrtizPenaloza 9/28/2014 21:01" },
 	"instance" : {
 		"initializeComparingWith:" : "FranciscoOrtizPenaloza 9/28/2014 21:01",
-		"isSatisfiedBy:" : "FranciscoOrtizPenaloza 9/28/2014 21:05" } }
+		"isSatisfiedBy:" : "FranciscoOrtizPenaloza 9/28/2014 21:05"
+	},
+	"class" : {
+		"comparingWith:" : "FranciscoOrtizPenaloza 9/28/2014 21:01"
+	}
+}

@@ -1,14 +1,11 @@
 {
-	"category" : "IoT-Tests-CodeQuality",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		 ],
-	"name" : "ArchitectureTests",
-	"pools" : [
-		 ],
 	"super" : "TestCase",
-	"type" : "normal" }
+	"category" : "IoT-Tests-CodeQuality",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ArchitectureTests",
+	"type" : "normal"
+}

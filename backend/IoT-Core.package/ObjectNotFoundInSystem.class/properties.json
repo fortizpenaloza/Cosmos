@@ -1,14 +1,11 @@
 {
-	"category" : "IoT-Core-SystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "FranciscoOrtizPenaloza 9/18/2014 14:40",
-	"instvars" : [
-		 ],
-	"name" : "ObjectNotFoundInSystem",
-	"pools" : [
-		 ],
 	"super" : "Error",
-	"type" : "normal" }
+	"category" : "IoT-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ObjectNotFoundInSystem",
+	"type" : "normal"
+}

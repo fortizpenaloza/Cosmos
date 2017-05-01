@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Core-ConditionalTriggerModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "FranciscoOrtizPenaloza 9/24/2014 20:03",
+	"super" : "TriggeringCondition",
+	"category" : "IoT-Core-ConditionalTriggerModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"timeSystem",
-		"timeInterval" ],
+		"timeInterval"
+	],
 	"name" : "TimeIntervalTriggeringCondition",
-	"pools" : [
-		 ],
-	"super" : "TriggeringCondition",
-	"type" : "normal" }
+	"type" : "normal"
+}

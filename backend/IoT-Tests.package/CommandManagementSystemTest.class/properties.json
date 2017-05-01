@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Tests-CommandManagementSystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "IoT-Tests-CommandManagementSystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"rootSystem",
-		"identifierProvider" ],
+		"identifierProvider"
+	],
 	"name" : "CommandManagementSystemTest",
-	"pools" : [
-		 ],
-	"super" : "TestCase",
-	"type" : "normal" }
+	"type" : "normal"
+}

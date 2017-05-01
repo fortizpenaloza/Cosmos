@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-ObjectBindingModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"description" ],
-	"name" : "UnboundedObject",
-	"pools" : [
-		 ],
 	"super" : "ObjectBinding",
-	"type" : "normal" }
+	"category" : "IoT-Core-ObjectBindingModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"description"
+	],
+	"name" : "UnboundedObject",
+	"type" : "normal"
+}

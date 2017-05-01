@@ -1,14 +1,11 @@
 {
-	"category" : "IoT-Core-IndentifierProviderModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		 ],
-	"name" : "IdentifierProvider",
-	"pools" : [
-		 ],
 	"super" : "Object",
-	"type" : "normal" }
+	"category" : "IoT-Core-IndentifierProviderModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IdentifierProvider",
+	"type" : "normal"
+}

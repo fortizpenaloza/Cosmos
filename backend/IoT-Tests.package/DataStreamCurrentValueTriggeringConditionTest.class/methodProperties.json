@@ -1,9 +1,10 @@
 {
-	"class" : {
-		 },
 	"instance" : {
-		"currentValue" : "FranciscoOrtizPenaloza 9/28/2014 21:04",
-		"dataChannel" : "fortizpenaloza 4/17/2016 12:40",
-		"septemberSixthOf2015AtNoon" : "fortizpenaloza 4/17/2016 12:49",
+		"testIsSafisfiedWhenDataStreamCurrentValueHasntBeenInitialized" : "fortizpenaloza 4/17/2016 12:39",
 		"testIsSafisfied" : "fortizpenaloza 1/18/2016 23:15",
-		"testIsSafisfiedWhenDataStreamCurrentValueHasntBeenInitialized" : "fortizpenaloza 4/17/2016 12:39" } }
+		"currentValue" : "FranciscoOrtizPenaloza 9/28/2014 21:04",
+		"septemberSixthOf2015AtNoon" : "fortizpenaloza 4/17/2016 12:49",
+		"dataChannel" : "fortizpenaloza 4/17/2016 12:40"
+	},
+	"class" : { }
+}
