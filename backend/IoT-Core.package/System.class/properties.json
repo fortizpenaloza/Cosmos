@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-SystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"parentHolder" ],
-	"name" : "System",
-	"pools" : [
-		 ],
 	"super" : "SystemImplementation",
-	"type" : "normal" }
+	"category" : "IoT-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"parentHolder"
+	],
+	"name" : "System",
+	"type" : "normal"
+}

@@ -1,8 +1,11 @@
 {
-	"class" : {
-		"on:holding:" : "FranciscoOrtizPenaloza 9/28/2014 11:44" },
 	"instance" : {
 		"initializeOn:holding:" : "FranciscoOrtizPenaloza 9/28/2014 11:44",
-		"printOn:" : "FranciscoOrtizPenaloza 9/19/2014 00:09",
 		"timestamp" : "FranciscoOrtizPenaloza 9/11/2014 23:08",
-		"value" : "FranciscoOrtizPenaloza 9/15/2014 15:49" } }
+		"value" : "FranciscoOrtizPenaloza 9/15/2014 15:49",
+		"printOn:" : "FranciscoOrtizPenaloza 9/19/2014 00:09"
+	},
+	"class" : {
+		"on:holding:" : "FranciscoOrtizPenaloza 9/28/2014 11:44"
+	}
+}

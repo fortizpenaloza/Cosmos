@@ -1,14 +1,11 @@
 {
-	"category" : "IoT-REST-API-Tests-FormatterModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		 ],
-	"name" : "ISO8601DateTimeFormatterTest",
-	"pools" : [
-		 ],
 	"super" : "TestCase",
-	"type" : "normal" }
+	"category" : "IoT-REST-API-Tests-FormatterModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ISO8601DateTimeFormatterTest",
+	"type" : "normal"
+}

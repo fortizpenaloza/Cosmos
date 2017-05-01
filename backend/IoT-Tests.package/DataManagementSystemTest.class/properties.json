@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Tests-DataManagementSystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "IoT-Tests-DataManagementSystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"rootSystem",
-		"identifierProvider" ],
+		"identifierProvider"
+	],
 	"name" : "DataManagementSystemTest",
-	"pools" : [
-		 ],
-	"super" : "TestCase",
-	"type" : "normal" }
+	"type" : "normal"
+}

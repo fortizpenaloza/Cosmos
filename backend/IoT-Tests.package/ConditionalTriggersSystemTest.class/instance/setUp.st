@@ -1,16 +1,15 @@
 running
 setUp
 
-	timeSource := FixedTimeSource
-		on: September tenth , 2015
-		at: TimeOfDay noon.
+	timeSource := FixedTimeSource on: September tenth , 2015 at: TimeOfDay noon.
 
 	rootSystem := CompositeSystem empty.
 
-	(OrderedCollection
-		with: (TimeSystem using: timeSource)
-		with: ConditionalTriggersSystem new
-		with: (DataManagementSystem using: SequentialNumberProvider new))
+	(OrderedCollection new)
+		add: (TimeSystem using: timeSource);
+		add: ConditionalTriggersSystem new;
+		add: (DataManagementSystem using: SequentialNumberProvider new);
+		add: EventNotificationSystem new;	
 		do: [ :subsystem | rootSystem register: subsystem ].
-	
+
 	rootSystem startUp

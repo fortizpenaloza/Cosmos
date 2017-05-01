@@ -5,12 +5,13 @@ setUp
 	identifierProvider := FixedNumberProvider providing: self identifier.
 	rootSystem := CompositeSystem empty.
 
-	(OrderedCollection
-		with: (TimeSystem using: timeSource)
-		with: (DataManagementSystem using: identifierProvider)
-		with: ConditionalTriggersSystem new) do: [ :subsystem | rootSystem register: subsystem ].
+	(OrderedCollection new)
+		add: (TimeSystem using: timeSource);
+		add: EventNotificationSystem new;
+		add: (DataManagementSystem using: identifierProvider);
+		add: ConditionalTriggersSystem new;
+		do: [ :subsystem | rootSystem register: subsystem ].
 
 	rootSystem startUp.
 
-	self addSensorsSampleData.
-		
+	self addSensorsSampleData

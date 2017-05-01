@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Core-PeriodicalSchedulerModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "IoT-Core-PeriodicalSchedulerModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"task",
-		"timePeriod" ],
+		"timePeriod"
+	],
 	"name" : "ScheduledTask",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

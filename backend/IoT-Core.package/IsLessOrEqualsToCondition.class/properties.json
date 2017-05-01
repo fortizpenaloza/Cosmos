@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-ConditionModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"value" ],
-	"name" : "IsLessOrEqualsToCondition",
-	"pools" : [
-		 ],
 	"super" : "Condition",
-	"type" : "normal" }
+	"category" : "IoT-Core-ConditionModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"value"
+	],
+	"name" : "IsLessOrEqualsToCondition",
+	"type" : "normal"
+}

@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-Core-DataModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "<historical>",
+	"super" : "Object",
+	"category" : "IoT-Core-DataModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"timestamp",
-		"value" ],
+		"value"
+	],
 	"name" : "DataPoint",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

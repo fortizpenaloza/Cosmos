@@ -1,8 +1,11 @@
 {
-	"class" : {
-		"executing:every:" : "fortizpenaloza 1/6/2016 17:49" },
 	"instance" : {
 		"execute" : "fortizpenaloza 1/4/2016 02:29",
 		"initializeExecuting:every:" : "fortizpenaloza 1/6/2016 17:49",
 		"name" : "fortizpenaloza 1/4/2016 02:32",
-		"timePeriod" : "fortizpenaloza 1/3/2016 04:09" } }
+		"timePeriod" : "fortizpenaloza 1/3/2016 04:09"
+	},
+	"class" : {
+		"executing:every:" : "fortizpenaloza 1/6/2016 17:49"
+	}
+}
