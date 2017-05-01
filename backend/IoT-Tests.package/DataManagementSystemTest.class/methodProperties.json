@@ -1,20 +1,21 @@
 {
-	"class" : {
-		 },
 	"instance" : {
-		"dataManagementSystem" : "fortizpenaloza 1/21/2016 16:19",
-		"identifier" : "fortizpenaloza 4/25/2016 22:37",
-		"requireDataManagementSystem" : "fortizpenaloza 10/20/2016 01:20",
-		"septemberSixth2015AtNoon" : "fortizpenaloza 1/21/2016 18:02",
-		"setUp" : "fortizpenaloza 10/20/2016 01:18",
+		"requireDataManagementSystem" : "fortizpenaloza 5/1/2017 19:51",
 		"testDataChannelRegistration" : "fortizpenaloza 4/25/2016 22:37",
+		"testDataPointRegistrationFailsIfStreamNotFound" : "fortizpenaloza 4/26/2016 08:37",
+		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 4/26/2016 08:37",
+		"timeSystem" : "fortizpenaloza 1/14/2016 18:57",
+		"testQueryingDataChannelByIdentifier" : "fortizpenaloza 4/26/2016 08:37",
+		"septemberSixth2015AtNoon" : "fortizpenaloza 1/21/2016 18:02",
+		"identifier" : "fortizpenaloza 4/25/2016 22:37",
+		"testDataStreamRegistration" : "fortizpenaloza 4/26/2016 08:37",
+		"testDataStreamRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:37",
+		"testQueryingDataStreamByNameAndChannelIdentifier" : "fortizpenaloza 4/26/2016 08:38",
 		"testDataChannelRegistrationFailsIfAlreadyExists" : "fortizpenaloza 4/25/2016 22:36",
 		"testDataPointRegistration" : "fortizpenaloza 4/24/2016 11:23",
+		"dataManagementSystem" : "fortizpenaloza 1/21/2016 16:19",
 		"testDataPointRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:38",
-		"testDataPointRegistrationFailsIfStreamNotFound" : "fortizpenaloza 4/26/2016 08:37",
-		"testDataStreamRegistration" : "fortizpenaloza 4/26/2016 08:37",
-		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 4/26/2016 08:37",
-		"testDataStreamRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:37",
-		"testQueryingDataChannelByIdentifier" : "fortizpenaloza 4/26/2016 08:37",
-		"testQueryingDataStreamByNameAndChannelIdentifier" : "fortizpenaloza 4/26/2016 08:38",
-		"timeSystem" : "fortizpenaloza 1/14/2016 18:57" } }
+		"setUp" : "fortizpenaloza 10/20/2016 01:18"
+	},
+	"class" : { }
+}

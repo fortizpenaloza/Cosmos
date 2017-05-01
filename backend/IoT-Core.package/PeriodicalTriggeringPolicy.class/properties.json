@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-ConditionalTriggerModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"timePeriod" ],
-	"name" : "PeriodicalTriggeringPolicy",
-	"pools" : [
-		 ],
 	"super" : "TriggeringPolicy",
-	"type" : "normal" }
+	"category" : "IoT-Core-ConditionalTriggerModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timePeriod"
+	],
+	"name" : "PeriodicalTriggeringPolicy",
+	"type" : "normal"
+}

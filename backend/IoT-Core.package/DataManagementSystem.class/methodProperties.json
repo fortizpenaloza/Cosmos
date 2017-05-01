@@ -1,16 +1,19 @@
 {
+	"instance" : {
+		"streamsOf:" : "fortizpenaloza 10/15/2016 14:25",
+		"registerStreamNamed:toChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:10",
+		"resolveDependecies" : "fortizpenaloza 5/1/2017 19:52",
+		"streamNamed:ofChannelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54",
+		"register:toStreamNamed:ofChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:16",
+		"initializeUsing:" : "fortizpenaloza 1/23/2016 02:29",
+		"registerChannel:" : "fortizpenaloza 1/23/2016 02:11",
+		"registerPoint:to:" : "fortizpenaloza 5/1/2017 19:52",
+		"registerChannelNamed:" : "fortizpenaloza 1/23/2016 02:05",
+		"registerStream:" : "fortizpenaloza 1/23/2016 02:11",
+		"channelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54"
+	},
 	"class" : {
 		"implementedInterface" : "fortizpenaloza 10/20/2016 23:15",
-		"using:" : "fortizpenaloza 1/11/2016 01:22" },
-	"instance" : {
-		"channelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54",
-		"initializeUsing:" : "fortizpenaloza 1/23/2016 02:29",
-		"register:toStreamNamed:ofChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:16",
-		"registerChannel:" : "fortizpenaloza 1/23/2016 02:11",
-		"registerChannelNamed:" : "fortizpenaloza 1/23/2016 02:05",
-		"registerPoint:to:" : "fortizpenaloza 4/20/2016 23:59",
-		"registerStream:" : "fortizpenaloza 1/23/2016 02:11",
-		"registerStreamNamed:toChannelIdentifiedBy:" : "fortizpenaloza 1/23/2016 02:10",
-		"resolveDependecies" : "fortizpenaloza 4/18/2016 19:40",
-		"streamNamed:ofChannelIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 1/23/2016 01:54",
-		"streamsOf:" : "fortizpenaloza 10/15/2016 14:25" } }
+		"using:" : "fortizpenaloza 1/11/2016 01:22"
+	}
+}

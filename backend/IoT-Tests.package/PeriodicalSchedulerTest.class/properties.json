@@ -1,14 +1,11 @@
 {
-	"category" : "IoT-Tests-PeriodicalSchedulerModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		 ],
-	"name" : "PeriodicalSchedulerTest",
-	"pools" : [
-		 ],
 	"super" : "TestCase",
-	"type" : "normal" }
+	"category" : "IoT-Tests-PeriodicalSchedulerModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "PeriodicalSchedulerTest",
+	"type" : "normal"
+}

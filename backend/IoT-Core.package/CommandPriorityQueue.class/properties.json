@@ -1,17 +1,16 @@
 {
-	"category" : "IoT-Core-CommandModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "IoT-Core-CommandModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"identifier",
 		"creationDateTime",
 		"prioritizedCommands",
-		"priorityQueue" ],
+		"priorityQueue"
+	],
 	"name" : "CommandPriorityQueue",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

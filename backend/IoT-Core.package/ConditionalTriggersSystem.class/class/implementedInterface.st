@@ -8,5 +8,5 @@ implementedInterface
 				add: #register:toTriggerOnDataPointRegistrationOn:;
 				add: #register:triggerPeriodicallyEvery:;
 				add: #notifyHavePassed:;
-				add: #notifyDataPointRegistrationOn:;
+				add: #evaluateDataPointRegistrationTriggersAccordingTo:;
 				yourself)

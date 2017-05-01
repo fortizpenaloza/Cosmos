@@ -1,11 +1,14 @@
 {
-	"class" : {
-		"implementedInterface" : "fortizpenaloza 10/20/2016 18:43" },
 	"instance" : {
+		"parent:" : "fortizpenaloza 1/11/2016 02:59",
+		"unresolvedSystemDependencyTo:" : "fortizpenaloza 10/9/2016 00:12",
+		"resolveDependecies" : "fortizpenaloza 10/14/2016 00:41",
 		"initialize" : "fortizpenaloza 1/11/2016 03:00",
 		"parent" : "fortizpenaloza 1/11/2016 02:59",
-		"parent:" : "fortizpenaloza 1/11/2016 02:59",
-		"resolveDependecies" : "fortizpenaloza 10/14/2016 00:41",
 		"resolveSystemDependencyTo:" : "fortizpenaloza 10/9/2016 00:12",
-		"startUp" : "fortizpenaloza 10/14/2016 00:44",
-		"unresolvedSystemDependencyTo:" : "fortizpenaloza 10/9/2016 00:12" } }
+		"startUp" : "fortizpenaloza 10/14/2016 00:44"
+	},
+	"class" : {
+		"implementedInterface" : "fortizpenaloza 10/20/2016 18:43"
+	}
+}
