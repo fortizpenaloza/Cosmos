@@ -1,8 +1,11 @@
 {
-	"class" : {
-		"of:to:toBeNotifiedSending:" : "fortizpenaloza 10/18/2016 20:04" },
 	"instance" : {
+		"subscriber" : "fortizpenaloza 10/21/2016 09:38",
 		"eventType" : "fortizpenaloza 10/18/2016 20:06",
-		"initializeOf:to:toBeNotifiedSending:" : "fortizpenaloza 10/21/2016 09:39",
 		"message" : "fortizpenaloza 10/21/2016 09:39",
-		"subscriber" : "fortizpenaloza 10/21/2016 09:38" } }
+		"initializeOf:to:toBeNotifiedSending:" : "fortizpenaloza 10/21/2016 09:39"
+	},
+	"class" : {
+		"of:to:toBeNotifiedSending:" : "fortizpenaloza 10/18/2016 20:04"
+	}
+}
