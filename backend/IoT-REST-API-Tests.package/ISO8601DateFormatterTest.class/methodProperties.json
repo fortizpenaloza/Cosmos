@@ -1,6 +1,7 @@
 {
-	"class" : {
-		 },
 	"instance" : {
-		"testFormattingUsingBasicFormat" : "fortizpenaloza 10/15/2016 19:45",
-		"testFormattingUsingExtendedFormat" : "fortizpenaloza 10/15/2016 19:45" } }
+		"testFormattingUsingExtendedFormat" : "fortizpenaloza 10/15/2016 19:45",
+		"testFormattingUsingBasicFormat" : "fortizpenaloza 10/15/2016 19:45"
+	},
+	"class" : { }
+}
