@@ -1,18 +1,19 @@
 {
+	"commentStamp" : "",
+	"super" : "Object",
 	"category" : "IoT-Notifications-Core-Model",
 	"classinstvars" : [
 		"subject",
 		"eventType",
-		"messageToSend" ],
-	"classvars" : [
-		 ],
-	"commentStamp" : "",
+		"messageToSend"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"eventType",
 		"subscriber",
-		"message" ],
+		"message"
+	],
 	"name" : "Subscription",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}
