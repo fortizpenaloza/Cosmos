@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "TriggeringCondition",
+	"category" : "IoT-ConditionalTrigger-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dataStream",
+		"condition"
+	],
+	"name" : "DataStreamCurrentValueTriggeringCondition",
+	"type" : "normal"
+}
