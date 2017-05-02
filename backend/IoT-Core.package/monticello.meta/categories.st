@@ -1,6 +1,4 @@
 SystemOrganization addCategory: #'IoT-Core'!
-SystemOrganization addCategory: 'IoT-Core-CommandManagementSystemModel'!
-SystemOrganization addCategory: 'IoT-Core-CommandModel'!
 SystemOrganization addCategory: 'IoT-Core-ConditionModel'!
 SystemOrganization addCategory: 'IoT-Core-ConditionalTriggerModel'!
 SystemOrganization addCategory: 'IoT-Core-ConditionalTriggersSystemModel'!

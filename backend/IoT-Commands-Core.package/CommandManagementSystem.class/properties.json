@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "System",
-	"category" : "IoT-Core-CommandManagementSystemModel",
+	"category" : "IoT-Commands-Core-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

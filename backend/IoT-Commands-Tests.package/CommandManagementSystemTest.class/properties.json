@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "TestCase",
-	"category" : "IoT-Tests-CommandManagementSystemModel",
+	"category" : "IoT-Commands-Tests-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
