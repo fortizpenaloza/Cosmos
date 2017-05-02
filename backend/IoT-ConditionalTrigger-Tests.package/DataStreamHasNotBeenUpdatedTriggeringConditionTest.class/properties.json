@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "IoT-ConditionalTrigger-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dateTime",
+		"lastUpdate"
+	],
+	"name" : "DataStreamHasNotBeenUpdatedTriggeringConditionTest",
+	"type" : "normal"
+}
