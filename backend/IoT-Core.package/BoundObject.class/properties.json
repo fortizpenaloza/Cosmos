@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "ObjectBinding",
 	"category" : "IoT-Core-ObjectBindingModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
-		"object"
-	],
+		"object" ],
 	"name" : "BoundObject",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "ObjectBinding",
+	"type" : "normal" }

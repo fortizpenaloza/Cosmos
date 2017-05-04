@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "fortizpenaloza 1/9/2016 21:13",
-	"super" : "TestCase",
 	"category" : "IoT-ConditionalTrigger-Tests-Model",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 1/9/2016 21:13",
 	"instvars" : [
-		"currentValue"
-	],
+		"currentValue" ],
 	"name" : "DataStreamCurrentValueTriggeringConditionTest",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

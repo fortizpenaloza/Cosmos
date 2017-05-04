@@ -1,15 +1,16 @@
 {
-	"commentStamp" : "",
-	"super" : "System",
 	"category" : "IoT-Commands-Core-SystemModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
 		"identifierProvider",
 		"timeSystem",
-		"commandPriorityQueues"
-	],
+		"commandPriorityQueues" ],
 	"name" : "CommandManagementSystem",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "System",
+	"type" : "normal" }

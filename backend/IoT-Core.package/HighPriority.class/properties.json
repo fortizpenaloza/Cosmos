@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "QueuePriority",
 	"category" : "IoT-Core-PriorityQueueModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
 	"name" : "HighPriority",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "QueuePriority",
+	"type" : "normal" }

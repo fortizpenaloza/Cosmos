@@ -1,9 +1,8 @@
 {
+	"class" : {
+		 },
 	"instance" : {
 		"testQueryingNotValidStream" : "fortizpenaloza 10/17/2016 01:33",
 		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "julianSaavedra 10/21/2016 22:24",
 		"testQueryingSnapshotOfChannelNotValid" : "fortizpenaloza 10/15/2016 14:33",
-		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins" : "julianSaavedra 10/21/2016 22:24"
-	},
-	"class" : { }
-}
+		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins" : "julianSaavedra 10/21/2016 22:24" } }

@@ -1,9 +1,6 @@
 {
+	"class" : {
+		"on:" : "FranciscoOrtizPenaloza 9/30/2014 01:30" },
 	"instance" : {
 		"initializeOn:" : "FranciscoOrtizPenaloza 9/30/2014 01:31",
-		"register:to:" : "fortizpenaloza 4/25/2016 00:24"
-	},
-	"class" : {
-		"on:" : "FranciscoOrtizPenaloza 9/30/2014 01:30"
-	}
-}
+		"register:to:" : "fortizpenaloza 4/25/2016 00:24" } }

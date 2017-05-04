@@ -1,10 +1,7 @@
 {
-	"instance" : {
-		"initializeWith:" : "fortizpenaloza 1/9/2016 21:31",
-		"isSatisfied" : "fortizpenaloza 1/9/2016 21:32"
-	},
 	"class" : {
 		"with:with:" : "fortizpenaloza 1/9/2016 23:49",
-		"withAll:" : "fortizpenaloza 1/9/2016 21:30"
-	}
-}
+		"withAll:" : "fortizpenaloza 1/9/2016 21:30" },
+	"instance" : {
+		"initializeWith:" : "fortizpenaloza 1/9/2016 21:31",
+		"isSatisfied" : "fortizpenaloza 1/9/2016 21:32" } }

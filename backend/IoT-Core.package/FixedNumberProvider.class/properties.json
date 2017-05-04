@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "IdentifierProvider",
 	"category" : "IoT-Core-IndentifierProviderModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
-		"identifier"
-	],
+		"identifier" ],
 	"name" : "FixedNumberProvider",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "IdentifierProvider",
+	"type" : "normal" }

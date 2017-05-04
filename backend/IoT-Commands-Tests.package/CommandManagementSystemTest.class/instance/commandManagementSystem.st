@@ -1,4 +1,4 @@
 systems
 commandManagementSystem
 	
-	^ rootSystem systemImplementing: 'Command Management System Interface'
+	^ rootSystem systemImplementing: CommandManagementSystem implementedInterface

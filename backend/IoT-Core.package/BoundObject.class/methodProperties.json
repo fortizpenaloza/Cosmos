@@ -1,10 +1,7 @@
 {
+	"class" : {
+		"to:" : "FranciscoOrtizPenaloza 9/18/2014 08:36" },
 	"instance" : {
 		"boundedObject" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
-		"initializeTo:" : "FranciscoOrtizPenaloza 9/18/2014 08:36",
-		"ifBound:ifNot:" : "fortizpenaloza 10/15/2016 20:21"
-	},
-	"class" : {
-		"to:" : "FranciscoOrtizPenaloza 9/18/2014 08:36"
-	}
-}
+		"ifBound:ifNot:" : "fortizpenaloza 10/15/2016 20:21",
+		"initializeTo:" : "FranciscoOrtizPenaloza 9/18/2014 08:36" } }

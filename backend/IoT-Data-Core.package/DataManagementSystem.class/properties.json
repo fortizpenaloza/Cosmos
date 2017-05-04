@@ -1,17 +1,18 @@
 {
-	"commentStamp" : "<historical>",
-	"super" : "System",
 	"category" : "IoT-Data-Core-SystemModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
 	"instvars" : [
 		"identifierProvider",
 		"dataStreams",
 		"dataChannels",
 		"timeSystem",
-		"eventNotificationSystem"
-	],
+		"eventNotificationSystem" ],
 	"name" : "DataManagementSystem",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "System",
+	"type" : "normal" }

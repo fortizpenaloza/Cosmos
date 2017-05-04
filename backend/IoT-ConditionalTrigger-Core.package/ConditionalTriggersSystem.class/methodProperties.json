@@ -1,14 +1,11 @@
 {
-	"instance" : {
-		"register:triggerPeriodicallyEvery:" : "fortizpenaloza 4/25/2016 00:23",
-		"register:toTriggerOnDataPointRegistrationOn:" : "fortizpenaloza 4/25/2016 00:24",
-		"notifyHavePassed:" : "FranciscoOrtizPenaloza 11/26/2014 00:58",
-		"initialize" : "fortizpenaloza 5/1/2017 19:36",
-		"register:" : "FranciscoOrtizPenaloza 11/21/2014 23:44",
-		"resolveDependecies" : "fortizpenaloza 5/1/2017 19:49",
-		"evaluateDataPointRegistrationTriggersAccordingTo:" : "fortizpenaloza 5/1/2017 19:49"
-	},
 	"class" : {
-		"implementedInterface" : "fortizpenaloza 5/1/2017 19:49"
-	}
-}
+		"implementedInterface" : "fortizpenaloza 5/1/2017 19:49" },
+	"instance" : {
+		"evaluateDataPointRegistrationTriggersAccordingTo:" : "fortizpenaloza 5/1/2017 19:49",
+		"initialize" : "fortizpenaloza 5/1/2017 19:36",
+		"notifyHavePassed:" : "FranciscoOrtizPenaloza 11/26/2014 00:58",
+		"register:" : "FranciscoOrtizPenaloza 11/21/2014 23:44",
+		"register:toTriggerOnDataPointRegistrationOn:" : "fortizpenaloza 4/25/2016 00:24",
+		"register:triggerPeriodicallyEvery:" : "fortizpenaloza 4/25/2016 00:23",
+		"resolveDependecies" : "julianSaavedra 5/4/2017 20:24" } }

@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "IoTSystemBasedTest",
 	"category" : "IoT-REST-API-Tests",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
 	"name" : "APIRestTest",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "IoTSystemBasedTest",
+	"type" : "normal" }

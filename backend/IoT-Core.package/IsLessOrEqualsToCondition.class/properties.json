@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "Condition",
 	"category" : "IoT-Core-ConditionModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
-		"value"
-	],
+		"value" ],
 	"name" : "IsLessOrEqualsToCondition",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "Condition",
+	"type" : "normal" }

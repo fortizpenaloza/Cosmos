@@ -1,9 +1,6 @@
 {
-	"instance" : {
-		"isSatisfied" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
-		"initializeQuerying:toBeBetween:" : "FranciscoOrtizPenaloza 9/24/2014 16:53"
-	},
 	"class" : {
-		"querying:toBeBetween:" : "FranciscoOrtizPenaloza 9/24/2014 16:53"
-	}
-}
+		"querying:toBeBetween:" : "FranciscoOrtizPenaloza 9/24/2014 16:53" },
+	"instance" : {
+		"initializeQuerying:toBeBetween:" : "FranciscoOrtizPenaloza 9/24/2014 16:53",
+		"isSatisfied" : "FranciscoOrtizPenaloza 9/24/2014 18:16" } }

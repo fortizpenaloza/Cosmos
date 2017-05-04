@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "IoTSystemBasedTest",
 	"category" : "IoT-REST-API-Tests-DataModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
 	"name" : "DataInterfaceTest",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "IoTSystemBasedTest",
+	"type" : "normal" }

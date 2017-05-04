@@ -1,10 +1,7 @@
 {
-	"instance" : {
-		"isSatisfiedBy:" : "FranciscoOrtizPenaloza 9/28/2014 22:42",
-		"initializeWithAll:" : "FranciscoOrtizPenaloza 9/23/2014 00:12"
-	},
 	"class" : {
 		"with:with:" : "FranciscoOrtizPenaloza 9/23/2014 00:11",
-		"withAll:" : "FranciscoOrtizPenaloza 9/23/2014 00:11"
-	}
-}
+		"withAll:" : "FranciscoOrtizPenaloza 9/23/2014 00:11" },
+	"instance" : {
+		"initializeWithAll:" : "FranciscoOrtizPenaloza 9/23/2014 00:12",
+		"isSatisfiedBy:" : "FranciscoOrtizPenaloza 9/28/2014 22:42" } }

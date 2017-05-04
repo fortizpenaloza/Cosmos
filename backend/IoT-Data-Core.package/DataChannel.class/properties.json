@@ -1,15 +1,16 @@
 {
-	"commentStamp" : "fortizpenaloza 4/17/2016 11:50",
-	"super" : "Object",
 	"category" : "IoT-Data-Core-Model",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 4/17/2016 11:50",
 	"instvars" : [
 		"identifier",
 		"name",
-		"dateTime"
-	],
+		"dateTime" ],
 	"name" : "DataChannel",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

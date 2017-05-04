@@ -1,9 +1,6 @@
 {
+	"class" : {
+		"querying:toCheckIf:hasNotBeenUpdatedForMoreThan:" : "fortizpenaloza 1/2/2016 19:41" },
 	"instance" : {
 		"initializeQuerying:toCheckIf:hasNotBeenUpdatedForMoreThan:" : "FranciscoOrtizPenaloza 9/25/2014 01:18",
-		"isSatisfied" : "FranciscoOrtizPenaloza 9/25/2014 01:25"
-	},
-	"class" : {
-		"querying:toCheckIf:hasNotBeenUpdatedForMoreThan:" : "fortizpenaloza 1/2/2016 19:41"
-	}
-}
+		"isSatisfied" : "FranciscoOrtizPenaloza 9/25/2014 01:25" } }

@@ -1,16 +1,13 @@
 {
+	"class" : {
+		"implementedInterface" : "julianSaavedra 5/4/2017 20:07",
+		"using:" : "fortizpenaloza 1/12/2016 01:46" },
 	"instance" : {
+		"commandsFromQueueIdentifiedBy:" : "fortizpenaloza 4/25/2016 00:08",
+		"initializeUsing:" : "fortizpenaloza 4/20/2016 23:17",
 		"popFromQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
+		"push:with:toQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
+		"queueIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 4/20/2016 23:50",
 		"register:" : "fortizpenaloza 4/20/2016 23:44",
 		"registerCommandPriorityQueue" : "fortizpenaloza 4/21/2016 00:01",
-		"resolveDependecies" : "fortizpenaloza 1/14/2016 19:06",
-		"commandsFromQueueIdentifiedBy:" : "fortizpenaloza 4/25/2016 00:08",
-		"queueIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 4/20/2016 23:50",
-		"push:with:toQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
-		"initializeUsing:" : "fortizpenaloza 4/20/2016 23:17"
-	},
-	"class" : {
-		"implementedInterface" : "fortizpenaloza 10/20/2016 18:42",
-		"using:" : "fortizpenaloza 1/12/2016 01:46"
-	}
-}
+		"resolveDependecies" : "julianSaavedra 5/4/2017 20:08" } }

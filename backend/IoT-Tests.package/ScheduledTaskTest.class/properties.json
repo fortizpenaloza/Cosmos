@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "<historical>",
-	"super" : "TestCase",
 	"category" : "IoT-Tests-PeriodicalSchedulerModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		 ],
 	"name" : "ScheduledTaskTest",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

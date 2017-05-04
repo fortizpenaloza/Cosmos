@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "FranciscoOrtizPenaloza 9/28/2014 12:02",
-	"super" : "Condition",
 	"category" : "IoT-Core-ConditionModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "FranciscoOrtizPenaloza 9/28/2014 12:02",
 	"instvars" : [
-		"value"
-	],
+		"value" ],
 	"name" : "IsEqualsToCondition",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "Condition",
+	"type" : "normal" }

@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "TimeSource",
 	"category" : "IoT-Core-TimeSystemModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
 	"name" : "SystemTimeSource",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "TimeSource",
+	"type" : "normal" }

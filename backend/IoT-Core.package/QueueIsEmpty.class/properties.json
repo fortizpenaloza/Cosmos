@@ -1,11 +1,14 @@
 {
-	"commentStamp" : "fortizpenaloza 1/19/2016 00:42",
-	"super" : "Error",
 	"category" : "IoT-Core-PriorityQueueModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
-	"instvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "fortizpenaloza 1/19/2016 00:42",
+	"instvars" : [
+		 ],
 	"name" : "QueueIsEmpty",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "Error",
+	"type" : "normal" }

@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "<historical>",
-	"super" : "TestCase",
 	"category" : "IoT-ConditionalTrigger-Tests-Model",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
 	"instvars" : [
-		"timeOfDay"
-	],
+		"timeOfDay" ],
 	"name" : "TimeIntervalTriggeringConditionTest",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }

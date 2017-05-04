@@ -1,11 +1,10 @@
 {
+	"class" : {
+		 },
 	"instance" : {
-		"testIsSafisfiedWhenDataStreamHasntBeenInitialized" : "fortizpenaloza 4/17/2016 23:56",
-		"lastUpdate" : "FranciscoOrtizPenaloza 9/25/2014 01:19",
-		"septemberSixthOf2015AtNoon" : "fortizpenaloza 4/17/2016 12:49",
 		"dataChannel" : "fortizpenaloza 4/17/2016 12:50",
 		"dateTime" : "FranciscoOrtizPenaloza 9/25/2014 01:19",
-		"testIsSafistied" : "fortizpenaloza 1/18/2016 23:15"
-	},
-	"class" : { }
-}
+		"lastUpdate" : "FranciscoOrtizPenaloza 9/25/2014 01:19",
+		"septemberSixthOf2015AtNoon" : "fortizpenaloza 4/17/2016 12:49",
+		"testIsSafisfiedWhenDataStreamHasntBeenInitialized" : "fortizpenaloza 4/17/2016 23:56",
+		"testIsSafistied" : "fortizpenaloza 1/18/2016 23:15" } }

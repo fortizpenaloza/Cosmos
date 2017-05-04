@@ -1,15 +1,12 @@
 {
-	"instance" : {
-		"currentValue" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
-		"lastUpdate" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
-		"dataChannel" : "fortizpenaloza 1/21/2016 12:32",
-		"add:" : "fortizpenaloza 1/10/2016 23:28",
-		"initializeNamed:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04",
-		"creationDateTime" : "fortizpenaloza 1/19/2016 20:04",
-		"name" : "fortizpenaloza 1/19/2016 20:00",
-		"dataPoints" : "FranciscoOrtizPenaloza 9/26/2014 19:43"
-	},
 	"class" : {
-		"named:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04"
-	}
-}
+		"named:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04" },
+	"instance" : {
+		"add:" : "fortizpenaloza 1/10/2016 23:28",
+		"creationDateTime" : "fortizpenaloza 1/19/2016 20:04",
+		"currentValue" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
+		"dataChannel" : "fortizpenaloza 1/21/2016 12:32",
+		"dataPoints" : "FranciscoOrtizPenaloza 9/26/2014 19:43",
+		"initializeNamed:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04",
+		"lastUpdate" : "FranciscoOrtizPenaloza 9/24/2014 20:05",
+		"name" : "fortizpenaloza 1/19/2016 20:00" } }

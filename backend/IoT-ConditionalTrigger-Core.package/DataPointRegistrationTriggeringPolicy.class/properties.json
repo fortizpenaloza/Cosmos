@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "TriggeringPolicy",
 	"category" : "IoT-ConditionalTrigger-Core-Model",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
-		"dataStream"
-	],
+		"dataStream" ],
 	"name" : "DataPointRegistrationTriggeringPolicy",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "TriggeringPolicy",
+	"type" : "normal" }

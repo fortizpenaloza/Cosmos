@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "",
-	"super" : "SystemImplementation",
 	"category" : "IoT-Core-SystemModel",
-	"classinstvars" : [ ],
-	"pools" : [ ],
-	"classvars" : [ ],
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
 	"instvars" : [
-		"systems"
-	],
+		"systems" ],
 	"name" : "CompositeSystem",
-	"type" : "normal"
-}
+	"pools" : [
+		 ],
+	"super" : "SystemImplementation",
+	"type" : "normal" }
