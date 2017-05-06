@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "IoT-API-Core-FormattingModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dateFormatter",
+		"timeOfDayFormatter"
+	],
+	"name" : "ISO8601DateTimeFormatter",
+	"type" : "normal"
+}
