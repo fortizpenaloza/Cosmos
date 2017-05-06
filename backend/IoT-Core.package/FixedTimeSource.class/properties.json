@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-TimeSystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "FranciscoOrtizPenaloza 9/24/2014 18:36",
-	"instvars" : [
-		"dateTime" ],
-	"name" : "FixedTimeSource",
-	"pools" : [
-		 ],
 	"super" : "TimeSource",
-	"type" : "normal" }
+	"category" : "IoT-Core-TimeSystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dateTime"
+	],
+	"name" : "FixedTimeSource",
+	"type" : "normal"
+}

@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Core-IndentifierProviderModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "<historical>",
-	"instvars" : [
-		"last" ],
-	"name" : "SequentialNumberProvider",
-	"pools" : [
-		 ],
 	"super" : "IdentifierProvider",
-	"type" : "normal" }
+	"category" : "IoT-Core-IndentifierProviderModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"last"
+	],
+	"name" : "SequentialNumberProvider",
+	"type" : "normal"
+}

@@ -1,4 +1,4 @@
 testing
 implements: aSubsystemInterface
 
-	^ self subclassResponsibility 
+	^ self class implementedInterface name = aSubsystemInterface 

@@ -9,5 +9,5 @@ testImplemetedInterfacesMustDeclareAtLeastOneMessage
 	self
 		assert: systems isEmpty
 		description:
-			('At least, one system implementation does not define the protocol of the interface it implements (check <1s>)'
+			('Al menos una implementación de un sistema no define protocolo en la interfaz que implementa (revisar <1s>)'
 				expandMacrosWith: systems asString)

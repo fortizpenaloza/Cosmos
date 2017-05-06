@@ -1,19 +1,18 @@
 {
-	"category" : "IoT-Data-Core-Model",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "<historical>",
+	"super" : "Object",
+	"category" : "IoT-Data-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"name",
 		"creationDateTime",
 		"dataChannel",
 		"currentValue",
 		"lastUpdate",
-		"dataPoints" ],
+		"dataPoints"
+	],
 	"name" : "DataStream",
-	"pools" : [
-		 ],
-	"super" : "Object",
-	"type" : "normal" }
+	"type" : "normal"
+}

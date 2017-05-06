@@ -1,14 +1,13 @@
 {
-	"category" : "IoT-Data-Tests-Model",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
-	"instvars" : [
-		"dataChannel" ],
-	"name" : "DataStreamTest",
-	"pools" : [
-		 ],
 	"super" : "TestCase",
-	"type" : "normal" }
+	"category" : "IoT-Data-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dataChannel"
+	],
+	"name" : "DataStreamTest",
+	"type" : "normal"
+}

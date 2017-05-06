@@ -1,12 +1,13 @@
 {
-	"class" : {
-		 },
 	"instance" : {
-		"dataChannel" : "fortizpenaloza 4/17/2016 12:56",
+		"testAddingDataPoint" : "fortizpenaloza 1/23/2016 02:37",
 		"octoberFirstOf2015AtMidnight" : "fortizpenaloza 1/22/2016 17:08",
 		"septemberSixthOf2015AtNoon" : "fortizpenaloza 1/21/2016 16:14",
 		"setUp" : "fortizpenaloza 4/17/2016 12:56",
+		"dataChannel" : "fortizpenaloza 4/17/2016 12:56",
 		"testAccessingCurrentValue" : "fortizpenaloza 1/23/2016 02:38",
 		"testAccessingLastUpdate" : "fortizpenaloza 4/26/2016 19:47",
-		"testAddingDataPoint" : "fortizpenaloza 1/23/2016 02:37",
-		"testInstanceCreationAndAccessing" : "fortizpenaloza 1/23/2016 02:37" } }
+		"testInstanceCreationAndAccessing" : "fortizpenaloza 1/23/2016 02:37"
+	},
+	"class" : { }
+}

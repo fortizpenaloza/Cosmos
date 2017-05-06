@@ -1,4 +1,4 @@
 systems
 conditionalTriggersSystem
 
-	^ rootSystem systemImplementing: ConditionalTriggersSystem implementedInterface
+	^ rootSystem systemImplementing: 'Conditional Triggers System Interface'

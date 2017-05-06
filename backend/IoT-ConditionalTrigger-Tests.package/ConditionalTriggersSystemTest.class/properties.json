@@ -1,15 +1,14 @@
 {
-	"category" : "IoT-ConditionalTrigger-Tests-SystemModel",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "IoT-ConditionalTrigger-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"rootSystem",
-		"timeSource" ],
+		"timeSource"
+	],
 	"name" : "ConditionalTriggersSystemTest",
-	"pools" : [
-		 ],
-	"super" : "TestCase",
-	"type" : "normal" }
+	"type" : "normal"
+}

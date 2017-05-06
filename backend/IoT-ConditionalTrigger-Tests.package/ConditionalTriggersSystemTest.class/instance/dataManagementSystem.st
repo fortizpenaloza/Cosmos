@@ -1,4 +1,4 @@
 systems
 dataManagementSystem
 	
-	^ rootSystem systemImplementing: DataManagementSystem implementedInterface
+	^ rootSystem systemImplementing: 'Data Management System Interface'

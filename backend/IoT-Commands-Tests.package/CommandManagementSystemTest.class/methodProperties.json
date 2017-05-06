@@ -1,16 +1,17 @@
 {
-	"class" : {
-		 },
 	"instance" : {
-		"commandManagementSystem" : "julianSaavedra 5/4/2017 20:26",
-		"setUp" : "fortizpenaloza 10/20/2016 01:20",
+		"timeSystem" : "fortizpenaloza 1/19/2016 02:16",
 		"testCommandPriorityQueueRegistration" : "fortizpenaloza 4/25/2016 23:13",
-		"testPoppingCommandsFollowsItsPriority" : "fortizpenaloza 4/25/2016 00:41",
-		"testPoppingFromQueueFailsIfEmpty" : "fortizpenaloza 4/24/2016 23:44",
-		"testPoppingFromQueueFailsIfNotFound" : "fortizpenaloza 4/25/2016 00:39",
 		"testPushingAndThenPoppingCommand" : "fortizpenaloza 4/25/2016 23:14",
-		"testPushingFromQueueFailsIfNotFound" : "fortizpenaloza 4/25/2016 23:13",
+		"testPoppingFromQueueFailsIfNotFound" : "fortizpenaloza 4/25/2016 00:39",
 		"testQueryingPrioritizedCommands" : "fortizpenaloza 4/25/2016 23:14",
-		"timeSystem" : "julianSaavedra 5/4/2017 20:27",
+		"turnOnLedCommand" : "fortizpenaloza 4/25/2016 00:27",
+		"testPoppingCommandsFollowsItsPriority" : "fortizpenaloza 4/25/2016 00:41",
+		"testPushingFromQueueFailsIfNotFound" : "fortizpenaloza 4/25/2016 23:13",
 		"turnOffLedCommand" : "fortizpenaloza 4/25/2016 00:30",
-		"turnOnLedCommand" : "fortizpenaloza 4/25/2016 00:27" } }
+		"testPoppingFromQueueFailsIfEmpty" : "fortizpenaloza 4/24/2016 23:44",
+		"commandManagementSystem" : "fortizpenaloza 1/18/2016 23:09",
+		"setUp" : "fortizpenaloza 10/20/2016 01:20"
+	},
+	"class" : { }
+}

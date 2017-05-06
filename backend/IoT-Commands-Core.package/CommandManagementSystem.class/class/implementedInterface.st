@@ -1,7 +1,8 @@
 system specification
 implementedInterface
 
-	^ SystemInterface named: 'Command Management System Interface'
+	^ SystemInterface
+		named: 'Command Management System Interface'
 		offering:
 			(OrderedCollection new
 				add: #registerCommandPriorityQueue;
