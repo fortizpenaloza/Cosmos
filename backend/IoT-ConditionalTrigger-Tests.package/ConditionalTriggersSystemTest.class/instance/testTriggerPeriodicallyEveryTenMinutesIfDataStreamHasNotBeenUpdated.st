@@ -29,10 +29,10 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 
 	timeSource
 		setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
-	self conditionalTriggersSystem notifyHavePassed: self fiveMinutes.
+	self conditionalTriggersSystem havePassed: self fiveMinutes.
 	self deny: triggered.
 
 	timeSource
 		setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self assert: triggered

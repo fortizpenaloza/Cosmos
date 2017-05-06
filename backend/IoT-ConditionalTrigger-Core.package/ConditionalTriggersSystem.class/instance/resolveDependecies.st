@@ -7,4 +7,4 @@ resolveDependecies
 	eventNotificationSystem
 		subscribe: self
 		to: DataPointRegistrationEvent
-		toBeNotifiedSending: #evaluateDataPointRegistrationTriggersAccordingTo:
+		toBeNotifiedSending: #dataPointRegisteredOn:
