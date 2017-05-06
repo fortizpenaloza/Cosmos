@@ -1,5 +1,5 @@
-notifying
-evaluateDataPointRegistrationTriggersAccordingTo: anEvent
+events handling
+dataPointRegisteredOn: anEvent
 
 	triggersToFireOnDataPointRegistration
 		select: [:trigger | trigger key = anEvent dataStream]

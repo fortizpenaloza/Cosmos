@@ -13,8 +13,8 @@ testTriggerPeriodicallyEveryTenMinutes
 	self conditionalTriggersSystem register: conditionalTrigger.
 	self deny: triggered.
 
-	self conditionalTriggersSystem notifyHavePassed: self fiveMinutes.
+	self conditionalTriggersSystem havePassed: self fiveMinutes.
 	self deny: triggered.
 
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self assert: triggered

@@ -7,6 +7,6 @@ implementedInterface
 			(OrderedCollection new
 				add: #register:toTriggerOnDataPointRegistrationOn:;
 				add: #register:triggerPeriodicallyEvery:;
-				add: #notifyHavePassed:;
-				add: #evaluateDataPointRegistrationTriggersAccordingTo:;
+				add: #havePassed:;
+				add: #dataPointRegisteredOn:;
 				yourself)

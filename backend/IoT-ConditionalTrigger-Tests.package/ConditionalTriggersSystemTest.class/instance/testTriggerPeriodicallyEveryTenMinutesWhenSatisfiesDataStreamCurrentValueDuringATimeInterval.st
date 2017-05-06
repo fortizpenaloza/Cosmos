@@ -34,24 +34,24 @@ testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringA
 		register: 10 
 		toStreamNamed: dataStream name 
 		ofChannelIdentifiedBy: dataChannel identifier.
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self deny: triggered.
 	
 	self dataManagementSystem 
 		register: 12 
 		toStreamNamed: dataStream name 
 		ofChannelIdentifiedBy: dataChannel identifier.
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self deny: triggered.
 	
 	timeSource setTimeTo: self eightPM.
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self deny: triggered.
 	
 	self dataManagementSystem 
 		register: 10 
 		toStreamNamed: dataStream name 
 		ofChannelIdentifiedBy: dataChannel identifier.
-	self conditionalTriggersSystem notifyHavePassed: self tenMinutes.
+	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self assert: triggered
 	

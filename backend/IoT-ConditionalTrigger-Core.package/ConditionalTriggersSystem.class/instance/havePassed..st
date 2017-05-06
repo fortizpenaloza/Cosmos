@@ -1,5 +1,5 @@
-notifying
-notifyHavePassed: aTimePeriod
+events handling
+havePassed: aTimePeriod
 
 	triggersToFirePeriodically
 		select: [:trigger | trigger key = aTimePeriod]
