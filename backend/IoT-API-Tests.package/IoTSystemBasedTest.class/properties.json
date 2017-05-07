@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "IoT-API-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeSource",
+		"identifierProvider",
+		"rootSystem"
+	],
+	"name" : "IoTSystemBasedTest",
+	"type" : "normal"
+}
