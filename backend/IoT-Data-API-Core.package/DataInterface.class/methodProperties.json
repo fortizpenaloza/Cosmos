@@ -1,10 +1,11 @@
 {
 	"instance" : {
+		"snapshotOf:" : "fortizpenaloza 5/10/2017 23:32",
 		"initializeWorkingWith:" : "julianSaavedra 5/6/2017 12:13",
 		"dataManagementSystem" : "fortizpenaloza 10/13/2016 01:30",
 		"streamNamed:ofChannelIdentifiedBy:" : "julianSaavedra 5/6/2017 12:22",
 		"initializeMappings" : "julianSaavedra 5/6/2017 12:22",
-		"currentSnapshotOfChannelIdentifiedBy:" : "julianSaavedra 5/6/2017 12:21"
+		"currentSnapshotOfChannelIdentifiedBy:" : "fortizpenaloza 5/10/2017 23:31"
 	},
 	"class" : {
 		"workingWith:" : "fortizpenaloza 10/13/2016 01:26"
