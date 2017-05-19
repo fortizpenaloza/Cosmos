@@ -1,11 +1,11 @@
 {
 	"commentStamp" : "",
-	"super" : "Object",
-	"category" : "IoT-API-Tests-Model",
+	"super" : "IoTSystemBasedTest",
+	"category" : "IoT-Commands-API-Test",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "SensorsSampleAddOn",
+	"name" : "CommandInterfaceTest",
 	"type" : "normal"
 }

@@ -1,9 +1,10 @@
 {
 	"instance" : {
-		"tearDown" : "fortizpenaloza 5/10/2017 23:40",
+		"testQueryingNextCommand" : "julianSaavedra 5/19/2017 17:21",
 		"testQueryingDataStream" : "fortizpenaloza 5/10/2017 23:49",
-		"setUp" : "fortizpenaloza 5/10/2017 23:47",
-		"testQueryingDataChannelSnapshot" : "fortizpenaloza 5/10/2017 23:49"
+		"testQueryingDataChannelSnapshot" : "julianSaavedra 5/18/2017 19:53",
+		"tearDown" : "fortizpenaloza 5/10/2017 23:40",
+		"setUp" : "julianSaavedra 5/19/2017 17:32"
 	},
 	"class" : { }
 }
