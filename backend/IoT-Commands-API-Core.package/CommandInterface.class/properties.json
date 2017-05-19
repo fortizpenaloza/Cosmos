@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "IoT-Commands-API-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"rootSystem",
+		"prioritizedCommandtMapping"
+	],
+	"name" : "CommandInterface",
+	"type" : "normal"
+}
