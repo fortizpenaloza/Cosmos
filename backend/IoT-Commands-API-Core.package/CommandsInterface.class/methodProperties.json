@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"commandManagementSystem" : "julianSaavedra 5/20/2017 10:50",
+		"initializeWorkingWith:" : "julianSaavedra 5/20/2017 10:45",
+		"prioritizedCommandsFromQueueIdentifiedBy:" : "julianSaavedra 5/20/2017 11:13",
+		"nextCommandFromQueueIdentifiedBy:" : "julianSaavedra 5/20/2017 11:08",
+		"initializeMappings" : "julianSaavedra 5/20/2017 11:28"
+	},
+	"class" : {
+		"workingWith:" : "julianSaavedra 5/20/2017 10:45"
+	}
+}
