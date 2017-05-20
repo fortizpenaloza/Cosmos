@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IoTSystemBasedTest",
+	"category" : "IoT-Commands-API-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "CommandsInterfaceTest",
+	"type" : "normal"
+}

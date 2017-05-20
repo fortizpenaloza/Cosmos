@@ -31,16 +31,18 @@ baseline: spec
 				package: 'IoT-Commands-Core' with: [ spec requires: 'IoT-Core' ];
 				package: 'IoT-API-Core' with: [ spec requires: 'Teapot' ];
 				package: 'IoT-Data-API-Core' with: [ spec requires: #('IoT-API-Core' 'IoT-Data-Core')];
+				package: 'IoT-Commands-API-Core' with: [ spec requires: #('IoT-API-Core' 'IoT-Commands-Core')];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ];
 				package: 'IoT-Notifications-Tests' with: [ spec requires: 'IoT-Notifications-Core' ];
 				package: 'IoT-Data-Tests' with: [ spec requires: 'IoT-Data-Core' ];
 				package: 'IoT-ConditionalTrigger-Tests' with: [ spec requires: 'IoT-ConditionalTrigger-Core' ];
 				package: 'IoT-Commands-Tests' with: [ spec requires: 'IoT-Commands-Core' ];
 				package: 'IoT-API-Tests' with: [ spec requires: 'IoT-API-Core' ];
-				package: 'IoT-Data-API-Tests' with: [ spec requires: 'IoT-Data-API-Core' ].
+				package: 'IoT-Data-API-Tests' with: [ spec requires: 'IoT-Data-API-Core' ];
+				package: 'IoT-Commands-API-Tests' with: [ spec requires: 'IoT-Commands-API-Core' ].
 			spec
 				group: 'Deployment'
-					with: #('IoT-Core' 'IoT-Notifications-Core' 'IoT-Data-Core' 'IoT-ConditionalTrigger-Core' 'IoT-Commands-Core' 'IoT-API-Core' 'IoT-Data-API-Core');
-				group: 'Tests' with: #('IoT-Tests' 'IoT-Notifications-Tests' 'IoT-Data-Tests'  'IoT-ConditionalTrigger-Tests' 'IoT-Commands-Tests'  'IoT-API-Tests' 'IoT-Data-API-Tests' );
+					with: #('IoT-Core' 'IoT-Notifications-Core' 'IoT-Data-Core' 'IoT-ConditionalTrigger-Core' 'IoT-Commands-Core' 'IoT-API-Core' 'IoT-Data-API-Core' 'IoT-Commands-API-Core');
+				group: 'Tests' with: #('IoT-Tests' 'IoT-Notifications-Tests' 'IoT-Data-Tests'  'IoT-ConditionalTrigger-Tests' 'IoT-Commands-Tests'  'IoT-API-Tests' 'IoT-Data-API-Tests' 'IoT-Commands-API-Tests');
 				group: 'Development' with: #('Deployment' 'Tests');
 				group: 'default' with: #('Deployment') ]

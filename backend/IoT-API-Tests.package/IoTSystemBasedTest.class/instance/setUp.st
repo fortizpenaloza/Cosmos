@@ -9,9 +9,10 @@ setUp
 		add: (TimeSystem using: timeSource);
 		add: EventNotificationSystem new;
 		add: (DataManagementSystem using: identifierProvider);
-		add: ConditionalTriggersSystem new;
+		add: (CommandManagementSystem using: identifierProvider);
 		do: [ :subsystem | rootSystem register: subsystem ].
 
 	rootSystem startUp.
 
-	self addSensorsSampleData
+	self addSensorsSampleData.
+	self addHighPriorityCommand
