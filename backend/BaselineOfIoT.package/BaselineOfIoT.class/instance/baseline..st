@@ -7,7 +7,7 @@ baseline: spec
 		do: [ spec
 				baseline: 'Chalten'
 				with: [ spec
-						repository: 'github://mtaborda/chalten:v5.0.0/repository';
+						repository: 'github://ba-st/chalten:v6.0.0/repository';
 						loads: #('Core') ].
 
 			spec
