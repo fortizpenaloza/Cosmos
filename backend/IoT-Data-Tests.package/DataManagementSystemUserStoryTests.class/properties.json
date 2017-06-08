@@ -6,6 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "DataManagementSystemTest",
+	"name" : "DataManagementSystemUserStoryTests",
 	"type" : "normal"
 }
