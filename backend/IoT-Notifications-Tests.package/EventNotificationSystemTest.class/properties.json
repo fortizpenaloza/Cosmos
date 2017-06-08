@@ -1,11 +1,13 @@
 {
 	"commentStamp" : "",
-	"super" : "NotifiableEvent",
+	"super" : "TestCase",
 	"category" : "IoT-Notifications-Tests-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
-	"instvars" : [ ],
-	"name" : "TestEvent",
+	"instvars" : [
+		"hasBeenNotified"
+	],
+	"name" : "EventNotificationSystemTest",
 	"type" : "normal"
 }

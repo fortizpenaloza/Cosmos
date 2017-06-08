@@ -1,5 +1,5 @@
 tests
-testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins
+testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints
 
 	| interface stream |
 

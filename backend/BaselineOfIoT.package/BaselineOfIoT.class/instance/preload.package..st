@@ -8,3 +8,8 @@ preload: aLoader package: aPackageSpec
 	Smalltalk
 		at: #TimeSystemInterface
 		put: nil.
+		
+	Smalltalk
+		at: #DataManagementSystemInterface
+		put: nil.
+	
