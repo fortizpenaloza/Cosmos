@@ -44,7 +44,8 @@ baseline: spec
 				package: 'IoT-Commands-Tests' with: [ spec requires: 'IoT-Commands-Core' ];
 				package: 'IoT-API-Tests' with: [ spec requires: 'IoT-API-Core' ];
 				package: 'IoT-Data-API-Tests' with: [ spec requires: 'IoT-Data-API-Core' ];
-				package: 'IoT-Commands-API-Tests' with: [ spec requires: 'IoT-Commands-API-Core' ].
+				package: 'IoT-Commands-API-Tests' with: [ spec requires: 'IoT-Commands-API-Core' ];
+				package: 'IoT-Code-Quality-Tests'.
 			spec
 				group: 'Deployment'
 					with:
