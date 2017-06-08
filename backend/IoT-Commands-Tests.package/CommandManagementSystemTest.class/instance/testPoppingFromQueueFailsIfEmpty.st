@@ -8,4 +8,4 @@ testPoppingFromQueueFailsIfEmpty
 	self
 		should: [ self commandManagementSystem popFromQueueIdentifiedBy: commandPriorityQueue identifier ]
 		raise: QueueIsEmpty
-		description: 'Command queue is empty'
+		withDescription: 'Command priority queue is empty'

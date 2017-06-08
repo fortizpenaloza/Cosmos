@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "IoT-Data-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "DataManagementSystemUserStoryTest",
+	"type" : "normal"
+}

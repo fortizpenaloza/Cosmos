@@ -1,6 +1,6 @@
-subsystem lookup
+system lookup
 systemImplementing: aSystemInterface
 
 	^ self
 		systemImplementing: aSystemInterface
-		ifNone: [ SystemImplementationNotFound signalFor: aSystemInterface ]
+		ifNone: [ SystemImplementationNotFound signal: aSystemInterface ]

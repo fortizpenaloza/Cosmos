@@ -1,4 +1,4 @@
-API
+API support
 snapshotOf: aChannel
 
 	^ DataChannelSnapshot

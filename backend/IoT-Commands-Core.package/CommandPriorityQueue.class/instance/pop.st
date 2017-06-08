@@ -1,8 +1,10 @@
 popping
 pop
 
-	| prioritizedCommand  |
+	^ [ | prioritizedCommand |
 
 	prioritizedCommand := priorityQueue pop.
 	prioritizedCommands remove: prioritizedCommand.
-	^ prioritizedCommand
+	prioritizedCommand ]
+		on: QueueIsEmpty
+		do: [ :signal | signal signal: 'Command priority queue is empty' ]
