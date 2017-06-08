@@ -3,13 +3,13 @@ descriptionFrom: ruleCheckingResult
 
 	| writeStream |
 
-	writeStream := WriteStream on: String new.
+	writeStream := WriteStream on: String new. 
 	ruleCheckingResult
 		classesAndSelectorsDo: [ :class :selector | 
 			writeStream
 				nextPutAll: class asString;
 				nextPutAll: '->';
-				nextPutAll: selector name;
+				nextPutAll: selector asString;
 				yourself ].
 			
 	^ '<1s> (<2p>): <3s>'

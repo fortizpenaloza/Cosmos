@@ -55,4 +55,5 @@ baseline: spec
 					#('IoT-Tests' 'IoT-Notifications-Tests' 'IoT-Data-Tests' 'IoT-ConditionalTrigger-Tests' 'IoT-Commands-Tests' 'IoT-API-Tests' 'IoT-Data-API-Tests' 'IoT-Commands-API-Tests' 'IoT-Code-Quality-Tests');
 				group: 'Development' with: #('Deployment' 'Tests');
 				group: 'default' with: #('Deployment').
-			spec postLoadDoIt: #postload:package: ]
+			spec postLoadDoIt: #postload:package:.
+			spec preLoadDoIt: #preload:package:]

@@ -6,6 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "ArchitectureTests",
+	"name" : "ArchitectureCodeQualityTest",
 	"type" : "normal"
 }
