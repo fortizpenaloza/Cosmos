@@ -4,6 +4,7 @@ setUp
 	| interface |
 
 	super setUp.
+	(SensorsSampleAddOn on: rootSystem) install.
 
 	interface := DataInterface workingWith: rootSystem.
 

@@ -1,5 +1,5 @@
 initialize-release
 initializeNamed: aName offering: aMessageCollection
 
-	name := aName .
-	messages := aMessageCollection 
+	name := aName.
+	messages := aMessageCollection

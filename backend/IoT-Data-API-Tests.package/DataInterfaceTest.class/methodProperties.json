@@ -1,9 +1,11 @@
 {
 	"instance" : {
-		"testQueryingNotValidStream" : "fortizpenaloza 10/17/2016 01:33",
 		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "julianSaavedra 10/21/2016 22:24",
+		"testQueryingNotValidStream" : "fortizpenaloza 10/17/2016 01:33",
 		"testQueryingSnapshotOfChannelNotValid" : "fortizpenaloza 10/15/2016 14:33",
-		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastdataPoins" : "julianSaavedra 10/21/2016 22:24"
+		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:15",
+		"setUp" : "fortizpenaloza 6/6/2017 02:13",
+		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints" : "fortizpenaloza 6/8/2017 03:21"
 	},
 	"class" : { }
 }

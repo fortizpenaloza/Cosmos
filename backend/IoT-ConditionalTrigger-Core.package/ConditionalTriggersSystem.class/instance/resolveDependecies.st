@@ -2,7 +2,7 @@ dependency resolution
 resolveDependecies
 
 	eventNotificationSystem := self
-		resolveSystemDependencyTo: 'Event Notification System Interface'.
+		resolveSystemDependencyTo: EventNotificationSystemInterface.
 
 	eventNotificationSystem
 		subscribe: self

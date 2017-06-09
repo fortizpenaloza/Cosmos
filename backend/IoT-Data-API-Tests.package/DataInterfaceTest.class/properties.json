@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "IoTSystemBasedTest",
+	"super" : "SystemBasedUserStoryTest",
 	"category" : "IoT-Data-API-Tests-Model",
 	"classinstvars" : [ ],
 	"pools" : [ ],

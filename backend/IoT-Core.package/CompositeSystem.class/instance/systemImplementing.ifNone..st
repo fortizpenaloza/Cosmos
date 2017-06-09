@@ -1,4 +1,4 @@
-subsystem lookup
+system lookup
 systemImplementing: aSystemInterface ifNone: aNoneBlock
 
 	^ systems

@@ -1,11 +1,12 @@
 initialize-release
 initializeUsing: anIdentifierProvider
 
-	super initialize.
+	self initialize.
 
-	timeSystem := self unresolvedSystemDependencyTo: 'Time System Interface'.
+	timeSystem := self
+		unresolvedSystemDependencyTo: TimeSystemInterface.
 	eventNotificationSystem := self
-		unresolvedSystemDependencyTo: 'Conditional Trigger Management System Interface'.
+		unresolvedSystemDependencyTo: ConditionalTriggersSystemInterface.
 
 	identifierProvider := anIdentifierProvider.
 	dataChannels := Set new.

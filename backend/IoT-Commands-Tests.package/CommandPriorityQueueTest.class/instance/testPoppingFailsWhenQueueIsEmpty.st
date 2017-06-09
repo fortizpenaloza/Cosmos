@@ -6,4 +6,4 @@ testPoppingFailsWhenQueueIsEmpty
 	commandQueue := CommandPriorityQueue
 		identifiedBy: 1
 		createdOn: (July twentyfourth , 2015) atMidnight.
-	self should: [ commandQueue pop ] raise: QueueIsEmpty withDescription: 'Queue is empty'
+	self should: [ commandQueue pop ] raise: QueueIsEmpty withDescription: 'Command priority queue is empty'

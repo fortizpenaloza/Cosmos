@@ -16,7 +16,8 @@ initializeMappings
 						mapAccessor: #name;
 						mapAccessor: #currentValue to: 'current-value';
 						mapAccessor: #lastUpdate to: 'last-update' ];
-				for: DateTime customDo: [ :mapping | mapping encoder: [ :dateTime | dateTime printString ] ];
+				for: DateTime
+					customDo: [ :mapping | mapping encoder: [ :dateTime | dateTime printString ] ];
 				prettyPrint: true;
 				nextPut: object ] ].
 
@@ -36,6 +37,7 @@ initializeMappings
 					mapping
 						mapAccessor: #timestamp;
 						mapAccessor: #value ];
-				for: DateTime customDo: [ :mapping | mapping encoder: [ :dateTime | dateTime printString ] ];
+				for: DateTime
+					customDo: [ :mapping | mapping encoder: [ :dateTime | dateTime printString ] ];
 				prettyPrint: true;
 				nextPut: object ] ]

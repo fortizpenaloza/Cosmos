@@ -1,9 +1,10 @@
 {
 	"instance" : {
-		"tearDown" : "fortizpenaloza 5/10/2017 23:40",
+		"testQueryingDataChannelSnapshot" : "fortizpenaloza 5/10/2017 23:49",
 		"testQueryingDataStream" : "fortizpenaloza 5/10/2017 23:49",
-		"setUp" : "fortizpenaloza 5/10/2017 23:47",
-		"testQueryingDataChannelSnapshot" : "fortizpenaloza 5/10/2017 23:49"
+		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:05",
+		"tearDown" : "fortizpenaloza 5/10/2017 23:40",
+		"setUp" : "fortizpenaloza 6/6/2017 02:06"
 	},
 	"class" : { }
 }
