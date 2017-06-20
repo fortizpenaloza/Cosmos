@@ -1,16 +1,16 @@
 {
 	"instance" : {
 		"putHoursOf:on:" : "fortizpenaloza 10/16/2016 19:53",
-		"initializeConfiguredToUse:" : "fortizpenaloza 10/16/2016 19:50",
-		"putSecondsOf:on:" : "fortizpenaloza 10/16/2016 19:56",
-		"putSeparatorOn:" : "fortizpenaloza 10/16/2016 19:55",
+		"putSecondsOf:on:" : "JulianMaestri 6/20/2017 00:12",
+		"initialize" : "JulianMaestri 6/20/2017 00:26",
+		"putSeparatorOn:" : "JulianMaestri 6/20/2017 00:10",
 		"put:paddedLeftToTwoWithZeroOn:" : "fortizpenaloza 10/16/2016 19:54",
+		"using:" : "JulianMaestri 6/20/2017 00:26",
 		"putMinutesOf:on:" : "fortizpenaloza 10/16/2016 19:56",
 		"format:" : "fortizpenaloza 10/17/2016 00:54"
 	},
 	"class" : {
-		"configuredToUse:" : "fortizpenaloza 10/16/2016 19:49",
-		"hypen" : "fortizpenaloza 10/16/2016 19:48",
-		"usingExtendedFormat" : "fortizpenaloza 10/16/2016 19:47"
+		"configuredToUse:" : "JulianMaestri 6/20/2017 00:06",
+		"usingExtendedFormat" : "JulianMaestri 6/20/2017 00:06"
 	}
 }

@@ -1,18 +1,17 @@
 {
 	"instance" : {
 		"putMonthOf:on:" : "fortizpenaloza 10/16/2016 15:41",
-		"putSeparatorOn:" : "fortizpenaloza 10/16/2016 15:39",
-		"putYearOf:on:" : "fortizpenaloza 10/16/2016 15:41",
+		"initialize" : "JulianMaestri 6/20/2017 00:26",
+		"putSeparatorOn:" : "JulianMaestri 6/20/2017 00:10",
 		"put:paddedLeftToTwoWithZeroOn:" : "fortizpenaloza 10/16/2016 15:41",
 		"putDayOf:on:" : "fortizpenaloza 10/16/2016 15:42",
-		"initializeConfiguredToUse:" : "fortizpenaloza 10/16/2016 15:36",
+		"putYearOf:on:" : "fortizpenaloza 10/16/2016 15:41",
+		"using:" : "JulianMaestri 6/20/2017 00:26",
 		"format:" : "fortizpenaloza 10/17/2016 00:54"
 	},
 	"class" : {
-		"usingExtendedFormat" : "fortizpenaloza 10/15/2016 20:00",
-		"noSeparator" : "fortizpenaloza 10/15/2016 20:01",
-		"usingBasicFormat" : "fortizpenaloza 10/15/2016 19:59",
-		"hypen" : "fortizpenaloza 10/15/2016 20:00",
-		"configuredToUse:" : "fortizpenaloza 10/15/2016 19:55"
+		"configuredToUse:" : "JulianMaestri 6/20/2017 00:07",
+		"usingExtendedFormat" : "JulianMaestri 6/20/2017 00:08",
+		"usingBasicFormat" : "JulianMaestri 6/20/2017 00:08"
 	}
 }

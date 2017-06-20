@@ -1,4 +1,4 @@
 accessing
 lastUpdate
 
-	^ lastUpdate boundedObject
+	^ lastUpdate content

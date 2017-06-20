@@ -9,8 +9,8 @@ testFormattingUsingExtendedFormat
 			(ISO8601TimeOfDayFormatter usingExtendedFormat
 				format:
 					(TimeOfDay
-						hours: 8
-						minutes: 8
+						hours: 6
+						minutes: 7
 						seconds: 8
 						milliseconds: 80))
-		equals: '08:08:08'
+		equals: '06:07:08'

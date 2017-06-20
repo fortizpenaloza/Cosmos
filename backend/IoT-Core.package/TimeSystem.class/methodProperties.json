@@ -1,9 +1,10 @@
 {
 	"instance" : {
 		"resolveDependecies" : "fortizpenaloza 1/11/2016 23:21",
-		"timeOfDay" : "FranciscoOrtizPenaloza 9/24/2014 18:17",
+		"initializeUsing:" : "fortizpenaloza 1/11/2016 01:51",
 		"dateTime" : "FranciscoOrtizPenaloza 9/24/2014 18:16",
-		"initializeUsing:" : "fortizpenaloza 1/11/2016 01:51"
+		"date" : "JulianMaestri 6/20/2017 04:11",
+		"timeOfDay" : "FranciscoOrtizPenaloza 9/24/2014 18:17"
 	},
 	"class" : {
 		"implementedInterface" : "fortizpenaloza 5/30/2017 01:44",

@@ -1,4 +1,4 @@
 instance creation
 configuredToUse: aSeparator
 
-	^ self new initializeConfiguredToUse: aSeparator
+	^ self new using: aSeparator

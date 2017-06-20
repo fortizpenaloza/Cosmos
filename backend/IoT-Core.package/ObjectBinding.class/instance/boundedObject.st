@@ -1,4 +1,0 @@
-accessing
-boundedObject
-
-	self subclassResponsibility 

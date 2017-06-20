@@ -1,4 +1,4 @@
 accessing
 currentValue
 
-	^ currentValue boundedObject
+	^ currentValue content
