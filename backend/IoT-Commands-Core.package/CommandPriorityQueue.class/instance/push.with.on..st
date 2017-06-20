@@ -1,4 +1,4 @@
-pushing
+pushing-popping
 push: aCommand with: aPriority on: aDateTime
 
 	| prioritizedCommand |

@@ -1,4 +1,4 @@
-managing-private
+private-managing
 registerPoint: aDataPoint to: aDataStream
 
 	aDataStream add: aDataPoint.

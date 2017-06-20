@@ -1,4 +1,4 @@
-managing-private
+private-managing
 registerChannel: aDataChannel
 
 	self

@@ -1,4 +1,4 @@
-formatting - private
+private-formatting
 putTimeZoneOf: aDateTime on: stream
 
 	aDateTime zone = TimeZones universalTime

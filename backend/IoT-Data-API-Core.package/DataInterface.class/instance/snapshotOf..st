@@ -1,4 +1,4 @@
-API support
+private-API
 snapshotOf: aChannel
 
 	^ DataChannelSnapshot
