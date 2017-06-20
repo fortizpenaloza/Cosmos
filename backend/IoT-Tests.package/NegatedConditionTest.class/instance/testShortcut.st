@@ -1,9 +1,9 @@
 tests
-testIsSatisfied
+testShortcut
 
 	| condition |
 
-	condition := NegatedCondition with: (ArithmeticCondition toBeEqualTo: 10).
+	condition := (ArithmeticCondition toBeEqualTo: 10) negated.
 
 	self
 		assert: (condition isSatisfiedBy: 8);

@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "JulianMaestri 6/20/2017 17:00",
+	"commentStamp" : "JulianMaestri 6/20/2017 16:10",
 	"super" : "Condition",
 	"category" : "IoT-Core-ConditionModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"condition"
+		"value",
+		"arithmeticOperator"
 	],
-	"name" : "NegatedCondition",
+	"name" : "ArithmeticCondition",
 	"type" : "normal"
 }
