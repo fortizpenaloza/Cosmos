@@ -1,4 +1,4 @@
 accessing
 parent: aCompositeSystem
 
-	parentHolder := BoundObject to: aCompositeSystem 
+	parentHolder := Binding to: aCompositeSystem

@@ -4,7 +4,8 @@ baseline: spec
 	<baseline>
 	spec
 		for: #common
-		do: [ spec
+		do: [ spec baseline: 'Buoy' with: [ spec repository: 'github://ba-st/Buoy:v2.2.0/source' ].
+			spec
 				baseline: 'Chalten'
 				with: [ spec
 						repository: 'github://ba-st/chalten:v6.0.0/repository';
@@ -26,27 +27,24 @@ baseline: spec
 			spec
 				package: 'IoT-Core' with: [ spec requires: #('Chalten' 'ZincHTTPComponents') ];
 				package: 'IoT-Notifications-Core' with: [ spec requires: 'IoT-Core' ];
-				package: 'IoT-Data-Core'
-					with: [ spec requires: #('IoT-Core' 'IoT-Notifications-Core') ];
+				package: 'IoT-Data-Core' with: [ spec requires: #('IoT-Core' 'IoT-Notifications-Core') ];
 				package: 'IoT-ConditionalTrigger-Core'
 					with: [ spec requires: #('IoT-Core' 'IoT-Notifications-Core') ];
 				package: 'IoT-Commands-Core' with: [ spec requires: 'IoT-Core' ];
 				package: 'IoT-API-Core' with: [ spec requires: 'Teapot' ];
-				package: 'IoT-Data-API-Core'
-					with: [ spec requires: #('IoT-API-Core' 'IoT-Data-Core') ];
-				package: 'IoT-Commands-API-Core'
-					with: [ spec requires: #('IoT-API-Core' 'IoT-Commands-Core') ];
-
+				package: 'IoT-Data-API-Core' with: [ spec requires: #('IoT-API-Core' 'IoT-Data-Core') ];
+				package: 'IoT-Commands-API-Core' with: [ spec requires: #('IoT-API-Core' 'IoT-Commands-Core') ];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ];
-				package: 'IoT-UserStoryTests' with: [ spec requires: #('IoT-Data-Core' 'IoT-Commands-Core' 'IoT-ConditionalTrigger-Core') ];
+				package: 'IoT-UserStoryTests'
+					with: [ spec requires: #('IoT-Data-Core' 'IoT-Commands-Core' 'IoT-ConditionalTrigger-Core') ];
 				package: 'IoT-Notifications-Tests' with: [ spec requires: 'IoT-Notifications-Core' ];
-				package: 'IoT-Data-Tests' with: [ spec requires: 'IoT-UserStoryTests'];
-				package: 'IoT-ConditionalTrigger-Tests'
-					with: [ spec requires: 'IoT-ConditionalTrigger-Core' ];
+				package: 'IoT-Data-Tests' with: [ spec requires: 'IoT-UserStoryTests' ];
+				package: 'IoT-ConditionalTrigger-Tests' with: [ spec requires: 'IoT-ConditionalTrigger-Core' ];
 				package: 'IoT-Commands-Tests' with: [ spec requires: 'IoT-Commands-Core' ];
 				package: 'IoT-API-Tests' with: [ spec requires: #('IoT-API-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Data-API-Tests' with: [ spec requires: #('IoT-Data-API-Core' 'IoT-UserStoryTests') ];
-				package: 'IoT-Commands-API-Tests' with: [ spec requires: #('IoT-Commands-API-Core' 'IoT-UserStoryTests') ];
+				package: 'IoT-Commands-API-Tests'
+					with: [ spec requires: #('IoT-Commands-API-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Code-Quality-Tests'.
 			spec
 				group: 'Deployment'

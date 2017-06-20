@@ -1,4 +1,4 @@
 accessing
 parent
 
-	^ parentHolder boundedObject
+	^ parentHolder content

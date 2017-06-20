@@ -1,7 +1,7 @@
 adding
 add: aDatapoint
 
-	currentValue := BoundObject to: aDatapoint value.
-	lastUpdate := BoundObject to: aDatapoint timestamp.
+	currentValue := Binding to: aDatapoint value.
+	lastUpdate := Binding to: aDatapoint timestamp.
 
-	^ dataPoints add: aDatapoint.
+	^ dataPoints add: aDatapoint

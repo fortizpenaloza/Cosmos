@@ -1,6 +1,4 @@
 formatting - private
 putSeparatorOn: aStream
 
-	separator
-		ifBound: [ :configuredSeparator | aStream nextPut: configuredSeparator ]
-		ifNot: [  ]	"do nothing"
+	separator withContentDo: [ :configuredSeparator | aStream nextPut: configuredSeparator ]
