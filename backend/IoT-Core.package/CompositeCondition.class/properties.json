@@ -1,13 +1,14 @@
 {
-	"commentStamp" : "JulianMaestri 6/20/2017 16:13",
+	"commentStamp" : "JulianMaestri 6/20/2017 16:12",
 	"super" : "Condition",
 	"category" : "IoT-Core-ConditionModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"condition"
+		"conditions",
+		"compositionPolicy"
 	],
-	"name" : "NegatedCondition",
+	"name" : "CompositeCondition",
 	"type" : "normal"
 }
