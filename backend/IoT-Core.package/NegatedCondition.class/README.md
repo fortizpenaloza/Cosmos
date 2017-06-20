@@ -1,5 +1,5 @@
 I'm a Condition.
-I'm an NegatedCondition
+I'm a NegatedCondition
 
 I test the opposite of the condition i was created with.
 
