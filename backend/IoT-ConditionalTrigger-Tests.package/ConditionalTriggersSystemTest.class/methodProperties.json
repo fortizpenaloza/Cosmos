@@ -1,12 +1,11 @@
 {
 	"instance" : {
-		"testTriggerOnDataPointRegistration" : "fortizpenaloza 4/25/2016 23:15",
+		"setUp" : "fortizpenaloza 5/31/2017 22:07",
 		"testTriggerPeriodicallyEveryTenMinutes" : "julianSaavedra 5/6/2017 11:20",
 		"timeSystem" : "fortizpenaloza 5/31/2017 22:05",
 		"conditionalTriggersSystem" : "fortizpenaloza 5/31/2017 22:05",
 		"registerDataStreamTo:" : "fortizpenaloza 4/18/2016 01:17",
 		"eightPM" : "fortizpenaloza 1/9/2016 23:16",
-		"septemberSixthOf2015AtNoon" : "fortizpenaloza 4/17/2016 12:49",
 		"testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringATimeInterval" : "julianSaavedra 5/6/2017 11:20",
 		"ninePM" : "fortizpenaloza 1/9/2016 23:16",
 		"fiveMinutes" : "fortizpenaloza 12/28/2015 11:51",
@@ -15,7 +14,7 @@
 		"registerDataChannel" : "fortizpenaloza 4/18/2016 01:18",
 		"dataManagementSystem" : "fortizpenaloza 5/31/2017 22:05",
 		"tenMinutes" : "FranciscoOrtizPenaloza 9/24/2014 17:00",
-		"setUp" : "fortizpenaloza 5/31/2017 22:07"
+		"testTriggerOnDataPointRegistration" : "fortizpenaloza 4/25/2016 23:15"
 	},
 	"class" : { }
 }
