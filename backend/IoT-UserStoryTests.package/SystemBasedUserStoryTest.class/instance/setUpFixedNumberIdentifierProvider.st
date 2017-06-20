@@ -1,4 +1,4 @@
 running
 setUpFixedNumberIdentifierProvider
 
-	identifierProvider := FixedNumberProvider providing: self identifier
+	identifierProvider := FixedNumberProvider providing: self startingIdentifier

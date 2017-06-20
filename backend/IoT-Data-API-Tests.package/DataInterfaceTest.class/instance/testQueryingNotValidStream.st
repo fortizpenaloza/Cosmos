@@ -10,5 +10,5 @@ testQueryingNotValidStream
 		raise: ResourceNotFound.
 
 	self
-		should: [ stream := interface streamNamed: 'pH' ofChannelIdentifiedBy: self identifier asString ]
+		should: [ stream := interface streamNamed: 'pH' ofChannelIdentifiedBy: self startingIdentifier asString ]
 		raise: ResourceNotFound

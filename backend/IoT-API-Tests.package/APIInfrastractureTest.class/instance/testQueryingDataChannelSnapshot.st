@@ -3,7 +3,7 @@ testQueryingDataChannelSnapshot
 
 	| response |
 
-	response := ZnEasy get: 'http://localhost:8010/data-channel/' , self identifier asString.
+	response := ZnEasy get: 'http://localhost:8010/data-channel/' , self startingIdentifier asString.
 
 	self
 		assert: response code equals: 200;

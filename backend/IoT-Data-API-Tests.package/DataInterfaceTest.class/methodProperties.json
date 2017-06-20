@@ -1,11 +1,11 @@
 {
 	"instance" : {
-		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "julianSaavedra 10/21/2016 22:24",
-		"testQueryingNotValidStream" : "fortizpenaloza 10/17/2016 01:33",
+		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "fortizpenaloza 6/20/2017 17:11",
+		"testQueryingNotValidStream" : "fortizpenaloza 6/20/2017 17:11",
 		"testQueryingSnapshotOfChannelNotValid" : "fortizpenaloza 10/15/2016 14:33",
 		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:15",
 		"setUp" : "fortizpenaloza 6/6/2017 02:13",
-		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints" : "fortizpenaloza 6/8/2017 03:21"
+		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints" : "fortizpenaloza 6/20/2017 17:11"
 	},
 	"class" : { }
 }

@@ -4,7 +4,7 @@ testQueryingPrioitizedCommands
 	| interface response |
 
 	interface := CommandsInterface workingWith: rootSystem.
-	response := interface prioritizedCommandsFromQueueIdentifiedBy: self identifier.
+	response := interface prioritizedCommandsFromQueueIdentifiedBy: self startingIdentifier.
 
 	self assert: response equals: '[
 	{

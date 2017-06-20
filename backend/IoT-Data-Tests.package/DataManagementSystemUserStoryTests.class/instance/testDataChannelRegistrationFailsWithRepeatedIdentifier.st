@@ -1,5 +1,5 @@
 tests
-testDataChannelRegistrationFailsIfAlreadyExists
+testDataChannelRegistrationFailsWithRepeatedIdentifier
 
 	self dataManagementSystem registerChannelNamed: 'Channel #1'.
 	self 

@@ -1,0 +1,4 @@
+systems
+eventNotificationSystem
+
+	^ rootSystem systemImplementing: EventNotificationSystemInterface 

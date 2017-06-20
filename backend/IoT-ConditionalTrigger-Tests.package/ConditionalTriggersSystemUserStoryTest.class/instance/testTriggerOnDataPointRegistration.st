@@ -17,7 +17,7 @@ testTriggerOnDataPointRegistration
 	self deny: triggered.
 
 	self dataManagementSystem
-		register: 1
+		register: 12
 		toStreamNamed: dataStream name
 		ofChannelIdentifiedBy: dataChannel identifier.
 	self assert: triggered

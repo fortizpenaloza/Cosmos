@@ -5,7 +5,7 @@ testQueryingNextCommandContainsCommandActionAndPriority
 
 	interface := CommandsInterface workingWith: rootSystem.
 	response := interface
-		nextCommandFromQueueIdentifiedBy: self identifier.
+		nextCommandFromQueueIdentifiedBy: self startingIdentifier.
 
 	self
 		assert: response

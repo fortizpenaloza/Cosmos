@@ -1,17 +1,17 @@
 {
 	"instance" : {
-		"testDataChannelRegistration" : "fortizpenaloza 4/25/2016 22:37",
+		"testDataChannelRegistrationFailsWithRepeatedIdentifier" : "fortizpenaloza 6/20/2017 17:49",
+		"testDataChannelRegistration" : "fortizpenaloza 6/20/2017 17:42",
 		"testDataPointRegistrationFailsIfStreamNotFound" : "fortizpenaloza 4/26/2016 08:37",
 		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 4/26/2016 08:37",
 		"testQueryingDataChannelByIdentifier" : "fortizpenaloza 4/26/2016 08:37",
-		"testDataStreamRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:37",
+		"testDataStreamRegistrationFailsIfChannelNotFound" : "fortizpenaloza 6/20/2017 17:02",
 		"testDataStreamRegistration" : "fortizpenaloza 4/26/2016 08:37",
 		"testQueryingDataStreamByNameAndChannelIdentifier" : "fortizpenaloza 4/26/2016 08:38",
-		"testDataChannelRegistrationFailsIfAlreadyExists" : "fortizpenaloza 4/25/2016 22:36",
-		"setUpRequirements" : "fortizpenaloza 6/8/2017 03:22",
+		"septemberSixth2015AtTwelveOFivePM" : "fortizpenaloza 6/20/2017 17:45",
+		"setUpRequirements" : "fortizpenaloza 6/20/2017 18:36",
 		"testDataPointRegistration" : "fortizpenaloza 4/24/2016 11:23",
-		"testDataPointRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:38",
-		"setUp" : "fortizpenaloza 6/8/2017 03:33"
+		"testDataPointRegistrationFailsIfChannelNotFound" : "fortizpenaloza 4/26/2016 08:38"
 	},
 	"class" : { }
 }

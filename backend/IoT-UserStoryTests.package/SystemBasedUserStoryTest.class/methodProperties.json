@@ -1,11 +1,14 @@
 {
 	"instance" : {
 		"queryingChannelNumber1Answer" : "julianSaavedra 5/6/2017 12:11",
-		"timeSystem" : "fortizpenaloza 5/31/2017 20:48",
-		"setUpFixedNumberIdentifierProvider" : "fortizpenaloza 6/1/2017 10:29",
+		"setUp" : "fortizpenaloza 6/6/2017 02:02",
+		"startingIdentifier" : "fortizpenaloza 6/20/2017 16:49",
+		"conditionalTriggersSystem" : "fortizpenaloza 6/20/2017 18:29",
+		"setUpFixedNumberIdentifierProvider" : "fortizpenaloza 6/20/2017 16:49",
+		"eventNotificationSystem" : "fortizpenaloza 6/20/2017 18:25",
 		"buildAndStartUpSystem" : "fortizpenaloza 6/6/2017 02:04",
 		"septemberSixth2015AtNoon" : "fortizpenaloza 10/9/2016 02:00",
-		"identifier" : "fortizpenaloza 10/9/2016 02:01",
+		"timeSystem" : "fortizpenaloza 5/31/2017 20:48",
 		"requireCommandManagementSystem" : "fortizpenaloza 6/6/2017 02:08",
 		"queryingStreamCalledTemperatureBelongingToChannelNumber1Answer" : "fortizpenaloza 6/1/2017 11:43",
 		"setUpFixedTimeSource" : "fortizpenaloza 6/1/2017 10:29",
@@ -13,7 +16,7 @@
 		"requireDataManagementSystem" : "fortizpenaloza 6/6/2017 02:07",
 		"dataManagementSystem" : "fortizpenaloza 6/6/2017 01:38",
 		"commandManagementSystem" : "fortizpenaloza 5/31/2017 20:44",
-		"setUp" : "fortizpenaloza 6/6/2017 02:02"
+		"requireConditionalTriggersSystem" : "fortizpenaloza 6/20/2017 18:20"
 	},
 	"class" : { }
 }

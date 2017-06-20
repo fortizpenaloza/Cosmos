@@ -6,5 +6,5 @@ testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints
 	interface := DataInterface workingWith: rootSystem.
 	stream := interface
 		streamNamed: 'Temperature'
-		ofChannelIdentifiedBy: self identifier asString.
+		ofChannelIdentifiedBy: self startingIdentifier asString.
 	self assert: stream equals: self queryingStreamCalledTemperatureBelongingToChannelNumber1Answer 
