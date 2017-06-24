@@ -1,4 +1,4 @@
-initailize-release
+initialize-release
 initializeFormattingDateUsing: aDateFormatter andTimeOfDayUsing: aTimeOfDayFormatter
 
 	dateFormatter := aDateFormatter.

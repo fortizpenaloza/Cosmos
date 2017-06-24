@@ -1,4 +1,4 @@
-subscribing-private
+private-subscribing
 assertNotExists: aSubscriber subscribedTo: anEventType
 
 	subscriptions

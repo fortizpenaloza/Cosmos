@@ -1,4 +1,4 @@
-formatting - private
+private-formatting
 universalTimeZoneDesignator
 
 	^ $Z
