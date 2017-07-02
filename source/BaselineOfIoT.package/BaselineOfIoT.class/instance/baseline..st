@@ -39,18 +39,16 @@ baseline: spec
 				package: 'IoT-Commands-API-Core' with: [ spec requires: #('IoT-API-Core' 'IoT-Commands-Core') ];
 				package: 'IoT-Tests' with: [ spec requires: 'IoT-Core' ];
 				package: 'IoT-UserStoryTests' with: [ spec requires: #('IoT-Data-Core' 'IoT-Commands-Core' 'IoT-ConditionalTrigger-Core') ];
-				package: 'IoT-Notifications-Tests' with: [ spec requires: 'IoT-Notifications-Core' ];
+				package: 'IoT-Notifications-Tests' with: [ spec requires: #('IoT-Notifications-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Data-Tests' with: [ spec requires: 'IoT-UserStoryTests' ];
-				package: 'IoT-ConditionalTrigger-Tests' with: [ spec requires: 'IoT-ConditionalTrigger-Core' ];
-				package: 'IoT-Commands-Tests' with: [ spec requires: 'IoT-Commands-Core' ];
+				package: 'IoT-ConditionalTrigger-Tests' with: [ spec requires: #('IoT-ConditionalTrigger-Core' 'IoT-UserStoryTests') ];
+				package: 'IoT-Commands-Tests' with: [ spec requires: #('IoT-Commands-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-API-Tests' with: [ spec requires: #('IoT-API-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Data-API-Tests' with: [ spec requires: #('IoT-Data-API-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Commands-API-Tests' with: [ spec requires: #('IoT-Commands-API-Core' 'IoT-UserStoryTests') ];
 				package: 'IoT-Code-Quality-Tests'.
 			spec
-				group: 'Deployment'
-					with:
-					#('IoT-Core' 'IoT-Notifications-Core' 'IoT-Data-Core' 'IoT-ConditionalTrigger-Core' 'IoT-Commands-Core' 'IoT-API-Core' 'IoT-Data-API-Core' 'IoT-Commands-API-Core');
+				group: 'Deployment' with: #('IoT-Core' 'IoT-Notifications-Core' 'IoT-Data-Core' 'IoT-ConditionalTrigger-Core' 'IoT-Commands-Core' 'IoT-API-Core' 'IoT-Data-API-Core' 'IoT-Commands-API-Core');
 				group: 'Tests'
 					with:
 					#('IoT-Tests' 'IoT-UserStoryTests' 'IoT-Notifications-Tests' 'IoT-Data-Tests' 'IoT-ConditionalTrigger-Tests' 'IoT-Commands-Tests' 'IoT-API-Tests' 'IoT-Data-API-Tests' 'IoT-Commands-API-Tests' 'IoT-Code-Quality-Tests');
