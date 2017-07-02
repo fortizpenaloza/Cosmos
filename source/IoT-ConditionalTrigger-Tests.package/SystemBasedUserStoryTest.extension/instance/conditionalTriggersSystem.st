@@ -1,0 +1,4 @@
+*IoT-ConditionalTrigger-Tests-SystemModel
+conditionalTriggersSystem
+
+	^ rootSystem systemImplementing: ConditionalTriggersSystemInterface

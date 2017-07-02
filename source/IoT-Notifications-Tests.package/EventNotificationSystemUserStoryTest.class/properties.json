@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "IoT-Notifications-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"hasBeenNotified"
+	],
+	"name" : "EventNotificationSystemUserStoryTest",
+	"type" : "normal"
+}

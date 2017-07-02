@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "IoT-Tests-TimeSystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "TimeSystemUserStoryTest",
+	"type" : "normal"
+}

@@ -1,4 +1,4 @@
 running
 setUpFixedTimeSource
 
-	timeSource := FixedTimeSource on: self septemberSixth2015AtNoon
+	timeSource := FixedTimeSource on: self systemDateTime

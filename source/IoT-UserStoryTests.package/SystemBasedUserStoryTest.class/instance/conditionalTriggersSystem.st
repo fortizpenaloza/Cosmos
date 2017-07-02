@@ -1,4 +1,0 @@
-systems
-conditionalTriggersSystem
-
-	^ rootSystem systemImplementing: ConditionalTriggersSystemInterface
