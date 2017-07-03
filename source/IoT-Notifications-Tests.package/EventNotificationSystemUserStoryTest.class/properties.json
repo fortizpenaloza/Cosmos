@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "TestCase",
+	"super" : "SystemBasedUserStoryTest",
 	"category" : "IoT-Notifications-Tests-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
@@ -8,6 +8,6 @@
 	"instvars" : [
 		"hasBeenNotified"
 	],
-	"name" : "EventNotificationSystemTest",
+	"name" : "EventNotificationSystemUserStoryTest",
 	"type" : "normal"
 }
