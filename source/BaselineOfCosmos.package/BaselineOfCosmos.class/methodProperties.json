@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"preload:package:" : "JulianMaestri 7/8/2017 15:36",
+		"setUpDependencies:" : "JulianMaestri 7/8/2017 17:01",
+		"defineCommandManagementSystemInterface" : "fortizpenaloza 5/30/2017 20:35",
+		"defineDataManagementSystemInterface" : "fortizpenaloza 5/30/2017 18:44",
+		"defineConditionalTriggersSystemInterface" : "fortizpenaloza 5/30/2017 18:45",
+		"defineSystemInterfaceOn:named:offering:" : "fortizpenaloza 5/31/2017 11:33",
+		"baseline:" : "JulianMaestri 7/8/2017 15:54",
+		"defineSystemInterfaces" : "JulianMaestri 7/8/2017 15:36",
+		"postload:package:" : "fortizpenaloza 5/30/2017 20:35"
+	},
+	"class" : { }
+}

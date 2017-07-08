@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "Cosmos-ConditionalTrigger-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ConditionalTriggersSystemUserStoryTest",
+	"type" : "normal"
+}

@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "NotifiableEvent",
+	"category" : "Cosmos-Data-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dataStream"
+	],
+	"name" : "DataPointRegistrationEvent",
+	"type" : "normal"
+}

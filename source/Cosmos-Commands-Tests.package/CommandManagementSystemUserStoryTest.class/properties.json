@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "Cosmos-Commands-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "CommandManagementSystemUserStoryTest",
+	"type" : "normal"
+}

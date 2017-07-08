@@ -1,0 +1,17 @@
+{
+	"commentStamp" : "<historical>",
+	"super" : "System",
+	"category" : "Cosmos-Data-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"identifierProvider",
+		"dataStreams",
+		"dataChannels",
+		"timeSystem",
+		"eventNotificationSystem"
+	],
+	"name" : "DataManagementSystem",
+	"type" : "normal"
+}
