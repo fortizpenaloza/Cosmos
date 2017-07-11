@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "TriggeringCondition",
+	"category" : "Cosmos-ConditionalTrigger-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeSystem",
+		"datastream",
+		"timePeriod"
+	],
+	"name" : "DataStreamHasNotBeenUpdatedTriggeringCondition",
+	"type" : "normal"
+}

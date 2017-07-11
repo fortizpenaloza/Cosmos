@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Core-PriorityQueueModel-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"lowPrioritizedElements",
+		"mediumPrioritizedElements",
+		"highPrioritizedElements"
+	],
+	"name" : "PriorityQueue",
+	"type" : "normal"
+}

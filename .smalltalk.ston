@@ -1,7 +1,7 @@
 SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
-      #baseline : 'IoT',
+      #baseline : 'Cosmos',
       #directory : 'source',
       #load : [ 'Development' ],
       #platforms : [ #pharo ]
@@ -9,10 +9,10 @@ SmalltalkCISpec {
   ], 
   #testing : {
     #coverage : {
-      #packages : [ 'IoT.*' ]
+      #packages : [ 'Cosmos.*' ]
     },
     #include : {  
-      #packages : [ 'IoT.*' ]
+      #packages : [ 'Cosmos.*' ]
     }    
   }
 }

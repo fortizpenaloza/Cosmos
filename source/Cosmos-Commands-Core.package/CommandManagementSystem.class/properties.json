@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "System",
+	"category" : "Cosmos-Commands-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"identifierProvider",
+		"timeSystem",
+		"commandPriorityQueues"
+	],
+	"name" : "CommandManagementSystem",
+	"type" : "normal"
+}

@@ -1,9 +1,0 @@
-actions
-defineSystemInterfaces
-
-	self
-		defineTimeSystemInterface;
-		defineEventNotificationSystemInterface;
-		defineDataManagementSystemInterface;
-		defineCommandManagementSystemInterface;
-		defineConditionalTriggersSystemInterface

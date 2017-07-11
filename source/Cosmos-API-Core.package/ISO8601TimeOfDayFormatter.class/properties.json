@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-API-Core-FormattingModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"separator"
+	],
+	"name" : "ISO8601TimeOfDayFormatter",
+	"type" : "normal"
+}
