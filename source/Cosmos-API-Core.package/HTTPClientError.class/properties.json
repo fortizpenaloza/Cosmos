@@ -6,6 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "ResourceNotFound",
+	"name" : "HTTPClientError",
 	"type" : "normal"
 }
