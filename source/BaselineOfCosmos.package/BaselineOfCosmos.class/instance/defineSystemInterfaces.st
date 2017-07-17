@@ -4,4 +4,5 @@ defineSystemInterfaces
 	self
 		defineDataManagementSystemInterface;
 		defineCommandManagementSystemInterface;
-		defineConditionalTriggersSystemInterface
+		defineConditionalTriggersSystemInterface;
+		defineActionManagementSystemInterface

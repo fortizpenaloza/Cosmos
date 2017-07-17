@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "System",
+	"category" : "Cosmos-Actions-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeSystem",
+		"eventNotificationSystem",
+		"actions"
+	],
+	"name" : "ActionManagementSystem",
+	"type" : "normal"
+}

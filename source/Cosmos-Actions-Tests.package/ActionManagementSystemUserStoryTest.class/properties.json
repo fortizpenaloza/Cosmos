@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "Cosmos-Actions-Tests-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"evaluateAction"
+	],
+	"name" : "ActionManagementSystemUserStoryTest",
+	"type" : "normal"
+}
