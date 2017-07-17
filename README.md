@@ -13,10 +13,10 @@ On Pharo 6 open Playground and evaluate:
 
 ```smalltalk
 Metacello new
-  baseline: 'IoT';
+  baseline: 'Cosmos';
   repository: 'github://iot-uca/back-end:master/source';
   load: ('Development').
   ```
 
-## Download Pharo + IoT-UCA!
+## Download Pharo + Cosmos!
 You may prefer to get a fresh new Pharo image and put IoT-UCA in it. You can use the [script](https://github.com/iot-uca/back-end/wiki/IoT-UCA-installation-script): it will get the last Pharo image+VM, install IoT-UCA code and give you a warming welcome!
