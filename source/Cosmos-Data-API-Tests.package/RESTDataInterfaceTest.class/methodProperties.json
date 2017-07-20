@@ -1,0 +1,16 @@
+{
+	"instance" : {
+		"setUp" : "fortizpenaloza 6/6/2017 02:13",
+		"queryingChannelNumber1Answer" : "JulianMaestri 7/8/2017 11:58",
+		"updateTemperatureAndPressureDataStreamsJSON" : "fortizpenaloza 7/20/2017 15:03",
+		"testQueryingSnapshotOfChannelNotValid" : "fortizpenaloza 7/20/2017 15:20",
+		"testQueryingNotValidStream" : "fortizpenaloza 7/20/2017 15:20",
+		"queryingStreamCalledTemperatureBelongingToChannelNumber1Answer" : "JulianMaestri 7/8/2017 11:58",
+		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:15",
+		"testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints" : "fortizpenaloza 7/20/2017 15:20",
+		"testMultipleDataStreamUpdates" : "fortizpenaloza 7/20/2017 15:20",
+		"testDataPointRegistration" : "fortizpenaloza 7/20/2017 15:20",
+		"testQueryingSnapshotOfChannelContainsItsNameAndCurrentValueOfEachDataStream" : "fortizpenaloza 7/20/2017 15:20"
+	},
+	"class" : { }
+}

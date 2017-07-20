@@ -3,7 +3,7 @@ testQueryingNotValidStream
 
 	| interface stream |
 
-	interface := DataInterface workingWith: rootSystem.
+	interface := RESTDataInterface workingWith: rootSystem.
 
 	self
 		should: [ stream := interface

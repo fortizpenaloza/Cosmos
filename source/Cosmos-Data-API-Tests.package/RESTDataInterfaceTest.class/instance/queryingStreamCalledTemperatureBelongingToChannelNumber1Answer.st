@@ -1,4 +1,4 @@
-tests
+accessing
 queryingStreamCalledTemperatureBelongingToChannelNumber1Answer
 
 	| localTimeString |

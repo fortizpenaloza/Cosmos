@@ -3,7 +3,7 @@ testQueryingStreamAnswersItsNameAndLastRegisteredValuesAndLastDataPoints
 
 	| interface stream |
 
-	interface := DataInterface workingWith: rootSystem.
+	interface := RESTDataInterface workingWith: rootSystem.
 	stream := interface
 		streamNamed: 'Temperature'
 		ofChannelIdentifiedBy: self startingIdentifier asString.
