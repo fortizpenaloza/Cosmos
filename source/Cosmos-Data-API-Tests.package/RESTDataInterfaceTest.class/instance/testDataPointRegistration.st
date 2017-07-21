@@ -3,7 +3,7 @@ testDataPointRegistration
 
 	| interface dataPoint |
 
-	interface := DataInterface workingWith: rootSystem.
+	interface := RESTDataInterface workingWith: rootSystem.
 
 	dataPoint := interface
 		register: 24

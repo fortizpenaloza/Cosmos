@@ -10,6 +10,6 @@
 		"dataChannelSnapshotMapping",
 		"dataStreamMapping"
 	],
-	"name" : "DataInterface",
+	"name" : "RESTDataInterface",
 	"type" : "normal"
 }

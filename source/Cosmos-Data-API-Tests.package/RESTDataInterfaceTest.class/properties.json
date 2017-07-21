@@ -6,6 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "DataInterfaceTest",
+	"name" : "RESTDataInterfaceTest",
 	"type" : "normal"
 }

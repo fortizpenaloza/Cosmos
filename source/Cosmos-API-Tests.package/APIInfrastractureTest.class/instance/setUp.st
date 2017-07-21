@@ -6,7 +6,7 @@ setUp
 	super setUp.
 	(SensorsSampleAddOn on: rootSystem) install.
 
-	interface := DataInterface workingWith: rootSystem.
+	interface := RESTDataInterface workingWith: rootSystem.
 
 	server := Teapot
 		configure:
