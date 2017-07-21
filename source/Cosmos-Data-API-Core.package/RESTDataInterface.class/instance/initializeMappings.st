@@ -5,11 +5,6 @@ initializeMappings
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
-				for: DataChannelSnapshot
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #dataStreams to: 'data-streams' ];
 				for: DataStream
 					do: [ :mapping | 
 					mapping

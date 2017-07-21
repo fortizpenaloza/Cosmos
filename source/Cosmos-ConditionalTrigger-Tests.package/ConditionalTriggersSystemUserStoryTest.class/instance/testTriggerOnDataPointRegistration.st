@@ -1,12 +1,11 @@
 tests
 testTriggerOnDataPointRegistration
 
-	| triggered dataChannel dataStream conditionalTrigger |
+	| triggered dataStream conditionalTrigger |
 
 	triggered := false.
 
-	dataChannel := self registerDataChannel.
-	dataStream := self registerDataStreamTo: dataChannel.
+	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
 
 	conditionalTrigger := ConditionalTrigger
 		firing: [ triggered := true ]
@@ -16,8 +15,5 @@ testTriggerOnDataPointRegistration
 	self conditionalTriggersSystem register: conditionalTrigger.
 	self deny: triggered.
 
-	self dataManagementSystem
-		register: 12
-		toStreamNamed: dataStream name
-		ofChannelIdentifiedBy: dataChannel identifier.
+	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
 	self assert: triggered

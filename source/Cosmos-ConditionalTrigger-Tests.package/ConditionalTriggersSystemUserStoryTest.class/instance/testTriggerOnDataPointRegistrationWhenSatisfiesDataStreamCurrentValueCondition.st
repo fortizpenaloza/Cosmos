@@ -1,29 +1,25 @@
 tests
 testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition
 
-	| triggered dataChannel dataStream conditionalTrigger |
+	| triggered dataStream conditionalTrigger |
 
 	triggered := false.
 
-	dataChannel := self registerDataChannel.
-	dataStream := self registerDataStreamTo: dataChannel.
+	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
 
 	conditionalTrigger := ConditionalTrigger
 		firing: [ triggered := true ]
-		whenMeets: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11)
+		whenMeets:
+			(DataStreamCurrentValueTriggeringCondition
+				of: dataStream
+				isLessThan: 11)
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream).
 
 	self conditionalTriggersSystem register: conditionalTrigger.
 	self deny: triggered.
 
-	self dataManagementSystem
-		register: 12
-		toStreamNamed: dataStream name
-		ofChannelIdentifiedBy: dataChannel identifier.
+	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
 	self deny: triggered.
 
-	self dataManagementSystem
-		register: 10
-		toStreamNamed: dataStream name
-		ofChannelIdentifiedBy: dataChannel identifier.
+	self dataManagementSystem register: 10 toStreamNamed: dataStream name.
 	self assert: triggered

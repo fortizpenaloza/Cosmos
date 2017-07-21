@@ -1,14 +1,8 @@
 tests
 testDataPointRegistrationFailsIfStreamNotFound
 
-	| dataChannel |
-
-	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
-
 	self
-		should: [ self dataManagementSystem
-				register: 10
-				toStreamNamed: 'Temperature'
-				ofChannelIdentifiedBy: dataChannel identifier ]
+		should:
+			[ self dataManagementSystem register: 10 toStreamNamed: 'Temperature' ]
 		raise: ObjectNotFoundInSystem
 		withDescription: 'Data stream does not exists in system'

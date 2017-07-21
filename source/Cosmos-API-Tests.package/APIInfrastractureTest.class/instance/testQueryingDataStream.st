@@ -4,7 +4,7 @@ testQueryingDataStream
 	| response |
 
 	response := ZnEasy
-		get: 'http://localhost:8010/data-channel/' , self startingIdentifier asString , '/data-stream/' , 'Temperature'.
+		get: 'http://localhost:8010/data-streams/Temperature'.
 
 	self
 		assert: response code equals: 200;

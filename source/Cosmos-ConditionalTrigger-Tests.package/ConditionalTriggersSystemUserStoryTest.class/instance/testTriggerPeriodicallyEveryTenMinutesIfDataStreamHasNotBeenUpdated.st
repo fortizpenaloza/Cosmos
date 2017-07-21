@@ -1,12 +1,11 @@
 tests
 testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 
-	| triggered dataChannel dataStream condition conditionalTrigger |
+	| triggered dataStream condition conditionalTrigger |
 
 	triggered := false.
 
-	dataChannel := self registerDataChannel.
-	dataStream := self registerDataStreamTo: dataChannel.
+	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
 
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
 		querying: timeSource
@@ -21,18 +20,13 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 	self conditionalTriggersSystem register: conditionalTrigger.
 	self deny: triggered.
 
-	self dataManagementSystem
-		register: 12
-		toStreamNamed: dataStream name
-		ofChannelIdentifiedBy: dataChannel identifier.
+	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
 	self deny: triggered.
 
-	timeSource
-		setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
+	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
 	self conditionalTriggersSystem havePassed: self fiveMinutes.
 	self deny: triggered.
 
-	timeSource
-		setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
+	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
 	self conditionalTriggersSystem havePassed: self tenMinutes.
 	self assert: triggered

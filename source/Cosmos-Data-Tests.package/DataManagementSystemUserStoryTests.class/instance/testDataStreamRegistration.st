@@ -1,14 +1,12 @@
 tests
 testDataStreamRegistration
 
-	| dataChannel dataStream |
+	| dataStream |
 
-	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
 	dataStream := self dataManagementSystem
-		registerStreamNamed: 'Temperature'
-		toChannelIdentifiedBy: dataChannel identifier.
+		registerStreamNamed: 'Temperature'.
 
 	self
 		assert: dataStream name equals: 'Temperature';
-		assert: dataStream creationDateTime equals: self timeSystem dateTime;
-		assert: dataStream dataChannel equals: dataChannel
+		assert: dataStream creationDateTime
+			equals: self timeSystem dateTime
