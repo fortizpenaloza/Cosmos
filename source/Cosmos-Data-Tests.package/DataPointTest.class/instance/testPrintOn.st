@@ -1,4 +1,4 @@
-tests-printing
+tests
 testPrintOn
 
 	| dataPoint |

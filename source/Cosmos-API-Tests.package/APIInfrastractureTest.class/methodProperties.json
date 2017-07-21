@@ -1,12 +1,12 @@
 {
 	"instance" : {
-		"testQueryingDataChannelSnapshot" : "fortizpenaloza 6/20/2017 17:10",
+		"testQueryingDataChannelSnapshot" : "fortizpenaloza 7/20/2017 21:48",
 		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:05",
-		"testQueryingDataStream" : "fortizpenaloza 6/20/2017 17:10",
+		"testQueryingDataStream" : "fortizpenaloza 7/20/2017 21:48",
 		"tearDown" : "fortizpenaloza 5/10/2017 23:40",
-		"setUp" : "fortizpenaloza 7/20/2017 15:20",
+		"setUp" : "fortizpenaloza 7/21/2017 08:15",
 		"queryingStreamCalledTemperatureBelongingToChannelNumber1Answer" : "JulianMaestri 7/8/2017 11:57",
-		"queryingChannelNumber1Answer" : "JulianMaestri 7/8/2017 11:58"
+		"queryingChannelNumber1Answer" : "fortizpenaloza 7/21/2017 08:16"
 	},
 	"class" : { }
 }

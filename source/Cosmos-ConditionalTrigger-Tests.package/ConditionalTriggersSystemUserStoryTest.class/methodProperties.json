@@ -1,16 +1,14 @@
 {
 	"instance" : {
-		"registerDataStreamTo:" : "fortizpenaloza 6/20/2017 18:30",
 		"eightPM" : "fortizpenaloza 1/9/2016 23:16",
-		"testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringATimeInterval" : "julianSaavedra 5/6/2017 11:20",
+		"testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringATimeInterval" : "fortizpenaloza 7/20/2017 21:47",
+		"testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated" : "fortizpenaloza 7/20/2017 21:47",
 		"ninePM" : "fortizpenaloza 1/9/2016 23:16",
+		"testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition" : "fortizpenaloza 7/20/2017 21:47",
 		"fiveMinutes" : "fortizpenaloza 12/28/2015 11:51",
-		"testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition" : "fortizpenaloza 4/25/2016 23:40",
-		"testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated" : "julianSaavedra 5/6/2017 11:20",
 		"setUpRequirements" : "fortizpenaloza 6/20/2017 18:27",
-		"registerDataChannel" : "fortizpenaloza 6/20/2017 18:30",
 		"testTriggerPeriodicallyEveryTenMinutes" : "julianSaavedra 5/6/2017 11:20",
-		"testTriggerOnDataPointRegistration" : "fortizpenaloza 6/20/2017 18:28",
+		"testTriggerOnDataPointRegistration" : "fortizpenaloza 7/20/2017 21:46",
 		"tenMinutes" : "FranciscoOrtizPenaloza 9/24/2014 17:00"
 	},
 	"class" : { }

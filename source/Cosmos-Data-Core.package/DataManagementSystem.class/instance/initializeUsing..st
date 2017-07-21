@@ -9,5 +9,4 @@ initializeUsing: anIdentifierProvider
 		unresolvedSystemDependencyTo: ConditionalTriggersSystemInterface.
 
 	identifierProvider := anIdentifierProvider.
-	dataChannels := Set new.
 	dataStreams := OrderedCollection new

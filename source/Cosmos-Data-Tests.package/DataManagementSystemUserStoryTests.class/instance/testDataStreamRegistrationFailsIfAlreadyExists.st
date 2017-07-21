@@ -1,16 +1,10 @@
 tests
 testDataStreamRegistrationFailsIfAlreadyExists
 
-	| dataChannel |
-
-	dataChannel := self dataManagementSystem registerChannelNamed: 'Channel #1'.
-	self dataManagementSystem
-		registerStreamNamed: 'Temperature'
-		toChannelIdentifiedBy: dataChannel identifier.
+	self dataManagementSystem registerStreamNamed: 'Temperature'.
 
 	self
-		should: [ self dataManagementSystem
-				registerStreamNamed: 'Temperature'
-				toChannelIdentifiedBy: dataChannel identifier ]
+		should:
+			[ self dataManagementSystem registerStreamNamed: 'Temperature' ]
 		raise: ObjectAlreadyInSystem
 		withDescription: 'Data stream already exists in system'

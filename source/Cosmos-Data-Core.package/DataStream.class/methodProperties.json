@@ -2,14 +2,13 @@
 	"instance" : {
 		"currentValue" : "JulianMaestri 6/19/2017 23:48",
 		"lastUpdate" : "JulianMaestri 6/19/2017 23:49",
-		"dataChannel" : "fortizpenaloza 1/21/2016 12:32",
 		"add:" : "JulianMaestri 6/20/2017 00:23",
-		"initializeNamed:createdOn:belongingTo:" : "JulianMaestri 6/20/2017 00:22",
+		"initializeNamed:createdOn:" : "fortizpenaloza 7/20/2017 20:39",
 		"creationDateTime" : "fortizpenaloza 1/19/2016 20:04",
 		"name" : "fortizpenaloza 1/19/2016 20:00",
 		"dataPoints" : "FranciscoOrtizPenaloza 9/26/2014 19:43"
 	},
 	"class" : {
-		"named:createdOn:belongingTo:" : "fortizpenaloza 1/19/2016 20:04"
+		"named:createdOn:" : "fortizpenaloza 7/20/2017 20:39"
 	}
 }
