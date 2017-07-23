@@ -1,5 +1,5 @@
 accessing
-queryingStreamCalledTemperatureBelongingToChannelNumber1Answer
+streamCalledTemperatureAsJSON
 
 	| localTimeString |
 

@@ -6,4 +6,4 @@ defineActionManagementSystemInterface
 		put:
 			(SystemInterface
 				named: 'Action Management System Interface'
-				offering: #(#registerNamed:toEvaluate: #evaluateNamed: #unregisterNamed:))
+				offering: #(#registerNamed:toEvaluate: #evaluateNamed: #deregisterNamed: actions))

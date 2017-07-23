@@ -1,5 +1,5 @@
 tests
-testQueryingDataStream
+testQueryingStreamByName
 
 	| response |
 
@@ -8,4 +8,4 @@ testQueryingDataStream
 
 	self
 		assert: response code equals: 200;
-		assert: response contents equals: self queryingStreamCalledTemperatureBelongingToChannelNumber1Answer
+		assert: response contents equals: self streamCalledTemperatureAsJSON

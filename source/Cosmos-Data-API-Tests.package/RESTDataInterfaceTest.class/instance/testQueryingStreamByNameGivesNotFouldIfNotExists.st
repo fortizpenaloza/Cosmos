@@ -1,5 +1,5 @@
 tests
-testQueryingNotValidStream
+testQueryingStreamByNameGivesNotFouldIfNotExists
 
 	| interface stream |
 
@@ -9,3 +9,4 @@ testQueryingNotValidStream
 		should:
 			[ stream := interface streamNamed: 'pH' ]
 		raise: HTTPClientError
+		withDescription: 'Not found'
