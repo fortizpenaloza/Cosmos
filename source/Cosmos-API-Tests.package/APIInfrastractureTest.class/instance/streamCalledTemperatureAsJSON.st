@@ -1,5 +1,5 @@
 test - expectedResults
-queryingStreamCalledTemperatureBelongingToChannelNumber1Answer
+streamCalledTemperatureAsJSON
 
 	| localTimeString |
 

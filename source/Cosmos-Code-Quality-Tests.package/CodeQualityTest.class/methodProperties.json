@@ -1,10 +1,11 @@
 {
 	"instance" : {
 		"descriptionFrom:" : "fortizpenaloza 6/8/2017 03:05",
+		"testInstaceVariableNeitherReadNorWritten" : "fortizpenaloza 7/23/2017 10:21",
 		"runRule:" : "fortizpenaloza 5/31/2017 17:15",
 		"testMessageSentToSelfButNotImplemented" : "fortizpenaloza 5/31/2017 17:19",
-		"testSubclassReponsibilityImplementedInLeafClases" : "fortizpenaloza 6/6/2017 00:26",
 		"testMessageImplementedButNotSent" : "fortizpenaloza 5/31/2017 11:57",
+		"testSubclassReponsibilityImplementedInLeafClases" : "fortizpenaloza 6/6/2017 00:26",
 		"packagesToBeChecked" : "JulianMaestri 7/8/2017 15:56",
 		"testMessageSentButNotImplemented" : "fortizpenaloza 10/8/2016 01:18",
 		"testMessagesMustBeCategorized" : "fortizpenaloza 10/8/2016 01:03"

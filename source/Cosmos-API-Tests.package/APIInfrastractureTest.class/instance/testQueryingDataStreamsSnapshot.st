@@ -1,5 +1,5 @@
 tests
-testQueryingDataChannelSnapshot
+testQueryingDataStreamsSnapshot
 
 	| response |
 
@@ -7,4 +7,4 @@ testQueryingDataChannelSnapshot
 
 	self
 		assert: response code equals: 200;
-		assert: response contents equals: self queryingChannelNumber1Answer
+		assert: response contents equals: self dataStreamsSnapshotAsJSON

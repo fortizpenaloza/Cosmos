@@ -6,7 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"identifierProvider",
 		"dataStreams",
 		"timeSystem",
 		"eventNotificationSystem"

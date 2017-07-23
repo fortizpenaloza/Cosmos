@@ -1,9 +1,10 @@
-running
-queryingChannelNumber1Answer
+accessing
+dataStreamsSnapshotAsJSON
 	
 	| localTimeString |
 	
-	localTimeString := TimeZones local asString.
+	localTimeString := TimeZones local asString.	
+
 		
 	^'[
 	{

@@ -7,4 +7,4 @@ testDataStreamRegistrationFailsIfAlreadyExists
 		should:
 			[ self dataManagementSystem registerStreamNamed: 'Temperature' ]
 		raise: ObjectAlreadyInSystem
-		withDescription: 'Data stream already exists in system'
+		withDescription: 'A data stream with that name already exists in system'
