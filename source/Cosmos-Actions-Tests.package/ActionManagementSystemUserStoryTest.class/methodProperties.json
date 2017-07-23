@@ -5,7 +5,6 @@
 		"setUpRequirements" : "fortizpenaloza 7/16/2017 17:54",
 		"setUp" : "fortizpenaloza 7/16/2017 19:13",
 		"testActionDeregistration" : "fortizpenaloza 7/23/2017 11:08",
-		"setEvaluateActionToTrue" : "fortizpenaloza 7/16/2017 19:11",
 		"testActionRegistration" : "fortizpenaloza 7/16/2017 21:00",
 		"testActionRegistrationFailsIfAlreadyExists" : "fortizpenaloza 7/16/2017 21:00",
 		"testQueringRegisteredActions" : "fortizpenaloza 7/23/2017 11:11"

@@ -1,5 +1,5 @@
 signalling
-signalConflic: aFailureExplanation
+signalConflict: aFailureExplanation
 
 	^ self new
 		tag: 409;
