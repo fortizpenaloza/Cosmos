@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-PeriodicalScheduler-Core-Cosmos-PeriodicalScheduler-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"delayScheduler",
+		"scheduledTasks",
+		"runningProcesses"
+	],
+	"name" : "PeriodicalScheduler",
+	"type" : "normal"
+}

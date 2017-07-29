@@ -1,23 +1,17 @@
 tests
 testQueryingPrioritizedCommands
 
-	| commandPriorityQueue |
-
-	commandPriorityQueue := self commandManagementSystem registerCommandPriorityQueue.
-
 	self commandManagementSystem
 		push: self turnOnLedCommand
-		with: QueuePriority high
-		toQueueIdentifiedBy: commandPriorityQueue identifier.
+		with: QueuePriority high.
 	self commandManagementSystem
 		push: self turnOffLedCommand
-		with: QueuePriority medium
-		toQueueIdentifiedBy: commandPriorityQueue identifier.
+		with: QueuePriority medium.
 
 	self
 		assert:
 			(self commandManagementSystem
-				commandsFromQueueIdentifiedBy: commandPriorityQueue identifier)
+				prioritizedCommands)
 		hasTheSameElementsInTheSameOrderThat:
 			(OrderedCollection
 				with:

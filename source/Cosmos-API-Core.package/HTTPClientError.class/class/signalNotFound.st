@@ -1,6 +1,4 @@
 signalling
 signalNotFound
 
-	^ self new
-		tag: 404;
-		signal: 'Not found'
+	^self signal: 404 describedBy: 'Not found'

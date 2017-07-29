@@ -6,9 +6,9 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"identifierProvider",
 		"timeSystem",
-		"commandPriorityQueues"
+		"prioritizedCommands",
+		"priorityQueue"
 	],
 	"name" : "CommandManagementSystem",
 	"type" : "normal"

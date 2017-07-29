@@ -1,9 +1,0 @@
-{
-	"instance" : {
-		"testQueryingNextCommandContainsCommandActionAndPriority" : "fortizpenaloza 6/20/2017 17:10",
-		"testQueryingPrioitizedCommands" : "fortizpenaloza 6/20/2017 17:10",
-		"setUp" : "fortizpenaloza 6/6/2017 02:13",
-		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:09"
-	},
-	"class" : { }
-}

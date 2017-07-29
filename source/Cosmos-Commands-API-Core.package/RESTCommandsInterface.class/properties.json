@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Commands-API-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"rootSystem",
+		"prioritizedCommandMapping"
+	],
+	"name" : "RESTCommandsInterface",
+	"type" : "normal"
+}

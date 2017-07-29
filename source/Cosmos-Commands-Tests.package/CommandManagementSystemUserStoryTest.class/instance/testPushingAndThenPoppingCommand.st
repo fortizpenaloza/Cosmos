@@ -1,17 +1,14 @@
 tests
 testPushingAndThenPoppingCommand
 
-	| commandPriorityQueue |
-
-	commandPriorityQueue := self commandManagementSystem registerCommandPriorityQueue.
-
 	self commandManagementSystem
 		push: self turnOnLedCommand
-		with: QueuePriority high
-		toQueueIdentifiedBy: commandPriorityQueue identifier.
-	self deny: commandPriorityQueue isEmpty.
+		with: QueuePriority high.
 
 	self
-		assert: (self commandManagementSystem popFromQueueIdentifiedBy: commandPriorityQueue identifier)
-			equals: self turnOnLedCommand;
-		assert: commandPriorityQueue isEmpty
+		assert: self commandManagementSystem pop
+		equals:
+			(PrioritizedCommand
+				holding: self turnOnLedCommand
+				with: QueuePriority high
+				on: self timeSystem dateTime)
