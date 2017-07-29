@@ -24,7 +24,7 @@ baseline: spec
 				package: 'Cosmos-ConditionalTrigger-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-ConditionalTrigger-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Commands-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Commands-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Actions-Tests' with: [spec requires: #('Cosmos-Tests' 'Cosmos-Actions-Core' 'Cosmos-UserStoryTests')];
-				package: 'Cosmos-PeriodicalScheduler-Tests'.
+				package: 'Cosmos-PeriodicalScheduler-Tests' with: [spec requires: #('Chalten')].
 				
 			spec
 				package: 'Cosmos-API-Tests' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-UserStoryTests') ];
