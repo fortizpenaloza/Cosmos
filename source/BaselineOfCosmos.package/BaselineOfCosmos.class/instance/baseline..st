@@ -6,8 +6,8 @@ baseline: spec
 		for: #common
 		do: [ self setUpDependencies: spec.
 			spec
-				package: 'Cosmos-Data-Core' with: [ spec requires: #('Kepler') ];
-				package: 'Cosmos-ConditionalTrigger-Core' with: [ spec requires: #('Kepler') ];
+				package: 'Cosmos-Data-Core' with: [ spec requires: #('Buoy' 'Kepler') ];
+				package: 'Cosmos-ConditionalTrigger-Core' with: [ spec requires: #('Buoy' 'Kepler') ];
 				package: 'Cosmos-Commands-Core' with: [ spec requires: #('Kepler') ];
 				package: 'Cosmos-Actions-Core' with: [ spec requires: #( 'Kepler') ];
 				package: 'Cosmos-PeriodicalScheduler-Core'.
