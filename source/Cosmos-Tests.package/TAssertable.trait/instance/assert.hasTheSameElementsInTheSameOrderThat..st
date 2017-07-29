@@ -1,4 +1,4 @@
-*Cosmos-PeriodicalScheduler-Tests
+*Cosmos-Tests
 assert: aSequenceableCollection hasTheSameElementsInTheSameOrderThat: anotherSequenceableCollection
 
 	self assert: aSequenceableCollection isSequenceable; 

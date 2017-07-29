@@ -1,4 +1,4 @@
-*Cosmos-PeriodicalScheduler-Tests
+*Cosmos-Tests
 withTheOnlyOneIn: aCollection do: aBlock
 
 	self assert: aCollection size equals: 1.

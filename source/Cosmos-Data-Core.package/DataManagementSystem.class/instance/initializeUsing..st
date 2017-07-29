@@ -8,5 +8,4 @@ initializeUsing: anIdentifierProvider
 	eventNotificationSystem := self
 		unresolvedSystemDependencyTo: ConditionalTriggersSystemInterface.
 
-	identifierProvider := anIdentifierProvider.
 	dataStreams := OrderedCollection new

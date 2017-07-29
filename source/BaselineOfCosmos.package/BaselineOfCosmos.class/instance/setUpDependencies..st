@@ -20,10 +20,4 @@ setUpDependencies: spec
 		configuration: 'Teapot'
 		with: [ spec
 				versionString: #stable;
-				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ].
-	spec
-		configuration: 'ZincHTTPComponents'
-		with: [ spec
-				loads: #('REST' 'WebSocket');
-				versionString: #stable;
-				repository: 'http://mc.stfx.eu/ZincHTTPComponets' ]
+				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ]

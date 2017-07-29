@@ -1,4 +1,4 @@
-*Cosmos-PeriodicalScheduler-Tests
+*Cosmos-Tests
 should: aBlock raise: anException withDescription: aDescription
 
 	^ self
