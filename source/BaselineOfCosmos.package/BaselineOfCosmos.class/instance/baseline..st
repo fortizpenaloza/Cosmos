@@ -24,7 +24,7 @@ baseline: spec
 				package: 'Cosmos-ConditionalTrigger-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-ConditionalTrigger-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Commands-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Commands-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Actions-Tests' with: [spec requires: #('Cosmos-Tests' 'Cosmos-Actions-Core' 'Cosmos-UserStoryTests')];
-				package: 'Cosmos-PeriodicalScheduler-Tests' with: [spec requires: #('Chalten')].
+				package: 'Cosmos-PeriodicalScheduler-Tests' with: [spec requires: #('Cosmos-PeriodicalScheduler-Core')].
 				
 			spec
 				package: 'Cosmos-API-Tests' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-UserStoryTests') ];
@@ -38,7 +38,7 @@ baseline: spec
 					#('Cosmos-Data-Core' 'Cosmos-ConditionalTrigger-Core' 'Cosmos-Commands-Core' 'Cosmos-Actions-Core' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-API-Core' 'Cosmos-Data-API-Core' 'Cosmos-Commands-API-Core');
 				group: 'Tests'
 					with:
-					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-ConditionalTrigger-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Code-Quality-Tests');
+					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-ConditionalTrigger-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Code-Quality-Tests');
 				group: 'Development' with: #('Deployment' 'Tests');
 				group: 'default' with: #('Deployment').
 			spec postLoadDoIt: #postload:package:.
