@@ -1,4 +1,0 @@
-querying
-prioritizedCommandsFromQueueIdentifiedBy: anIdentifier
-
-	^ prioritizedCommandtMapping value: (self commandManagementSystem commandsFromQueueIdentifiedBy: anIdentifier)

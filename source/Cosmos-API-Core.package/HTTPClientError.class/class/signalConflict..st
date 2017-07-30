@@ -1,6 +1,4 @@
 signalling
 signalConflict: aFailureExplanation
 
-	^ self new
-		tag: 409;
-		signal: aFailureExplanation
+	^self signal: 409 describedBy: aFailureExplanation

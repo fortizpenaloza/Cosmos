@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-PeriodicalScheduler-Core-Cosmos-PeriodicalScheduler-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"task",
+		"timePeriod"
+	],
+	"name" : "ScheduledTask",
+	"type" : "normal"
+}

@@ -2,4 +2,4 @@
 requireCommandManagementSystem
 
 	self requireTimeSystem.
-	systemBuilder add: (CommandManagementSystem using: identifierProvider)
+	systemBuilder add: (CommandManagementSystem new)

@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "fortizpenaloza 4/18/2016 19:50",
 	"super" : "Object",
-	"category" : "Cosmos-Commands-Core-Model",
+	"category" : "Cosmos-Commands-Core-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

@@ -1,16 +1,15 @@
 {
 	"instance" : {
-		"popFromQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
-		"register:" : "fortizpenaloza 4/20/2016 23:44",
-		"registerCommandPriorityQueue" : "fortizpenaloza 4/21/2016 00:01",
+		"register:" : "fortizpenaloza 7/29/2017 18:10",
+		"initialize" : "fortizpenaloza 7/29/2017 18:10",
+		"pop" : "fortizpenaloza 7/29/2017 18:08",
+		"push:with:" : "fortizpenaloza 7/29/2017 18:10",
+		"prioritizedCommands" : "fortizpenaloza 7/29/2017 18:03",
 		"resolveDependecies" : "fortizpenaloza 5/31/2017 20:42",
-		"commandsFromQueueIdentifiedBy:" : "fortizpenaloza 4/25/2016 00:08",
-		"queueIdentifiedBy:ifFound:ifNone:" : "fortizpenaloza 4/20/2016 23:50",
-		"push:with:toQueueIdentifiedBy:" : "fortizpenaloza 4/24/2016 11:19",
-		"initializeUsing:" : "fortizpenaloza 6/8/2017 01:50"
+		"unregister:" : "fortizpenaloza 7/29/2017 18:08"
 	},
 	"class" : {
 		"implementedInterface" : "fortizpenaloza 5/30/2017 18:08",
-		"using:" : "fortizpenaloza 1/12/2016 01:46"
+		"new" : "fortizpenaloza 7/29/2017 18:03"
 	}
 }
