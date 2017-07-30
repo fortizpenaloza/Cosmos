@@ -3,7 +3,7 @@ initialize
 
 	super initialize.
 	eventNotificationSystem := self
-		unresolvedSystemDependencyTo: EventNotificationSystemInterface.
+		unresolvedSystemDependencyTo: Interfaces >> #EventNotificationSystemInterface.
 
 	triggersToFireOnDataPointRegistration := OrderedCollection new.
 	triggersToFirePeriodically := OrderedCollection new

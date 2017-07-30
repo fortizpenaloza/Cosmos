@@ -1,8 +1,0 @@
-actions
-defineSystemInterfaces
-
-	self
-		defineDataManagementSystemInterface;
-		defineCommandManagementSystemInterface;
-		defineConditionalTriggersSystemInterface;
-		defineActionManagementSystemInterface

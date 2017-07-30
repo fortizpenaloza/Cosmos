@@ -2,9 +2,10 @@ initialize-release
 initialize
 
 	super initialize.
-	
-	timeSystem := self unresolvedSystemDependencyTo: TimeSystemInterface.
-	eventNotificationSystem := self
-		unresolvedSystemDependencyTo: EventNotificationSystemInterface.
 
-	actions := OrderedCollection new.
+	timeSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #TimeSystemInterface.
+	eventNotificationSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #EventNotificationSystemInterface.
+
+	actions := OrderedCollection new
