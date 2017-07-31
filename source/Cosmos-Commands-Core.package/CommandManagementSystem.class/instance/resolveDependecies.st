@@ -1,4 +1,4 @@
 dependency resolution
 resolveDependecies
 
-	timeSystem := self resolveSystemDependencyTo: Interfaces >> #TimeSystemInterface.
+	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface
