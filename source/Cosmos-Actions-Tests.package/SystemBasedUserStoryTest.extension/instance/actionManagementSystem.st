@@ -1,4 +1,4 @@
 *Cosmos-Actions-Tests-SystemModel
 actionManagementSystem
 
-	^ rootSystem systemImplementing: ActionManagementSystemInterface
+	^ rootSystem systemImplementing: #ActionManagementSystemInterface

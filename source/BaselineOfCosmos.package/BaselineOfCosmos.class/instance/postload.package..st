@@ -1,4 +1,4 @@
 actions
 postload: aLoader package: aPackageSpec
 
-	self defineSystemInterfaces
+	self registerSystemInterfaces

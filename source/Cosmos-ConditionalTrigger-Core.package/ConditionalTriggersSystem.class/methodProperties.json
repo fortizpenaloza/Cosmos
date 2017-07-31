@@ -3,12 +3,12 @@
 		"register:triggerPeriodicallyEvery:" : "fortizpenaloza 4/25/2016 00:23",
 		"havePassed:" : "julianSaavedra 5/6/2017 11:20",
 		"register:" : "FranciscoOrtizPenaloza 11/21/2014 23:44",
-		"initialize" : "fortizpenaloza 5/31/2017 21:49",
+		"initialize" : "JulianMaestri 7/31/2017 11:55",
 		"register:toTriggerOnDataPointRegistrationOn:" : "fortizpenaloza 4/25/2016 00:24",
 		"dataPointRegisteredOn:" : "julianSaavedra 5/6/2017 11:23",
-		"resolveDependecies" : "fortizpenaloza 5/31/2017 20:42"
+		"resolveDependecies" : "JulianMaestri 7/30/2017 21:07"
 	},
 	"class" : {
-		"implementedInterface" : "fortizpenaloza 5/30/2017 18:10"
+		"implementedInterface" : "fortizpenaloza 7/30/2017 17:01"
 	}
 }

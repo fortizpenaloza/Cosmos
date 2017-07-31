@@ -2,14 +2,14 @@
 	"instance" : {
 		"evaluateNamed:" : "fortizpenaloza 7/16/2017 19:06",
 		"deregisterNamed:" : "fortizpenaloza 7/23/2017 11:09",
-		"initialize" : "fortizpenaloza 7/16/2017 18:13",
+		"initialize" : "JulianMaestri 7/31/2017 11:54",
 		"register:" : "fortizpenaloza 7/16/2017 20:02",
-		"resolveDependecies" : "fortizpenaloza 7/16/2017 17:57",
+		"resolveDependecies" : "JulianMaestri 7/30/2017 21:08",
 		"deregister:" : "fortizpenaloza 7/23/2017 11:09",
 		"actions" : "fortizpenaloza 7/16/2017 22:39",
 		"registerNamed:toEvaluate:" : "fortizpenaloza 7/17/2017 01:13"
 	},
 	"class" : {
-		"implementedInterface" : "fortizpenaloza 7/16/2017 17:55"
+		"implementedInterface" : "fortizpenaloza 7/30/2017 17:01"
 	}
 }

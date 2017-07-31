@@ -1,15 +1,14 @@
 {
 	"instance" : {
-		"preload:package:" : "JulianMaestri 7/8/2017 15:36",
-		"defineCommandManagementSystemInterface" : "fortizpenaloza 7/29/2017 18:03",
-		"defineDataManagementSystemInterface" : "fortizpenaloza 7/21/2017 08:23",
-		"baseline:" : "fortizpenaloza 7/29/2017 21:46",
+		"registerConditionalTriggersSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
+		"registerSystemInterfaces" : "fortizpenaloza 7/30/2017 17:45",
+		"registerDataManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
 		"setUpDependencies:" : "fortizpenaloza 7/29/2017 18:50",
-		"defineActionManagementSystemInterface" : "fortizpenaloza 7/23/2017 17:40",
-		"defineSystemInterfaces" : "fortizpenaloza 7/17/2017 02:02",
-		"defineConditionalTriggersSystemInterface" : "fortizpenaloza 5/30/2017 18:45",
-		"postload:package:" : "fortizpenaloza 5/30/2017 20:35",
-		"defineSystemInterfaceOn:named:offering:" : "fortizpenaloza 5/31/2017 11:33"
+		"registerActionManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
+		"baseline:" : "fortizpenaloza 7/30/2017 17:46",
+		"registerCommandManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
+		"registerInterfaceAs:named:offering:" : "fortizpenaloza 7/30/2017 17:44",
+		"postload:package:" : "fortizpenaloza 7/30/2017 17:45"
 	},
 	"class" : { }
 }

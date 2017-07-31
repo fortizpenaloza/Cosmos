@@ -1,4 +1,4 @@
-# IoT 
+# Cosmos 
 [![Build Status](https://travis-ci.org/iot-uca/back-end.svg?branch=master)](https://travis-ci.org/iot-uca/back-end)
 [![Coverage Status](https://coveralls.io/repos/github/iot-uca/back-end/badge.svg?branch=master)](https://coveralls.io/github/iot-uca/back-end?branch=master)
 

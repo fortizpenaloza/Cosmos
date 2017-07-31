@@ -1,4 +1,4 @@
 *Cosmos-ConditionalTrigger-Tests-SystemModel
 conditionalTriggersSystem
 
-	^ rootSystem systemImplementing: ConditionalTriggersSystemInterface
+	^ rootSystem systemImplementing: #ConditionalTriggersSystemInterface

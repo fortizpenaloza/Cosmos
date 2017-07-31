@@ -1,4 +1,4 @@
 *Cosmos-Commands-Tests-SystemModel
 commandManagementSystem
 
-	^ rootSystem systemImplementing: CommandManagementSystemInterface
+	^ rootSystem systemImplementing: #CommandManagementSystemInterface

@@ -1,0 +1,8 @@
+actions
+registerSystemInterfaces
+
+	self
+		registerDataManagementSystemInterface;
+		registerCommandManagementSystemInterface;
+		registerConditionalTriggersSystemInterface;
+		registerActionManagementSystemInterface

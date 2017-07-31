@@ -3,14 +3,14 @@
 		"registerStream:" : "fortizpenaloza 7/20/2017 21:17",
 		"registerPoint:to:" : "fortizpenaloza 5/1/2017 19:52",
 		"register:toStreamNamed:" : "fortizpenaloza 7/20/2017 20:32",
-		"resolveDependecies" : "fortizpenaloza 5/31/2017 20:42",
+		"resolveDependecies" : "JulianMaestri 7/30/2017 21:07",
 		"registerStreamNamed:" : "fortizpenaloza 7/22/2017 23:32",
-		"initializeUsing:" : "fortizpenaloza 7/29/2017 18:39",
+		"initializeUsing:" : "JulianMaestri 7/31/2017 11:55",
 		"streamNamed:ifFound:ifNone:" : "fortizpenaloza 7/20/2017 20:33",
 		"streams" : "fortizpenaloza 7/20/2017 21:06"
 	},
 	"class" : {
-		"implementedInterface" : "fortizpenaloza 5/30/2017 18:01",
+		"implementedInterface" : "fortizpenaloza 7/30/2017 17:01",
 		"using:" : "fortizpenaloza 1/11/2016 01:22"
 	}
 }

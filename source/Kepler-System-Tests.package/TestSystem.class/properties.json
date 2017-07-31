@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "<historical>",
+	"super" : "System",
+	"category" : "Kepler-System-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeSystem",
+		"started"
+	],
+	"name" : "TestSystem",
+	"type" : "normal"
+}
