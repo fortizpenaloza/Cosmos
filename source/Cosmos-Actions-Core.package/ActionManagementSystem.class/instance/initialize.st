@@ -3,7 +3,9 @@ initialize
 
 	super initialize.
 
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self unresolvedSystemDependencyTo: #EventNotificationSystemInterface.
+	timeSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #TimeSystemInterface.
+	eventNotificationSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #EventNotificationSystemInterface.
 
 	actions := OrderedCollection new

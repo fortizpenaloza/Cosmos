@@ -1,8 +1,10 @@
 {
 	"instance" : {
-		"evaluate:" : "fortizpenaloza 7/17/2017 01:17",
-		"evaluateAsBlock:" : "fortizpenaloza 7/17/2017 01:19",
+		"evaluate:" : "fortizpenaloza 8/29/2017 23:43",
+		"initializeConfiguredBy:" : "fortizpenaloza 8/29/2017 23:38",
 		"evaluateOn:" : "fortizpenaloza 7/23/2017 12:19"
 	},
-	"class" : { }
+	"class" : {
+		"configuredBy:" : "fortizpenaloza 8/29/2017 23:43"
+	}
 }

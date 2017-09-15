@@ -3,7 +3,9 @@ initializeUsing: anIdentifierProvider
 
 	self initialize.
 
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self unresolvedSystemDependencyTo: #ConditionalTriggersSystemInterface.
+	timeSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #TimeSystemInterface.
+	eventNotificationSystem := self
+		unresolvedSystemDependencyTo: Interfaces >> #ConditionalTriggersSystemInterface.
 
 	dataStreams := OrderedCollection new

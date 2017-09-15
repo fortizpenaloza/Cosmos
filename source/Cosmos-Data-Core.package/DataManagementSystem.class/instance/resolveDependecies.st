@@ -1,5 +1,6 @@
 dependency resolution
 resolveDependecies
 
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self resolveSystemDependencyTo: #EventNotificationSystemInterface
+	timeSystem := self resolveSystemDependencyTo: Interfaces >> #TimeSystemInterface.
+	eventNotificationSystem := self
+		resolveSystemDependencyTo: Interfaces >> #EventNotificationSystemInterface

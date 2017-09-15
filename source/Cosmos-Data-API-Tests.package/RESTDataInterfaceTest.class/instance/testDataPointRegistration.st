@@ -13,5 +13,5 @@ testDataPointRegistration
 
 	self dataManagementSystem
 		streamNamed: 'Temperature'
-		ifFound: [ :stream | self assert: stream dataPoints last equals: dataPoint ]
+		ifFound: [ :stream | self assert: stream dataPoints first equals: dataPoint ]
 		ifNone: [ self fail ]

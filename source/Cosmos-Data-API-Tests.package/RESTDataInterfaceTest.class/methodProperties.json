@@ -1,16 +1,16 @@
 {
 	"instance" : {
-		"streamCalledTemperatureAsJSON" : "fortizpenaloza 7/22/2017 22:50",
+		"streamCalledTemperatureAsJSON" : "fortizpenaloza 8/12/2017 11:41",
 		"updateTemperatureAndPressureDataStreamsJSON" : "fortizpenaloza 7/20/2017 15:03",
 		"testDataStreamRegistrationFailsIfAlreadyExists" : "fortizpenaloza 7/22/2017 23:31",
-		"testDataStreamsUpdate" : "fortizpenaloza 7/23/2017 17:45",
+		"testDataStreamsUpdate" : "fortizpenaloza 8/12/2017 11:34",
 		"testQueryingDataStreamsSnapshot" : "fortizpenaloza 7/22/2017 22:58",
 		"testQueryingStreamByNameGivesNotFouldIfNotExists" : "fortizpenaloza 7/23/2017 17:47",
-		"dataStreamsSnapshotAsJSON" : "fortizpenaloza 7/22/2017 22:53",
+		"dataStreamsSnapshotAsJSON" : "fortizpenaloza 8/12/2017 11:21",
 		"testDataStreamRegistration" : "fortizpenaloza 7/22/2017 23:35",
 		"setUpRequirements" : "fortizpenaloza 6/6/2017 02:15",
 		"testQueryingStreamByName" : "fortizpenaloza 7/22/2017 22:50",
-		"testDataPointRegistration" : "fortizpenaloza 7/20/2017 20:32",
+		"testDataPointRegistration" : "fortizpenaloza 8/12/2017 11:31",
 		"setUp" : "fortizpenaloza 6/6/2017 02:13"
 	},
 	"class" : { }

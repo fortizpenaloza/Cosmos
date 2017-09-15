@@ -1,22 +1,22 @@
-accessing
+expected results
 streamCalledTemperatureAsJSON
 
-	| localTimeString |
+	| localTimeOffset |
 
-	localTimeString := TimeZones local asString.
+	localTimeOffset := TimeZones local offset.
 
 	^ '{
 	"name" : "Temperature",
 	"current-value" : 16,
-	"last-update" : "September 6, 2015 12:00:00 {' , localTimeString
-		,
-			'}",
+	"last-update" : "2015-09-06T12:00:00<1p>",
 	"data-points" : [
 		{
-			"timestamp" : "September 6, 2015 12:00:00 {' , localTimeString
-		,
-			'}",
+			"timestamp" : "2015-09-06T12:00:00<1p>",
 			"value" : 16
+		},
+		{
+			"timestamp" : "2015-09-06T12:00:00<1p>",
+			"value" : 15.5
 		}
 	]
-}'
+}' expandMacrosWith: localTimeOffset 

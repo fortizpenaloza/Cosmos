@@ -1,6 +1,10 @@
 dependency resolution
 resolveDependecies
 
-	eventNotificationSystem := self resolveSystemDependencyTo: #EventNotificationSystemInterface.
+	eventNotificationSystem := self
+		resolveSystemDependencyTo: Interfaces >> #EventNotificationSystemInterface.
 
-	eventNotificationSystem subscribe: self to: DataPointRegistrationEvent toBeNotifiedSending: #dataPointRegisteredOn:
+	eventNotificationSystem
+		subscribe: self
+		to: DataPointRegistrationEvent
+		toBeNotifiedSending: #dataPointRegisteredOn:

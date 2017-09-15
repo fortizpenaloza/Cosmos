@@ -1,4 +1,4 @@
 evaluating
 evaluate: anAction 
 
-	anAction evaluateWith: self 
+	anAction evaluateWith: configuration  

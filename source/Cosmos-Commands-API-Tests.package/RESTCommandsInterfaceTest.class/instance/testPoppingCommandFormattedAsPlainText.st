@@ -1,5 +1,5 @@
 tests
-testQueryingNextCommandFormattedAsPlainText
+testPoppingCommandFormattedAsPlainText
 
 	| interface response |
 

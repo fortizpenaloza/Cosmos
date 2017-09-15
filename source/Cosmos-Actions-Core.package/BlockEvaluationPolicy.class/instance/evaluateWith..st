@@ -1,4 +1,4 @@
 evaluating
-evaluateWith: anActionEvaluator
+evaluateWith: anActionEvaluatorConfiguration
 
-	anActionEvaluator evaluateAsBlock: block 
+	block value

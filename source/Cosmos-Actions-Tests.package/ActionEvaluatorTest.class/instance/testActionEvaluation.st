@@ -1,17 +1,16 @@
 tests
 testActionEvaluation
 
-	| evaluator evaluated |
-
-	evaluator := ActionEvaluator new.
-
+	| evaluated |
+	
 	evaluated := false.
 	self deny: evaluated.
-
-	evaluator
+	
+	ActionEvaluator new
 		evaluate:
 			(Action
 				named: 'Send YO to Fran'
 				createdOn: (October first , 2014) atNoon
 				toEvaluate: (BlockEvaluationPolicy for: [ evaluated := true ])).
+	
 	self assert: evaluated

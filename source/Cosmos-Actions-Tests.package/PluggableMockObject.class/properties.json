@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "ProtoObject",
+	"category" : "Cosmos-Actions-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"knowResponses"
+	],
+	"name" : "PluggableMockObject",
+	"type" : "normal"
+}

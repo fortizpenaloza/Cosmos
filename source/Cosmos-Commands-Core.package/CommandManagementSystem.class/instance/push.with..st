@@ -9,5 +9,6 @@ push: aCommand with: aPriority
 		on: timeSystem dateTime.
 		
 	priorityQueue push: prioritizedCommand with: aPriority.
-
-	self register: prioritizedCommand 
+	self register: prioritizedCommand.
+	
+	^prioritizedCommand
