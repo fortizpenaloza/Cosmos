@@ -1,4 +1,4 @@
 instance creation
 for: aRequest
 
-	^self new initializeFor: aRequest 
+	^ self new initializeFor: aRequest

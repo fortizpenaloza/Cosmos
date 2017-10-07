@@ -1,6 +1,6 @@
-evaluation
-evaluateWith: anActionEvaluatorConfiguration
+initialization
+evaluateWith: aConfiguration
 
-	anActionEvaluatorConfiguration httpClient
+	aConfiguration httpClient
 		request: requestToSend;
 		get

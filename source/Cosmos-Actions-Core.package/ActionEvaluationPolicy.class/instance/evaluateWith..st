@@ -1,4 +1,0 @@
-evaluation
-evaluateWith: anActionEvaluatorConfiguration
-
-	self subclassResponsibility 

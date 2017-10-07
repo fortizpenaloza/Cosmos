@@ -1,4 +1,4 @@
 systems
 actionManagementSystem
 
-	^ rootSystem systemImplementing: Interfaces >> #ActionManagementSystemInterface
+	^ rootSystem systemImplementing: #ActionManagementSystemInterface

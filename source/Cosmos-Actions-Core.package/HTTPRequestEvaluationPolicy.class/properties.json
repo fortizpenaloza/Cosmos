@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "ActionEvaluationPolicy",
+	"super" : "Object",
 	"category" : "Cosmos-Actions-Core-Model",
 	"classinstvars" : [ ],
 	"pools" : [ ],

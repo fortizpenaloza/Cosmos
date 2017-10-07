@@ -1,4 +1,4 @@
 evaluation
-evaluateWith: anActionEvaluatorConfiguration 
+evaluateWith: anActionEvaluator 
 
-	evaluationPolicy evaluateWith: anActionEvaluatorConfiguration 
+	evaluationPolicy evaluateWith: anActionEvaluator "evaluateAsBlock: evaluationPolicy"
