@@ -15,7 +15,8 @@ baseline: spec
 			spec
 				package: 'Cosmos-API-Core' with: [ spec requires: 'Teapot' ];
 				package: 'Cosmos-Data-API-Core' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-Data-Core') ];
-				package: 'Cosmos-Commands-API-Core' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-Commands-Core') ].
+				package: 'Cosmos-Commands-API-Core' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-Commands-Core') ];
+				package: 'Cosmos-Actions-API-Core' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-Actions-Core')].
 
 			spec
 				package: 'Cosmos-Tests';
@@ -31,6 +32,9 @@ baseline: spec
 				package: 'Cosmos-API-Tests' with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Data-API-Tests' with: [ spec requires: #('Cosmos-Data-API-Core' 'Cosmos-UserStoryTests') ];
 				package: 'Cosmos-Commands-API-Tests' with: [ spec requires: #('Cosmos-Commands-API-Core' 'Cosmos-UserStoryTests') ];
+				package: 'Cosmos-Actions-API-Tests' with: [ spec requires: #('Cosmos-Actions-API-Core' 'Cosmos-UserStoryTests')].
+			
+			spec
 				package: 'Cosmos-Code-Quality-Tests'.
 
 			spec

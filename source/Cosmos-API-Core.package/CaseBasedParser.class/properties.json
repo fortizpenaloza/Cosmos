@@ -1,13 +1,13 @@
 {
 	"commentStamp" : "",
 	"super" : "Object",
-	"category" : "Cosmos-API-Core-Formatting",
+	"category" : "Cosmos-API-Core",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"separator"
+		"cases"
 	],
-	"name" : "ISO8601DateFormatter",
+	"name" : "CaseBasedParser",
 	"type" : "normal"
 }
