@@ -1,4 +1,4 @@
-initialization
+initialize-release
 initializeFor: aRequest
 	
 	requestToSend := aRequest

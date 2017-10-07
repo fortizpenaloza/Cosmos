@@ -1,4 +1,4 @@
-initialization
+evaluating
 evaluateWith: aConfiguration
 
 	aConfiguration httpClient
