@@ -1,4 +1,4 @@
-as yet unclassified
+accessing
 actionMapping
 
 	^ [ :action | 
@@ -19,7 +19,7 @@ actionMapping
 				for: ZnRequestLine do: [ :mapping | 
 					mapping
 						mapAccessor: #method;
-						mapAccessor: #uri;
+						mapAccessor: #uri to: #URL;
 						mapInstVar: #version ];
 				for: ZnUrl customDo: [ :mapping |
 					mapping
@@ -27,6 +27,10 @@ actionMapping
 				for: ZnHeaders do: [ :mapping |
 					mapping
 						mapAccessor: #headers ];
+				for: Association do: [ :mapping |
+					mapping
+						mapAccessor: #key;
+						mapAccessor: #value ];
 				for: DateTime customDo: [ :mapping | 
 					mapping
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];

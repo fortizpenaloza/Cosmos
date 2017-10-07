@@ -3,11 +3,11 @@ updateTemperatureAndPressureDataStreamsJSON
 
 	^ '[
 			{
-				"name" : "Temperature",
+				"data-stream" : "Temperature",
 				"value" : 24
 			},
 			{
-				"name" : "Pressure",
+				"data-stream" : "Pressure",
 				"value" : 89
 			}
 		]'

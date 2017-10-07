@@ -9,4 +9,4 @@ register: aJSON
 		collect: [ :rawDataPoint | 
 			self
 				register: (rawDataPoint at: 'value')
-				toStreamNamed: (rawDataPoint at: 'name') ]
+				toStreamNamed: (rawDataPoint at: 'data-stream') ]

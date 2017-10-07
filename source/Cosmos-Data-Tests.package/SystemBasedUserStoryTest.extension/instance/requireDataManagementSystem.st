@@ -3,4 +3,4 @@ requireDataManagementSystem
 
 	self requireTimeSystem.
 	self requireEventNotificationSystem.
-	systemBuilder add: (DataManagementSystem using: identifierProvider)
+	systemBuilder add: (DataManagementSystem new)
