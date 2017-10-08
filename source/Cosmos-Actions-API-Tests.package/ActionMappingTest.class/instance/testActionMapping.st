@@ -1,11 +1,12 @@
 tests
 testActionMapping
 
-
-	self assert: (self actionMapping value: self action) equals: 
-'{
+	self
+		assert: (self actionMapping value: self action)
+		equals:
+			('{
 	"name" : "List DNS records",
-	"created_on" : "2015-09-06T12:00:00-03:00",
+	"created_on" : "2015-09-06T12:00:00<1p>",
 	"http_request" : {
 		"request_line" : {
 			"method" : "GET",
@@ -23,4 +24,4 @@ testActionMapping
 			}
 		]
 	}
-}'
+}' expandMacrosWith: TimeZones local offset)

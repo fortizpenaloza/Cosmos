@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "Object",
-	"category" : "Cosmos-API-Core",
+	"category" : "Cosmos-API-Core-Parsing",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

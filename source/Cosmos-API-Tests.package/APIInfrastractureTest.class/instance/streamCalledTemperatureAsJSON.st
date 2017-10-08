@@ -1,11 +1,6 @@
 expected results
 streamCalledTemperatureAsJSON
 
-
-	| localTimeOffset |
-
-	localTimeOffset := TimeZones local offset.
-
 	^ '{
 	"name" : "Temperature",
 	"current-value" : 16,
@@ -20,4 +15,4 @@ streamCalledTemperatureAsJSON
 			"value" : 15.5
 		}
 	]
-}' expandMacrosWith: localTimeOffset 
+}' expandMacrosWith: TimeZones local offset

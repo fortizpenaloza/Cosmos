@@ -1,7 +1,9 @@
 initialization
 testQueringActions
 
-	| interface response |
+	| interface response localTimeOffset |
+
+	localTimeOffset := TimeZones local offset.
 
 	interface := RESTActionsInterface workingWith: (RESTActionsContext workingWith: rootSystem).
 
@@ -24,11 +26,10 @@ testQueringActions
 
 	self
 		assert: response
-		equals:
-			'[
+		equals: ('[
 	{
 		"name" : "List DNS records",
-		"created_on" : "2015-09-06T12:00:00-03:00",
+		"created_on" : "2015-09-06T12:00:00<1p>",
 		"http_request" : {
 			"request_line" : {
 				"method" : "GET",
@@ -47,4 +48,4 @@ testQueringActions
 			]
 		}
 	}
-]'
+]' expandMacrosWith: localTimeOffset)

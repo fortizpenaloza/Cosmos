@@ -1,10 +1,6 @@
 expected results
 dataStreamsSnapshotAsJSON
 
-	| localTimeOffset |
-
-	localTimeOffset := TimeZones local offset.
-
 	^ '[
 	{
 		"name" : "Temperature",
@@ -21,4 +17,4 @@ dataStreamsSnapshotAsJSON
 		"current-value" : 72,
 		"last-update" : "2015-09-06T12:00:00<1p>"
 	}
-]' expandMacrosWith: localTimeOffset
+]' expandMacrosWith: TimeZones local offset

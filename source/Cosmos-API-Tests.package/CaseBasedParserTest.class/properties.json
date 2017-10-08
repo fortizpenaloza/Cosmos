@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "TestCase",
-	"category" : "Cosmos-API-Tests",
+	"category" : "Cosmos-API-Tests-Parsing",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
