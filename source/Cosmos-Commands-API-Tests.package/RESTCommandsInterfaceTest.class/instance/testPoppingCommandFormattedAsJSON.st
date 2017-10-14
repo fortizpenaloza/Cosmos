@@ -1,5 +1,5 @@
 tests
-testQueryingNextCommandFormattedAsJSON
+testPoppingCommandFormattedAsJSON
 
 	| interface response |
 

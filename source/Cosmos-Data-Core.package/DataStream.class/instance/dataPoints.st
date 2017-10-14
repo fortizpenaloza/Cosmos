@@ -1,4 +1,4 @@
 accessing
 dataPoints
 
-	^ dataPoints copy
+	^ dataPoints copy reversed

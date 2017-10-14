@@ -9,10 +9,10 @@ testDataStreamsUpdate
 
 	self dataManagementSystem
 		streamNamed: 'Temperature'
-		ifFound: [ :stream | self assert: stream dataPoints last equals: dataPoints first ]
+		ifFound: [ :stream | self assert: stream dataPoints first equals: dataPoints first ]
 		ifNone: [ self fail ].
 
 	self dataManagementSystem
 		streamNamed: 'Pressure'
-		ifFound: [ :stream | self assert: stream dataPoints last equals: dataPoints second ]
+		ifFound: [ :stream | self assert: stream dataPoints first equals: dataPoints last ]
 		ifNone: [ self fail ]

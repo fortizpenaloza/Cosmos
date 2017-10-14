@@ -10,4 +10,6 @@ push: aCommand with: aPriority
 		
 	priorityQueue push: prioritizedCommand with: aPriority.
 
-	self register: prioritizedCommand 
+	self register: prioritizedCommand.
+
+	^ prioritizedCommand 

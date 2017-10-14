@@ -1,5 +1,5 @@
 tests
-testActionRegistration
+testRegistration
 
 	| action |
 

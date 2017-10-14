@@ -10,6 +10,9 @@ install
 	humidityStream := self dataManagementSystem
 		registerStreamNamed: 'Humidity'.
 	self dataManagementSystem
+		register: 15.5
+		toStreamNamed: temperatureStream name.
+	self dataManagementSystem
 		register: 16
 		toStreamNamed: temperatureStream name.
 	self dataManagementSystem

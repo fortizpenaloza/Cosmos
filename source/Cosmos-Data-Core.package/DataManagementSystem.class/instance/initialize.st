@@ -1,7 +1,7 @@
 initialize-release
-initializeUsing: anIdentifierProvider
+initialize
 
-	self initialize.
+	super initialize.
 
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self unresolvedSystemDependencyTo: #ConditionalTriggersSystemInterface.
