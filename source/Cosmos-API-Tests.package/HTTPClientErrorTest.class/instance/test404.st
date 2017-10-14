@@ -1,4 +1,4 @@
-tests-accessing
+tests
 test404
 
 	self

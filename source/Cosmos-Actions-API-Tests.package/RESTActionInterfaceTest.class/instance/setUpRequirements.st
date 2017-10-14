@@ -1,4 +1,4 @@
-initialization
+initialize-release
 setUpRequirements
 
 	super

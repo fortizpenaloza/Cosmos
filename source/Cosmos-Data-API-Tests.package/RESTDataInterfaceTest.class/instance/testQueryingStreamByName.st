@@ -7,4 +7,4 @@ testQueryingStreamByName
 	stream := interface streamNamed: 'Temperature'.
 	self
 		assert: stream
-		equals: self streamCalledTemperatureAsJSON
+		equals: self temperatureDataStreamAsJSON

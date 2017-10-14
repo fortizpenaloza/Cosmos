@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "SystemBasedUserStoryTest",
-	"category" : "Cosmos-Data-API-Tests-Model",
+	"category" : "Cosmos-Data-API-Tests",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

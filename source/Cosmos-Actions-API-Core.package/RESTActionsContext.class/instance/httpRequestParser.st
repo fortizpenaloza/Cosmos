@@ -1,4 +1,4 @@
-private -parsers
+private-parsers
 httpRequestParser
 
 	^ HTTPRequestParser new
