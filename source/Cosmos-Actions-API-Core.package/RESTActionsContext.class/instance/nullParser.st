@@ -1,4 +1,4 @@
-private -parsers
+private-parsers
 nullParser
 	
 	^ BlockToParserAdapter onParsingEvaluate: [ :string | string ] 

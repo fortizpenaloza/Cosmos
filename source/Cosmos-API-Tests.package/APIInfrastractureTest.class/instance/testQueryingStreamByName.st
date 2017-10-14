@@ -8,4 +8,4 @@ testQueryingStreamByName
 
 	self
 		assert: response code equals: 200;
-		assert: response contents equals: self streamCalledTemperatureAsJSON
+		assert: response contents equals: self temperatureDataStreamAsJSON

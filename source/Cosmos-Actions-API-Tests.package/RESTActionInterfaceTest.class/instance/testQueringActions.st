@@ -1,11 +1,10 @@
-initialization
+initialize-release
 testQueringActions
 
-	| interface response localTimeOffset |
+	| interface response |
 
-	localTimeOffset := TimeZones local offset.
-
-	interface := RESTActionsInterface workingWith: (RESTActionsContext workingWith: rootSystem).
+	interface := RESTActionsInterface
+		workingWith: (RESTActionsContext workingWith: rootSystem).
 
 	(rootSystem systemImplementing: #ActionManagementSystemInterface)
 		registerNamed: 'List DNS records'
@@ -14,7 +13,9 @@ testQueringActions
 				requestLine:
 					(ZnRequestLine empty
 						method: #GET;
-						uri: 'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records' asZnUrl;
+						uri:
+							'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records'
+								asZnUrl;
 						version: ZnConstants defaultHTTPVersion;
 						yourself);
 				headers:
@@ -26,7 +27,8 @@ testQueringActions
 
 	self
 		assert: response
-		equals: ('[
+		equals:
+			('[
 	{
 		"name" : "List DNS records",
 		"created_on" : "2015-09-06T12:00:00<1p>",
@@ -48,4 +50,4 @@ testQueringActions
 			]
 		}
 	}
-]' expandMacrosWith: localTimeOffset)
+]' expandMacrosWith: TimeZones local offset)

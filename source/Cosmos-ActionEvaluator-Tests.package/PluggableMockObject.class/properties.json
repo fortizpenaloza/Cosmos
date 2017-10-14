@@ -1,13 +1,13 @@
 {
 	"commentStamp" : "",
-	"super" : "Object",
-	"category" : "Cosmos-Actions-Core-Model",
+	"super" : "ProtoObject",
+	"category" : "Cosmos-ActionEvaluator-Tests",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"configuration"
+		"knowResponses"
 	],
-	"name" : "ActionEvaluator",
+	"name" : "PluggableMockObject",
 	"type" : "normal"
 }

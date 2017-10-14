@@ -1,5 +1,5 @@
 expected results
-streamCalledTemperatureAsJSON
+temperatureDataStreamAsJSON
 
 	^ '{
 	"name" : "Temperature",

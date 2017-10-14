@@ -1,4 +1,4 @@
-private - parsing
+private-parsing
 parse: aKey from: aDictionary with: aParser ifNotFound: aNotFoundBlock
 
 	^ aDictionary
