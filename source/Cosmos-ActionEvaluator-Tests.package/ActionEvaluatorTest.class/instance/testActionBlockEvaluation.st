@@ -1,5 +1,5 @@
 tests
-testActionEvaluation
+testActionBlockEvaluation
 
 	| evaluated |
 	

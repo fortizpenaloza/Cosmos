@@ -1,10 +1,13 @@
 tests
 testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 
-	| triggered dataStream condition conditionalTrigger |
+	| dataStream condition conditionalTrigger |
 
-	triggered := false.
-
+	self eventNotificationSystem
+		subscribe: self
+		to: EvaluateActionEvent
+		toBeNotifiedSending: #setTriggeredToTrue.
+			
 	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
 
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
@@ -13,7 +16,7 @@ testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated
 		hasNotBeenUpdatedForMoreThan: self fiveMinutes.
 
 	conditionalTrigger := ConditionalTrigger
-		firing: [ triggered := true ]
+		firing: 'Set triggered to true'
 		whenMeets: condition
 		accordingTo: (PeriodicalTriggeringPolicy every: self tenMinutes).
 

@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "Object",
+	"super" : "NotifiableEvent",
 	"category" : "Cosmos-Actions-Core-SystemModel",
 	"classinstvars" : [ ],
 	"pools" : [ ],
