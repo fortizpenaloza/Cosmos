@@ -1,7 +1,7 @@
 managing
 deregisterNamed: aName
 
-	actions
-		detect: [ :action | action name = aName ]
+	self
+		actionNamed: aName
 		ifFound: [ :action | self deregister: action ]
 		ifNone: [ ObjectNotFoundInSystem signal: 'Action not found in system' ]

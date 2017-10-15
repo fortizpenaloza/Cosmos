@@ -1,10 +1,13 @@
 tests
 testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringATimeInterval
 
-	| triggered dataStream triggerCondition trigger |
+	| dataStream triggerCondition trigger |
 
-	triggered := false.
-
+	self eventNotificationSystem
+		subscribe: self
+		to: EvaluateActionEvent
+		toBeNotifiedSending: #setTriggeredToTrue.
+		
 	dataStream := self dataManagementSystem
 		registerStreamNamed: 'Temperature'.
 
@@ -19,7 +22,7 @@ testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringA
 				toBeBetween: (self eightPM to: self ninePM)).
 
 	trigger := ConditionalTrigger
-		firing: [ triggered := true ]
+		firing: 'Set triggered to true'
 		whenMeets: triggerCondition
 		accordingTo: (PeriodicalTriggeringPolicy every: self tenMinutes).
 

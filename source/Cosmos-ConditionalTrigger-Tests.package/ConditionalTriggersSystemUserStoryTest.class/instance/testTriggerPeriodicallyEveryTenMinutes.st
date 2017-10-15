@@ -1,12 +1,15 @@
 tests
 testTriggerPeriodicallyEveryTenMinutes
 
-	| triggered conditionalTrigger |
+	| conditionalTrigger |
 
-	triggered := false.
+	self eventNotificationSystem
+		subscribe: self
+		to: EvaluateActionEvent
+		toBeNotifiedSending: #setTriggeredToTrue.
 
 	conditionalTrigger := ConditionalTrigger
-		firing: [ triggered := true ]
+		firing: 'Set triggered to true'
 		whenMeets: AlwaysTriggeringCondition new
 		accordingTo: (PeriodicalTriggeringPolicy every: self tenMinutes).
 

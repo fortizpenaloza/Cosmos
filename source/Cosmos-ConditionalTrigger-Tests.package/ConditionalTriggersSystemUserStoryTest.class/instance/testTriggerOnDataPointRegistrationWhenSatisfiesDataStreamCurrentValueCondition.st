@@ -1,14 +1,17 @@
 tests
 testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition
 
-	| triggered dataStream conditionalTrigger |
-
-	triggered := false.
+	| dataStream conditionalTrigger |
 
 	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
 
+	self eventNotificationSystem
+		subscribe: self
+		to: EvaluateActionEvent
+		toBeNotifiedSending: #setTriggeredToTrue.
+
 	conditionalTrigger := ConditionalTrigger
-		firing: [ triggered := true ]
+		firing: 'Set triggered to true'
 		whenMeets:
 			(DataStreamCurrentValueTriggeringCondition
 				of: dataStream

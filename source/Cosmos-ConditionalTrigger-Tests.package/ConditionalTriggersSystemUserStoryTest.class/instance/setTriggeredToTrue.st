@@ -1,0 +1,4 @@
+accessing
+setTriggeredToTrue
+
+	triggered := true.
