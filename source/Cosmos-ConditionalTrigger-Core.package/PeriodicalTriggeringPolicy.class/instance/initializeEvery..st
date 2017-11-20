@@ -1,4 +1,4 @@
 initialize-release
-initializeEvery: aTimeMeasure
+initializeEvery: aTimePeriod
 
-	timePeriod := aTimeMeasure
+	timePeriod := aTimePeriod

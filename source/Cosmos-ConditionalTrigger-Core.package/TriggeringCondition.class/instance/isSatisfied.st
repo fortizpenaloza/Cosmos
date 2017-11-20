@@ -1,4 +1,0 @@
-testing
-isSatisfied
-
-	self subclassResponsibility 

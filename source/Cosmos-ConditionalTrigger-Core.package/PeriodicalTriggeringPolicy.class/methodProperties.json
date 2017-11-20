@@ -1,9 +1,10 @@
 {
 	"instance" : {
-		"initializeEvery:" : "FranciscoOrtizPenaloza 11/21/2014 23:02",
-		"register:to:" : "fortizpenaloza 4/25/2016 00:23"
+		"deregister:from:" : "fortizpenaloza 11/19/2017 17:05",
+		"initializeEvery:" : "fortizpenaloza 11/16/2017 17:18",
+		"register:to:" : "fortizpenaloza 11/19/2017 16:50"
 	},
 	"class" : {
-		"every:" : "FranciscoOrtizPenaloza 11/21/2014 23:01"
+		"every:" : "fortizpenaloza 11/16/2017 17:18"
 	}
 }

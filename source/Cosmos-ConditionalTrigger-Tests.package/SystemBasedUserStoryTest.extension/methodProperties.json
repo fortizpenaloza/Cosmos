@@ -1,7 +1,7 @@
 {
 	"instance" : {
-		"requireConditionalTriggersSystem" : "JulianMaestri 7/2/2017 16:18",
-		"conditionalTriggersSystem" : "JulianMaestri 7/30/2017 21:12"
+		"triggerManagementSystem" : "fortizpenaloza 11/20/2017 14:39",
+		"requireTriggerManagementSystem" : "fortizpenaloza 11/19/2017 15:44"
 	},
 	"class" : { }
 }

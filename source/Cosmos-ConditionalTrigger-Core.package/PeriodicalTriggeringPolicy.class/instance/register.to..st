@@ -1,5 +1,4 @@
 registering
-register: aConditionalTrigger to: aTriggerSystem 
+register: aTrigger to: aTriggerSystem
 
-	aTriggerSystem register: aConditionalTrigger triggerPeriodicallyEvery: timePeriod
-	
+	aTriggerSystem register: aTrigger toTriggerPeriodicallyEvery: timePeriod

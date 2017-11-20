@@ -1,4 +1,7 @@
 instance creation
-with: aTriggerCondition with: anotherTriggerCondition
+with: aTrigger with: anotherTrigger
 
-	^ self withAll: (OrderedCollection with: aTriggerCondition with: anotherTriggerCondition)
+	^ self
+		withAll:
+			{aTrigger.
+			anotherTrigger}

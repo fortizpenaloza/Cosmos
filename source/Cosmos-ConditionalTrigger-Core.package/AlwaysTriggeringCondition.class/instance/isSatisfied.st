@@ -1,4 +1,0 @@
-testing
-isSatisfied
-
-	^ true

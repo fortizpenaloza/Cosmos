@@ -1,4 +1,4 @@
 registering
-register: aConditionalTrigger to: aTriggerSystem
+register: aTrigger to: aTriggerSystem
 
 	self subclassResponsibility 

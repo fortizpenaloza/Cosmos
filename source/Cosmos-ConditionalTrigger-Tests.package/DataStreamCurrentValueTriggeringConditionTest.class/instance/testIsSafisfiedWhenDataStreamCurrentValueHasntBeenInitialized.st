@@ -8,6 +8,6 @@ testIsSafisfiedWhenDataStreamCurrentValueHasntBeenInitialized
 		isLessThan: 10.
 
 	self
-		should: [ condition isSatisfied ]
+		should: [ (condition isSatisfiedOn: self) ]
 		raise: AssertionFailed
 		withDescription: 'Current value has not been initialized.'

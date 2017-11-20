@@ -1,4 +1,4 @@
 instance creation
-withAll: aTriggerConditionCollection
+withAll: aTriggerCollection
 
-	^ self new initializeWith: aTriggerConditionCollection 
+	^ self new initializeWith: aTriggerCollection 

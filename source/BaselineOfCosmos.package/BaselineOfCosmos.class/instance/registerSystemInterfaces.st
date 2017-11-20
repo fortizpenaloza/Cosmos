@@ -4,5 +4,5 @@ registerSystemInterfaces
 	self
 		registerDataManagementSystemInterface;
 		registerCommandManagementSystemInterface;
-		registerConditionalTriggersSystemInterface;
+		registerTriggerManagementSystemInterface;
 		registerActionManagementSystemInterface

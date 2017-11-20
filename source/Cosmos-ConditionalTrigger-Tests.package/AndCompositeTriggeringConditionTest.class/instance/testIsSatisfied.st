@@ -6,17 +6,19 @@ testIsSatisfied
 	condition := AndCompositeTriggeringCondition
 		withAll:
 			(OrderedCollection
-				with: (TimeIntervalTriggeringCondition querying: self toBeBetween: (self eightPM to: self tenPM))
+				with:
+					(TimeIntervalTriggeringCondition
+						checkingCurrentTimeIsBetween: (self eightPM to: self tenPM))
 				with: (DataStreamCurrentValueTriggeringCondition of: self isLessThan: 10)).
 
 	currentValue := 9.
 	timeOfDay := self eightPM.
-	self assert: condition isSatisfied.
+	self assert: (condition isSatisfiedOn: self).
 
 	currentValue := 10.
 	timeOfDay := self eightPM.
-	self deny: condition isSatisfied.
+	self deny: (condition isSatisfiedOn: self).
 
 	currentValue := 9.
 	timeOfDay := self elevenPM.
-	self deny: condition isSatisfied
+	self deny: (condition isSatisfiedOn: self)
