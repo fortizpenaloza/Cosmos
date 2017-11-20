@@ -1,4 +1,4 @@
 instance creation
-every: aTimeMeasure 
+every: aTimePeriod 
 
-	^ self new initializeEvery: aTimeMeasure
+	^ self new initializeEvery: aTimePeriod

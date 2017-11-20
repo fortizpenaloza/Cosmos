@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-ConditionalTrigger-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dateTime"
+	],
+	"name" : "TriggeringContext",
+	"type" : "normal"
+}

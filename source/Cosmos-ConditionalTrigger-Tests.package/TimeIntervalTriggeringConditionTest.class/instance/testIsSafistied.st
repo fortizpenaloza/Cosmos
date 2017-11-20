@@ -4,20 +4,19 @@ testIsSafistied
 	| condition |
 
 	condition := TimeIntervalTriggeringCondition
-		querying: self
-		toBeBetween: (self eightPM to: self tenPM).
-		
+		checkingCurrentTimeIsBetween: (self eightPM to: self tenPM).
+
 	timeOfDay := self eightPM.
-	self assert: condition isSatisfied.
-	
+	self assert: (condition isSatisfiedOn: self).
+
 	timeOfDay := self sevenPM.
-	self deny: condition isSatisfied.
-	
+	self deny: (condition isSatisfiedOn: self).
+
 	timeOfDay := TimeOfDay hours: 20 minutes: 01.
-	self assert: condition isSatisfied.
-	
+	self assert: (condition isSatisfiedOn: self).
+
 	timeOfDay := self tenPM.
-	self assert: condition isSatisfied.
-	
+	self assert: (condition isSatisfiedOn: self).
+
 	timeOfDay := TimeOfDay hours: 22 minutes: 00 seconds: 01.
-	self deny: condition isSatisfied
+	self deny: (condition isSatisfiedOn: self)

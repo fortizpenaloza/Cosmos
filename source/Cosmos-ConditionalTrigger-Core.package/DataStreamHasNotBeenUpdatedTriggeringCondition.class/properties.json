@@ -6,8 +6,7 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"timeSystem",
-		"datastream",
+		"dataStream",
 		"timePeriod"
 	],
 	"name" : "DataStreamHasNotBeenUpdatedTriggeringCondition",

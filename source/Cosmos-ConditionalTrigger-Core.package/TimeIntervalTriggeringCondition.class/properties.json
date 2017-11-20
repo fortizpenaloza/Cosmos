@@ -6,7 +6,6 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"timeSystem",
 		"timeInterval"
 	],
 	"name" : "TimeIntervalTriggeringCondition",

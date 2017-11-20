@@ -1,9 +1,9 @@
 {
 	"instance" : {
-		"registerConditionalTriggersSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
-		"registerSystemInterfaces" : "fortizpenaloza 7/30/2017 17:45",
-		"registerDataManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
+		"registerSystemInterfaces" : "fortizpenaloza 11/19/2017 18:57",
 		"setUpDependencies:" : "fortizpenaloza 7/29/2017 18:50",
+		"registerDataManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
+		"registerTriggerManagementSystemInterface" : "fortizpenaloza 11/20/2017 14:39",
 		"registerActionManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
 		"baseline:" : "fortizpenaloza 10/14/2017 12:30",
 		"registerCommandManagementSystemInterface" : "fortizpenaloza 7/30/2017 17:45",
