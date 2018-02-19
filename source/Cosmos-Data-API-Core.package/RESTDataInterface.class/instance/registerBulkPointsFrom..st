@@ -6,12 +6,10 @@ registerBulkPointsFrom: aJSON
 	rawData := (NeoJSONReader on: aJSON readStream) next.
 
 	rawData
-		do: [ :rawDataPoint | 
-			self
-				register: (rawDataPoint at: 'value')
-				toStreamNamed: (rawDataPoint at: 'data-stream') ].
+		do:
+			[ :rawDataPoint | self register: (rawDataPoint at: 'value') toStreamNamed: (rawDataPoint at: 'data-stream') ].
 
-	TeaResponse created ]
+	ZnResponse created: 'all' ]
 		on: KeyNotFound
 		do: [ :signal | 
 			HTTPClientError

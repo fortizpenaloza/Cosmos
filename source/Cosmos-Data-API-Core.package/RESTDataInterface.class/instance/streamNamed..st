@@ -1,8 +1,8 @@
 API
 streamNamed: aName
 
-	^ [ TeaResponse ok
-		body:
+	^ [ ZnResponse
+		ok:
 			(ZnEntity
 				json:
 					(self dataManagementSystem

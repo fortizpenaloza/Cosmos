@@ -5,7 +5,7 @@ registerStreamFrom: aJSON
 
 	name := (STONJSON fromString: aJSON) at: #name.
 	self dataManagementSystem registerStreamNamed: name.
-	TeaResponse created location: (ZnUrl fromString: 'localhost') ]
+	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ObjectAlreadyInSystem
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound

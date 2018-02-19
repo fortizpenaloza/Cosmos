@@ -10,8 +10,7 @@ setUp
 
 	server := Teapot
 		configure:
-			{(#defaultOutput -> #json).
-			(#port -> 8010).
+			{(#port -> 8010).
 			(#debugMode -> true)}.
 	server
 		GET: '/data-streams' -> [ :request | interface streams ];

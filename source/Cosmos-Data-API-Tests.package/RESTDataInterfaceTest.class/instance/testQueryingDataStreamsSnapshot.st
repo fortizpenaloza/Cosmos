@@ -8,4 +8,4 @@ testQueryingDataStreamsSnapshot
 
 	self
 		assert: response code equals: 200;
-		assert: response body equals: (ZnEntity json: self dataStreamsSnapshotAsJSON)
+		assert: response contents equals: self dataStreamsSnapshotAsJSON

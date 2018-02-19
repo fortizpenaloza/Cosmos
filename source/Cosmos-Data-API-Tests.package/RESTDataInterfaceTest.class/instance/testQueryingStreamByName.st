@@ -8,4 +8,4 @@ testQueryingStreamByName
 
 	self
 		assert: response code equals: 200;
-		assert: response body equals: (ZnEntity json: self temperatureDataStreamAsJSON)
+		assert: response contents equals: self temperatureDataStreamAsJSON
