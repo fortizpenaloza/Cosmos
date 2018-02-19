@@ -1,13 +1,18 @@
 tests
 testDataStreamRegistration
 
-	| interface dataStream |
+	| interface |
+
+	self dataManagementSystem streamNamed: 'pH' ifFound: [ :dataStream | self fail ] ifNone: [ "do nothing" ].
 
 	interface := RESTDataInterface workingWith: rootSystem.
+	interface registerStreamFrom: '{"name": "pH"}'.
 
-	dataStream := interface registerStreamNamed: 'pH'.
-
-	self
-		assert: dataStream name equals: 'pH';
-		assert: dataStream creationDateTime equals: self timeSystem dateTime;
-		assert: dataStream dataPoints isEmpty
+	self dataManagementSystem
+		streamNamed: 'pH'
+		ifFound: [ :dataStream | 
+			self
+				assert: dataStream name equals: 'pH';
+				assert: dataStream creationDateTime equals: self timeSystem dateTime;
+				assert: dataStream dataPoints isEmpty ]
+		ifNone: [ self fail ]

@@ -9,7 +9,7 @@ testAccessingCurrentValue
 
 	self
 		should: [ dataStream currentValue ]
-		raise: AssertionFailed
+		raise: BindingNotYetDefined
 		withDescription: 'Current value has not been initialized.'.
 
 	dataPoint := DataPoint

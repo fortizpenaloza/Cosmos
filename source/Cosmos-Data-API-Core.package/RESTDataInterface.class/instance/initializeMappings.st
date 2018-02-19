@@ -12,9 +12,9 @@ initializeMappings
 						mapAccessor: #currentValue to: 'current-value';
 						mapAccessor: #lastUpdate to: 'last-update' ];
 				for: DateTime
-					customDo:
-						[ :mapping | mapping encoder: [ :dateTime | 
-							ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
 				nextPut: object ] ].
 
@@ -34,7 +34,9 @@ initializeMappings
 					mapping
 						mapAccessor: #timestamp;
 						mapAccessor: #value ];
-				for: DateTime customDo: [ :mapping | mapping encoder: [ :dateTime |  
-							ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				for: DateTime
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
 				nextPut: object ] ]

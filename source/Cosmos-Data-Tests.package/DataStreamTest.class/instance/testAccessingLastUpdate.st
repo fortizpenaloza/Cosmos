@@ -9,7 +9,7 @@ testAccessingLastUpdate
 
 	self
 		should: [ dataStream lastUpdate ]
-		raise: AssertionFailed
+		raise: BindingNotYetDefined
 		withDescription: 'Last update date and time has not been initialized.'.
 
 	dataPoint := DataPoint
