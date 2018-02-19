@@ -9,5 +9,5 @@ testIsSafisfiedWhenDataStreamCurrentValueHasntBeenInitialized
 
 	self
 		should: [ (condition isSatisfiedOn: self) ]
-		raise: AssertionFailed
+		raise: BindingNotYetDefined 
 		withDescription: 'Current value has not been initialized.'

@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Data-API-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"system",
+		"server"
+	],
+	"name" : "DataAPIInstaller",
+	"type" : "normal"
+}

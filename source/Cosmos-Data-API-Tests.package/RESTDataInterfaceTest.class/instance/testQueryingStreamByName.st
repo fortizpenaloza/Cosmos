@@ -1,10 +1,11 @@
 tests
 testQueryingStreamByName
 
-	| interface stream |
+	| interface response |
 
 	interface := RESTDataInterface workingWith: rootSystem.
-	stream := interface streamNamed: 'Temperature'.
+	response := interface streamNamed: 'Temperature'.
+
 	self
-		assert: stream
-		equals: self temperatureDataStreamAsJSON
+		assert: response code equals: 200;
+		assert: response contents equals: self temperatureDataStreamAsJSON

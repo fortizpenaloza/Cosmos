@@ -14,7 +14,5 @@ setUp
 			(#debugMode -> true)}.
 	server
 		GET: '/data-streams' -> [ :request | interface streams ];
-		GET:
-			'/data-streams/<name>'
-				-> [ :request | interface streamNamed: (request at: #name) ];
+		GET: '/data-streams/<name>' -> [ :request | interface streamNamed: (request at: #name) ];
 		start
