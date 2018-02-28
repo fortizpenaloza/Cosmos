@@ -1,4 +1,4 @@
-baselines
+private-baselines
 setUpDependencies: spec
 
 	spec
