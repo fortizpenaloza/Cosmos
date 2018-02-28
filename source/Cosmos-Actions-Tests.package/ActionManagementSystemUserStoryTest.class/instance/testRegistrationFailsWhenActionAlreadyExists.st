@@ -12,4 +12,4 @@ testRegistrationFailsWhenActionAlreadyExists
 				registerNamed: 'Send YO to Fran'
 				toEvaluate: [ "empty" ] ]
 		raise: ObjectAlreadyInSystem
-		withDescription: 'Action already exists in system'
+		withDescription: 'An action with that name already exists in system'

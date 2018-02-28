@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Triggers-API-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"triggersMapping",
+		"context"
+	],
+	"name" : "TriggersAPI",
+	"type" : "normal"
+}

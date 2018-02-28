@@ -4,10 +4,10 @@ testInstanceCreation
 	| action |
 
 	action := Action
-		named: 'Send YO'
+		named: 'Do nothing'
 		createdOn: self septemberSixth2015AtTwelveOFivePM
 		toEvaluate: (BlockEvaluationPolicy for: [ "do nothing" ]).
 
 	self
-		assert: action name equals: 'Send YO';
+		assert: action name equals: 'Do nothing';
 		assert: action creationDateTime equals: self septemberSixth2015AtTwelveOFivePM

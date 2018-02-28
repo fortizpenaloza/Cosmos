@@ -1,0 +1,4 @@
+testing
+isSatisfiedOn: aContext
+
+	^ true

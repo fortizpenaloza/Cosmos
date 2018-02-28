@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "TriggeringCondition",
+	"category" : "Cosmos-Triggers-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dataStream",
+		"condition"
+	],
+	"name" : "DataStreamCurrentValueTriggeringCondition",
+	"type" : "normal"
+}
