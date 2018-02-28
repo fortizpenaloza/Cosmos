@@ -1,0 +1,17 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Triggers-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"name",
+		"creationDateTime",
+		"action",
+		"policy",
+		"condition"
+	],
+	"name" : "ActionTrigger",
+	"type" : "normal"
+}

@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "Cosmos-Triggers-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"dateTime",
+		"lastUpdate"
+	],
+	"name" : "DataStreamHasNotBeenUpdatedTriggeringConditionTest",
+	"type" : "normal"
+}

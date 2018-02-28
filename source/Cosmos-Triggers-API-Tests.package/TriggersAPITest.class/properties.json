@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "SystemBasedUserStoryTest",
+	"category" : "Cosmos-Triggers-API-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"interface"
+	],
+	"name" : "TriggersAPITest",
+	"type" : "normal"
+}

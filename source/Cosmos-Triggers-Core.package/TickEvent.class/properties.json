@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "NotifiableEvent",
+	"category" : "Cosmos-Triggers-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timePeriod"
+	],
+	"name" : "TickEvent",
+	"type" : "normal"
+}

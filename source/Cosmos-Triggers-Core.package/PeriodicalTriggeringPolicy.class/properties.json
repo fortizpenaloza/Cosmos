@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "TriggeringPolicy",
+	"category" : "Cosmos-Triggers-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timePeriod"
+	],
+	"name" : "PeriodicalTriggeringPolicy",
+	"type" : "normal"
+}

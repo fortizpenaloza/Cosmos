@@ -2,11 +2,11 @@ tests
 testParsingFail
 
 	| parser |
-	
+
 	parser := CaseBasedParser new
-		parsing: 'high' to: QueuePriority high;
-		parsing: 'medium' to: QueuePriority medium;
-		parsing: 'low' to: QueuePriority low;
+		parsing: #high to: QueuePriority high;
+		parsing: #medium to: QueuePriority medium;
+		parsing: #low to: QueuePriority low;
 		yourself.
 
-	self should: [parser parse: 'lower'] raise: Error withDescription: 'Parsing failed'
+	self should: [ parser parse: 'lower' ] raise: ParsingFailed withDescription: '"lower" is not a valid object'

@@ -15,6 +15,8 @@ testActionEvaluation
 		toEvaluate: (BlockEvaluationPolicy for: [ evaluateAction := true ]).
 
 	self deny: evaluateAction.
+	
+	self eventNotificationSystem
+				notifySubscribersTo: (EvaluateActionEvent of: action).
 
-	self actionManagementSystem evaluateNamed: 'Send YO to Fran'.
 	self assert: evaluateAction

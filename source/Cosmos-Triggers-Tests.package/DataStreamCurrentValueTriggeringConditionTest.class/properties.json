@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "fortizpenaloza 1/9/2016 21:13",
+	"super" : "TestCase",
+	"category" : "Cosmos-Triggers-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"currentValue"
+	],
+	"name" : "DataStreamCurrentValueTriggeringConditionTest",
+	"type" : "normal"
+}

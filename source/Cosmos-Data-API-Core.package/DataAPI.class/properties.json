@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Cosmos-Data-API-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"rootSystem",
+		"dataStreamMapping",
+		"dataStreamsSnapshotsMapping"
+	],
+	"name" : "DataAPI",
+	"type" : "normal"
+}

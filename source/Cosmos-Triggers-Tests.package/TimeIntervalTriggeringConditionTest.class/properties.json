@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "<historical>",
+	"super" : "TestCase",
+	"category" : "Cosmos-Triggers-Tests-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeOfDay"
+	],
+	"name" : "TimeIntervalTriggeringConditionTest",
+	"type" : "normal"
+}

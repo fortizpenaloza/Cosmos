@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "FranciscoOrtizPenaloza 9/24/2014 20:03",
+	"super" : "TriggeringCondition",
+	"category" : "Cosmos-Triggers-Core-Model",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"timeInterval"
+	],
+	"name" : "TimeIntervalTriggeringCondition",
+	"type" : "normal"
+}

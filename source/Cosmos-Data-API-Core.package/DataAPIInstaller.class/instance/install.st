@@ -3,7 +3,7 @@ install
 
 	| interface |
 
-	interface := RESTDataInterface workingWith: system.
+	interface := DataAPI workingWith: system.
 
 	server
 		GET: '/data-streams' -> [ :request | interface streams ];
@@ -15,5 +15,4 @@ install
 				-> [ :request | interface registerStreamFrom: request contents ];
 		output: #text;
 		POST: '/data-points' -> [ :request | interface registerBulkPointsFrom: request contents ];
-		output: #text;
-		exception: HTTPClientError -> [ :signal :request | TeaResponse code: signal tag ]
+		output: #text

@@ -1,0 +1,17 @@
+{
+	"commentStamp" : "FranciscoOrtizPenaloza 4/17/2015 01:40",
+	"super" : "System",
+	"category" : "Cosmos-Triggers-Core-SystemModel",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"eventNotificationSystem",
+		"timeSystem",
+		"triggers",
+		"triggersToTriggerPeriodically",
+		"triggersToTriggerAfterDataPointRegistration"
+	],
+	"name" : "TriggerManagementSystem",
+	"type" : "normal"
+}

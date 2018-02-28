@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "NotifiableEvent",
-	"category" : "Cosmos-Actions-Core-SystemModel",
+	"category" : "Cosmos-Actions-Core-Model",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
