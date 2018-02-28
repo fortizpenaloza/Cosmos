@@ -57,7 +57,7 @@ baseline: spec
 					#('Cosmos-Data-Core' 'Cosmos-Triggers-Core' 'Cosmos-Commands-Core' 'Cosmos-Actions-Core' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core' 'Cosmos-API-Core' 'Cosmos-Data-API-Core' 'Cosmos-Commands-API-Core' 'Cosmos-Actions-API-Core' 'Cosmos-Triggers-API-Core' 'Cosmos');
 				group: 'Tests'
 					with:
-					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Actions-API-Tests' 'Cosmos-Code-Quality-Tests');
+					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Actions-API-Tests' 'Cosmos-Triggers-API-Tests' 'Cosmos-Code-Quality-Tests');
 				group: 'Development' with: #('Deployment' 'Tests');
 				group: 'default' with: #('Deployment').
 			spec postLoadDoIt: #postload:package: ]
