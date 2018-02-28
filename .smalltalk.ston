@@ -9,10 +9,10 @@ SmalltalkCISpec {
   ], 
   #testing : {
     #coverage : {
-      #packages : [ 'Cosmos.*' ]
+      #packages : [ 'Cosmos*' ]
     },
     #include : {  
-      #packages : [ 'Cosmos.*' ]
+      #packages : [ 'Cosmos-Tests*' ]
     }    
   }
 }
