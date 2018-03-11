@@ -62,6 +62,7 @@ baseline: spec
 					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Actions-API-Tests' 'Cosmos-Triggers-API-Tests' 'Cosmos-Code-Quality-Tests');
 				group: 'Tools'
 					with: #('Cosmos-Tools');
-				group: 'Development' with: #('Deployment' 'Tests' 'Tools');
+				group: 'CI' with: #('Deployment' 'Tests');
+				group: 'Development' with: #('CI' 'Tools');
 				group: 'default' with: #('Deployment').
 			spec postLoadDoIt: #postload:package: ]

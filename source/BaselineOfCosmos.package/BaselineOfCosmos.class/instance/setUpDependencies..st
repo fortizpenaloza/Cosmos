@@ -25,5 +25,5 @@ setUpDependencies: spec
 	spec
 		configuration: 'Roassal2'
     		with: [  spec
-				versionString: 'bleedingEdge';
+				versionString: #development;
 				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
