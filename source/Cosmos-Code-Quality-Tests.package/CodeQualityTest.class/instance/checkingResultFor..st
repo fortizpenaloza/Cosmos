@@ -1,5 +1,5 @@
 tests support
-runRule: aRule
+checkingResultFor: aRule
 
 	^ (RBSmalllintChecker
 		runRule: aRule

@@ -1,7 +1,0 @@
-{
-	"instance" : {
-		"testImplemetedInterfacesMustDeclareAtLeastOneMessage" : "fortizpenaloza 10/20/2016 22:28",
-		"testSystemsMustImplementAllMessagesDeclaredInItsInterface" : "fortizpenaloza 10/20/2016 23:07"
-	},
-	"class" : { }
-}
