@@ -50,6 +50,8 @@ baseline: spec
 			spec
 				package: 'Cosmos'
 				with: [ spec requires: #('Teapot' 'Kepler' 'Cosmos-Data-API-Core') ].
+				
+			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
 
 			spec
 				group: 'Deployment'
@@ -58,6 +60,8 @@ baseline: spec
 				group: 'Tests'
 					with:
 					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Actions-API-Tests' 'Cosmos-Triggers-API-Tests' 'Cosmos-Code-Quality-Tests');
-				group: 'Development' with: #('Deployment' 'Tests');
+				group: 'Tools'
+					with: #('Cosmos-Tools');
+				group: 'Development' with: #('Deployment' 'Tests' 'Tools');
 				group: 'default' with: #('Deployment').
 			spec postLoadDoIt: #postload:package: ]
