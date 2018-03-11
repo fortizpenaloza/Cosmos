@@ -20,4 +20,10 @@ setUpDependencies: spec
 		configuration: 'Teapot'
 		with: [ spec
 				versionString: #stable;
-				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ]
+				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ].
+			
+	spec
+		configuration: 'Roassal2'
+    		with: [  spec
+				versionString: #development;
+				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
