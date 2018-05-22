@@ -1,5 +1,5 @@
 managing
-push: aCommand with: aPriority
+enqueue: aCommand with: aPriority
 
 	| prioritizedCommand |
 
@@ -8,7 +8,7 @@ push: aCommand with: aPriority
 		with: aPriority
 		on: timeSystem dateTime.
 		
-	priorityQueue push: prioritizedCommand with: aPriority.
+	priorityQueue enqueue: prioritizedCommand with: aPriority.
 
 	self register: prioritizedCommand.
 

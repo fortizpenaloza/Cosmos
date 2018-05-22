@@ -6,8 +6,8 @@ testDataPointBulkRegistration
 	temperature := self temperatureStream.
 	pressure := self pressureStream.
 
-	self assert: temperature currentValue ~= 24.
-	self assert: pressure currentValue ~= 89.
+	self deny: temperature currentValue = 24.
+	self deny: pressure currentValue = 89.
 
 	interface := DataAPI workingWith: rootSystem.
 	response := interface registerBulkPointsFrom: self updateTemperatureAndPressureDataStreamsJSON.

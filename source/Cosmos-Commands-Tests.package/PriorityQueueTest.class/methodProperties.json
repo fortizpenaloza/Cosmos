@@ -1,9 +1,0 @@
-{
-	"instance" : {
-		"testPoppingRepectsPushingOrderWhenQueueHasElementsWithSamePriority" : "fortizpenaloza 4/24/2016 16:00",
-		"testIsEmptyAfterCreation" : "fortizpenaloza 4/26/2016 08:40",
-		"testPoppingRespectsPushedElementPriority" : "fortizpenaloza 4/24/2016 15:59",
-		"testPoppingFailsWhenQueueIsEmpty" : "fortizpenaloza 4/24/2016 15:48"
-	},
-	"class" : { }
-}

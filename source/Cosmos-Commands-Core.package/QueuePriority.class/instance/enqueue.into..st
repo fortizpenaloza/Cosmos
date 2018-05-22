@@ -1,4 +1,4 @@
 pushing-popping
-push: aCommand into: aPriorityQueue 
+enqueue: aCommand into: aPriorityQueue 
 
 	self subclassResponsibility 

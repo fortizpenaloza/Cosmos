@@ -1,9 +1,9 @@
 tests
 testPoppingCommandsFollowsItsPriority
 
-	self commandManagementSystem push: self turnOnLedCommand with: QueuePriority medium.
-	self commandManagementSystem push: self turnOnLedCommand with: QueuePriority low.
-	self commandManagementSystem push: self turnOffLedCommand with: QueuePriority high.
+	self commandManagementSystem enqueue: self turnOnLedCommand with: QueuePriority medium.
+	self commandManagementSystem enqueue: self turnOnLedCommand with: QueuePriority low.
+	self commandManagementSystem enqueue: self turnOffLedCommand with: QueuePriority high.
 
 	self
 		assert: self commandManagementSystem pop

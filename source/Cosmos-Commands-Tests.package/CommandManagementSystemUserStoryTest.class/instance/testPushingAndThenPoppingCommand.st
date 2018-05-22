@@ -2,7 +2,7 @@ tests
 testPushingAndThenPoppingCommand
 
 	self commandManagementSystem
-		push: self turnOnLedCommand
+		enqueue: self turnOnLedCommand
 		with: QueuePriority high.
 
 	self

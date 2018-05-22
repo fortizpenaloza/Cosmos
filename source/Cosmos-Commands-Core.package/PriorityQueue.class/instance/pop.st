@@ -1,4 +1,4 @@
-pushing-popping
+enqueuing-dequeiung
 pop
 
 	^ highPrioritizedElements

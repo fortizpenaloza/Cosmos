@@ -8,5 +8,5 @@ push: aJSON
 		next.
 
 	^ self commandManagementSystem
-		push: (rawCommand at: #command)
+		enqueue: (rawCommand at: #command)
 		with: (self parse: (rawCommand at: #priority) with: self priorityParser)

@@ -2,10 +2,10 @@ tests
 testQueryingPrioritizedCommands
 
 	self commandManagementSystem
-		push: self turnOnLedCommand
+		enqueue: self turnOnLedCommand
 		with: QueuePriority high.
 	self commandManagementSystem
-		push: self turnOffLedCommand
+		enqueue: self turnOffLedCommand
 		with: QueuePriority medium.
 
 	self
