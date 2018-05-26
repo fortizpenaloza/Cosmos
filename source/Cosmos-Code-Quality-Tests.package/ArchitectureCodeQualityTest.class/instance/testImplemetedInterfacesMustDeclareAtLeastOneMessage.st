@@ -4,7 +4,7 @@ testImplemetedInterfacesMustDeclareAtLeastOneMessage
 	| systems |
 
 	systems := System allSubclasses
-		reject: [ :class | class implementedInterface messages notEmpty ].
+		reject: [ :class | class implementedInterface isImplementedByInstancesOf: class ].
 		
 	self
 		assert: systems isEmpty
