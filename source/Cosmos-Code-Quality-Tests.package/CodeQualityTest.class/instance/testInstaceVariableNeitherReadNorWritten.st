@@ -1,4 +1,0 @@
-tests
-testInstaceVariableNeitherReadNorWritten
-
-	self assertThereIsNoProblemsRunning: RBOnlyReadOrWrittenVariableRule new

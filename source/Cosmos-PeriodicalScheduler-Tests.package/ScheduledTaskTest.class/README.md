@@ -1,1 +1,0 @@
-A ScheduledTaskTest is a test class for testing the behavior of ScheduledTask

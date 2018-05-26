@@ -1,4 +1,0 @@
-tests
-testSubclassReponsibilityImplementedInLeafClases
-
-	self assertThereIsNoProblemsRunning: RBSubclassResponsibilityNotDefinedRule new

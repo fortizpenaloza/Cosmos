@@ -1,4 +1,0 @@
-systems
-triggerManagementSystem
-	
-	^ context triggerManagementSystem

@@ -1,4 +1,0 @@
-accessing
-setTriggeredToTrue
-
-	triggered := true.

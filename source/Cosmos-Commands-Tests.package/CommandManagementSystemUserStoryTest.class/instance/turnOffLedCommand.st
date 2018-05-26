@@ -1,4 +1,0 @@
-accessing
-turnOffLedCommand
-
-	^ LEDCommandsAddOn turnOffLedCommand

@@ -1,4 +1,0 @@
-enqueuing-dequeiung
-enqueueWithHighPriority: anElementWithPriority 
-
-	highPrioritizedElements add: anElementWithPriority 

@@ -1,4 +1,0 @@
-tests
-testMessageSentButNotImplemented
-
-	self assertThereIsNoProblemsRunning: RBSentNotImplementedRule new

@@ -1,5 +1,0 @@
-*Cosmos-ConditionalTrigger-Tests-SystemModel
-requireTriggerManagementSystem
-
-	self requireEventNotificationSystem.
-	systemBuilder add: TriggerManagementSystem new

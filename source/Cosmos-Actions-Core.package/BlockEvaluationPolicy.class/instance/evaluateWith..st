@@ -1,4 +1,0 @@
-evaluating
-evaluateWith: anActionEvaluatorConfiguration
-
-	block value

@@ -1,4 +1,0 @@
-testing
-isSatisfiedOn: aContext
-
-	^ true

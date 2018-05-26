@@ -1,4 +1,0 @@
-initialize-release
-initializeWith: aTriggerConditionCollection
-
-	triggerConditions := aTriggerConditionCollection

@@ -1,1 +1,0 @@
-A TimeIntervalCondition is xxxxxxxxx.
