@@ -1,8 +1,0 @@
-actions
-registerSystemInterfaces
-
-	self
-		registerDataManagementSystemInterface;
-		registerCommandManagementSystemInterface;
-		registerTriggerManagementSystemInterface;
-		registerActionManagementSystemInterface

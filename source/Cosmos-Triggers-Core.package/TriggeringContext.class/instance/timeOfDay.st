@@ -1,4 +1,0 @@
-accessing
-timeOfDay
-
-	^ dateTime timeOfDay 

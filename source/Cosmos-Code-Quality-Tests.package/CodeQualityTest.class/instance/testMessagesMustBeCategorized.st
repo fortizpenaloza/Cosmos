@@ -1,4 +1,0 @@
-tests
-testMessagesMustBeCategorized
-
-	self assertThereIsNoProblemsRunning: RBUnclassifiedMethodsRule new

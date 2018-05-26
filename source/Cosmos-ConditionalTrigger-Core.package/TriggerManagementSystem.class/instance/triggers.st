@@ -1,4 +1,0 @@
-querying
-triggers
-
-	^ triggers 

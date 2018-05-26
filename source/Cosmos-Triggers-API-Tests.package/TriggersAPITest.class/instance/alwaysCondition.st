@@ -1,4 +1,0 @@
-accessing
-alwaysCondition
-
-	^ AlwaysTriggeringCondition new

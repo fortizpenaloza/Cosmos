@@ -1,4 +1,0 @@
-querying
-prioritizedCommands
-
-	^ prioritizedCommands copy

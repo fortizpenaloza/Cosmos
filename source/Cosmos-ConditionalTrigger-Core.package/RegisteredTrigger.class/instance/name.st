@@ -1,4 +1,0 @@
-accessing
-name
-	
-	^ trigger name
