@@ -1,5 +1,5 @@
 enqueuing-dequeiung
-pop
+dequeue
 
 	^ highPrioritizedElements
 		ifEmpty: [ mediumPrioritizedElements

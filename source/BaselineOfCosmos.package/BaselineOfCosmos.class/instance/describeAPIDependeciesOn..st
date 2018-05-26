@@ -1,5 +1,5 @@
 private-baselines
-defineAPICoreDependeciesOn: spec
+describeAPIDependeciesOn: spec
 
 	spec
 		package: 'Cosmos-API-Core' with: [ spec requires: 'Teapot' ];

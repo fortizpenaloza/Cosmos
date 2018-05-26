@@ -4,4 +4,4 @@ registerActionManagementSystemInterface
 	self
 		registerInterfaceAs: #ActionManagementSystemInterface
 		named: 'Action Management System Interface'
-		offering: #(#registerNamed:toEvaluate: #deregisterNamed: actions)
+		declaring: #(#registerNamed:toEvaluate: #deregisterNamed: actions)

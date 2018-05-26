@@ -1,5 +1,5 @@
 tests
-testPoppingCommandFormattedAsJSON
+testDequeuingCommandFormattedAsJSON
 
 	| interface response |
 

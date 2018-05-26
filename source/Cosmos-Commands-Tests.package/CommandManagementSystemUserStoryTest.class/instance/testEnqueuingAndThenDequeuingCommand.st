@@ -1,12 +1,12 @@
 tests
-testPushingAndThenPoppingCommand
+testEnqueuingAndThenDequeuingCommand
 
 	self commandManagementSystem
 		enqueue: self turnOnLedCommand
 		with: QueuePriority high.
 
 	self
-		assert: self commandManagementSystem pop
+		assert: self commandManagementSystem dequeue
 		equals:
 			(PrioritizedCommand
 				holding: self turnOnLedCommand

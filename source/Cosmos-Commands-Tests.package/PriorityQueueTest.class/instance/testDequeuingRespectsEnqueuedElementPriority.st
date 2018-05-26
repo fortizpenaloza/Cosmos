@@ -1,5 +1,5 @@
 tests
-testPoppingRespectsPushedElementPriority
+testDequeuingRespectsEnqueuedElementPriority
 
 	| priorityQueue |
 
@@ -8,6 +8,6 @@ testPoppingRespectsPushedElementPriority
 	priorityQueue enqueue: 3 with: QueuePriority medium.
 	priorityQueue enqueue: 4 with: QueuePriority high.
 
-	self assert: priorityQueue pop equals: 4.
-	self assert: priorityQueue pop equals: 3.
-	self assert: priorityQueue pop equals: 2
+	self assert: priorityQueue dequeue equals: 4.
+	self assert: priorityQueue dequeue equals: 3.
+	self assert: priorityQueue dequeue equals: 2

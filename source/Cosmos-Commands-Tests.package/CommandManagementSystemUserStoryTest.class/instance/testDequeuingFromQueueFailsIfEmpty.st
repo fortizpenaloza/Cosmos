@@ -1,8 +1,8 @@
 tests
-testPoppingFromQueueFailsIfEmpty
+testDequeuingFromQueueFailsIfEmpty
 
 	self
 		should:
-			[ self commandManagementSystem pop ]
+			[ self commandManagementSystem dequeue ]
 		raise: QueueIsEmpty
 		withDescription: 'Command priority queue is empty'

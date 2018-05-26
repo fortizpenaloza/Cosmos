@@ -1,5 +1,5 @@
 tests
-testPoppingCommandFormattedAsPlainText
+testDequeuingCommandFormattedAsPlainText
 
 	| interface response |
 

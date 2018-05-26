@@ -1,5 +1,5 @@
 tests
-testPushingCommand
+testEnqueuingCommand
 
 	| interface prioritizedCommand |
 

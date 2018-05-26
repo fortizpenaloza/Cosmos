@@ -1,8 +1,8 @@
 managing
-pop
+dequeue
 
 	^ [ | prioritizedCommand |
-			prioritizedCommand := priorityQueue pop.
+			prioritizedCommand := priorityQueue dequeue.
 			self unregister: prioritizedCommand.
 			prioritizedCommand ]
 		on: QueueIsEmpty

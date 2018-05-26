@@ -2,20 +2,11 @@ private-baselines
 setUpDependencies: spec
 
 	spec
-		baseline: 'Buoy'
-		with: [ spec
-				repository: 'github://ba-st/Buoy:master/source';
-				loads: #('Deployment') ].
-	spec
-		baseline: 'Chalten'
-		with: [ spec
-				repository: 'github://ba-st/chalten:v6.0.0/repository';
-				loads: #('Core') ].
-	spec
 		baseline: 'Kepler'
 		with: [ spec
-				repository: 'github://iot-uca/Kepler:master/source';
+				repository: 'github://ba-st/Kepler:master/source';
 				loads: #('Development') ].
+	
 	spec
 		configuration: 'Teapot'
 		with: [ spec
