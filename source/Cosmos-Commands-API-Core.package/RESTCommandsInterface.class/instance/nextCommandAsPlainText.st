@@ -1,4 +1,4 @@
 querying
 nextCommandAsPlainText
 
-	^ self commandManagementSystem pop command
+	^ self commandManagementSystem dequeue command

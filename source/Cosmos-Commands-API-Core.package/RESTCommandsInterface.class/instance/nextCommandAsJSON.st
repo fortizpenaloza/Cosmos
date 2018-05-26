@@ -2,4 +2,4 @@ querying
 nextCommandAsJSON
 
 	^ prioritizedCommandMapping
-		value: self commandManagementSystem pop
+		value: self commandManagementSystem dequeue

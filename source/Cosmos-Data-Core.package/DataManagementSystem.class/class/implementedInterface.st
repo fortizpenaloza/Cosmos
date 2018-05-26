@@ -1,4 +1,4 @@
 system specification
 implementedInterface
 
-	^ Interfaces >> #DataManagementSystemInterface 
+	^ SystemInterface >> #DataManagementSystemInterface 

@@ -4,4 +4,4 @@ registerCommandManagementSystemInterface
 	self
 		registerInterfaceAs: #CommandManagementSystemInterface
 		named: 'Command Management System Interface'
-		offering: #(#push:with: #pop #prioritizedCommands)
+		declaring: #(#enqueue:with: #dequeue #prioritizedCommands)

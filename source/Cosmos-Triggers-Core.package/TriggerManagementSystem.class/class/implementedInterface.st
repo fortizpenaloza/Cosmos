@@ -1,4 +1,4 @@
 system specification
 implementedInterface
 
-	^ Interfaces >> #TriggerManagementSystemInterface
+	^ SystemInterface >> #TriggerManagementSystemInterface

@@ -2,5 +2,5 @@ installing
 install
 
 	self commandManagementSystem
-		push: self class turnOnLedCommand
+		enqueue: self class turnOnLedCommand
 		with: QueuePriority high
