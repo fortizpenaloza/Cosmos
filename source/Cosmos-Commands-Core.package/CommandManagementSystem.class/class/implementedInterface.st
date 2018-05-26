@@ -1,4 +1,4 @@
 system specification
 implementedInterface
 
-	^ Interfaces >> #CommandManagementSystemInterface
+	^ SystemInterface >> #CommandManagementSystemInterface
