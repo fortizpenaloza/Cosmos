@@ -32,7 +32,7 @@ TriggersAPITest >> setUp [
 
 	super setUp.
 
-	interface := TriggersAPI workingWith: (TriggersAPIContext workingWith: rootSystem).
+	interface := TriggersAPI workingWithin: (TriggersAPIContext workingWith: rootSystem).
 
 	(SensorsSampleAddOn on: rootSystem) install.
 
@@ -66,13 +66,13 @@ TriggersAPITest >> testQueryingTriggers [
 	interface
 		registerFrom:
 			'{
-	"name" : "Always set triggered to true",
+	"name" : "Set triggered to true periodically every 5 minutes",
 	"action" : "Set triggered to true",
 	"policy" : {
 		"type" : "periodical",
 		"time_interval" : "5 minutes"
 	},
-	"condition" : "true"
+	"conditions" : [ ]
 }'.
 
 	response := interface triggers.
@@ -88,29 +88,29 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 	| response |
 
 	self triggerManagementSystem
-		triggerNamed: 'Always set triggered to true'
+		triggerNamed: 'Set triggered to true on data point registration'
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
 	response := interface
 		registerFrom:
 			'{
-	"name" : "Always set triggered to true",
+	"name" : "Set triggered to true on data point registration",
 	"action" : "Set triggered to true",
 	"policy" : {
 		"type" : "data_point_registration",
 		"data_stream" : "Temperature"
 	},
-	"condition" : "true"
+	"conditions" : [ ]
 }'.
 
 	self assert: response code equals: 201.
 
 	self triggerManagementSystem
-		triggerNamed: 'Always set triggered to true'
+		triggerNamed: 'Set triggered to true on data point registration'
 		ifFound: [ :trigger | 
 			self
-				assert: trigger name equals: 'Always set triggered to true';
+				assert: trigger name equals: 'Set triggered to true on data point registration';
 				assert: trigger creationDateTime equals: self timeSystem dateTime ]
 		ifNone: [ self fail ]
 ]
@@ -119,27 +119,27 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 
 	self triggerManagementSystem
-		triggerNamed: 'Always set triggered to true'
+		triggerNamed: 'Set triggered to true periodically every 5 minutes'
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
 	interface
 		registerFrom:
 			'{
-	"name" : "Always set triggered to true",
+	"name" : "Set triggered to true periodically every 5 minutes",
 	"action" : "Set triggered to true",
 	"policy" : {
 		"type" : "periodical",
 		"time_interval" : "00:05:00"
 	},
-	"condition" : "true"
+	"conditions" : [ ]
 }'.
 
 	self triggerManagementSystem
-		triggerNamed: 'Always set triggered to true'
+		triggerNamed: 'Set triggered to true periodically every 5 minutes'
 		ifFound: [ :trigger | 
 			self
-				assert: trigger name equals: 'Always set triggered to true';
+				assert: trigger name equals: 'Set triggered to true periodically every 5 minutes';
 				assert: trigger creationDateTime equals: self timeSystem dateTime ]
 		ifNone: [ self fail ]
 ]
@@ -149,14 +149,14 @@ TriggersAPITest >> triggersAsJSON [
 
 	^ '[
 	{
-		"name" : "Always set triggered to true",
+		"name" : "Set triggered to true periodically every 5 minutes",
 		"created_on" : "2015-09-06T12:00:00<1p>",
+		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "periodical",
 			"time_interval" : "5 minutes"
 		},
-		"action" : "Set triggered to true",
-		"condition" : "true"
+		"conditions" : [ ]
 	}
 ]' expandMacrosWith: TimeZones local offset
 ]
