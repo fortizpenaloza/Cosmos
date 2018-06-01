@@ -23,4 +23,4 @@ deploy:
   provider: script
   script: docker push "${IMAGE_NAME}"
   on:
-    branch: Docker
+    branch: master
