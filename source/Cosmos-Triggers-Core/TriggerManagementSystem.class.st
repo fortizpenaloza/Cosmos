@@ -193,7 +193,7 @@ TriggerManagementSystem >> triggeringContext [
 { #category : #querying }
 TriggerManagementSystem >> triggers [
 
-	^ triggers
+	^ triggers copy
 ]
 
 { #category : #'private-querying' }

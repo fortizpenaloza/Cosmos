@@ -5,15 +5,15 @@ Class {
 }
 
 { #category : #accessing }
-DataStreamTest >> octoberFirstOf2014AtMidnight [
+DataStreamTest >> decemberTenthOf2016AtNoon [
 
-	^ (October tenth, 2014) atMidnight
+	^ (December tenth , 2016) atNoon
 ]
 
 { #category : #accessing }
-DataStreamTest >> septemberSixthOf2014AtNoon [
+DataStreamTest >> octoberFirstOf2014AtMidnight [
 
-	^ (September sixth , 2014) atNoon
+	^ (October tenth, 2014) atMidnight
 ]
 
 { #category : #tests }
@@ -23,7 +23,7 @@ DataStreamTest >> testAccessingCurrentValue [
 
 	dataStream := DataStream
 		named: 'Temperature'
-		createdOn: self septemberSixthOf2014AtNoon.
+		createdOn: self decemberTenthOf2016AtNoon.
 
 	self
 		should: [ dataStream currentValue ]
@@ -44,7 +44,7 @@ DataStreamTest >> testAccessingLastUpdate [
 
 	dataStream := DataStream
 		named: 'Temperature'
-		createdOn: self septemberSixthOf2014AtNoon.
+		createdOn: self decemberTenthOf2016AtNoon.
 
 	self
 		should: [ dataStream lastUpdate ]
@@ -65,7 +65,7 @@ DataStreamTest >> testAddingDataPoint [
 
 	dataStream := DataStream
 		named: 'Temperature'
-		createdOn: self septemberSixthOf2014AtNoon.
+		createdOn: self decemberTenthOf2016AtNoon.
 
 	self assert: dataStream dataPoints isEmpty.
 

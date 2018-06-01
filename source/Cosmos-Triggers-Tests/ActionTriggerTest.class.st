@@ -5,15 +5,15 @@ Class {
 }
 
 { #category : #accessing }
-ActionTriggerTest >> fiveMinutes [
+ActionTriggerTest >> decemberTenthOf2016AtNoon [
 
-	^ TimeUnits minute with: 5
+	^ (December tenth , 2016) atNoon
 ]
 
 { #category : #accessing }
-ActionTriggerTest >> septemberSixthOf2014AtNoon [
+ActionTriggerTest >> fiveMinutes [
 
-	^ (September sixth , 2015) atNoon
+	^ TimeUnits minute with: 5
 ]
 
 { #category : #tests }
@@ -24,16 +24,16 @@ ActionTriggerTest >> testInstanceCreationAndAccessing [
 	triggered := false.
 
 	trigger := ActionTrigger
-		named: 'Set triggered to true'
-		createdOn: self septemberSixthOf2014AtNoon
+		named: 'Set triggered to true periodically every 5 minutes'
+		createdOn: self decemberTenthOf2016AtNoon
 		triggering: [ triggered := true ]
 		accordingTo: (PeriodicalTriggeringPolicy every: self fiveMinutes)
 		ifSatisfies: AlwaysTriggeringCondition new.
 
 	self
-		assert: trigger name equals: 'Set triggered to true';
+		assert: trigger name equals: 'Set triggered to true periodically every 5 minutes';
 		assert: trigger creationDateTime
-			equals: self septemberSixthOf2014AtNoon;
+			equals: self decemberTenthOf2016AtNoon;
 		deny: triggered.
 
 	trigger ifSatisfiedOn: nil withActionDo: [ :action | action value ].

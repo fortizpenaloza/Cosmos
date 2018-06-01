@@ -15,6 +15,14 @@ DataStreamCurrentValueTriggeringCondition class >> of: aDataStream comparingWith
 ]
 
 { #category : #'instance creation' }
+DataStreamCurrentValueTriggeringCondition class >> of: aDataStream isGreaterThan: aValue [
+
+	^ self
+		of: aDataStream
+		comparingWith: (ArithmeticCondition toBeGreaterThan: aValue)
+]
+
+{ #category : #'instance creation' }
 DataStreamCurrentValueTriggeringCondition class >> of: aDataStream isLessThan: aValue [
 
 	^ self

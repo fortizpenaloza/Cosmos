@@ -15,15 +15,15 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> dateTime [
 ]
 
 { #category : #accessing }
-DataStreamHasNotBeenUpdatedTriggeringConditionTest >> lastUpdate [
+DataStreamHasNotBeenUpdatedTriggeringConditionTest >> decemberTenthOf2016AtNoon [
 
-	^ lastUpdate
+	^ (December tenth , 2016) atNoon
 ]
 
 { #category : #accessing }
-DataStreamHasNotBeenUpdatedTriggeringConditionTest >> septemberSixthOf2014AtNoon [
+DataStreamHasNotBeenUpdatedTriggeringConditionTest >> lastUpdate [
 
-	^ (September sixth , 2015) atNoon
+	^ lastUpdate
 ]
 
 { #category : #tests }
@@ -35,7 +35,7 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> testIsSafisfiedWhenDataStr
 		checkingIf:
 			(DataStream
 				named: 'Temperature'
-				createdOn: self septemberSixthOf2014AtNoon)
+				createdOn: self decemberTenthOf2016AtNoon)
 		hasNotBeenUpdatedForMoreThan: (TimeUnits minute with: 10).
 
 	self
