@@ -44,7 +44,7 @@ ActionsAPIContext >> parse: aKey from: aDictionary with: aParser [
 		parse: aKey
 		from: aDictionary
 		with: aParser
-		ifNotFound: [ Error signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
+		ifNotFound: [ ParsingFailed signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
 ]
 
 { #category : #'private-parsing' }

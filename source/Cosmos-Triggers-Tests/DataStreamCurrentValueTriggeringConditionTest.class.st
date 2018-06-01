@@ -17,9 +17,9 @@ DataStreamCurrentValueTriggeringConditionTest >> currentValue [
 ]
 
 { #category : #accessing }
-DataStreamCurrentValueTriggeringConditionTest >> septemberSixthOf2014AtNoon [
+DataStreamCurrentValueTriggeringConditionTest >> decemberTenthOf2016AtNoon [
 
-	^ (September sixth , 2015) atNoon
+	^ (December tenth , 2016) atNoon
 ]
 
 { #category : #tests }
@@ -45,7 +45,7 @@ DataStreamCurrentValueTriggeringConditionTest >> testIsSafisfiedWhenDataStreamCu
 	| condition |
 
 	condition := DataStreamCurrentValueTriggeringCondition
-		of: (DataStream named: 'Test' createdOn: self septemberSixthOf2014AtNoon)
+		of: (DataStream named: 'Test' createdOn: self decemberTenthOf2016AtNoon)
 		isLessThan: 10.
 
 	self

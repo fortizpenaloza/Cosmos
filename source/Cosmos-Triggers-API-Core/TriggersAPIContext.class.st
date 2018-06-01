@@ -53,6 +53,96 @@ TriggersAPIContext >> initializeWorkingWith: aCompositeSystem [
 	rootSystem := aCompositeSystem 
 ]
 
+{ #category : #mapping }
+TriggersAPIContext >> mapToJson: anActionTrigger [
+
+	| jsonMapping |
+
+	jsonMapping := [ :object | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: ActionTrigger
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #name;
+						mapAccessor: #creationDateTime to: 'created_on';
+						mapAccessor: #action;
+						mapAccessor: #triggeringPolicy to: 'policy'.
+					(mapping mapInstVar: #condition to: #conditions) valueSchema: #Bleh ];
+				for: #Bleh
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :condition | 
+							| mappings |
+
+							mappings := Dictionary new.
+							mappings
+								at: AndCompositeTriggeringCondition put: [ Array withAll: (condition instVarNamed: #triggerConditions) ];
+								at: AlwaysTriggeringCondition put: [ Array empty ];
+								at: DataStreamCurrentValueTriggeringCondition
+									put: [ Array
+										with:
+											(OrderedDictionary new
+												at: #type put: #data_stream_current_value;
+												at: #data_stream put: (condition instVarNamed: #dataStream) name;
+												at: #condition put: (condition instVarNamed: #condition);
+												yourself) ];
+								at: TimeIntervalTriggeringCondition
+									put: [ Array
+										with:
+											(OrderedDictionary new
+												at: #type put: #time_interval;
+												at: #from put: (condition instVarNamed: #timeInterval) from;
+												at: #to put: (condition instVarNamed: #timeInterval) to;
+												yourself) ];
+								yourself.
+							(mappings at: condition class) value ] ];
+				for: TimeIntervalTriggeringCondition
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :condition | 
+							OrderedDictionary new
+								at: #type put: #time_interval;
+								at: #from put: (condition instVarNamed: #timeInterval) from;
+								at: #to put: (condition instVarNamed: #timeInterval) to;
+								yourself ] ];
+				for: DataStreamCurrentValueTriggeringCondition
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :condition | 
+							OrderedDictionary new
+								at: #type put: #data_stream_current_value;
+								at: #data_stream put: (condition instVarNamed: #dataStream) name;
+								at: #condition put: (condition instVarNamed: #condition);
+								yourself ] ];
+				for: Action customDo: [ :mapping | mapping encoder: [ :action | action name ] ];
+				for: PeriodicalTriggeringPolicy
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :policy | 
+							{(#type -> #periodical).
+							(#time_interval -> (policy instVarNamed: #timePeriod))} asOrderedDictionary ] ];
+				for: DataPointRegistrationTriggeringPolicy
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :policy | 
+							{(#type -> #on_data_point_registration).
+							(#data_stream -> ((policy instVarNamed: #dataStream) instVarNamed: #name))} asOrderedDictionary ] ];
+				for: ArithmeticCondition
+					do: [ :mapping | 
+					mapping
+						mapInstVar: #arithmeticOperator to: #operator;
+						mapInstVar: #value ];
+				for: Measure customDo: [ :mapping | mapping encoder: [ :measure | measure printString ] ];
+				for: TimeOfDay customDo: [ :mapping | mapping encoder: [ :timeOfDay | timeOfDay printString ] ];
+				for: DateTime customDo: [ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				prettyPrint: true;
+				nextPut: object ] ].
+
+	^ jsonMapping value: anActionTrigger
+]
+
 { #category : #'private-parsing' }
 TriggersAPIContext >> parse: aKey from: aDictionary with: aParser [
 
@@ -60,7 +150,7 @@ TriggersAPIContext >> parse: aKey from: aDictionary with: aParser [
 		parse: aKey
 		from: aDictionary
 		with: aParser
-		ifNotFound: [ Error signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
+		ifNotFound: [ ParsingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
 ]
 
 { #category : #'private-parsing' }
@@ -117,7 +207,7 @@ TriggersAPIContext >> parseTriggeringPolicyFrom: aJSON [
 { #category : #'private-parsers' }
 TriggersAPIContext >> timeIntervalParser [
 
-	^ BlockToParserAdapter onParsingEvaluate: [:string |  TimeUnits minute with: 5 ]
+	^ BlockToParserAdapter onParsingEvaluate: [ :string | TimeUnits minute with: 5 ]
 ]
 
 { #category : #systems }
