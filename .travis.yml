@@ -16,12 +16,12 @@ smalltalk:
   - Pharo-6.1
 
 before_deploy:
-  - cp "${SMALLTALK_CI_IMAGE}" Cosmos.image
-  - docker pull "$IMAGE_NAME" || true
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-  - docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
+    - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USER}" --password-stdin
 deploy:
   provider: script
-  script: docker push "${IMAGE_NAME}"
+  script:
+    - cp "${SMALLTALK_CI_IMAGE}" Cosmos.image
+    - docker build --pull --tag "${IMAGE_NAME}" .
+    - docker push "${IMAGE_NAME}"
   on:
     branch: Docker
