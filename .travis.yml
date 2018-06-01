@@ -17,11 +17,10 @@ smalltalk:
 
 before_deploy:
     - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USER}" --password-stdin
-deploy:
-  provider: script
-  script:
     - cp "${SMALLTALK_CI_IMAGE}" Cosmos.image
     - docker build --pull --tag "${IMAGE_NAME}" .
-    - docker push "${IMAGE_NAME}"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}"
   on:
     branch: Docker
