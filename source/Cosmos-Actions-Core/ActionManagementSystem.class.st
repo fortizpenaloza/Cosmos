@@ -41,7 +41,7 @@ ActionManagementSystem >> deregisterNamed: aName [
 	self
 		actionNamed: aName
 		ifFound: [ :action | self deregister: action ]
-		ifNone: [ ObjectNotFoundInSystem signal: 'Action not found in system' ]
+		ifNone: [ ObjectNotFound signal: 'Action not found in system' ]
 ]
 
 { #category : #'initialize-release' }
@@ -58,7 +58,7 @@ ActionManagementSystem >> register: anAction [
 
 	actions
 		detect: [ :action | action name = anAction name ]
-		ifFound: [ :action | ObjectAlreadyInSystem signal: 'An action with that name already exists in system' ]
+		ifFound: [ :action | ConflictingObjectFound signal: 'An action with that name already exists in system' ]
 		ifNone: [ actions add: anAction ]
 ]
 

@@ -117,6 +117,6 @@ ActionManagementSystemUserStoryTest >> testRegistrationFailsWhenActionAlreadyExi
 		should: [ action := self actionManagementSystem
 				registerNamed: 'Send YO to Fran'
 				toEvaluate: [ "empty" ] ]
-		raise: ObjectAlreadyInSystem
+		raise: ConflictingObjectFound
 		withDescription: 'An action with that name already exists in system'
 ]

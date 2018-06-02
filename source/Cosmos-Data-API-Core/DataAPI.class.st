@@ -10,9 +10,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataAPI class >> workingWith: aCompositeSystem [ 
+DataAPI class >> workingWithin: aCompositeSystem [ 
 	
-	^self new initializeWorkingWith: aCompositeSystem 
+	^self new initializeWorkingWithin: aCompositeSystem 
 ]
 
 { #category : #systems }
@@ -21,7 +21,7 @@ DataAPI >> dataManagementSystem [
 	^ rootSystem systemImplementing: #DataManagementSystemInterface
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 DataAPI >> initializeMappings [
 
 	dataStreamsSnapshotsMapping := [ :object | 
@@ -65,10 +65,10 @@ DataAPI >> initializeMappings [
 				nextPut: object ] ]
 ]
 
-{ #category : #'initialize-release' }
-DataAPI >> initializeWorkingWith: aCompositeSystem [
+{ #category : #initialization }
+DataAPI >> initializeWorkingWithin: aContext [
 
-	rootSystem := aCompositeSystem.
+	rootSystem := aContext.
 	self initializeMappings
 ]
 
@@ -132,7 +132,7 @@ DataAPI >> registerStreamFrom: aJSON [
 
 	self dataManagementSystem registerStreamNamed: name.
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
-		on: ObjectAlreadyInSystem
+		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
