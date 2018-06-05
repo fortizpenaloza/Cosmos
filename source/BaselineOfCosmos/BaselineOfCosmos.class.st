@@ -54,7 +54,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 			with: [ spec requires: #('Cosmos-API-Core' 'Cosmos-Triggers-Core') ]
 ]
 
-{ #category : #baselines }
+{ #category : #'private-baselines' }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
@@ -87,7 +87,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 		package: 'Cosmos-ActionEvaluator-Core'
 ]
 
-{ #category : #baselines }
+{ #category : #'private-baselines' }
 BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 
 	spec

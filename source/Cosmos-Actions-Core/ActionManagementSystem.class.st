@@ -41,7 +41,7 @@ ActionManagementSystem >> deregisterNamed: aName [
 	self
 		actionNamed: aName
 		ifFound: [ :action | self deregister: action ]
-		ifNone: [ ObjectNotFound signal: 'Action not found in system' ]
+		ifNone: [ ObjectNotFound signal: 'Action not found in the system' ]
 ]
 
 { #category : #'initialize-release' }

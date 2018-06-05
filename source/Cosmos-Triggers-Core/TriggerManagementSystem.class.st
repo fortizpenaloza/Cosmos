@@ -59,7 +59,7 @@ TriggerManagementSystem >> deregisterNamed: aName [
 	self
 		triggerNamed: aName
 		ifFound: [ :trigger | self deregister: trigger accordingTo: trigger triggeringPolicy ]
-		ifNone: [ ObjectNotFound signal: 'Trigger not found in system' ]
+		ifNone: [ ObjectNotFound signal: 'Trigger not found in the system' ]
 ]
 
 { #category : #'events handling' }

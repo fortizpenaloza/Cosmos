@@ -10,8 +10,7 @@ DataAPIInstallerTest >> testInstallation [
 	| teapot |
 
 	teapot := Teapot on.
-
-	(DataAPIInstaller toWorkWith: self on: teapot) install.
+	(DataAPIInstaller toInstallOn: teapot workingWith: self) install.
 
 	self assert: teapot routes size equals: 4
 ]

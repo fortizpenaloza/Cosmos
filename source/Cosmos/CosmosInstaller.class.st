@@ -52,10 +52,10 @@ CosmosInstaller >> installAPIsOn: system [
 	| server |
 
 	server := self teapot.
-
-	(DataAPIInstaller toWorkWith: system on: server) install.
-	(TriggersAPIInstaller toWorkWith: system on: server) install.
-	(ActionsAPIInstaller toWorkWith: system on: server) install.
+	(DataAPIInstaller toInstallOn: server workingWith: system) install.
+	(TriggersAPIInstaller toInstallOn: server workingWith: system)
+		install.
+	(ActionsAPIInstaller toInstallOn: server workingWith: system) install.
 
 	server
 		exception:
@@ -64,7 +64,7 @@ CosmosInstaller >> installAPIsOn: system [
 					(ZnResponse statusCode: signal tag)
 						entity: (ZnEntity json: signal messageText);
 						yourself ].
-					
+
 	server start
 ]
 

@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataAPIInstaller class >> toWorkWith: aCompositeSystem on: aServer [
-	
-	^ self new initializeToWorkWith: aCompositeSystem on: aServer
+DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+
+	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
 { #category : #'private-installing' }
@@ -50,7 +50,7 @@ DataAPIInstaller >> addRegisterDataStreamRoute [
 ]
 
 { #category : #initialization }
-DataAPIInstaller >> initializeToWorkWith: aCompositeSystem on: aServer [
+DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCompositeSystem [
 
 	interface := DataAPI workingWithin: (DataAPIContext workingWith: aCompositeSystem).
 	server := aServer
