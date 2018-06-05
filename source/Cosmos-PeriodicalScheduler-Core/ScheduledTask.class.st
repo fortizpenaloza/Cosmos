@@ -5,7 +5,7 @@ Class {
 		'task',
 		'timePeriod'
 	],
-	#category : 'Cosmos-PeriodicalScheduler-Core-Cosmos-PeriodicalScheduler-Core'
+	#category : 'Cosmos-PeriodicalScheduler-Core'
 }
 
 { #category : #'instance creation' }
