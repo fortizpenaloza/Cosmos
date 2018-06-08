@@ -47,10 +47,12 @@ TriggersAPITest >> setUp [
 
 	super setUp.
 
-	interface := TriggersAPI workingWithin: (TriggersAPIContext workingWith: rootSystem).
-	
+	interface := (TriggersAPIInstaller toInstallOn: Teapot on workingWith: rootSystem)
+		install;
+		installedInterface.
+
 	(SensorsSampleAddOn on: rootSystem) install.
-	
+
 	setTriggeredToTrue := self actionManagementSystem
 		registerNamed: 'Set triggered to true'
 		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
@@ -90,8 +92,11 @@ TriggersAPITest >> testMappingSetTriggeredToTrueAfterDataPointWasRegisteredOnTem
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
 		whenMeets: AlwaysTriggeringCondition new.
 
-	response := interface triggers.	"according to a request"
-
+	response := interface
+		triggersFor:
+			((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
+				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
+				yourself).
 	self
 		assert: response isSuccess;
 		assert: response contents
@@ -265,7 +270,11 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 
 	response := interface
 		registerFrom:
-			'{
+			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
+				entity:
+					(ZnEntity
+						with:
+							'{
 	"name" : "Set triggered to true on data point registration",
 	"action" : "Set triggered to true",
 	"policy" : {
@@ -273,7 +282,8 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 		"data_stream" : "Temperature"
 	},
 	"conditions" : [ ]
-}'.
+}'
+						type: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'))).
 
 	self assert: response code equals: 201.
 

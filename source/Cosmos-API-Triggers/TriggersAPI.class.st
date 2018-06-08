@@ -32,7 +32,11 @@ TriggersAPI >> initializeWorkingWithin: aContext [
 ]
 
 { #category : #API }
-TriggersAPI >> registerFrom: aJSON [
+TriggersAPI >> registerFrom: anHttpRequest [
+
+	| aJSON mimeType |
+	aJSON := anHttpRequest contents.
+	mimeType := anHttpRequest contentType.
 
 	^ [ [ | rawTrigger |
 
@@ -40,13 +44,15 @@ TriggersAPI >> registerFrom: aJSON [
 		propertyNamesAsSymbols: true;
 		next.
 
+	context register: aJSON encodedAs: mimeType.
+
 	self triggerManagementSystem
 		registerNamed: (rawTrigger at: #name)
 		triggering: (context parseActionFrom: rawTrigger)
 		accordingTo: (context parseTriggeringPolicyFrom: rawTrigger)
 		whenMeets: (context parseConditionFrom: rawTrigger).
 
-	ZnResponse created: (ZnUrl fromString: 'localhost') ]
+	ZnResponse created: (anHttpRequest requestLine uri) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound , ParsingFailed
@@ -64,8 +70,12 @@ TriggersAPI >> triggerManagementSystem [
 ]
 
 { #category : #API }
-TriggersAPI >> triggers [
+TriggersAPI >> triggersFor: aHttpRequest [
+
+	| mimeType |
+
+	mimeType := ZnMimeType fromString: aHttpRequest accept.
 
 	^ ZnResponse
-		ok: (ZnEntity json: (context mapToJson: self triggerManagementSystem triggers))
+		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType))
 ]

@@ -9,7 +9,7 @@ DynamicParserTest >> testParsing [
 
 	| parser triggerJSON policy context |
 
-	context := TriggersAPIContext workingWith: nil.
+	context := TriggersAPIContext workingWith: nil queryingMappingsTo: MappingRegistry new.
 
 	parser := (DynamicParser determiningParserBy: #type)
 		parsing: #periodical
