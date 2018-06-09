@@ -91,16 +91,6 @@ TriggersAPIContext >> parse: aKey from: aDictionary with: aParser ifNotFound: aN
 ]
 
 { #category : #parsing }
-TriggersAPIContext >> parseActionFrom: aJSON [
-
-	^ self
-		parse: #action
-		from: aJSON
-		with: self actionParser
-		ifNotFound: [ self halt ]
-]
-
-{ #category : #parsing }
 TriggersAPIContext >> parseConditionFrom: aJSON [
 
 	^ AlwaysTriggeringCondition new

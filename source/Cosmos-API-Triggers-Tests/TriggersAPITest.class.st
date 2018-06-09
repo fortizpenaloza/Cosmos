@@ -104,10 +104,10 @@ TriggersAPITest >> testQueryingTriggers [
 
 	self
 		assert: response code equals: 200;
-		assert: response contents equals: '[
+		assert: response contents equals: ('[
 	{
 		"name" : "Set triggered to true after data point regisration on Temperature",
-		"created_on" : "2015-09-06T12:00:00-03:00",
+		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
@@ -117,7 +117,7 @@ TriggersAPITest >> testQueryingTriggers [
 	},
 	{
 		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "2015-09-06T12:00:00-03:00",
+		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "periodical",
@@ -125,7 +125,7 @@ TriggersAPITest >> testQueryingTriggers [
 		},
 		"conditions" : [ ]
 	}
-]'
+]' expandMacrosWith: TimeZones local offset)
 ]
 
 { #category : #tests }
@@ -231,7 +231,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 			('[
 	{
 		"name" : "Set triggered to true after data point regisration on Temperature",
-		"created_on" : "2015-09-06T12:00:00-03:00",
+		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
