@@ -7,6 +7,14 @@ Class {
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
+{ #category : #'tests support' }
+TriggersAPITest >> assert: aResponse wasSuccessfulAndContentEqualsTo: aString [
+
+	self
+		assert: aResponse code equals: 200;
+		assert: aResponse contents equals: (aString expandMacrosWith: TimeZones local offset)
+]
+
 { #category : #accessing }
 TriggersAPITest >> decemberTenthOf2016AtNoon [
 
@@ -26,34 +34,70 @@ TriggersAPITest >> fiveMinutes [
 ]
 
 { #category : #accessing }
+TriggersAPITest >> getTriggersHttpRequest [
+
+	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
+		setAccept: self triggerJsonVersion1dot0dot0MimeType
+]
+
+{ #category : #accessing }
 TriggersAPITest >> ninePM [
 	
 	^ TimeOfDay hours: 21
 ]
 
 { #category : #accessing }
+TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
+
+	self triggerManagementSystem
+		registerNamed:
+			'Set triggered to true after a data point greater than 11 was registered on Temperature'
+		triggering: self setTriggedToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
+		whenMeets:
+			(DataStreamCurrentValueTriggeringCondition of: self temperature isGreaterThan: 11)
+]
+
+{ #category : #accessing }
+TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
+
+	self triggerManagementSystem
+		registerNamed: 'Set triggered to true after a data point was registered on Temperature'
+		triggering: self setTriggedToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
+		whenMeets: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
+TriggersAPITest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
+
+	self triggerManagementSystem
+		registerNamed: 'Set triggered to true periodically every 5 minutes'
+		triggering: self setTriggedToTrue
+		accordingTo: (PeriodicalTriggeringPolicy every: self fiveMinutes)
+		whenMeets: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
 TriggersAPITest >> setTriggedToTrue [
 
-	^ Action
-		named: 'Set triggered to true'
-		createdOn: self decemberTenthOf2016AtNoon
-		toEvaluate: (BlockEvaluationPolicy for: [ "do nothing" ])
+	^ self actionManagementSystem
+		actionNamed: 'Set triggered to true'
+		ifFound: [ :action | action ]
+		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
 { #category : #initialization }
 TriggersAPITest >> setUp [
 
-	| setTriggeredToTrue |
-
 	super setUp.
 
-	interface := (TriggersAPIInstaller
-		toInstallOn: Teapot on
-		workingWith: rootSystem) install.
+	interface := (TriggersAPIInstaller toInstallOn: Teapot on workingWith: rootSystem)
+		install.
 
 	(SensorsSampleAddOn on: rootSystem) install.
 
-	setTriggeredToTrue := self actionManagementSystem
+	self actionManagementSystem
 		registerNamed: 'Set triggered to true'
 		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
 ]
@@ -71,8 +115,11 @@ TriggersAPITest >> setUpRequirements [
 
 { #category : #accessing }
 TriggersAPITest >> temperature [
-	
-	^ DataStream named: 'Temperature' createdOn: self decemberTenthOf2016AtNoon 
+
+	^ self dataManagementSystem 
+		streamNamed: 'Temperature'
+		ifFound: [ :stream | stream ]
+		ifNone: [ ObjectNotFound signal: 'Data stream not found' ]
 ]
 
 { #category : #accessing }
@@ -82,31 +129,22 @@ TriggersAPITest >> tenMinutes [
 ]
 
 { #category : #tests }
-TriggersAPITest >> testQueryingTriggers [
+TriggersAPITest >> testGettingTriggers [
 
 	| response |
-	
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point regisration on Temperature'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
-		whenMeets: AlwaysTriggeringCondition new.
-
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true periodically every 5 minutes'
-		triggering: self setTriggedToTrue
-		accordingTo: (PeriodicalTriggeringPolicy every: self fiveMinutes)
-		whenMeets: AlwaysTriggeringCondition new.
-
-	response := interface triggersFor: ((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
-				yourself).
 
 	self
-		assert: response code equals: 200;
-		assert: response contents equals: ('[
+		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature;
+		registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
+
+	response := interface triggersFor: self getTriggersHttpRequest.
+
+	self
+		assert: response
+		wasSuccessfulAndContentEqualsTo:
+			'[
 	{
-		"name" : "Set triggered to true after data point regisration on Temperature",
+		"name" : "Set triggered to true after a data point was registered on Temperature",
 		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
@@ -125,32 +163,40 @@ TriggersAPITest >> testQueryingTriggers [
 		},
 		"conditions" : [ ]
 	}
-]' expandMacrosWith: TimeZones local offset)
+]'
 ]
 
 { #category : #tests }
-TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
+TriggersAPITest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion [
+
+	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+
+	self
+		should: [ interface
+				triggersFor:
+					((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
+						setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0')) ]
+		raise: HTTPClientError
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Encoder not found for given schema' ]
+]
+
+{ #category : #tests }
+TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	| response |
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point regisration on Temperature'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
-		whenMeets: AlwaysTriggeringCondition new.
+	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
-	response := interface
-		triggersFor:
-			((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
-				yourself).
+	response := interface triggersFor: self getTriggersHttpRequest.
+
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
 			('[
 	{
-		"name" : "Set triggered to true after data point regisration on Temperature",
+		"name" : "Set triggered to true after a data point was registered on Temperature",
 		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
@@ -167,24 +213,17 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 
 	| response |
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point regisration on Temperature'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
-		whenMeets: (DataStreamCurrentValueTriggeringCondition of: self temperature isGreaterThan: 11).
+	self
+		registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
-	response := interface
-		triggersFor:
-			((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
-				yourself).
+	response := interface triggersFor: self getTriggersHttpRequest.
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
 			('[
 	{
-		"name" : "Set triggered to true after data point regisration on Temperature",
+		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature",
 		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
@@ -211,26 +250,24 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 	| response |
 
 	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point regisration on Temperature'
+		registerNamed: 'Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM'
 		triggering: self setTriggedToTrue
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
 		whenMeets:
 			(AndCompositeTriggeringCondition
 				with: (DataStreamCurrentValueTriggeringCondition of: self temperature isGreaterThan: 11)
-				with: (TimeIntervalTriggeringCondition checkingCurrentTimeIsBetween: (self eightPM to: self ninePM))).
+				with:
+					(TimeIntervalTriggeringCondition
+						checkingCurrentTimeIsBetween: (self eightPM to: self ninePM))).
 
-	response := interface
-		triggersFor:
-			((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
-				yourself).
+	response := interface triggersFor: self getTriggersHttpRequest.
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
 			('[
 	{
-		"name" : "Set triggered to true after data point regisration on Temperature",
+		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM",
 		"created_on" : "2015-09-06T12:00:00<1p>",
 		"action" : "Set triggered to true",
 		"policy" : {
@@ -261,17 +298,9 @@ TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryF
 
 	| response |
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true periodically every 5 minutes'
-		triggering: self setTriggedToTrue
-		accordingTo: (PeriodicalTriggeringPolicy every: self fiveMinutes)
-		whenMeets: AlwaysTriggeringCondition new.
+	self registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := interface
-		triggersFor:
-			((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-				setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0');
-				yourself).
+	response := interface triggersFor: self getTriggersHttpRequest.
 
 	self
 		assert: response isSuccess;
@@ -316,7 +345,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 	},
 	"conditions" : [ ]
 }'
-						type: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'))).
+						type: self triggerJsonVersion1dot0dot0MimeType)).
 
 	self
 		assert: response code equals: 201;
@@ -326,7 +355,8 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 		triggerNamed: 'Set triggered to true on data point registration'
 		ifFound: [ :trigger | 
 			self
-				assert: trigger name equals: 'Set triggered to true on data point registration';
+				assert: trigger name
+					equals: 'Set triggered to true on data point registration';
 				assert: trigger creationDateTime equals: self timeSystem dateTime ]
 		ifNone: [ self fail ]
 ]
@@ -371,26 +401,9 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 		ifNone: [ self fail ]
 ]
 
-{ #category : #tests }
+{ #category : #accessing }
 TriggersAPITest >> triggerJsonVersion1dot0dot0MimeType [
 
 	^ ZnMimeType
 		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
-]
-
-{ #category : #'expected results' }
-TriggersAPITest >> triggersAsJSON [
-
-	^ '[
-	{
-		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "2015-09-06T12:00:00<1p>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "periodical",
-			"time_interval" : "5 minutes"
-		},
-		"conditions" : [ ]
-	}
-]' expandMacrosWith: TimeZones local offset
 ]
