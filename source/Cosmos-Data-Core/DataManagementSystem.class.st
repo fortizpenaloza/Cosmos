@@ -50,8 +50,8 @@ DataManagementSystem >> register: aValue toStreamNamed: aName [
 	self
 		streamNamed: aName
 		ifFound: [ :dataStream | self registerPoint: dataPoint to: dataStream ]
-		ifNone: [ ObjectNotFoundInSystem
-				signal: 'A data stream with that name does not exists in system' ].
+		ifNone: [ ObjectNotFound
+				signal: 'Data stream not found in the system' ].
 
 	^ dataPoint
 ]
@@ -77,7 +77,7 @@ DataManagementSystem >> registerStreamNamed: aName [
 	^ self
 		streamNamed: aName
 		ifFound: [ :dataStream | 
-			ObjectAlreadyInSystem
+			ConflictingObjectFound
 				signal: 'A data stream with that name already exists in system' ]
 		ifNone: [ self
 				registerStream: (DataStream named: aName createdOn: timeSystem dateTime) ]

@@ -23,18 +23,6 @@ ActionTrigger class >> named: aName createdOn: aDateTime triggering: anAction ac
 ]
 
 { #category : #accessing }
-ActionTrigger >> action [
-
-	^ action 
-]
-
-{ #category : #accessing }
-ActionTrigger >> condition [
-
-	^ condition 
-]
-
-{ #category : #accessing }
 ActionTrigger >> creationDateTime [
 
 	^ creationDateTime

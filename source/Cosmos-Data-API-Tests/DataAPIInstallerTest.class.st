@@ -7,13 +7,10 @@ Class {
 { #category : #tests }
 DataAPIInstallerTest >> testInstallation [
 
-	| system teapot |
+	| teapot |
 
 	teapot := Teapot on.
-
-	system := nil.
-
-	(DataAPIInstaller toWorkWith: system on: teapot) install.
+	(DataAPIInstaller toInstallOn: teapot workingWith: self) install.
 
 	self assert: teapot routes size equals: 4
 ]

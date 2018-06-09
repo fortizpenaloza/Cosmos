@@ -2,38 +2,66 @@ Class {
 	#name : #DataAPIInstaller,
 	#superclass : #Object,
 	#instVars : [
-		'system',
-		'server'
+		'server',
+		'interface'
 	],
-	#category : 'Cosmos-Data-API-Core'
+	#category : #'Cosmos-Data-API-Core'
 }
 
 { #category : #'instance creation' }
-DataAPIInstaller class >> toWorkWith: aCompositeSystem on: aServer [
-	
-	^ self new initializeToWorkWith: aCompositeSystem on: aServer
+DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+
+	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
-{ #category : #'initialize-release' }
-DataAPIInstaller >> initializeToWorkWith: aCompositeSystem on: aServer [
+{ #category : #'private-installing' }
+DataAPIInstaller >> addBulkDataPointRegistrationRoute [
 
-	system := aCompositeSystem .
-	server := aServer 
+	server
+		POST:
+			'/data-points'
+				-> [ :request | interface registerBulkPointsFrom: request contents ];
+		output: #text
+]
+
+{ #category : #'private-installing' }
+DataAPIInstaller >> addGetDataStreamRoute [
+
+	server
+		GET:
+			'/data-streams/<name>'
+				-> [ :request | interface streamNamed: (request at: #name) ]
+]
+
+{ #category : #'private-installing' }
+DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
+
+	server GET: '/data-streams' -> [ :request | interface streams ]
+]
+
+{ #category : #'private-installing' }
+DataAPIInstaller >> addRegisterDataStreamRoute [
+
+	server
+		POST:
+			'/data-streams'
+				-> [ :request | interface registerStreamFrom: request contents ];
+		output: #text
+]
+
+{ #category : #initialization }
+DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
+
+	interface := DataAPI workingWithin: aCosmosSystem.
+	server := aServer
 ]
 
 { #category : #installing }
 DataAPIInstaller >> install [
 
-	| interface |
-
-	interface := DataAPI workingWith: system.
-
-	server
-		GET: '/data-streams' -> [ :request | interface streams ];
-		"streamsSnapshot"
-			GET: '/data-streams/<name>' -> [ :request | interface streamNamed: (request at: #name) ];
-		POST: '/data-streams' -> [ :request | interface registerStreamFrom: request contents ];
-		output: #text;
-		POST: '/data-points' -> [ :request | interface registerBulkPointsFrom: request contents ];
-		output: #text
+	self
+		addGetDataStreamSnapshotsRoute;
+		addGetDataStreamRoute;
+		addRegisterDataStreamRoute;
+		addBulkDataPointRegistrationRoute
 ]

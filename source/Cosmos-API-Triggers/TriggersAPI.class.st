@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'context'
 	],
-	#category : #'Cosmos-Triggers-API-Core-Model'
+	#category : #'Cosmos-API-Triggers-Model'
 }
 
 { #category : #'instance creation' }
@@ -25,31 +25,23 @@ TriggersAPI >> deregisterNamed: aName [
 	^ ZnResponse noContent
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 TriggersAPI >> initializeWorkingWithin: aContext [
 
 	context := aContext
 ]
 
 { #category : #API }
-TriggersAPI >> registerFrom: aJSON [
+TriggersAPI >> registerFrom: anHttpRequest [
 
-	^ [ [ | rawTrigger |
+	^ [ [ context
+		register: anHttpRequest contents
+		encodedAs: anHttpRequest contentType.
 
-	rawTrigger := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	self triggerManagementSystem
-		registerNamed: (rawTrigger at: #name)
-		triggering: (context  parseActionFrom: rawTrigger) 
-		accordingTo: (context parseTriggeringPolicyFrom: rawTrigger) 
-		whenMeets: (context parseConditionFrom: rawTrigger).
-
-	ZnResponse created: (ZnUrl fromString: 'localhost') ]
-		on: ObjectAlreadyInSystem
+	ZnResponse created: anHttpRequest requestLine uri ]
+		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound , ParsingFailed 
+		on: KeyNotFound , ParsingFailed
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest:
@@ -64,8 +56,12 @@ TriggersAPI >> triggerManagementSystem [
 ]
 
 { #category : #API }
-TriggersAPI >> triggers [
+TriggersAPI >> triggersFor: anHttpRequest [
+
+	| mimeType |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
 
 	^ ZnResponse
-		ok: (ZnEntity json: (context mapToJson: self triggerManagementSystem triggers))
+		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType))
 ]

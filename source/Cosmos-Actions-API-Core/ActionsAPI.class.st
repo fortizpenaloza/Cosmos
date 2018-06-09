@@ -100,7 +100,7 @@ ActionsAPI >> registerFrom: aJSON [
 		toEvaluate: (context parseRequestFrom: rawAction).
 
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
-		on: ObjectAlreadyInSystem
+		on: ConflictingObjectFound
 		do: [ :signal | 
 			HTTPClientError
 				signalConflict: ('{"error":{"code": 409,"message":"<1s>"}}' expandMacrosWith: signal messageText) ] ]

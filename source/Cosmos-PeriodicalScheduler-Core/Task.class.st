@@ -5,7 +5,7 @@ Class {
 		'name',
 		'block'
 	],
-	#category : 'Cosmos-PeriodicalScheduler-Core-Cosmos-PeriodicalScheduler-Core'
+	#category : 'Cosmos-PeriodicalScheduler-Core'
 }
 
 { #category : #'instance creation' }

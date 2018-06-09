@@ -30,5 +30,7 @@ PeriodicalTriggeringPolicy >> initializeEvery: aTimePeriod [
 { #category : #registering }
 PeriodicalTriggeringPolicy >> register: aTrigger to: aTriggerSystem [
 
-	aTriggerSystem register: aTrigger toTriggerPeriodicallyEvery: timePeriod
+	aTriggerSystem 
+		register: aTrigger 
+		toTriggerPeriodicallyEvery: timePeriod
 ]

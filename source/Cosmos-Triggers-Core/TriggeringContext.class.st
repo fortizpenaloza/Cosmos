@@ -19,7 +19,7 @@ TriggeringContext >> dateTime [
 	^ dateTime
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 TriggeringContext >> initializeProviding: aDateTime [ 
 
 	dateTime := aDateTime 

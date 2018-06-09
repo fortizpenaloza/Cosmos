@@ -129,7 +129,7 @@ TriggerManagementSystemUserStoryTest >> testRegistrationFailsIfTriggerWithSameNa
 				triggering: self setTriggeredToTrue
 				periodicallyEvery: self tenMinutes
 				ifSatisfies: AlwaysTriggeringCondition new ]
-		raise: ObjectAlreadyInSystem
+		raise: ConflictingObjectFound
 		whoseDescriptionIncludes: 'Trigger with that name already exists in system'
 		description: 'Expected: Trigger with that name already exists in system'
 ]

@@ -47,8 +47,8 @@ DataManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotF
 
 	self
 		should: [ self dataManagementSystem register: 10 toStreamNamed: 'Temperature' ]
-		raise: ObjectNotFoundInSystem
-		withDescription: 'A data stream with that name does not exists in system'
+		raise: ObjectNotFound
+		withDescription: 'Data stream not found in the system'
 ]
 
 { #category : #tests }
@@ -73,7 +73,7 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyEx
 	self
 		should:
 			[ self dataManagementSystem registerStreamNamed: 'Temperature' ]
-		raise: ObjectAlreadyInSystem
+		raise: ConflictingObjectFound
 		withDescription: 'A data stream with that name already exists in system'
 ]
 

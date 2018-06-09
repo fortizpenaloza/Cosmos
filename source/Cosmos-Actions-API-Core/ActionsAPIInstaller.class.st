@@ -9,13 +9,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionsAPIInstaller class >> toWorkWith: aCompositeSystem on: aServer [
-	
-	^ self new initializeToWorkWith: aCompositeSystem on: aServer
+ActionsAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+
+	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
 { #category : #initialization }
-ActionsAPIInstaller >> initializeToWorkWith: aCompositeSystem on: aServer [
+ActionsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCompositeSystem [
 
 	rootSystem := aCompositeSystem .
 	server := aServer 

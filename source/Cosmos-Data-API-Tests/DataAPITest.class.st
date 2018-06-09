@@ -92,7 +92,7 @@ DataAPITest >> testDataPointBulkRegistration [
 	self deny: temperature currentValue = 24.
 	self deny: pressure currentValue = 89.
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 	response := interface registerBulkPointsFrom: self updateTemperatureAndPressureDataStreamsJSON.
 
 	self assert: response code equals: 201.
@@ -106,7 +106,7 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 
 	| interface |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 
 	self
 		should: [ interface
@@ -135,7 +135,7 @@ DataAPITest >> testDataStreamRegistration [
 		ifFound: [ :dataStream | self fail ]
 		ifNone: [ "do nothing" ].
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 	interface registerStreamFrom: '{"name": "pH"}'.
 
 	self dataManagementSystem
@@ -154,7 +154,7 @@ DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
 
 	| interface |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 
 	self
 		should: [ interface registerStreamFrom: '{"name": "Temperature"}' ]
@@ -167,7 +167,7 @@ DataAPITest >> testDataStreamRegistrationFailsWithMalformattedRequest [
 
 	| interface |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 
 	self
 		should: [ interface registerStreamFrom: '{"xxx": "Temperature"}' ]
@@ -180,7 +180,7 @@ DataAPITest >> testQueryingDataStreamsSnapshot [
 
 	| interface response |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 	response := interface streams.
 
 	self
@@ -193,7 +193,7 @@ DataAPITest >> testQueryingStreamByName [
 
 	| interface response |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 	response := interface streamNamed: 'Temperature'.
 
 	self
@@ -206,7 +206,7 @@ DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
 
 	| interface stream |
 
-	interface := DataAPI workingWith: rootSystem.
+	interface := DataAPI workingWithin: rootSystem.
 
 	self
 		should:
