@@ -65,12 +65,6 @@ TriggersAPIContext >> encode: anActionTrigger to: aMimeType [
 ]
 
 { #category : #initialization }
-TriggersAPIContext >> initializeWorkingWith: aCosmosSystem [ 
-
-	cosmosSystem := aCosmosSystem 
-]
-
-{ #category : #initialization }
 TriggersAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry [
 
 	cosmosSystem := aCosmosSystem.
