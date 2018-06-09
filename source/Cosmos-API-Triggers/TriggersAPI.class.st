@@ -44,9 +44,7 @@ TriggersAPI >> registerFrom: anHttpRequest [
 		on: KeyNotFound , ParsingFailed
 		do: [ :signal | 
 			HTTPClientError
-				signalBadRequest:
-					('{"error":{"code":400,"message":"Expected key <1s> was not found"}'
-						expandMacrosWith: signal key) ]
+				signalBadRequest: signal messageText ]
 ]
 
 { #category : #systems }
@@ -62,6 +60,12 @@ TriggersAPI >> triggersFor: anHttpRequest [
 
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
 
-	^ ZnResponse
-		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType))
+	^ [ [ ZnResponse
+		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType)) ]
+		on: ConflictingObjectFound
+		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
+		on: ObjectNotFound
+		do: [ :signal | 
+			HTTPClientError
+				signalBadRequest: signal messageText ]
 ]

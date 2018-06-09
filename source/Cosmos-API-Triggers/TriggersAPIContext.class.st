@@ -59,9 +59,9 @@ TriggersAPIContext >> decodeActionFrom: aJSON [
 ]
 
 { #category : #encoding }
-TriggersAPIContext >> encode: anActionTrigger to: aMimeType [
+TriggersAPIContext >> encode: aTriggerCollection to: aMimeType [
 
-	^ (mappingRegistry encoderFor: aMimeType) value: anActionTrigger
+	^ (mappingRegistry encoderFor: aMimeType) value: aTriggerCollection
 ]
 
 { #category : #initialization }
