@@ -47,12 +47,6 @@ MappingRegistryTest >> testEncoderRegistration [
 ]
 
 { #category : #accessing }
-MappingRegistryTest >> triggerAsJsonVersion1dot0dot0MimeType [
-
-	^ ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
-]
-
-{ #category : #accessing }
 MappingRegistryTest >> triggerJsonEncoderVersion1dot0dot0 [
 	
 	^ #triggerJsonEncoderVersion1dot0dot0
@@ -62,10 +56,4 @@ MappingRegistryTest >> triggerJsonEncoderVersion1dot0dot0 [
 MappingRegistryTest >> triggerJsonVersion1dot0dot0MimeType [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
-]
-
-{ #category : #accessing }
-MappingRegistryTest >> triggerToJsonMappingVersion1dot0dot0 [
-	
-	^ #triggerToJsonMappingVersion1dot0dot0
 ]
