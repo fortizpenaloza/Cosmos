@@ -50,9 +50,9 @@ DataAPIInstaller >> addRegisterDataStreamRoute [
 ]
 
 { #category : #initialization }
-DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCompositeSystem [
+DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	interface := DataAPI workingWithin: (DataAPIContext workingWith: aCompositeSystem).
+	interface := DataAPI workingWithin: aCosmosSystem.
 	server := aServer
 ]
 

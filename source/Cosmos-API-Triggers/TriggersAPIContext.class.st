@@ -24,9 +24,9 @@ TriggersAPIContext >> actionManagementSystem [
 TriggersAPIContext >> actionParser [
 
 	^ BlockToParserAdapter
-		onParsingEvaluate: [ :string | 
+		onParsingEvaluate: [ :name | 
 			self actionManagementSystem
-				actionNamed: string
+				actionNamed: name
 				ifFound: [ :action | action ]
 				ifNone: [ Error signal: 'Action not found' ] ]
 ]
@@ -48,14 +48,20 @@ TriggersAPIContext >> dataStreamParser [
 				ifNone: [ Error signal: 'aca loco' ] ]
 ]
 
-{ #category : #mapping }
+{ #category : #parsing }
+TriggersAPIContext >> decodeActionFrom: aJSON [
+
+	^ self
+		parse: #action
+		from: aJSON
+		with: self actionParser
+		ifNotFound: [ self halt ]
+]
+
+{ #category : #encoding }
 TriggersAPIContext >> encode: anActionTrigger to: aMimeType [
 
-	| encoder |
-
-	encoder := mappingRegistry mappingFor: aMimeType.
-
-	^ encoder value: anActionTrigger
+	^ (mappingRegistry encoderFor: aMimeType) value: anActionTrigger
 ]
 
 { #category : #initialization }
@@ -130,6 +136,16 @@ TriggersAPIContext >> parseTimeIntervalFrom: aJSON [
 TriggersAPIContext >> parseTriggeringPolicyFrom: aJSON [ 
 	
 	^ self parse: #policy from: aJSON with: self triggeringPolicyParser
+]
+
+{ #category : #decoding }
+TriggersAPIContext >> register: anEncodedTrigger encodedAs: aMimeType [
+
+	| decoder |
+
+	decoder := mappingRegistry decoderFor: aMimeType.
+	
+	decoder value: anEncodedTrigger value: self
 ]
 
 { #category : #'private-parsers' }

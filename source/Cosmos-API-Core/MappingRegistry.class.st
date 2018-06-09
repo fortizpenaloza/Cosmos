@@ -2,27 +2,43 @@ Class {
 	#name : #MappingRegistry,
 	#superclass : #Object,
 	#instVars : [
-		'mappings'
+		'encoders',
+		'decoders'
 	],
 	#category : #'Cosmos-API-Core-Model'
 }
 
-{ #category : #'dependency resolution' }
+{ #category : #querying }
+MappingRegistry >> decoderFor: aSchema [
+
+	^ decoders
+		at: aSchema
+		ifAbsent: [ ObjectNotFound signal: 'Decoder not found for given schema' ]
+]
+
+{ #category : #querying }
+MappingRegistry >> encoderFor: aSchema [
+
+	^ encoders
+		at: aSchema
+		ifAbsent: [ ObjectNotFound signal: 'Encoder not found for given schema' ]
+]
+
+{ #category : #initialization }
 MappingRegistry >> initialize [
 
-	mappings := Dictionary new
+	encoders := Dictionary new.
+	decoders := Dictionary new
 ]
 
 { #category : #managing }
-MappingRegistry >> mappingFor: aSchema [
+MappingRegistry >> register: aDecoder asDecoderFor: aMimeType [
 
-	^ mappings
-		at: aSchema
-		ifAbsent: [ ObjectNotFound signal: 'Mapping not found in the system' ]
+	decoders at: aMimeType put: aDecoder
 ]
 
 { #category : #managing }
-MappingRegistry >> register: aMapping to: aSchema [
-	
-	mappings at: aSchema put: aMapping
+MappingRegistry >> register: anEncoder asEncoderFor: aMimeType [
+
+	encoders at: aMimeType put: anEncoder
 ]

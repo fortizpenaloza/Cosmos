@@ -34,25 +34,11 @@ TriggersAPI >> initializeWorkingWithin: aContext [
 { #category : #API }
 TriggersAPI >> registerFrom: anHttpRequest [
 
-	| aJSON mimeType |
-	aJSON := anHttpRequest contents.
-	mimeType := anHttpRequest contentType.
+	^ [ [ context
+		register: anHttpRequest contents
+		encodedAs: anHttpRequest contentType.
 
-	^ [ [ | rawTrigger |
-
-	rawTrigger := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	context register: aJSON encodedAs: mimeType.
-
-	self triggerManagementSystem
-		registerNamed: (rawTrigger at: #name)
-		triggering: (context parseActionFrom: rawTrigger)
-		accordingTo: (context parseTriggeringPolicyFrom: rawTrigger)
-		whenMeets: (context parseConditionFrom: rawTrigger).
-
-	ZnResponse created: (anHttpRequest requestLine uri) ]
+	ZnResponse created: anHttpRequest requestLine uri ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound , ParsingFailed
@@ -70,11 +56,11 @@ TriggersAPI >> triggerManagementSystem [
 ]
 
 { #category : #API }
-TriggersAPI >> triggersFor: aHttpRequest [
+TriggersAPI >> triggersFor: anHttpRequest [
 
 	| mimeType |
 
-	mimeType := ZnMimeType fromString: aHttpRequest accept.
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
 
 	^ ZnResponse
 		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType))
