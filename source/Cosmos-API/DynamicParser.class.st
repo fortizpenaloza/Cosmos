@@ -44,5 +44,5 @@ DynamicParser >> parsing: aKey with: aBlock [
 { #category : #parsing }
 DynamicParser >> value: aDictionary [ 
 
-	^ self parse: aDictionary
+	^ self parse: aDictionary 
 ]
