@@ -61,7 +61,7 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 		package: 'Cosmos-API-Tests'
 			with: [ spec requires: #('Cosmos-API' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Data-API-Tests'
-			with: [ spec requires: #('Cosmos-Data-API' 'Cosmos-UserStoryTests') ];
+			with: [ spec requires: #('Cosmos-Data-API-Core' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Commands-API-Tests'
 			with:
 				[ spec requires: #('Cosmos-Commands-API-Core' 'Cosmos-UserStoryTests') ];
