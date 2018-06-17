@@ -100,7 +100,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 				requires: #('Cosmos-Tests' 'Cosmos-Data-Core' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Triggers-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Triggers-Core' 'Cosmos-UserStoryTests') ];
+				requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Commands-Tests'
 			with: [ spec
 				requires: #('Cosmos-Tests' 'Cosmos-Commands-Core' 'Cosmos-UserStoryTests') ];
