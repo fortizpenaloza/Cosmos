@@ -1,8 +1,19 @@
 Class {
 	#name : #ActionsAPITest,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : 'Cosmos-Actions-API-Tests'
+	#instVars : [
+		'interface'
+	],
+	#category : #'Cosmos-Actions-API-Tests'
 }
+
+{ #category : #'initialize-release' }
+ActionsAPITest >> setUp [
+
+	super setUp.
+
+	interface := (ActionsAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install
+]
 
 { #category : #'initialize-release' }
 ActionsAPITest >> setUpRequirements [
@@ -15,11 +26,6 @@ ActionsAPITest >> setUpRequirements [
 
 { #category : #'initialize-release' }
 ActionsAPITest >> testDeregistration [
-
-	| interface |
-
-	interface := ActionsAPI
-		workingWith: (ActionsAPIContext workingWith: rootSystem).
 
 	self assert: self actionManagementSystem actions isEmpty.
 
@@ -58,9 +64,7 @@ ActionsAPITest >> testDeregistration [
 { #category : #'initialize-release' }
 ActionsAPITest >> testQueringActions [
 
-	| interface response |
-
-	interface := ActionsAPI workingWith: (ActionsAPIContext workingWith: rootSystem).
+	|  response |
 
 	(rootSystem systemImplementing: #ActionManagementSystemInterface)
 		registerNamed: 'List DNS records'
@@ -113,11 +117,8 @@ ActionsAPITest >> testQueringActions [
 { #category : #'initialize-release' }
 ActionsAPITest >> testRegistration [
 
-	| interface response |
-
-	interface := ActionsAPI
-		workingWith: (ActionsAPIContext workingWith: rootSystem).
-		
+	| response |
+	
 	self assert: self actionManagementSystem actions isEmpty.
 
 	response := interface

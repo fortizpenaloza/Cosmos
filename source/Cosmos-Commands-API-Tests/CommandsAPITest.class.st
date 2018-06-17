@@ -1,11 +1,11 @@
 Class {
-	#name : #RESTCommandsInterfaceTest,
+	#name : #CommandsAPITest,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : 'Cosmos-Commands-API-Tests'
+	#category : #'Cosmos-Commands-API-Tests'
 }
 
 { #category : #running }
-RESTCommandsInterfaceTest >> setUp [
+CommandsAPITest >> setUp [
 
 	super setUp.
 	
@@ -13,7 +13,7 @@ RESTCommandsInterfaceTest >> setUp [
 ]
 
 { #category : #running }
-RESTCommandsInterfaceTest >> setUpRequirements [
+CommandsAPITest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -22,11 +22,11 @@ RESTCommandsInterfaceTest >> setUpRequirements [
 ]
 
 { #category : #tests }
-RESTCommandsInterfaceTest >> testDequeuingCommandFormattedAsJSON [
+CommandsAPITest >> testDequeuingCommandFormattedAsJSON [
 
 	| interface response |
 
-	interface := RESTCommandsInterface workingWith: rootSystem.
+	interface := CommandsAPI workingWith: rootSystem.
 	response := interface nextCommandAsJSON.
 
 	self assert: response equals: '{
@@ -36,22 +36,22 @@ RESTCommandsInterfaceTest >> testDequeuingCommandFormattedAsJSON [
 ]
 
 { #category : #tests }
-RESTCommandsInterfaceTest >> testDequeuingCommandFormattedAsPlainText [
+CommandsAPITest >> testDequeuingCommandFormattedAsPlainText [
 
 	| interface response |
 
-	interface := RESTCommandsInterface workingWith: rootSystem.
+	interface := CommandsAPI workingWith: rootSystem.
 	response := interface nextCommandAsPlainText.
 
 	self assert: response equals: 'TURN_ON_LED'
 ]
 
 { #category : #tests }
-RESTCommandsInterfaceTest >> testEnqueuingCommand [
+CommandsAPITest >> testEnqueuingCommand [
 
 	| interface prioritizedCommand |
 
-	interface := RESTCommandsInterface workingWith: rootSystem.
+	interface := CommandsAPI workingWith: rootSystem.
 	prioritizedCommand := interface push: '{
 	"command" : "TURN_ON_LED",
 	"priority" : "high"
@@ -63,11 +63,11 @@ RESTCommandsInterfaceTest >> testEnqueuingCommand [
 ]
 
 { #category : #tests }
-RESTCommandsInterfaceTest >> testQueryingPrioitizedCommands [
+CommandsAPITest >> testQueryingPrioitizedCommands [
 
 	| interface response |
 
-	interface := RESTCommandsInterface workingWith: rootSystem.
+	interface := CommandsAPI workingWith: rootSystem.
 	response := interface prioritizedCommands.
 
 	self assert: response equals: '[

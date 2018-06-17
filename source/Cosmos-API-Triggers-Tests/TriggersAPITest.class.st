@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'tests support' }
-TriggersAPITest >> assert: aResponse wasSuccessfulAndContentEqualsTo: aString [
+TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
 	self
 		assert: aResponse code equals: 200;
@@ -141,7 +141,7 @@ TriggersAPITest >> testGettingTriggers [
 
 	self
 		assert: response
-		wasSuccessfulAndContentEqualsTo:
+		wasSuccessfulWithContentEqualsTo:
 			'[
 	{
 		"name" : "Set triggered to true after a data point was registered on Temperature",

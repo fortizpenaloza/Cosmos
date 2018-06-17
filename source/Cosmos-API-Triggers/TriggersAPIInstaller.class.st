@@ -6,7 +6,7 @@ Class {
 		'interface',
 		'mappingRegistry'
 	],
-	#category : #'Cosmos-API-Triggers-Model'
+	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'instance creation' }
@@ -86,17 +86,18 @@ TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
-	| rawTrigger |
-
-	rawTrigger := (NeoJSONReader on: aJSON readStream)
+	(NeoJSONReader on: aJSON readStream)
+		for: #TriggerRegistration
+			customDo: [ :mapping | 
+			mapping
+				decoder: [ :rawTrigger | 
+					context triggerManagementSystem
+						registerNamed: (rawTrigger at: #name)
+						triggering: (context decodeActionFrom: rawTrigger)
+						accordingTo: (context decodeTriggeringPolicyFrom: rawTrigger)
+						whenMeets: (context decodeTriggeringConditionFrom: rawTrigger) ] ];
 		propertyNamesAsSymbols: true;
-		next.
-
-	context triggerManagementSystem
-		registerNamed: (rawTrigger at: #name)
-		triggering: (context decodeActionFrom: rawTrigger)
-		accordingTo: (context parseTriggeringPolicyFrom: rawTrigger)
-		whenMeets: (context parseConditionFrom: rawTrigger) ]
+		nextAs: #TriggerRegistration ]
 ]
 
 { #category : #'private-encoding' }

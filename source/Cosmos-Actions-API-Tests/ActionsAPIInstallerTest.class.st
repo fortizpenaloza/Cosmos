@@ -14,6 +14,5 @@ ActionsAPIInstallerTest >> testInstallation [
 
 	teapot := Teapot on.
 	(ActionsAPIInstaller toInstallOn: teapot workingWith: self) install.
-
 	self assert: teapot routes size equals: 3
 ]

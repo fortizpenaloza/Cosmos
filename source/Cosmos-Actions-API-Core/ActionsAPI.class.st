@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionsAPI class >> workingWith: aContext [
-
-	^ self new initializeWorkingWith: aContext 
+ActionsAPI class >> workingWithin: aContext [
+	
+	^ self new initializeWorkingWithin: aContext 
 ]
 
 { #category : #systems }
@@ -39,7 +39,7 @@ ActionsAPI >> deregisterNamed: aName [
 	^ ZnResponse noContent
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ActionsAPI >> initializeMappings [
 
 	actionsMapping := [ :action | 
@@ -79,8 +79,8 @@ ActionsAPI >> initializeMappings [
 				nextPut: action] ]
 ]
 
-{ #category : #'initialize-release' }
-ActionsAPI >> initializeWorkingWith: aContext [
+{ #category : #initialization }
+ActionsAPI >> initializeWorkingWithin: aContext [
 
 	context := aContext.
 	self initializeMappings
@@ -104,7 +104,7 @@ ActionsAPI >> registerFrom: aJSON [
 		do: [ :signal | 
 			HTTPClientError
 				signalConflict: ('{"error":{"code": 409,"message":"<1s>"}}' expandMacrosWith: signal messageText) ] ]
-		on: KeyNotFound , ParsingFailed
+		on: KeyNotFound , DecodingFailed
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest:
