@@ -132,11 +132,11 @@ TriggersAPIContext >> triggerManagementSystem [
 { #category : #'private-decoders' }
 TriggersAPIContext >> triggeringPolicyDecoder [
 
-	^ (DynamicParser determiningParserBy: #type)
-		parsing: #periodical
-			with: [ :json | PeriodicalTriggeringPolicy every: (self decodeTimeIntervalFrom: json) ];
-		parsing: #data_point_registration
-			with:
+	^ (DynamicDecoder determiningDecoderBy: #type)
+		decoding: #periodical
+			applying: [ :json | PeriodicalTriggeringPolicy every: (self decodeTimeIntervalFrom: json) ];
+		decoding: #data_point_registration
+			applying:
 				[ :json | DataPointRegistrationTriggeringPolicy on: (self decodeDataStreamFrom: json) ];
 		yourself
 ]
