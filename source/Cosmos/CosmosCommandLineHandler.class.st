@@ -119,8 +119,6 @@ CosmosCommandLineHandler >> teapot [
 		ifPresent: [ :string | string asNumber ]
 		ifAbsent: [ 8080 ].
 	debugMode := self hasOption: 'debug-mode'.
-	
-	self halt.
 
 	^ Teapot
 		configure:
