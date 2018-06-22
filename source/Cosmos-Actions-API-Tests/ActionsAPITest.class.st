@@ -7,6 +7,18 @@ Class {
 	#category : #'Cosmos-Actions-API-Tests'
 }
 
+{ #category : #accessing }
+ActionsAPITest >> actionJsonVersion1dot0dot0MimeType [
+
+	^ ZnMimeType fromString: 'application/vnd.cosmos.action+json; version=1.0.0'
+]
+
+{ #category : #accessing }
+ActionsAPITest >> getActionsHttpRequest [
+
+	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions') setAccept: self actionJsonVersion1dot0dot0MimeType
+]
+
 { #category : #'initialize-release' }
 ActionsAPITest >> setUp [
 
@@ -64,7 +76,7 @@ ActionsAPITest >> testDeregistration [
 { #category : #'initialize-release' }
 ActionsAPITest >> testQueringActions [
 
-	|  response |
+	| response |
 
 	(rootSystem systemImplementing: #ActionManagementSystemInterface)
 		registerNamed: 'List DNS records'
@@ -83,7 +95,7 @@ ActionsAPITest >> testQueringActions [
 					('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')};
 				yourself).
 
-	response := interface actions.
+	response := interface actionsFor: self getActionsHttpRequest.
 
 	self
 		assert: response code equals: 200;

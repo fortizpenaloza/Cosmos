@@ -30,6 +30,12 @@ ActionsAPIContext >> decode: aKey from: aDictionary with: aParser [
 		ifNotFound: [ DecodingFailed signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
 ]
 
+{ #category : #enconding }
+ActionsAPIContext >> encode: anActionCollection to: aMimeType [
+
+	^ (mappingRegistry encoderFor: aMimeType) value: anActionCollection
+]
+
 { #category : #'private-parsers' }
 ActionsAPIContext >> httpRequestParser [
 
