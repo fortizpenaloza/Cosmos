@@ -6,7 +6,7 @@ Class {
 		'interface',
 		'mappingRegistry'
 	],
-	#category : #'Cosmos-API-Triggers-Model'
+	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'instance creation' }
@@ -86,23 +86,24 @@ TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
-	| rawTrigger |
-
-	rawTrigger := (NeoJSONReader on: aJSON readStream)
+	(NeoJSONReader on: aJSON readStream)
+		for: #TriggerRegistration
+			customDo: [ :mapping | 
+			mapping
+				decoder: [ :rawTrigger | 
+					context triggerManagementSystem
+						registerNamed: (rawTrigger at: #name)
+						triggering: (context decodeActionFrom: rawTrigger)
+						accordingTo: (context decodeTriggeringPolicyFrom: rawTrigger)
+						whenMeets: (context decodeTriggeringConditionFrom: rawTrigger) ] ];
 		propertyNamesAsSymbols: true;
-		next.
-
-	context triggerManagementSystem
-		registerNamed: (rawTrigger at: #name)
-		triggering: (context decodeActionFrom: rawTrigger)
-		accordingTo: (context parseTriggeringPolicyFrom: rawTrigger)
-		whenMeets: (context parseConditionFrom: rawTrigger) ]
+		nextAs: #TriggerRegistration ]
 ]
 
 { #category : #'private-encoding' }
 TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 
-	^ [ :object | 
+	^ [ :trigger | 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
@@ -113,8 +114,8 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 						mapAccessor: #creationDateTime to: 'created_on';
 						mapInstVar: #action;
 						mapAccessor: #triggeringPolicy to: 'policy'.
-					(mapping mapInstVar: #condition to: #conditions) valueSchema: #Bleh ];
-				for: #Bleh
+					(mapping mapInstVar: #condition to: #conditions) valueSchema: #Conditions ];
+				for: #Conditions
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :condition | 
@@ -122,7 +123,8 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 
 							mappings := Dictionary new.
 							mappings
-								at: AndCompositeTriggeringCondition put: [ Array withAll: (condition instVarNamed: #triggerConditions) ];
+								at: AndCompositeTriggeringCondition
+									put: [ Array withAll: (condition instVarNamed: #triggerConditions) ];
 								at: AlwaysTriggeringCondition put: [ Array empty ];
 								at: DataStreamCurrentValueTriggeringCondition
 									put: [ Array
@@ -160,7 +162,8 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 								at: #data_stream put: (condition instVarNamed: #dataStream) name;
 								at: #condition put: (condition instVarNamed: #condition);
 								yourself ] ];
-				for: Action customDo: [ :mapping | mapping encoder: [ :action | action name ] ];
+				for: Action
+					customDo: [ :mapping | mapping encoder: [ :action | action name ] ];
 				for: PeriodicalTriggeringPolicy
 					customDo: [ :mapping | 
 					mapping
@@ -172,17 +175,23 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 					mapping
 						encoder: [ :policy | 
 							{(#type -> #on_data_point_registration).
-							(#data_stream -> ((policy instVarNamed: #dataStream) instVarNamed: #name))} asOrderedDictionary ] ];
+							(#data_stream -> ((policy instVarNamed: #dataStream) instVarNamed: #name))}
+								asOrderedDictionary ] ];
 				for: ArithmeticCondition
 					do: [ :mapping | 
 					mapping
 						mapInstVar: #arithmeticOperator to: #operator;
 						mapInstVar: #value ];
-				for: Measure customDo: [ :mapping | mapping encoder: [ :measure | measure printString ] ];
-				for: TimeOfDay customDo: [ :mapping | mapping encoder: [ :timeOfDay | timeOfDay printString ] ];
-				for: DateTime customDo: [ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				for: Measure
+					customDo: [ :mapping | mapping encoder: [ :measure | measure printString ] ];
+				for: TimeOfDay
+					customDo: [ :mapping | mapping encoder: [ :timeOfDay | timeOfDay printString ] ];
+				for: DateTime
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
-				nextPut: object ] ]
+				nextPut: trigger ] ]
 ]
 
 { #category : #accessing }

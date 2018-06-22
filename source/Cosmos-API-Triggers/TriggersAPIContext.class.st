@@ -2,10 +2,10 @@ Class {
 	#name : #TriggersAPIContext,
 	#superclass : #Object,
 	#instVars : [
-		'cosmosSystem',
-		'mappingRegistry'
+		'mappingRegistry',
+		'cosmos'
 	],
-	#category : #'Cosmos-API-Triggers-Model'
+	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'instance creation' }
@@ -14,48 +14,85 @@ TriggersAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
+{ #category : #'private-decoders' }
+TriggersAPIContext >> actionDecoder [
+
+	^ [ :name | 
+	self actionManagementSystem
+		actionNamed: name
+		ifFound: [ :action | action ]
+		ifNone: [ DecodingFailed signal: ('Action named <1s> not found' expandMacrosWith: name) ] ]
+]
+
 { #category : #systems }
 TriggersAPIContext >> actionManagementSystem [
 	
-	^ cosmosSystem systemImplementing: #ActionManagementSystemInterface
-]
-
-{ #category : #'private-parsers' }
-TriggersAPIContext >> actionParser [
-
-	^ BlockToParserAdapter
-		onParsingEvaluate: [ :name | 
-			self actionManagementSystem
-				actionNamed: name
-				ifFound: [ :action | action ]
-				ifNone: [ Error signal: 'Action not found' ] ]
+	^ cosmos systemImplementing: #ActionManagementSystemInterface
 ]
 
 { #category : #systems }
 TriggersAPIContext >> dataManagementSystem [
 
-	^ cosmosSystem systemImplementing: #DataManagementSystemInterface
+	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
-{ #category : #'private-parsers' }
-TriggersAPIContext >> dataStreamParser [
+{ #category : #'private-decoders' }
+TriggersAPIContext >> dataStreamDecoder [
 
-	^ BlockToParserAdapter
-		onParsingEvaluate: [ :string | 
-			self dataManagementSystem
-				streamNamed: string
-				ifFound: [ :stream | stream ]
-				ifNone: [ Error signal: 'aca loco' ] ]
+	^ [ :name | 
+	self dataManagementSystem
+		streamNamed: name
+		ifFound: [ :stream | stream ]
+		ifNone: [ DecodingFailed signal: ('Data stream named <1s> not found' expandMacrosWith: name) ] ]
 ]
 
-{ #category : #parsing }
+{ #category : #'private-decoding' }
+TriggersAPIContext >> decode: aKey from: aDictionary with: aDecodingBlock [
+
+	^ aDictionary
+		at: aKey
+		ifPresent: [ :rawData | aDecodingBlock value: rawData ]
+		ifAbsent:
+			[ DecodingFailed signal: ('<1s> key is mandatory and must be present' expandMacrosWith: aKey) ]
+]
+
+{ #category : #'private-decoding' }
 TriggersAPIContext >> decodeActionFrom: aJSON [
 
 	^ self
-		parse: #action
+		decode: #action
 		from: aJSON
-		with: self actionParser
-		ifNotFound: [ self halt ]
+		with: self actionDecoder
+]
+
+{ #category : #'private-decoding' }
+TriggersAPIContext >> decodeDataStreamFrom: aJSON [
+
+	^ self
+		decode: #data_stream
+		from: aJSON
+		with: self dataStreamDecoder
+]
+
+{ #category : #'private-decoding' }
+TriggersAPIContext >> decodeTimeIntervalFrom: aJSON [
+
+	^ self
+		decode: #time_interval
+		from: aJSON
+		with: self timeIntervalDecoder
+]
+
+{ #category : #'private-decoding' }
+TriggersAPIContext >> decodeTriggeringConditionFrom: aJSON [
+
+	^ AlwaysTriggeringCondition new
+]
+
+{ #category : #'private-decoding' }
+TriggersAPIContext >> decodeTriggeringPolicyFrom: aJSON [ 
+	
+	^ self decode: #policy from: aJSON with: self triggeringPolicyDecoder
 ]
 
 { #category : #encoding }
@@ -67,59 +104,8 @@ TriggersAPIContext >> encode: aTriggerCollection to: aMimeType [
 { #category : #initialization }
 TriggersAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry [
 
-	cosmosSystem := aCosmosSystem.
+	cosmos := aCosmosSystem.
 	mappingRegistry := aMappingRegistry
-]
-
-{ #category : #'private-parsing' }
-TriggersAPIContext >> parse: aKey from: aDictionary with: aParser [
-
-	^ self
-		parse: aKey
-		from: aDictionary
-		with: aParser
-		ifNotFound: [ ParsingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
-]
-
-{ #category : #'private-parsing' }
-TriggersAPIContext >> parse: aKey from: aDictionary with: aParser ifNotFound: aNotFoundBlock [
-
-	^ aDictionary
-		at: aKey
-		ifPresent: [ :rawData | aParser parse: rawData ]
-		ifAbsent: aNotFoundBlock
-]
-
-{ #category : #parsing }
-TriggersAPIContext >> parseConditionFrom: aJSON [
-
-	^ AlwaysTriggeringCondition new
-]
-
-{ #category : #parsing }
-TriggersAPIContext >> parseDataStreamFrom: aJSON [
-
-	^ self
-		parse: #data_stream
-		from: aJSON
-		with: self dataStreamParser
-		ifNotFound: [ self halt ]
-]
-
-{ #category : #parsing }
-TriggersAPIContext >> parseTimeIntervalFrom: aJSON [
-
-	^ self
-		parse: #time_interval
-		from: aJSON
-		with: self timeIntervalParser
-		ifNotFound: [ self halt ]
-]
-
-{ #category : #parsing }
-TriggersAPIContext >> parseTriggeringPolicyFrom: aJSON [ 
-	
-	^ self parse: #policy from: aJSON with: self triggeringPolicyParser
 ]
 
 { #category : #decoding }
@@ -128,30 +114,29 @@ TriggersAPIContext >> register: anEncodedTrigger encodedAs: aMimeType [
 	| decoder |
 
 	decoder := mappingRegistry decoderFor: aMimeType.
-	
 	decoder value: anEncodedTrigger value: self
 ]
 
-{ #category : #'private-parsers' }
-TriggersAPIContext >> timeIntervalParser [
+{ #category : #'private-decoders' }
+TriggersAPIContext >> timeIntervalDecoder [
 
-	^ BlockToParserAdapter onParsingEvaluate: [ :string | TimeUnits minute with: 5 ]
+	^ [ :string | TimeUnits minute with: 5 ]
 ]
 
 { #category : #systems }
 TriggersAPIContext >> triggerManagementSystem [
 
-	^ cosmosSystem systemImplementing: #TriggerManagementSystemInterface
+	^ cosmos systemImplementing: #TriggerManagementSystemInterface
 ]
 
-{ #category : #'private-parsers' }
-TriggersAPIContext >> triggeringPolicyParser [
-	
-	^  (DynamicParser determiningParserBy: #type)
-		parsing: #periodical
-			with: [ :json | PeriodicalTriggeringPolicy every: (self parseTimeIntervalFrom: json) ];
-		parsing: #data_point_registration
-			with:
-				[ :json | DataPointRegistrationTriggeringPolicy on: (self parseDataStreamFrom: json) ];
-		yourself.
+{ #category : #'private-decoders' }
+TriggersAPIContext >> triggeringPolicyDecoder [
+
+	^ (DynamicDecoder determiningDecoderBy: #type)
+		decoding: #periodical
+			applying: [ :json | PeriodicalTriggeringPolicy every: (self decodeTimeIntervalFrom: json) ];
+		decoding: #data_point_registration
+			applying:
+				[ :json | DataPointRegistrationTriggeringPolicy on: (self decodeDataStreamFrom: json) ];
+		yourself
 ]

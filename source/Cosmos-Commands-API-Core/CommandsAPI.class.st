@@ -1,27 +1,37 @@
 Class {
-	#name : #RESTCommandsInterface,
+	#name : #CommandsAPI,
 	#superclass : #Object,
 	#instVars : [
 		'rootSystem',
 		'prioritizedCommandMapping'
 	],
-	#category : 'Cosmos-Commands-API-Core'
+	#category : #'Cosmos-Commands-API-Core'
 }
 
 { #category : #'instance creation' }
-RESTCommandsInterface class >> workingWith: aCompositeSystem [
+CommandsAPI class >> workingWith: aCompositeSystem [
 
 	^ self new initializeWorkingWith: aCompositeSystem 
 ]
 
 { #category : #systems }
-RESTCommandsInterface >> commandManagementSystem [
+CommandsAPI >> commandManagementSystem [
 
 	^ rootSystem systemImplementing: #CommandManagementSystemInterface
 ]
 
+{ #category : #decoding }
+CommandsAPI >> decode: aKey from: aDictionary with: aParser [
+
+	^ self
+		parse: aKey
+		from: aDictionary
+		with: aParser
+		ifNotFound: [ DecodingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
+]
+
 { #category : #'initialize-release' }
-RESTCommandsInterface >> initializeMappings [
+CommandsAPI >> initializeMappings [
 
 	prioritizedCommandMapping := [ :object | 
 	String
@@ -38,50 +48,56 @@ RESTCommandsInterface >> initializeMappings [
 ]
 
 { #category : #'initialize-release' }
-RESTCommandsInterface >> initializeWorkingWith: aCompositeSystem [
+CommandsAPI >> initializeWorkingWith: aCompositeSystem [
 
 	rootSystem := aCompositeSystem.
 	self initializeMappings
 ]
 
 { #category : #querying }
-RESTCommandsInterface >> nextCommandAsJSON [
+CommandsAPI >> nextCommandAsJSON [
 
 	^ prioritizedCommandMapping
 		value: self commandManagementSystem dequeue
 ]
 
 { #category : #querying }
-RESTCommandsInterface >> nextCommandAsPlainText [
+CommandsAPI >> nextCommandAsPlainText [
 
 	^ self commandManagementSystem dequeue command
 ]
 
-{ #category : #parsing }
-RESTCommandsInterface >> parse: aString with: aParser [ 
+{ #category : #decoding }
+CommandsAPI >> parse: aKey from: aDictionary with: aParser ifNotFound: aNotFoundBlock [
 
-	^ aParser parse: aString
+	^ aDictionary
+		at: aKey
+		ifPresent: [ :rawData | aParser value: rawData ]
+		ifAbsent: aNotFoundBlock
 ]
 
 { #category : #querying }
-RESTCommandsInterface >> prioritizedCommands [
+CommandsAPI >> prioritizedCommands [
 
 	^ prioritizedCommandMapping value: (self commandManagementSystem prioritizedCommands )
 ]
 
 { #category : #parsers }
-RESTCommandsInterface >> priorityParser [
+CommandsAPI >> priorityParser [
 
-	^ CaseBasedParser new
-		parsing: 'high' to: QueuePriority high;
-		parsing: 'medium' to: QueuePriority medium;
-		parsing: 'low' to: QueuePriority low;
+	| priorities |
+
+	priorities := Dictionary new
+		at: 'high' put: QueuePriority high;
+		at: 'medium' put: QueuePriority medium;
+		at: 'low' put: QueuePriority low;
 		yourself.
 
+	^ [ :string | priorities at: string ifAbsent: [ DecodingFailed signal: 'lalal' ] ]
 ]
 
 { #category : #'pushing-popping' }
-RESTCommandsInterface >> push: aJSON [
+CommandsAPI >> push: aJSON [
 
 	| rawCommand |
 
@@ -91,5 +107,5 @@ RESTCommandsInterface >> push: aJSON [
 
 	^ self commandManagementSystem
 		enqueue: (rawCommand at: #command)
-		with: (self parse: (rawCommand at: #priority) with: self priorityParser)
+		with: (self decode: #priority from: rawCommand with: self priorityParser)
 ]

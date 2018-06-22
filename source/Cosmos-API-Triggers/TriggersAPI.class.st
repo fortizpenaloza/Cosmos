@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'context'
 	],
-	#category : #'Cosmos-API-Triggers-Model'
+	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'instance creation' }
@@ -41,7 +41,7 @@ TriggersAPI >> registerFrom: anHttpRequest [
 	ZnResponse created: anHttpRequest requestLine uri ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound , ParsingFailed
+		on: KeyNotFound , DecodingFailed
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest: signal messageText ]

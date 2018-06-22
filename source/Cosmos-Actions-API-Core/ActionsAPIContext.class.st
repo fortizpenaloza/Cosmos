@@ -2,21 +2,38 @@ Class {
 	#name : #ActionsAPIContext,
 	#superclass : #Object,
 	#instVars : [
-		'rootSystem'
+		'cosmos',
+		'mappingRegistry'
 	],
-	#category : 'Cosmos-Actions-API-Core-Model'
+	#category : #'Cosmos-Actions-API-Core-Model'
 }
 
 { #category : #'instance creation' }
-ActionsAPIContext class >> workingWith: aCompositeSystem [ 
+ActionsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry [
 
-	^ self new initializeWorkingWith: aCompositeSystem 
+	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
 { #category : #systems }
 ActionsAPIContext >> actionManagementSystem [
 
-	^ rootSystem systemImplementing: #ActionManagementSystemInterface
+	^ cosmos systemImplementing: #ActionManagementSystemInterface
+]
+
+{ #category : #'private-parsing' }
+ActionsAPIContext >> decode: aKey from: aDictionary with: aParser [
+
+	^ self
+		parse: aKey
+		from: aDictionary
+		with: aParser
+		ifNotFound: [ DecodingFailed signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
+]
+
+{ #category : #enconding }
+ActionsAPIContext >> encode: anActionCollection to: aMimeType [
+
+	^ (mappingRegistry encoderFor: aMimeType) value: anActionCollection
 ]
 
 { #category : #'private-parsers' }
@@ -25,26 +42,17 @@ ActionsAPIContext >> httpRequestParser [
 	^ HTTPRequestParser new
 ]
 
-{ #category : #'initialize-release' }
-ActionsAPIContext >> initializeWorkingWith: aCompositeSystem [ 
+{ #category : #initialization }
+ActionsAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry [
 
-	rootSystem := aCompositeSystem 
+	cosmos := aCosmosSystem.
+	mappingRegistry := aMappingRegistry
 ]
 
 { #category : #'private-parsers' }
 ActionsAPIContext >> nullParser [
 	
-	^ BlockToParserAdapter onParsingEvaluate: [ :string | string ] 
-]
-
-{ #category : #'private-parsing' }
-ActionsAPIContext >> parse: aKey from: aDictionary with: aParser [
-
-	^ self
-		parse: aKey
-		from: aDictionary
-		with: aParser
-		ifNotFound: [ ParsingFailed signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
+	^ [ :string | string ] 
 ]
 
 { #category : #'private-parsing' }
@@ -52,18 +60,18 @@ ActionsAPIContext >> parse: aKey from: aDictionary with: aParser ifNotFound: aNo
 
 	^ aDictionary
 		at: aKey
-		ifPresent: [ :rawData | aParser parse: rawData ]
+		ifPresent: [ :rawData | aParser value: rawData ]
 		ifAbsent: aNotFoundBlock
 ]
 
 { #category : #parsing }
 ActionsAPIContext >> parseNameFrom: rawAction [ 
 
-	^ self parse: #name from: rawAction with: self nullParser
+	^ self decode: #name from: rawAction with: self nullParser
 ]
 
 { #category : #parsing }
 ActionsAPIContext >> parseRequestFrom: rawAction [ 
 
-	self parse: #request from: rawAction with: self httpRequestParser
+	self decode: #request from: rawAction with: self httpRequestParser
 ]
