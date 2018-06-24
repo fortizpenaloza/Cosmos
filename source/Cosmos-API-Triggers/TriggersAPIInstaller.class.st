@@ -71,7 +71,7 @@ TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
 	mappingRegistry
 		register: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self triggerJsonVersion1dot0dot0MimeType
+		asDecoderFor: self triggerMimeTypeVersion1dot0dot0
 ]
 
 { #category : #'private-installing' }
@@ -79,7 +79,7 @@ TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
 	mappingRegistry
 		register: self triggerJsonEnconderVersion1dot0dot0
-		asEncoderFor: self triggerJsonVersion1dot0dot0MimeType
+		asEncoderFor: self triggerMimeTypeVersion1dot0dot0
 ]
 
 { #category : #'private-encoding' }
@@ -195,7 +195,7 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
-TriggersAPIInstaller >> triggerJsonVersion1dot0dot0MimeType [
+TriggersAPIInstaller >> triggerMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType
 		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'

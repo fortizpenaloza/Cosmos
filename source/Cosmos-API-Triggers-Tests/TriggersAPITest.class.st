@@ -37,7 +37,7 @@ TriggersAPITest >> fiveMinutes [
 TriggersAPITest >> getTriggersHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-		setAccept: self triggerJsonVersion1dot0dot0MimeType
+		setAccept: self triggerMimeTypeVersion1dot0dot0
 ]
 
 { #category : #accessing }
@@ -345,7 +345,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 	},
 	"conditions" : [ ]
 }'
-						type: self triggerJsonVersion1dot0dot0MimeType)).
+						type: self triggerMimeTypeVersion1dot0dot0)).
 
 	self
 		assert: response code equals: 201;
@@ -385,7 +385,7 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 	},
 	"conditions" : [ ]
 }'
-						type: self triggerJsonVersion1dot0dot0MimeType)).
+						type: self triggerMimeTypeVersion1dot0dot0)).
 						
 	self
 		assert: response code equals: 201;
@@ -402,7 +402,7 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 ]
 
 { #category : #accessing }
-TriggersAPITest >> triggerJsonVersion1dot0dot0MimeType [
+TriggersAPITest >> triggerMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType
 		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'

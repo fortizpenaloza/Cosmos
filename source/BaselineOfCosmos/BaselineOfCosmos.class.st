@@ -19,19 +19,13 @@ BaselineOfCosmos >> baseline: spec [
 
 			spec package: 'Cosmos-Code-Quality-Tests'.
 
-			spec
-				package: 'Cosmos'
-				with: [ spec requires: #('Teapot' 'Kepler' 'Cosmos-Data-API-Core') ].
+			spec package: 'Cosmos-CommandLineHandler' with: [ spec requires: #('Teapot' 'Kepler' 'Cosmos-API-Data') ].
 
 			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
 
 			spec
-				group: 'Deployment'
-					with:
-					#('Cosmos-Data-Core' 'Cosmos-Triggers' 'Cosmos-Commands-Core' 'Cosmos-Actions-Core' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core' 'Cosmos-API' 'Cosmos-Data-API-Core' 'Cosmos-Commands-API-Core' 'Cosmos-Actions-API-Core' 'Cosmos-API-Triggers' 'Cosmos');
-				group: 'Tests'
-					with:
-					#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests' 'Cosmos-API-Tests' 'Cosmos-Data-API-Tests' 'Cosmos-Commands-API-Tests' 'Cosmos-Actions-API-Tests' 'Cosmos-API-Triggers-Tests' 'Cosmos-Code-Quality-Tests');
+				group: 'Deployment' with: #('Cosmos-Model' 'Cosmos-API-Model' 'Cosmos-CommandLineHandler');
+				group: 'Tests' with: #('Cosmos-Model-Tests' 'Cosmos-API-Model-Tests' 'Cosmos-Code-Quality-Tests');
 				group: 'Tools' with: #('Cosmos-Tools');
 				group: 'CI' with: #('Deployment' 'Tests');
 				group: 'Development' with: #('CI' 'Tools');
@@ -44,47 +38,46 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-API' with: [ spec requires: 'Teapot' ];
-		package: 'Cosmos-Data-API-Core'
-			with: [ spec requires: #('Cosmos-API' 'Cosmos-Data-Core') ];
-		package: 'Cosmos-Commands-API-Core'
-			with: [ spec requires: #('Cosmos-API' 'Cosmos-Commands-Core') ];
-		package: 'Cosmos-Actions-API-Core'
-			with: [ spec requires: #('Cosmos-API' 'Cosmos-Actions-Core') ];
-		package: 'Cosmos-API-Triggers'
-			with: [ spec requires: #('Cosmos-API' 'Cosmos-Triggers') ]
+		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API' 'Cosmos-Data') ];
+		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API' 'Cosmos-Commands') ];
+		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API' 'Cosmos-Actions') ];
+		package: 'Cosmos-API-Triggers' with: [ spec requires: #('Cosmos-API' 'Cosmos-Triggers') ].
+	
+	spec
+		group: 'Cosmos-API-Model'
+		with: #('Cosmos-API' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
 ]
 
 { #category : #'private-baselines' }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Tests'
-			with: [ spec requires: #('Cosmos-API' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Data-API-Tests'
-			with: [ spec requires: #('Cosmos-Data-API-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Commands-API-Tests'
-			with:
-				[ spec requires: #('Cosmos-Commands-API-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Actions-API-Tests'
-			with:
-				[ spec requires: #('Cosmos-Actions-API-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-API-Triggers-Tests'
-			with: [ spec requires: #('Cosmos-API-Triggers' 'Cosmos-UserStoryTests') ]
+		package: 'Cosmos-API-Tests' with: [ spec requires: #('Cosmos-API' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-API-Data-Tests' with: [ spec requires: #('Cosmos-API-Data' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-API-Commands-Tests' with: [ spec requires: #('Cosmos-API-Commands' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-API-Actions-Tests' with: [ spec requires: #('Cosmos-API-Actions' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-API-Triggers-Tests' with: [ spec requires: #('Cosmos-API-Triggers' 'Cosmos-UserStoryTests') ].
+
+	spec
+		group: 'Cosmos-API-Model-Tests'
+		with: #('Cosmos-API-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
 ]
 
 { #category : #'private-baselines' }
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-Data-Core'
-			with: [ spec requires: #('Kepler') ];
-		package: 'Cosmos-Triggers'
-			with: [ spec requires: #('Kepler') ];
-		package: 'Cosmos-Commands-Core'
-			with: [ spec requires: #('Kepler') ];
-		package: 'Cosmos-Actions-Core' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Commands' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Actions' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-PeriodicalScheduler-Core';
-		package: 'Cosmos-ActionEvaluator-Core'
+		package: 'Cosmos-ActionEvaluator-Core'.
+
+	spec
+		group: 'Cosmos-Model'
+		with:
+			#('Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
 { #category : #'private-baselines' }
@@ -92,25 +85,17 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Tests';
-		package: 'Cosmos-UserStoryTests'
-			with: [ spec
-				requires: #('Cosmos-Data-Core' 'Cosmos-Commands-Core' 'Cosmos-Triggers') ];
-		package: 'Cosmos-Data-Tests'
-			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Data-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Triggers-Tests'
-			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Commands-Tests'
-			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Commands-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-Actions-Tests'
-			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Actions-Core' 'Cosmos-UserStoryTests') ];
-		package: 'Cosmos-PeriodicalScheduler-Tests'
-			with: [ spec requires: #('Cosmos-PeriodicalScheduler-Core') ];
-		package: 'Cosmos-ActionEvaluator-Tests'
-			with: [ spec requires: #('Cosmos-ActionEvaluator-Core') ]
+		package: 'Cosmos-UserStoryTests' with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers') ];
+		package: 'Cosmos-Data-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-Triggers-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-Commands-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Commands' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-Actions-Tests' with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Actions' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-PeriodicalScheduler-Tests' with: [ spec requires: #('Cosmos-PeriodicalScheduler-Core') ];
+		package: 'Cosmos-ActionEvaluator-Tests' with: [ spec requires: #('Cosmos-ActionEvaluator-Core') ].
+		
+	spec
+		group: 'Cosmos-Model-Tests'
+		with: #('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
 { #category : #actions }
