@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'interface'
 	],
-	#category : #'Cosmos-AP-Actions-Tests'
+	#category : #'Cosmos-API-Actions-Tests'
 }
 
 { #category : #accessing }
