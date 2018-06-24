@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'cosmos'
 	],
-	#category : #Cosmos
+	#category : #'Cosmos-CommandLineHandler'
 }
 
 { #category : #accessing }

@@ -3,7 +3,7 @@ I'm an exception expecting to be raised when someone tries to query current valu
 "
 Class {
 	#name : #DataStreamIsEmpty,
-	#superclass : #Exception,
+	#superclass : #Error,
 	#category : #'Cosmos-Data-Model'
 }
 
@@ -19,4 +19,10 @@ DataStreamIsEmpty class >> signalAll: failureExplanations [
 DataStreamIsEmpty >> defaultAction [
 
 	UnhandledError signalForException: self
+]
+
+{ #category : #'private-testing' }
+DataStreamIsEmpty >> isResumable [
+
+	^ true
 ]
