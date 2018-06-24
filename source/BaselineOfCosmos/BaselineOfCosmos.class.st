@@ -19,13 +19,22 @@ BaselineOfCosmos >> baseline: spec [
 
 			spec package: 'Cosmos-Code-Quality-Tests'.
 
-			spec package: 'Cosmos-CommandLineHandler' with: [ spec requires: #('Teapot' 'Kepler' 'Cosmos-API-Data') ].
+			spec
+				package: 'Cosmos-CommandLineHandler'
+				with: [ spec requires: #('Cosmos-Model' 'Cosmos-API-Model') ].
+				
+			spec
+				package: 'Cosmos-CommandLineHandler-Tests'
+				with: [ spec requires: #('Cosmos-CommandLineHandler') ].
 
-			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
+		spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
 
 			spec
-				group: 'Deployment' with: #('Cosmos-Model' 'Cosmos-API-Model' 'Cosmos-CommandLineHandler');
-				group: 'Tests' with: #('Cosmos-Model-Tests' 'Cosmos-API-Model-Tests' 'Cosmos-Code-Quality-Tests');
+				group: 'Deployment'
+					with: #('Cosmos-Model' 'Cosmos-API-Model' 'Cosmos-CommandLineHandler');
+				group: 'Tests'
+					with:
+					#('Cosmos-Model-Tests' 'Cosmos-API-Model-Tests' 'Cosmos-CommandLineHandler-Tests' 'Cosmos-Code-Quality-Tests');
 				group: 'Tools' with: #('Cosmos-Tools');
 				group: 'CI' with: #('Deployment' 'Tests');
 				group: 'Development' with: #('CI' 'Tools');
