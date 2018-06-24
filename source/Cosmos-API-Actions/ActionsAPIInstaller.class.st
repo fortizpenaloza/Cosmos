@@ -6,7 +6,7 @@ Class {
 		'interface',
 		'mappingRegistry'
 	],
-	#category : #'Cosmos-Actions-API'
+	#category : #'Cosmos-API-Actions'
 }
 
 { #category : #'instance creation' }

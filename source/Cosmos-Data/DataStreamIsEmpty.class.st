@@ -15,12 +15,6 @@ DataStreamIsEmpty class >> signalAll: failureExplanations [
 		signal: ('. ' join: failureExplanations)
 ]
 
-{ #category : #accessing }
-DataStreamIsEmpty >> defaultAction [
-
-	UnhandledError signalForException: self
-]
-
 { #category : #'private-testing' }
 DataStreamIsEmpty >> isResumable [
 

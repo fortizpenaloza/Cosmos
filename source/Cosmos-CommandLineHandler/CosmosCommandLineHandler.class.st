@@ -22,6 +22,7 @@ CosmosCommandLineHandler class >> description [
 { #category : #activation }
 CosmosCommandLineHandler >> activate [
 
+	<ignoreForCoverage> 
 	self
 		buildAndStartCosmos;
 		buildAndStartCosmosAPI;
@@ -31,6 +32,7 @@ CosmosCommandLineHandler >> activate [
 { #category : #'private-activation' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
+	<ignoreForCoverage>
 	| builder |
 
 	builder := CompositeSystemBuilder new.
@@ -44,7 +46,7 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 		yourself.
 
 	cosmos := builder build.
-	
+
 	cosmos startUp
 ]
 
@@ -105,13 +107,14 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 { #category : #'private-accessing' }
 CosmosCommandLineHandler >> periodicalScheduler [
 
-	^ PeriodicalScheduler
-		workingWith: DelayExperimentalSemaphoreScheduler new
+	<ignoreForCoverage>
+	^ PeriodicalScheduler workingWith: DelayExperimentalSemaphoreScheduler new
 ]
 
 { #category : #'private-accessing' }
 CosmosCommandLineHandler >> teapot [
 
+	<ignoreForCoverage>
 	| port debugMode |
 
 	port := self
