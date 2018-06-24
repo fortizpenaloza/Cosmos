@@ -12,15 +12,15 @@ MappingRegistryTest >> testDecoderRegistration [
 	mappingRegistry := MappingRegistry new.
 
 	self
-		should: [ mappingRegistry decoderFor: self triggerJsonVersion1dot0dot0MimeType ]
+		should: [ mappingRegistry decoderFor: self triggerMimeTypeVersion1dot0dot0 ]
 		raise: ObjectNotFound
 		withDescription: 'Decoder not found for given schema'.
 
 	mappingRegistry
 		register: self triggerJsonEncoderVersion1dot0dot0
-		 asDecoderFor: self triggerJsonVersion1dot0dot0MimeType.
+		 asDecoderFor: self triggerMimeTypeVersion1dot0dot0.
 
-	mapping := mappingRegistry decoderFor: self triggerJsonVersion1dot0dot0MimeType.
+	mapping := mappingRegistry decoderFor: self triggerMimeTypeVersion1dot0dot0.
 
 	self assert: mapping equals: self triggerJsonEncoderVersion1dot0dot0
 ]
@@ -33,15 +33,15 @@ MappingRegistryTest >> testEncoderRegistration [
 	mappingRegistry := MappingRegistry new.
 
 	self
-		should: [ mappingRegistry encoderFor: self triggerJsonVersion1dot0dot0MimeType ]
+		should: [ mappingRegistry encoderFor: self triggerMimeTypeVersion1dot0dot0 ]
 		raise: ObjectNotFound
 		withDescription: 'Encoder not found for given schema'.
 
 	mappingRegistry
 		register: self triggerJsonEncoderVersion1dot0dot0
-		 asEncoderFor: self triggerJsonVersion1dot0dot0MimeType.
+		 asEncoderFor: self triggerMimeTypeVersion1dot0dot0.
 
-	mapping := mappingRegistry encoderFor: self triggerJsonVersion1dot0dot0MimeType.
+	mapping := mappingRegistry encoderFor: self triggerMimeTypeVersion1dot0dot0.
 
 	self assert: mapping equals: self triggerJsonEncoderVersion1dot0dot0
 ]
@@ -53,7 +53,7 @@ MappingRegistryTest >> triggerJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
-MappingRegistryTest >> triggerJsonVersion1dot0dot0MimeType [
+MappingRegistryTest >> triggerMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
 ]

@@ -40,7 +40,7 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> testIsSafisfiedWhenDataStr
 
 	self
 		should: [ (condition isSatisfiedOn: self) ]
-		raise: BindingNotYetDefined
+		raise: DataStreamIsEmpty
 		withDescription: 'Last update date and time has not been initialized.'
 ]
 

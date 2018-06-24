@@ -50,6 +50,6 @@ DataStreamCurrentValueTriggeringConditionTest >> testIsSafisfiedWhenDataStreamCu
 
 	self
 		should: [ (condition isSatisfiedOn: self) ]
-		raise: BindingNotYetDefined 
+		raise: DataStreamIsEmpty 
 		withDescription: 'Current value has not been initialized.'
 ]
