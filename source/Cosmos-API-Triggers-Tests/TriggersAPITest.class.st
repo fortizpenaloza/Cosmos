@@ -87,7 +87,7 @@ TriggersAPITest >> setTriggedToTrue [
 		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
-{ #category : #initialization }
+{ #category : #running }
 TriggersAPITest >> setUp [
 
 	super setUp.
@@ -102,7 +102,7 @@ TriggersAPITest >> setUp [
 		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
 ]
 
-{ #category : #initialization }
+{ #category : #running }
 TriggersAPITest >> setUpRequirements [
 
 	super
