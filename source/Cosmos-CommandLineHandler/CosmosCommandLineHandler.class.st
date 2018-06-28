@@ -94,8 +94,17 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 		exception:
 			HTTPClientError
 				-> [ :signal :request | 
+					| error |
+
+					error := Dictionary new.
+
+					error
+						at: #code put: signal tag;
+						at: #message put: signal messageText;
+						yourself.
+
 					(ZnResponse statusCode: signal tag)
-						entity: (ZnEntity json: signal messageText);
+						entity: (ZnEntity json: (STONJSON toStringPretty: error));
 						yourself ].
 
 	server start
