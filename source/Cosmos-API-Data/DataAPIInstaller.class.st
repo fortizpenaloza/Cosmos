@@ -26,6 +26,25 @@ DataAPIInstaller >> addBulkDataPointRegistrationRoute [
 ]
 
 { #category : #'private-installing' }
+DataAPIInstaller >> addCrossOriginResourceSharingRoute [
+
+	server
+		OPTIONS:
+			'/data-streams'
+				-> [ :request | 
+					| response |
+
+					response := ZnResponse noContent.
+
+					response headers
+						at: 'Access-Control-Allow-Methods' put: 'POST GET';
+						at: 'Access-Control-Allow-Origin' put: '*';
+						at: 'Access-Control-Max-Age' put: '86400'.
+
+					response ]
+]
+
+{ #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamRoute [
 
 	server
@@ -80,7 +99,8 @@ DataAPIInstaller >> install [
 		addGetDataStreamSnapshotsRoute;
 		addGetDataStreamRoute;
 		addRegisterDataStreamRoute;
-		addBulkDataPointRegistrationRoute.		
+		addBulkDataPointRegistrationRoute;
+		addCrossOriginResourceSharingRoute.
 
 	^ interface
 ]
