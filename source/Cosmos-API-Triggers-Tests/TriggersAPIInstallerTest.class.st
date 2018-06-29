@@ -14,5 +14,6 @@ TriggersAPIInstallerTest >> testInstallation [
 
 	teapot := Teapot on.
 	(TriggersAPIInstaller toInstallOn: teapot workingWith: self) install.
+
 	self assert: teapot routes size equals: 3
 ]

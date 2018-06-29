@@ -1,8 +1,17 @@
 Class {
 	#name : #DataAPITest,
 	#superclass : #SystemBasedUserStoryTest,
+	#instVars : [
+		'interface'
+	],
 	#category : #'Cosmos-API-Data-Tests'
 }
+
+{ #category : #accessing }
+DataAPITest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
+
+	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
+]
 
 { #category : #'expected results' }
 DataAPITest >> dataStreamsSnapshotAsJSON [
@@ -39,6 +48,8 @@ DataAPITest >> pressureStream [
 DataAPITest >> setUp [
 
 	super setUp.
+
+	interface := (DataAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install.
 
 	(SensorsSampleAddOn on: rootSystem) install
 ]
@@ -84,7 +95,7 @@ DataAPITest >> temperatureStream [
 { #category : #tests }
 DataAPITest >> testDataPointBulkRegistration [
 
-	| interface response temperature pressure |
+	| response temperature pressure |
 
 	temperature := self temperatureStream.
 	pressure := self pressureStream.
@@ -92,8 +103,8 @@ DataAPITest >> testDataPointBulkRegistration [
 	self deny: temperature currentValue = 24.
 	self deny: pressure currentValue = 89.
 
-	interface := DataAPI workingWithin: rootSystem.
-	response := interface registerBulkPointsFrom: self updateTemperatureAndPressureDataStreamsJSON.
+	response := interface
+		registerBulkPointsHandling: self updateTemperatureAndPressureDataStreamsHttpRequest.
 
 	self assert: response code equals: 201.
 
@@ -104,23 +115,9 @@ DataAPITest >> testDataPointBulkRegistration [
 { #category : #tests }
 DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 
-	| interface |
-
-	interface := DataAPI workingWithin: rootSystem.
-
 	self
-		should: [ interface
-				registerBulkPointsFrom:
-					'[
-			{
-				"xxx" : "Temperature",
-				"value" : 24
-			},
-			{
-				"data-stream" : "Pressure",
-				"value" : 89
-			}
-		]' ]
+		should:
+			[ interface registerBulkPointsHandling: self updateTemperatureAndPressureDataStreamsMalformattedRequest ]
 		raise: HTTPClientError
 		withDescription: '{"error":{"code":400,"message":"Expected key data-stream was not found"}'
 ]
@@ -216,9 +213,13 @@ DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
 ]
 
 { #category : #accessing }
-DataAPITest >> updateTemperatureAndPressureDataStreamsJSON [
+DataAPITest >> updateTemperatureAndPressureDataStreamsHttpRequest [
 
-	^ '[
+	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+		entity:
+			(ZnEntity
+				with:
+					'[
 			{
 				"data-stream" : "Temperature",
 				"value" : 24
@@ -228,4 +229,25 @@ DataAPITest >> updateTemperatureAndPressureDataStreamsJSON [
 				"value" : 89
 			}
 		]'
+				type: self dataPointCollectionMimeTypeVersion1dot0dot0)
+]
+
+{ #category : #accessing }
+DataAPITest >> updateTemperatureAndPressureDataStreamsMalformattedRequest [
+
+	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+		entity:
+			(ZnEntity
+				with:
+					'[
+			{
+				"xxx" : "Temperature",
+				"value" : 24
+			},
+			{
+				"data-stream" : "Pressure",
+				"value" : 89
+			}
+		]'
+				type: self dataPointCollectionMimeTypeVersion1dot0dot0)
 ]

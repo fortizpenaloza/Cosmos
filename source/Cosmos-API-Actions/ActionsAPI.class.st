@@ -54,7 +54,7 @@ ActionsAPI >> initializeWorkingWithin: aContext [
 ]
 
 { #category : #API }
-ActionsAPI >> registerFrom: aJSON [
+ActionsAPI >> registerHandling: aJSON [
 
 	^ [ [ | rawAction |
 
@@ -68,13 +68,9 @@ ActionsAPI >> registerFrom: aJSON [
 
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound
-		do: [ :signal | 
-			HTTPClientError
-				signalConflict: ('{"error":{"code": 409,"message":"<1s>"}}' expandMacrosWith: signal messageText) ] ]
+		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound , DecodingFailed
 		do: [ :signal | 
 			HTTPClientError
-				signalBadRequest:
-					('{"error":{"code":400,"message":"Expected key <1s> was not found"}'
-						expandMacrosWith: signal key) ]
+				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
 ]
