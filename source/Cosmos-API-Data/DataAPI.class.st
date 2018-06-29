@@ -2,9 +2,9 @@ Class {
 	#name : #DataAPI,
 	#superclass : #Object,
 	#instVars : [
-		'rootSystem',
 		'dataStreamMapping',
-		'dataStreamsSnapshotsMapping'
+		'dataStreamsSnapshotsMapping',
+		'context'
 	],
 	#category : #'Cosmos-API-Data'
 }
@@ -18,7 +18,7 @@ DataAPI class >> workingWithin: aCompositeSystem [
 { #category : #systems }
 DataAPI >> dataManagementSystem [
 
-	^ rootSystem systemImplementing: #DataManagementSystemInterface
+	^ context systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #initialization }
@@ -68,7 +68,7 @@ DataAPI >> initializeMappings [
 { #category : #initialization }
 DataAPI >> initializeWorkingWithin: aContext [
 
-	rootSystem := aContext.
+	context := aContext.
 	self initializeMappings
 ]
 
@@ -91,24 +91,16 @@ DataAPI >> jsonFormattedStreams [
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
-{ #category : #'private-API' }
-DataAPI >> register: aValue toStreamNamed: aName [
-
-	^ self dataManagementSystem register: aValue toStreamNamed: aName
-]
-
 { #category : #API }
-DataAPI >> registerBulkPointsFrom: aJSON [
+DataAPI >> registerBulkPointsHandling: anHttpRequest [
 
 	^ [ | rawData |
 
-	rawData := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
+	rawData := context decode: anHttpRequest contents encodedAs: anHttpRequest contentType.
 
 	rawData
 		do:
-			[ :rawDataPoint | self register: (rawDataPoint at: 'value') toStreamNamed: (rawDataPoint at: 'data-stream') ].
+			[ :rawDataPoint | context register: (rawDataPoint at: 'value') toStreamNamed: (rawDataPoint at: 'data-stream') ].
 
 	ZnResponse created: 'all' ]
 		on: KeyNotFound

@@ -73,5 +73,5 @@ ActionsAPIContext >> parseNameFrom: rawAction [
 { #category : #parsing }
 ActionsAPIContext >> parseRequestFrom: rawAction [ 
 
-	self decode: #request from: rawAction with: self httpRequestParser
+	^ self decode: #request from: rawAction with: self httpRequestParser
 ]

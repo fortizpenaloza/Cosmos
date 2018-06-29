@@ -82,7 +82,7 @@ ActionsAPIInstaller >> addGetActionsRoute [
 { #category : #'private-installing' }
 ActionsAPIInstaller >> addRegisterActionRoute [
 
-	server POST: '/actions' -> [ :request | interface registerFrom: request contents ]
+	server POST: '/actions' -> [ :request | interface registerHandling: request contents ]
 ]
 
 { #category : #initialization }

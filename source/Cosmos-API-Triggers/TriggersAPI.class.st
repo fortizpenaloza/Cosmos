@@ -32,7 +32,7 @@ TriggersAPI >> initializeWorkingWithin: aContext [
 ]
 
 { #category : #API }
-TriggersAPI >> registerFrom: anHttpRequest [
+TriggersAPI >> registerHandling: anHttpRequest [
 
 	^ [ [ context
 		register: anHttpRequest contents
@@ -54,7 +54,7 @@ TriggersAPI >> triggerManagementSystem [
 ]
 
 { #category : #API }
-TriggersAPI >> triggersFor: anHttpRequest [
+TriggersAPI >> triggersHandling: anHttpRequest [
 
 	| mimeType |
 
