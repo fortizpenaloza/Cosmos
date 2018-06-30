@@ -18,7 +18,7 @@ DataAPI class >> workingWithin: aCompositeSystem [
 { #category : #systems }
 DataAPI >> dataManagementSystem [
 
-	^ context systemImplementing: #DataManagementSystemInterface
+	^ context dataManagementSystem
 ]
 
 { #category : #initialization }

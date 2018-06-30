@@ -37,9 +37,8 @@ DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 					response := ZnResponse noContent.
 
 					response headers
-						at: 'Access-Control-Allow-Headers' put: 'Content-Type, Accept';
-						at: 'Access-Control-Allow-Methods' put: 'POST GET';
-						at: 'Access-Control-Allow-Origin' put: '*';
+						at: 'Access-Control-Allow-Headers' put: 'Access-Control-Allow-Origin, Content-Type, Accept';
+						at: 'Access-Control-Allow-Methods' put: 'POST, GET';
 						at: 'Access-Control-Max-Age' put: '86400'.
 
 					response ]
