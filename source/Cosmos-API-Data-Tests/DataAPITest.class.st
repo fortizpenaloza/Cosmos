@@ -125,14 +125,12 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 { #category : #tests }
 DataAPITest >> testDataStreamRegistration [
 
-	| interface |
-
+	
 	self dataManagementSystem
 		streamNamed: 'pH'
 		ifFound: [ :dataStream | self fail ]
 		ifNone: [ "do nothing" ].
 
-	interface := DataAPI workingWithin: rootSystem.
 	interface registerStreamFrom: '{"name": "pH"}'.
 
 	self dataManagementSystem
@@ -148,10 +146,6 @@ DataAPITest >> testDataStreamRegistration [
 
 { #category : #tests }
 DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
-
-	| interface |
-
-	interface := DataAPI workingWithin: rootSystem.
 
 	self
 		should: [ interface registerStreamFrom: '{"name": "Temperature"}' ]
@@ -175,9 +169,8 @@ DataAPITest >> testDataStreamRegistrationFailsWithMalformattedRequest [
 { #category : #tests }
 DataAPITest >> testQueryingDataStreamsSnapshot [
 
-	| interface response |
+	| response |
 
-	interface := DataAPI workingWithin: rootSystem.
 	response := interface streams.
 
 	self
@@ -188,9 +181,8 @@ DataAPITest >> testQueryingDataStreamsSnapshot [
 { #category : #tests }
 DataAPITest >> testQueryingStreamByName [
 
-	| interface response |
+	| response |
 
-	interface := DataAPI workingWithin: rootSystem.
 	response := interface streamNamed: 'Temperature'.
 
 	self
@@ -201,13 +193,9 @@ DataAPITest >> testQueryingStreamByName [
 { #category : #tests }
 DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
 
-	| interface stream |
-
-	interface := DataAPI workingWithin: rootSystem.
-
 	self
 		should:
-			[ stream := interface streamNamed: 'pH' ]
+			[ interface streamNamed: 'pH' ]
 		raise: HTTPClientError
 		withDescription: 'Not found'
 ]
