@@ -62,6 +62,26 @@ ActionsAPIInstaller >> actionJsonVersion1dot0dot0MimeType [
 ]
 
 { #category : #'private-installing' }
+ActionsAPIInstaller >> addCrossOriginResourceSharingRoute [
+
+	server
+		OPTIONS:
+			'/actions'
+				-> [ :request | 
+					| response |
+
+					response := ZnResponse noContent.
+
+					response headers
+						at: 'Access-Control-Allow-Headers'
+							put: 'Access-Control-Allow-Origin, Content-Type, Accept';
+						at: 'Access-Control-Allow-Methods' put: 'POST, GET';
+						at: 'Access-Control-Max-Age' put: '86400'.
+
+					response ]
+]
+
+{ #category : #'private-installing' }
 ActionsAPIInstaller >> addDeregisterActionRoute [
 
 	server
@@ -99,7 +119,8 @@ ActionsAPIInstaller >> install [
 	self
 		addGetActionsRoute;
 		addRegisterActionRoute;
-		addDeregisterActionRoute.
+		addDeregisterActionRoute;
+		addCrossOriginResourceSharingRoute.
 
 	^ interface
 ]

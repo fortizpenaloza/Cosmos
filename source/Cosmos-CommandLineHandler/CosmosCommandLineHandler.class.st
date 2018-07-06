@@ -58,6 +58,27 @@ CosmosCommandLineHandler >> activate [
 ]
 
 { #category : #'private-activation' }
+CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aRequest matchesAny: allowedOrigins [
+
+	<ignoreForCoverage>
+	allowedOrigins
+		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
+		ifFound:
+			[ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
+		ifNone: [ "do nothing" ]
+]
+
+{ #category : #'private-accessing' }
+CosmosCommandLineHandler >> allowedOrigins [
+
+	<ignoreForCoverage>
+	^ self
+		optionAt: 'allowed-origins'
+		ifPresent: [ :string | string substrings: ',' ]
+		ifAbsent: [ OrderedCollection new ]
+]
+
+{ #category : #'private-activation' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
 	<ignoreForCoverage>
@@ -87,32 +108,11 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	server := self teapot.
 
 	(DataAPIInstaller toInstallOn: server workingWith: cosmos) install.
-	(TriggersAPIInstaller toInstallOn: server workingWith: cosmos) install.
+	(TriggersAPIInstaller toInstallOn: server workingWith: cosmos)
+		install.
 	(ActionsAPIInstaller toInstallOn: server workingWith: cosmos) install.
-
-	server
-		after:
-			'/*'
-				-> [ :request :response | response headers at: 'Access-Control-Allow-Origin' put: '*' ];
-		exception:
-			HTTPClientError
-				-> [ :signal :request | 
-					| error |
-
-					error := Dictionary new.
-
-					error
-						at: #code put: signal tag;
-						at: #message put: signal messageText;
-						yourself.
-
-					(ZnResponse statusCode: signal tag)
-						headers:
-							(ZnHeaders defaultResponseHeaders
-								at: 'Access-Control-Allow-Origin' put: '*';
-								yourself);
-						entity: (ZnEntity json: (STONJSON toStringPretty: error));
-						yourself ].
+	self configureAllowOriginAfterFilterOn: server.
+	self configureExceptionHandlerOn: server.
 
 	server start
 ]
@@ -148,6 +148,64 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 	scheduler start
 ]
 
+{ #category : #'private-activation' }
+CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
+
+	<ignoreForCoverage>
+	| allowedOrigins |
+
+	allowedOrigins := self allowedOrigins.
+
+	aServer
+		after:
+			'/*'
+				-> [ :request :response | 
+					self
+						addAllowOriginHeaderTo: response
+						ifOriginAt: request
+						matchesAny: allowedOrigins.
+
+					response ]
+]
+
+{ #category : #'private-activation' }
+CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
+
+	<ignoreForCoverage>
+	aServer
+		exception:
+			HTTPClientError
+				-> [ :signal :request | 
+					| errorMessage |
+
+					errorMessage := OrderedDictionary new
+						at: #code put: signal tag;
+						at: #message put: signal messageText;
+						yourself.
+
+					(ZnResponse statusCode: signal tag)
+						headers:
+							(ZnHeaders defaultResponseHeaders
+								at: 'Access-Control-Allow-Origin' put: '*';
+								yourself);
+						entity: (ZnEntity json: (STONJSON toStringPretty: errorMessage));
+						yourself ]
+]
+
+{ #category : #'private-accessing' }
+CosmosCommandLineHandler >> defaultPortNumber [
+
+	<ignoreForCoverage>
+	^ 8080
+]
+
+{ #category : #'private-accessing' }
+CosmosCommandLineHandler >> isDebugModeEnabled [
+
+	<ignoreForCoverage>
+	^ self hasOption: 'debug-mode'
+]
+
 { #category : #'private-accessing' }
 CosmosCommandLineHandler >> periodicalScheduler [
 
@@ -156,19 +214,21 @@ CosmosCommandLineHandler >> periodicalScheduler [
 ]
 
 { #category : #'private-accessing' }
+CosmosCommandLineHandler >> portNumber [
+
+	<ignoreForCoverage>
+	^ self
+		optionAt: 'port'
+		ifPresent: [ :string | string asNumber ]
+		ifAbsent: [ self defaultPortNumber ]
+]
+
+{ #category : #'private-accessing' }
 CosmosCommandLineHandler >> teapot [
 
 	<ignoreForCoverage>
-	| port debugMode |
-
-	port := self
-		optionAt: 'port'
-		ifPresent: [ :string | string asNumber ]
-		ifAbsent: [ 8080 ].
-	debugMode := self hasOption: 'debug-mode'.
-
 	^ Teapot
 		configure:
-			{(#port -> port).
-			(#debugMode -> debugMode)}
+			{(#port -> self portNumber).
+			(#debugMode -> self isDebugModeEnabled)}
 ]
