@@ -19,7 +19,7 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 TriggersAPIInstaller >> addGetTriggersRoute [
 
 	server
-		GET: '/triggers' -> [ :request | interface triggersFor: request ].
+		GET: '/triggers' -> [ :request | interface triggersHandling: request ].
 		
 	self registerTriggerJsonEncoderVersion1dot0dot0
 ]
@@ -28,7 +28,7 @@ TriggersAPIInstaller >> addGetTriggersRoute [
 TriggersAPIInstaller >> addRegisterTriggerRoute [
 
 	server
-		POST: '/triggers' -> [ :request | interface registerFrom: request ];
+		POST: '/triggers' -> [ :request | interface registerHandling: request ];
 		output: #text.
 		
 	self registerTriggerJsonDecoderVersion1dot0dot0

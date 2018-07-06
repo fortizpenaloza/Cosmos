@@ -87,7 +87,7 @@ TriggersAPITest >> setTriggedToTrue [
 		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
-{ #category : #initialization }
+{ #category : #running }
 TriggersAPITest >> setUp [
 
 	super setUp.
@@ -102,7 +102,7 @@ TriggersAPITest >> setUp [
 		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
 ]
 
-{ #category : #initialization }
+{ #category : #running }
 TriggersAPITest >> setUpRequirements [
 
 	super
@@ -137,7 +137,7 @@ TriggersAPITest >> testGettingTriggers [
 		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature;
 		registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := interface triggersFor: self getTriggersHttpRequest.
+	response := interface triggersHandling: self getTriggersHttpRequest.
 
 	self
 		assert: response
@@ -173,7 +173,7 @@ TriggersAPITest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion 
 
 	self
 		should: [ interface
-				triggersFor:
+				triggersHandling:
 					((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
 						setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0')) ]
 		raise: HTTPClientError
@@ -188,7 +188,7 @@ TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWa
 
 	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
-	response := interface triggersFor: self getTriggersHttpRequest.
+	response := interface triggersHandling: self getTriggersHttpRequest.
 
 	self
 		assert: response isSuccess;
@@ -216,7 +216,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 	self
 		registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
-	response := interface triggersFor: self getTriggersHttpRequest.
+	response := interface triggersHandling: self getTriggersHttpRequest.
 	self
 		assert: response isSuccess;
 		assert: response contents
@@ -260,7 +260,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 					(TimeIntervalTriggeringCondition
 						checkingCurrentTimeIsBetween: (self eightPM to: self ninePM))).
 
-	response := interface triggersFor: self getTriggersHttpRequest.
+	response := interface triggersHandling: self getTriggersHttpRequest.
 	self
 		assert: response isSuccess;
 		assert: response contents
@@ -300,7 +300,7 @@ TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryF
 
 	self registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := interface triggersFor: self getTriggersHttpRequest.
+	response := interface triggersHandling: self getTriggersHttpRequest.
 
 	self
 		assert: response isSuccess;
@@ -331,7 +331,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 		ifNone: [ "do nothing" ].
 
 	response := interface
-		registerFrom:
+		registerHandling:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
 					(ZnEntity
@@ -371,7 +371,7 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 		ifNone: [ "do nothing" ].
 
 	response := interface
-		registerFrom:
+		registerHandling:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
 					(ZnEntity

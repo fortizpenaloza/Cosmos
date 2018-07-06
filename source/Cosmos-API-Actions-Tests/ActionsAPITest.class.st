@@ -42,7 +42,7 @@ ActionsAPITest >> testDeregistration [
 	self assert: self actionManagementSystem actions isEmpty.
 
 	interface
-		registerFrom:
+		registerHandling:
 			'{
 		"name" : "List DNS records",
 		"request" : { 
@@ -134,7 +134,7 @@ ActionsAPITest >> testRegistration [
 	self assert: self actionManagementSystem actions isEmpty.
 
 	response := interface
-		registerFrom:
+		registerHandling:
 			'{
 		"name" : "List DNS records",
 		"request" : { 

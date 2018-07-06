@@ -91,11 +91,27 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	(ActionsAPIInstaller toInstallOn: server workingWith: cosmos) install.
 
 	server
+		after:
+			'/*'
+				-> [ :request :response | response headers at: 'Access-Control-Allow-Origin' put: '*' ];
 		exception:
 			HTTPClientError
 				-> [ :signal :request | 
+					| error |
+
+					error := Dictionary new.
+
+					error
+						at: #code put: signal tag;
+						at: #message put: signal messageText;
+						yourself.
+
 					(ZnResponse statusCode: signal tag)
-						entity: (ZnEntity json: signal messageText);
+						headers:
+							(ZnHeaders defaultResponseHeaders
+								at: 'Access-Control-Allow-Origin' put: '*';
+								yourself);
+						entity: (ZnEntity json: (STONJSON toStringPretty: error));
 						yourself ].
 
 	server start

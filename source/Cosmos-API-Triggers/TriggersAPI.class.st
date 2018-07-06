@@ -32,7 +32,7 @@ TriggersAPI >> initializeWorkingWithin: aContext [
 ]
 
 { #category : #API }
-TriggersAPI >> registerFrom: anHttpRequest [
+TriggersAPI >> registerHandling: anHttpRequest [
 
 	^ [ [ context
 		register: anHttpRequest contents
@@ -54,18 +54,18 @@ TriggersAPI >> triggerManagementSystem [
 ]
 
 { #category : #API }
-TriggersAPI >> triggersFor: anHttpRequest [
+TriggersAPI >> triggersHandling: anHttpRequest [
 
 	| mimeType |
 
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
 
-	^ [ [ ZnResponse
+	^ [ [ [ ZnResponse
 		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: ObjectNotFound
-		do: [ :signal | 
-			HTTPClientError
-				signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
+		on: DecodingFailed
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
