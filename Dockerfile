@@ -4,4 +4,4 @@ WORKDIR /opt/pharo
 
 ADD Cosmos.image Cosmos.image
 
-CMD ["./pharo", "Cosmos.image", "cosmos", "--port=8090"]
+CMD ["./pharo", "Cosmos.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
