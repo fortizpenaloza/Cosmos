@@ -48,7 +48,7 @@ ActionsAPITest >> testDeregistration [
 		"request" : { 
 			"request_line" : { 
 				"method" : "GET",
-				"URL" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
+				"url" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
 				"version" : "HTTP/1.1"
 			},
 		"headers" : [
@@ -140,7 +140,7 @@ ActionsAPITest >> testRegistration [
 		"request" : { 
 			"request_line" : { 
 				"method" : "GET",
-				"URL" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
+				"url" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
 				"version" : "HTTP/1.1"
 			},
 		"headers" : [

@@ -119,14 +119,14 @@ DataAPI >> registerStreamFrom: aJSON [
 	rawStream := (NeoJSONReader on: aJSON readStream)
 		propertyNamesAsSymbols: true;
 		next.
-		
+
 	name := rawStream at: #name.
 
 	self dataManagementSystem registerStreamNamed: name.
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound
+		on: KeyNotFound, InstanceCreationFailed 
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 

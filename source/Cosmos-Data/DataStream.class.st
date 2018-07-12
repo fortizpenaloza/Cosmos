@@ -18,7 +18,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+DataStream class >> assertIsNotEmpty: aName [
+
+	AssertionChecker
+		enforce: [ aName notEmpty ]
+		because: 'Data stream name must not be empty'
+		raising: InstanceCreationFailed
+]
+
+{ #category : #'instance creation' }
 DataStream class >> named: aName createdOn: aDateTime [
+
+	self assertIsNotEmpty: aName.
 
 	^ self new initializeNamed: aName createdOn: aDateTime
 ]
