@@ -61,11 +61,12 @@ CosmosCommandLineHandler >> activate [
 CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aRequest matchesAny: allowedOrigins [
 
 	<ignoreForCoverage>
-	allowedOrigins
+	[ allowedOrigins
 		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
-		ifFound:
-			[ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
-		ifNone: [ "do nothing" ]
+		ifFound: [ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
+		ifNone: [ "do nothing" ] ]
+		on: KeyNotFound
+		do: [ :signal | HTTPClientError signalBadRequest: 'Origin header expected not found' ]
 ]
 
 { #category : #'private-accessing' }
@@ -152,10 +153,6 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 
 	<ignoreForCoverage>
-	| allowedOrigins |
-
-	allowedOrigins := self allowedOrigins.
-
 	aServer
 		after:
 			'/*'
@@ -163,9 +160,10 @@ CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 					self
 						addAllowOriginHeaderTo: response
 						ifOriginAt: request
-						matchesAny: allowedOrigins.
+						matchesAny: self allowedOrigins.
 
-					response ]
+					response ];
+		when: [ :request | self methodIsNotSafeOf: request ]
 ]
 
 { #category : #'private-activation' }
@@ -178,7 +176,7 @@ CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 				-> [ :signal :request | 
 					| errorMessage |
 
-					errorMessage := OrderedDictionary new
+					errorMessage := Dictionary new
 						at: #code put: signal tag;
 						at: #message put: signal messageText;
 						yourself.
@@ -204,6 +202,14 @@ CosmosCommandLineHandler >> isDebugModeEnabled [
 
 	<ignoreForCoverage>
 	^ self hasOption: 'debug-mode'
+]
+
+{ #category : #'private-activation' }
+CosmosCommandLineHandler >> methodIsNotSafeOf: aRequest [
+
+	"According to Hypertext Transfer Protocol version 1.1 GET and HEAD are safe methods that SHOULD NOT have the significance of taking an action other than retrieval"
+
+	^ (#('HEAD' 'GET') includes: aRequest method) not
 ]
 
 { #category : #'private-accessing' }

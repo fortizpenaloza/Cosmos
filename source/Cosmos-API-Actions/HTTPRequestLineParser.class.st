@@ -9,7 +9,7 @@ HTTPRequestLineParser >> parse: rawRequestLine [
 
 	^ ZnRequestLine empty
 		method: (rawRequestLine at: #method);
-		uri: (rawRequestLine at: #URL) asZnUrl;
+		uri: (rawRequestLine at: #url) asZnUrl;
 		version: (rawRequestLine at: #version);
-		yourself 
+		yourself
 ]
