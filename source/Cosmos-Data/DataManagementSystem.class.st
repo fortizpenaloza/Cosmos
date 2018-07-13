@@ -18,6 +18,12 @@ DataManagementSystem class >> implementedInterface [
 	^ SystemInterface >> #DataManagementSystemInterface 
 ]
 
+{ #category : #managing }
+DataManagementSystem >> deregisterStream: aDataStream [ 
+	
+	dataStreams remove: aDataStream 
+]
+
 { #category : #'initialize-release' }
 DataManagementSystem >> initialize [
 
@@ -56,7 +62,7 @@ DataManagementSystem >> registerPoint: aDataPoint to: aDataStream [
 
 { #category : #'private-managing' }
 DataManagementSystem >> registerStream: aDataStream [
-
+	
 	^ dataStreams add: aDataStream
 ]
 
