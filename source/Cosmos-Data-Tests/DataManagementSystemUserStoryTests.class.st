@@ -52,6 +52,20 @@ DataManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotF
 ]
 
 { #category : #tests }
+DataManagementSystemUserStoryTests >> testDataStreamDeregistration [
+
+	| dataStream |
+
+	self assert: self dataManagementSystem streams isEmpty.
+	
+	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	self deny: self dataManagementSystem streams isEmpty.
+
+	self dataManagementSystem deregisterStream: dataStream.
+	self assert: self dataManagementSystem streams isEmpty
+]
+
+{ #category : #tests }
 DataManagementSystemUserStoryTests >> testDataStreamRegistration [
 
 	| dataStream |

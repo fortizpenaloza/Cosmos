@@ -38,10 +38,11 @@ ActionsAPIInstaller >> actionJsonEncoderVersion1dot0dot0 [
 					do: [ :mapping | 
 					mapping
 						mapAccessor: #method;
-						mapAccessor: #uri to: #URL;
+						mapAccessor: #uri to: #url;
 						mapInstVar: #version ];
 				for: ZnUrl customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
-				for: ZnHeaders do: [ :mapping | mapping mapAccessor: #headers ];
+				for: ZnHeaders
+					customDo: [ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
 				for: Association
 					do: [ :mapping | 
 					mapping
