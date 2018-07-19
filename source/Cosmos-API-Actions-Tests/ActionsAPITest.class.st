@@ -19,7 +19,7 @@ ActionsAPITest >> getActionsHttpRequest [
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions') setAccept: self actionJsonVersion1dot0dot0MimeType
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #running }
 ActionsAPITest >> setUp [
 
 	super setUp.
@@ -27,7 +27,7 @@ ActionsAPITest >> setUp [
 	interface := (ActionsAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #running }
 ActionsAPITest >> setUpRequirements [
 
 	super
@@ -36,7 +36,7 @@ ActionsAPITest >> setUpRequirements [
  
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #tests }
 ActionsAPITest >> testDeregistration [
 
 	self assert: self actionManagementSystem actions isEmpty.
@@ -73,7 +73,7 @@ ActionsAPITest >> testDeregistration [
 		
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #tests }
 ActionsAPITest >> testQueringActions [
 
 	| response |
@@ -128,7 +128,7 @@ ActionsAPITest >> testQueringActions [
 ]' expandMacrosWith: TimeZones local offset)
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #tests }
 ActionsAPITest >> testRegistration [
 
 	| response |
