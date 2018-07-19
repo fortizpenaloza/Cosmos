@@ -24,7 +24,7 @@ DataManagementSystem >> deregisterStream: aDataStream [
 	dataStreams remove: aDataStream 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 DataManagementSystem >> initialize [
 
 	super initialize.
@@ -62,7 +62,7 @@ DataManagementSystem >> registerPoint: aDataPoint to: aDataStream [
 
 { #category : #'private-managing' }
 DataManagementSystem >> registerStream: aDataStream [
-	
+
 	^ dataStreams add: aDataStream
 ]
 
