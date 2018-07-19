@@ -162,7 +162,10 @@ BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorS
 { #category : #actions }
 BaselineOfCosmos >> registerMetadataSystemInterface [
 
-	self registerInterfaceAs: #MetadataSystemInterface named: 'Metadata System Interface' declaring: #(#register:as:for)
+	self
+		registerInterfaceAs: #MetadataSystemInterface
+		named: 'Metadata System Interface'
+		declaring: #(#metadataFor: #metadataFor:of: #register:of:for:)
 ]
 
 { #category : #actions }
