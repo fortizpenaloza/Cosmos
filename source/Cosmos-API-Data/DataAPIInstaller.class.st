@@ -68,8 +68,7 @@ DataAPIInstaller >> addRegisterDataStreamRoute [
 	server
 		POST:
 			'/data-streams'
-				-> [ :request | interface registerStreamFrom: request contents ];
-		output: #text
+				-> [ :request | interface registerStreamHandling: request ]
 ]
 
 { #category : #accessing }

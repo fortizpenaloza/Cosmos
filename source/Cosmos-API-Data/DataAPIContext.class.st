@@ -30,7 +30,7 @@ DataAPIContext >> decode: aJSON encodedAs: aMimeType [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #decoding }
 DataAPIContext >> encode: anObject to: aMimeType [
 
 	^ (mappingRegistry encoderFor: aMimeType) value: anObject

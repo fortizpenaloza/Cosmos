@@ -86,11 +86,11 @@ DataAPI >> registerBulkPointsHandling: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> registerStreamFrom: aJSON [
-
+DataAPI >> registerStreamHandling: anHttpRequest [
+	
 	^ [ [ | rawStream name |
 
-	rawStream := (NeoJSONReader on: aJSON readStream)
+	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 

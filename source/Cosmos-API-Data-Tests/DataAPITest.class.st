@@ -130,15 +130,20 @@ DataAPITest >> testDataStreamRegistration [
 		ifFound: [ :dataStream | self fail ]
 		ifNone: [ "do nothing" ].
 
-	interface registerStreamFrom: '{"name": "pH"}'.
+	interface
+		registerStreamHandling:
+			((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+				entity:
+					(ZnEntity
+						with: '{"name": "pH"}'
+						type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))).
 
 	self dataManagementSystem
 		streamNamed: 'pH'
 		ifFound: [ :dataStream | 
 			self
 				assert: dataStream name equals: 'pH';
-				assert: dataStream creationDateTime
-					equals: self timeSystem dateTime;
+				assert: dataStream creationDateTime equals: self timeSystem dateTime;
 				assert: dataStream dataPoints isEmpty ]
 		ifNone: [ self fail ]
 ]
@@ -147,7 +152,13 @@ DataAPITest >> testDataStreamRegistration [
 DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
 
 	self
-		should: [ interface registerStreamFrom: '{"name": "Temperature"}' ]
+		should: [ interface
+				registerStreamHandling:
+					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+						entity:
+							(ZnEntity
+								with: '{"name": "Temperature"}'
+								type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))) ]
 		raise: HTTPClientError
 		withDescription: 'A data stream with that name already exists in system'
 ]
@@ -156,7 +167,13 @@ DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
 DataAPITest >> testDataStreamRegistrationFailsWithMalformattedRequest [
 
 	self
-		should: [ interface registerStreamFrom: '{"xxx": "Temperature"}' ]
+		should: [ interface
+				registerStreamHandling:
+					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+						entity:
+							(ZnEntity
+								with: '{"xxx": "Temperature"}'
+								type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))) ]
 		raise: HTTPClientError
 		withDescription: 'key #name not found in Dictionary'
 ]
