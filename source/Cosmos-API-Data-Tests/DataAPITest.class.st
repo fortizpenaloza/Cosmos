@@ -125,7 +125,6 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 { #category : #tests }
 DataAPITest >> testDataStreamRegistration [
 
-	
 	self dataManagementSystem
 		streamNamed: 'pH'
 		ifFound: [ :dataStream | self fail ]
@@ -156,10 +155,6 @@ DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
 { #category : #tests }
 DataAPITest >> testDataStreamRegistrationFailsWithMalformattedRequest [
 
-	| interface |
-
-	interface := DataAPI workingWithin: rootSystem.
-
 	self
 		should: [ interface registerStreamFrom: '{"xxx": "Temperature"}' ]
 		raise: HTTPClientError
@@ -171,7 +166,12 @@ DataAPITest >> testQueryingDataStreamsSnapshot [
 
 	| response |
 
-	response := interface streams.
+	response := interface
+		streamsHandling:
+			((ZnRequest get: 'http://COSMOS_URL/v1/data-streams')
+				setAccept:
+					(ZnMimeType
+						fromString: 'application/vnd.cosmos.data-stream-snapshot+json; version=1.0.0')).
 
 	self
 		assert: response code equals: 200;

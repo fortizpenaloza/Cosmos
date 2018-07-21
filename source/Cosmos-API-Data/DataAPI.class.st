@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'dataStreamMapping',
-		'dataStreamsSnapshotsMapping',
 		'context'
 	],
 	#category : #'Cosmos-API-Data'
@@ -23,23 +22,6 @@ DataAPI >> dataManagementSystem [
 
 { #category : #initialization }
 DataAPI >> initializeMappings [
-
-	dataStreamsSnapshotsMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: DataStream
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #currentValue to: 'current-value';
-						mapAccessor: #lastUpdate to: 'last-update' ];
-				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
-				nextPut: object ] ].
 
 	dataStreamMapping := [ :object | 
 	String
@@ -81,14 +63,6 @@ DataAPI >> jsonFormattedStreamNamed: aName [
 		ifNone: [ HTTPClientError signalNotFound ] ]
 			on: DataStreamIsEmpty
 			do: [ :signal | signal resume: 'N/A' ]
-]
-
-{ #category : #'private-API' }
-DataAPI >> jsonFormattedStreams [
-
-	^ [ dataStreamsSnapshotsMapping value: self dataManagementSystem streams ]
-		on: DataStreamIsEmpty
-		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #API }
@@ -138,8 +112,15 @@ DataAPI >> streamNamed: aName [
 ]
 
 { #category : #API }
-DataAPI >> streams [
+DataAPI >> streamsHandling: anHttpRequest [
 
-	^ ZnResponse ok:
-		(ZnEntity json: self jsonFormattedStreams)
+	| mimeType |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+
+
+	^ ZnResponse
+		ok:
+			(ZnEntity
+				json: (context encode: self dataManagementSystem streams to: mimeType))
 ]

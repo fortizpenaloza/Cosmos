@@ -28,7 +28,7 @@ DataStreamTest >> testAccessingCurrentValue [
 	self
 		should: [ dataStream currentValue ]
 		raise: DataStreamIsEmpty
-		withDescription: 'Current value has not been initialized.'.
+		withDescription: 'Current value has not been initialized'.
 
 	dataPoint := DataPoint
 		on: self octoberFirstOf2014AtMidnight
@@ -49,7 +49,7 @@ DataStreamTest >> testAccessingLastUpdate [
 	self
 		should: [ dataStream lastUpdate ]
 		raise: DataStreamIsEmpty
-		withDescription: 'Last update date and time has not been initialized.'.
+		withDescription: 'Last update date and time has not been initialized'.
 
 	dataPoint := DataPoint
 		on: self octoberFirstOf2014AtMidnight

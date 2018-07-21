@@ -30,6 +30,12 @@ DataAPIContext >> decode: aJSON encodedAs: aMimeType [
 
 ]
 
+{ #category : #'as yet unclassified' }
+DataAPIContext >> encode: anObject to: aMimeType [
+
+	^ (mappingRegistry encoderFor: aMimeType) value: anObject
+]
+
 { #category : #initialization }
 DataAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:  
 	aMappingRegistry [
