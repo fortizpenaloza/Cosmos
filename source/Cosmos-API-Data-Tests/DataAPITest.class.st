@@ -35,6 +35,38 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 ]' expandMacrosWith: TimeZones local offset
 ]
 
+{ #category : #tests }
+DataAPITest >> dtestQueryingStreamByNameGivesNotFouldIfNotExists [
+
+	self
+		should: [ interface
+				streamBasedOn:
+					(self
+						getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
+		raise: HTTPClientError
+		withDescription: 'Data stream with that name not found'
+]
+
+{ #category : #tests }
+DataAPITest >> getDataStreamHttpRequest: uri [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: uri)
+				setAccept:
+					(ZnMimeType
+						fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))
+]
+
+{ #category : #accessing }
+DataAPITest >> getDataStreamSnapshotsRequest [
+
+	^ (ZnRequest get: 'http://COSMOS_URL/v1/data-streams')
+		setAccept:
+			(ZnMimeType
+				fromString: 'application/vnd.cosmos.data-stream-snapshot+json; version=1.0.0')
+]
+
 { #category : #accessing }
 DataAPITest >> pressureStream [
 
@@ -104,7 +136,7 @@ DataAPITest >> testDataPointBulkRegistration [
 	self deny: pressure currentValue = 89.
 
 	response := interface
-		registerBulkPointsHandling: self updateTemperatureAndPressureDataStreamsHttpRequest.
+		registerBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsHttpRequest.
 
 	self assert: response code equals: 201.
 
@@ -117,7 +149,7 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 
 	self
 		should:
-			[ interface registerBulkPointsHandling: self updateTemperatureAndPressureDataStreamsMalformattedRequest ]
+			[ interface registerBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest ]
 		raise: HTTPClientError
 		withDescription: '{"error":{"code":400,"message":"Expected key data-stream was not found"}'
 ]
@@ -131,7 +163,7 @@ DataAPITest >> testDataStreamRegistration [
 		ifNone: [ "do nothing" ].
 
 	interface
-		registerStreamHandling:
+		registerStreamBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 				entity:
 					(ZnEntity
@@ -153,7 +185,7 @@ DataAPITest >> testDataStreamRegistrationFailsIfAlreadyExists [
 
 	self
 		should: [ interface
-				registerStreamHandling:
+				registerStreamBasedOn:
 					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 						entity:
 							(ZnEntity
@@ -168,7 +200,7 @@ DataAPITest >> testDataStreamRegistrationFailsWithMalformattedRequest [
 
 	self
 		should: [ interface
-				registerStreamHandling:
+				registerStreamBasedOn:
 					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 						entity:
 							(ZnEntity
@@ -184,11 +216,7 @@ DataAPITest >> testQueryingDataStreamsSnapshot [
 	| response |
 
 	response := interface
-		streamsHandling:
-			((ZnRequest get: 'http://COSMOS_URL/v1/data-streams')
-				setAccept:
-					(ZnMimeType
-						fromString: 'application/vnd.cosmos.data-stream-snapshot+json; version=1.0.0')).
+		streamsSummaryBasedOn: self getDataStreamSnapshotsRequest.
 
 	self
 		assert: response code equals: 200;
@@ -200,7 +228,8 @@ DataAPITest >> testQueryingStreamByName [
 
 	| response |
 
-	response := interface streamNamed: 'Temperature'.
+	response := interface
+		streamBasedOn: (self getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=Temperature').
 
 	self
 		assert: response code equals: 200;
@@ -211,10 +240,10 @@ DataAPITest >> testQueryingStreamByName [
 DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
 
 	self
-		should:
-			[ interface streamNamed: 'pH' ]
+		should: [ interface
+				streamBasedOn: (self getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
 		raise: HTTPClientError
-		withDescription: 'Not found'
+		withDescription: 'Data stream with that name not found'
 ]
 
 { #category : #accessing }

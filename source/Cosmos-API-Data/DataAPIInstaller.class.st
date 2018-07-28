@@ -19,7 +19,7 @@ DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 DataAPIInstaller >> addBulkDataPointRegistrationRoute [
 
 	server
-		POST: '/data-points' -> [ :request | interface registerBulkPointsHandling: request contents ];
+		POST: '/data-points' -> [ :request | interface registerBulkPointsBasedOn: request contents ];
 		output: #text.
 
 	self registerBulkDataPointDecoderVersion1dot0dot0
@@ -50,13 +50,15 @@ DataAPIInstaller >> addGetDataStreamRoute [
 	server
 		GET:
 			'/data-streams/<name>'
-				-> [ :request | interface streamNamed: (request at: #name) ]
+				-> [ :request | interface streamBasedOn: request ].
+				
+	self registerDataStreamEncoderVersion1dot0dot0
 ]
 
 { #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
-	server GET: '/data-streams' -> [ :request | interface streamsHandling: request ].
+	server GET: '/data-streams' -> [ :request | interface streamsSummaryBasedOn: request ].
 	
 	self registerDataStreamSnapshotEncoderVersion1dot0dot0
 	
@@ -68,7 +70,7 @@ DataAPIInstaller >> addRegisterDataStreamRoute [
 	server
 		POST:
 			'/data-streams'
-				-> [ :request | interface registerStreamHandling: request ]
+				-> [ :request | interface registerStreamBasedOn: request ]
 ]
 
 { #category : #accessing }
@@ -84,6 +86,33 @@ DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
 DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
+]
+
+{ #category : #accessing }
+DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
+
+	^ [ :dataStream | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: DataStream
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #name;
+						mapAccessor: #currentValue to: 'current-value';
+						mapAccessor: #lastUpdate to: 'last-update';
+						mapAccessor: #dataPoints to: 'data-points' ];
+				for: DataPoint
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #timestamp;
+						mapAccessor: #value ];
+				for: DateTime
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				prettyPrint: true;
+				nextPut: dataStream ] ]
 ]
 
 { #category : #accessing }
@@ -140,6 +169,14 @@ DataAPIInstaller >> registerBulkDataPointDecoderVersion1dot0dot0 [
 	mappingRegistry
 		register: self bulkDataPointDecoderVersion1dot0dot0
 		asDecoderFor: self bulkDataPointMimeTypeVersion1dot0dot0
+]
+
+{ #category : #accessing }
+DataAPIInstaller >> registerDataStreamEncoderVersion1dot0dot0 [
+
+	mappingRegistry
+		register: self dataStreamEncoderVersion1dot0dot0
+		asEncoderFor: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0')
 ]
 
 { #category : #accessing }

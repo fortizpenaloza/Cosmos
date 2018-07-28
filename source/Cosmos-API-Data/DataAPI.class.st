@@ -2,7 +2,6 @@ Class {
 	#name : #DataAPI,
 	#superclass : #Object,
 	#instVars : [
-		'dataStreamMapping',
 		'context'
 	],
 	#category : #'Cosmos-API-Data'
@@ -21,52 +20,13 @@ DataAPI >> dataManagementSystem [
 ]
 
 { #category : #initialization }
-DataAPI >> initializeMappings [
-
-	dataStreamMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: DataStream
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #currentValue to: 'current-value';
-						mapAccessor: #lastUpdate to: 'last-update';
-						mapAccessor: #dataPoints to: 'data-points' ];
-				for: DataPoint
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #timestamp;
-						mapAccessor: #value ];
-				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
-				nextPut: object ] ]
-]
-
-{ #category : #initialization }
 DataAPI >> initializeWorkingWithin: aContext [
 
-	context := aContext.
-	self initializeMappings
-]
-
-{ #category : #'private-API' }
-DataAPI >> jsonFormattedStreamNamed: aName [
-
-	^ [ self dataManagementSystem
-		streamNamed: aName
-		ifFound: [ :dataStream | dataStreamMapping value: dataStream ]
-		ifNone: [ HTTPClientError signalNotFound ] ]
-			on: DataStreamIsEmpty
-			do: [ :signal | signal resume: 'N/A' ]
+	context := aContext
 ]
 
 { #category : #API }
-DataAPI >> registerBulkPointsHandling: anHttpRequest [
+DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
 
 	^ [ | rawData |
 
@@ -86,7 +46,7 @@ DataAPI >> registerBulkPointsHandling: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> registerStreamHandling: anHttpRequest [
+DataAPI >> registerStreamBasedOn: anHttpRequest [
 	
 	^ [ [ | rawStream name |
 
@@ -97,6 +57,7 @@ DataAPI >> registerStreamHandling: anHttpRequest [
 	name := rawStream at: #name.
 
 	self dataManagementSystem registerStreamNamed: name.
+
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
@@ -105,14 +66,33 @@ DataAPI >> registerStreamHandling: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> streamNamed: aName [
+DataAPI >> streamBasedOn: anHttpRequest [
 
-	^ ZnResponse
-		ok: (ZnEntity json: (self jsonFormattedStreamNamed: aName))
+	| mimeType aName |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+	aName := anHttpRequest at: #name.
+
+	^ [ ZnResponse
+		ok:
+			(ZnEntity json: (self streamNamed: aName encodedTo: mimeType)) ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+]
+
+{ #category : #'private-API' }
+DataAPI >> streamNamed: aName encodedTo: mimeType [
+
+	^ [ self dataManagementSystem
+		streamNamed: aName
+		ifFound: [ :dataStream | context encode: dataStream to: mimeType ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that name not found' ] ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #API }
-DataAPI >> streamsHandling: anHttpRequest [
+DataAPI >> streamsSummaryBasedOn: anHttpRequest [
 
 	| mimeType |
 
