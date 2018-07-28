@@ -36,6 +36,20 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 ]
 
 { #category : #tests }
+
+DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
+
+	self
+		should: [ interface
+				streamBasedOn:
+					(self
+						getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
+		raise: HTTPClientError
+		withDescription: 'Data stream with that name not found'
+]
+
+{ #category : #tests }
+
 DataAPITest >> getDataStreamHttpRequest: uri [
 
 	^ TeaRequest
@@ -222,18 +236,6 @@ DataAPITest >> testQueryingStreamByName [
 	self
 		assert: response code equals: 200;
 		assert: response contents equals: self temperatureDataStreamAsJSON
-]
-
-{ #category : #tests }
-DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
-
-	self
-		should: [ interface
-				streamBasedOn:
-					(self
-						getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
-		raise: HTTPClientError
-		withDescription: 'Data stream with that name not found'
 ]
 
 { #category : #accessing }

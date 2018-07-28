@@ -58,6 +58,7 @@ DataAPIInstaller >> addGetDataStreamRoute [
 { #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
+
 	server GET: '/data-streams' -> [ :request | interface streamsSnapshotsBasedOn: request ].
 	
 	self registerDataStreamSnapshotEncoderVersion1dot0dot0
@@ -116,6 +117,7 @@ DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
+
 DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType
@@ -123,6 +125,7 @@ DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
+
 DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 
 	^ [ :dataStream | 

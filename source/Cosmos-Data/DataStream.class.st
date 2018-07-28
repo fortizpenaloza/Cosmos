@@ -68,10 +68,10 @@ DataStream >> initializeNamed: aName createdOn: aDateTime [
 	creationDateTime := aDateTime.
 
 	currentValue := Binding
-		undefinedExplainedBy: 'Current value has not been initialized.'
+		undefinedExplainedBy: 'Current value has not been initialized'
 		raising: DataStreamIsEmpty.
 	lastUpdate := Binding
-		undefinedExplainedBy: 'Last update date and time has not been initialized.'
+		undefinedExplainedBy: 'Last update date and time has not been initialized'
 		raising: DataStreamIsEmpty.
 
 	dataPoints := OrderedCollection new
