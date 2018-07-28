@@ -58,7 +58,8 @@ DataAPIInstaller >> addGetDataStreamRoute [
 { #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
-	server GET: '/data-streams' -> [ :request | interface streamsSummaryBasedOn: request ].
+
+	server GET: '/data-streams' -> [ :request | interface streamsSnapshotsBasedOn: request ].
 	
 	self registerDataStreamSnapshotEncoderVersion1dot0dot0
 	
@@ -116,6 +117,15 @@ DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
+
+DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
+
+	^ ZnMimeType
+		fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'
+]
+
+{ #category : #accessing }
+
 DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 
 	^ [ :dataStream | 
@@ -176,7 +186,7 @@ DataAPIInstaller >> registerDataStreamEncoderVersion1dot0dot0 [
 
 	mappingRegistry
 		register: self dataStreamEncoderVersion1dot0dot0
-		asEncoderFor: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0')
+		asEncoderFor: self dataStreamMimeTypeVersion1dot0dot0
 ]
 
 { #category : #accessing }

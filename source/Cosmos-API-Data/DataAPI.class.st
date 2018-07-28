@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataAPI class >> workingWithin: aCompositeSystem [ 
+DataAPI class >> workingWithin: aContext [ 
 	
-	^self new initializeWorkingWithin: aCompositeSystem 
+	^self new initializeWorkingWithin: aContext 
 ]
 
 { #category : #systems }
@@ -92,7 +92,7 @@ DataAPI >> streamNamed: aName encodedTo: mimeType [
 ]
 
 { #category : #API }
-DataAPI >> streamsSummaryBasedOn: anHttpRequest [
+DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
 
 	| mimeType |
 
