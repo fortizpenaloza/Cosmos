@@ -2,17 +2,15 @@ Class {
 	#name : #DataAPI,
 	#superclass : #Object,
 	#instVars : [
-		'dataStreamMapping',
-		'dataStreamsSnapshotsMapping',
 		'context'
 	],
 	#category : #'Cosmos-API-Data'
 }
 
 { #category : #'instance creation' }
-DataAPI class >> workingWithin: aCompositeSystem [ 
+DataAPI class >> workingWithin: aContext [ 
 	
-	^self new initializeWorkingWithin: aCompositeSystem 
+	^self new initializeWorkingWithin: aContext 
 ]
 
 { #category : #systems }
@@ -22,77 +20,13 @@ DataAPI >> dataManagementSystem [
 ]
 
 { #category : #initialization }
-DataAPI >> initializeMappings [
-
-	dataStreamsSnapshotsMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: DataStream
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #currentValue to: 'current-value';
-						mapAccessor: #lastUpdate to: 'last-update' ];
-				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
-				nextPut: object ] ].
-
-	dataStreamMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: DataStream
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #currentValue to: 'current-value';
-						mapAccessor: #lastUpdate to: 'last-update';
-						mapAccessor: #dataPoints to: 'data-points' ];
-				for: DataPoint
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #timestamp;
-						mapAccessor: #value ];
-				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
-				nextPut: object ] ]
-]
-
-{ #category : #initialization }
 DataAPI >> initializeWorkingWithin: aContext [
 
-	context := aContext.
-	self initializeMappings
-]
-
-{ #category : #'private-API' }
-DataAPI >> jsonFormattedStreamNamed: aName [
-
-	^ [ self dataManagementSystem
-		streamNamed: aName
-		ifFound: [ :dataStream | dataStreamMapping value: dataStream ]
-		ifNone: [ HTTPClientError signalNotFound ] ]
-			on: DataStreamIsEmpty
-			do: [ :signal | signal resume: 'N/A' ]
-]
-
-{ #category : #'private-API' }
-DataAPI >> jsonFormattedStreams [
-
-	^ [ dataStreamsSnapshotsMapping value: self dataManagementSystem streams ]
-		on: DataStreamIsEmpty
-		do: [ :signal | signal resume: 'N/A' ]
+	context := aContext
 ]
 
 { #category : #API }
-DataAPI >> registerBulkPointsHandling: anHttpRequest [
+DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
 
 	^ [ | rawData |
 
@@ -112,17 +46,18 @@ DataAPI >> registerBulkPointsHandling: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> registerStreamFrom: aJSON [
-
+DataAPI >> registerStreamBasedOn: anHttpRequest [
+	
 	^ [ [ | rawStream name |
 
-	rawStream := (NeoJSONReader on: aJSON readStream)
+	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
 	name := rawStream at: #name.
 
 	self dataManagementSystem registerStreamNamed: name.
+
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
@@ -131,15 +66,41 @@ DataAPI >> registerStreamFrom: aJSON [
 ]
 
 { #category : #API }
-DataAPI >> streamNamed: aName [
+DataAPI >> streamBasedOn: anHttpRequest [
 
-	^ ZnResponse
-		ok: (ZnEntity json: (self jsonFormattedStreamNamed: aName))
+	| mimeType aName |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+	aName := anHttpRequest at: #name.
+
+	^ [ ZnResponse
+		ok:
+			(ZnEntity json: (self streamNamed: aName encodedTo: mimeType)) ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+]
+
+{ #category : #'private-API' }
+DataAPI >> streamNamed: aName encodedTo: mimeType [
+
+	^ [ self dataManagementSystem
+		streamNamed: aName
+		ifFound: [ :dataStream | context encode: dataStream to: mimeType ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that name not found' ] ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #API }
-DataAPI >> streams [
+DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
 
-	^ ZnResponse ok:
-		(ZnEntity json: self jsonFormattedStreams)
+	| mimeType |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+
+
+	^ ZnResponse
+		ok:
+			(ZnEntity
+				json: (context encode: self dataManagementSystem streams to: mimeType))
 ]
