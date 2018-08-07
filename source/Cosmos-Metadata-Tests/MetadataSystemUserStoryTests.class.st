@@ -4,6 +4,12 @@ Class {
 	#category : #'Cosmos-Metadata-Tests'
 }
 
+{ #category : #accessing }
+MetadataSystemUserStoryTests >> livingTemperature [
+
+	^ DataStream named: 'Living temperature' createdOn: September sixth, 1979
+]
+
 { #category : #running }
 MetadataSystemUserStoryTests >> setUpRequirements [
 
@@ -13,31 +19,42 @@ MetadataSystemUserStoryTests >> setUpRequirements [
 ]
 
 { #category : #tests }
+MetadataSystemUserStoryTests >> temperature [
+
+	^ DataStream named: 'Temperature' createdOn: September sixth, 1979
+]
+
+{ #category : #tests }
 MetadataSystemUserStoryTests >> testMetadataRegistration [
 
-	| identifier |
+	| metadata |
 
-	identifier := UUID new.
+	metadata := Metadata
+		about: self temperature
+		where: #identifier
+		is: UUID new.
 
 	self
-		should: [ self metadataSystem metadataFor: 1 of: #identifier ]
-		raise: ObjectNotFound.
-	self metadataSystem register: identifier of: #identifier for: 1.
+		assert: (self metadataSystem metadataFor: self temperature) isEmpty.
+	self metadataSystem register: metadata.
 	self
-		assert: (self metadataSystem metadataFor: 1 of: #identifier)
-		equals: identifier
+		withTheOnlyOneIn: (self metadataSystem metadataFor: self temperature)
+		do: [ :foundMetadata | self assert: foundMetadata equals: metadata ]
 ]
 
 { #category : #tests }
 MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 
-	| identifier |
+	| metadata |
 
-	identifier := UUID new.
+	metadata := Metadata
+		about: self temperature
+		where: #identifier
+		is: UUID new.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
+	self metadataSystem register: metadata.
 	self
-		should: [ self metadataSystem register: identifier of: #identifier for: 1 ]
+		should: [ self metadataSystem register: metadata ]
 		raise: ConflictingObjectFound
 ]
 
@@ -46,25 +63,82 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
 
-	identifier := UUID new.
-	registrationTimestamp := (December tenth , 2016) atMidnight.
+	identifier := Metadata
+		about: self temperature
+		where: #identifier
+		is: UUID new.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
-	self metadataSystem register: registrationTimestamp of: #registration_timestamp for: 1.
+	registrationTimestamp := Metadata
+		about: self temperature
+		where: #registration_timestamp
+		is: (December tenth , 2016) atMidnight.
+
+	self metadataSystem register: identifier.
+	self metadataSystem register: registrationTimestamp.
 	self
-		assert: (self metadataSystem metadataFor: 1)
+		assert: (self metadataSystem metadataFor: self temperature)
 		equals:
-			{(#registration_timestamp -> registrationTimestamp).
-			(#identifier -> identifier)}
+			{identifier.
+			registrationTimestamp} asSet
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testQueryingDescribedObject [
+
+	| identifier metadata |
+
+	identifier := UUID new.
+	metadata := Metadata
+		about: self temperature
+		where: #identifier
+		is: identifier.
+
+	self metadataSystem register: metadata.
+	self
+		assert: (self metadataSystem objectWhere: #identifier is: identifier)
+		equals: self temperature
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testQueryingDescribedObjectFailsWhenInformationAndAspectDuplicated [
+
+	| temperatureIdentifier livingTemperatureIdentifier identifier |
+
+	identifier := UUID new.
+
+	temperatureIdentifier := Metadata
+		about: self temperature
+		where: #identifier
+		is: identifier.
+
+	livingTemperatureIdentifier := Metadata
+		about: self livingTemperature
+		where: #identifier
+		is: identifier.
+
+	self metadataSystem register: temperatureIdentifier.
+	self metadataSystem register: livingTemperatureIdentifier.
+	self
+		assert: (self metadataSystem objectWhere: #identifier is: identifier)
+		equals: self temperature
 ]
 
 { #category : #tests }
 MetadataSystemUserStoryTests >> testQueryingSingleMetadata [
 
-	| identifier |
+	| identifier metadata |
 
 	identifier := UUID new.
+	metadata := Metadata
+		about: self temperature
+		where: #identifier
+		is: identifier.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
-	self assert: (self metadataSystem metadataFor: 1 of: #identifier) equals: identifier
+	self metadataSystem register: metadata.
+	self
+		assert:
+			(self metadataSystem
+				metadataDescribing: #identifier
+				of: self temperature)
+		equals: metadata
 ]

@@ -165,7 +165,7 @@ BaselineOfCosmos >> registerMetadataSystemInterface [
 	self
 		registerInterfaceAs: #MetadataSystemInterface
 		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #metadataFor:of: #register:of:for:)
+		declaring: #(#metadataFor: #metadataDescribing:of: #register:of:for:)
 ]
 
 { #category : #actions }

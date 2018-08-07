@@ -11,5 +11,6 @@ SystemBasedUserStoryTest >> requireDataManagementSystem [
 
 	self requireTimeSystem.
 	self requireEventNotificationSystem.
+	self requireMetadataSystem.
 	systemBuilder add: (DataManagementSystem new)
 ]

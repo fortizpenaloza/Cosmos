@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #accessing }
-ActionManagementSystemUserStoryTest >> septemberSixth2015AtNoon [
+ActionManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 
-	^ (September sixth, 2015) atNoon
+	^ (October first , 2014) atNoon
 ]
 
 { #category : #initialization }
@@ -101,7 +101,7 @@ ActionManagementSystemUserStoryTest >> testRegistration [
 
 	self
 		assert: action name equals: 'Send YO to Fran';
-		assert: action creationDateTime equals: self septemberSixth2015AtNoon
+		assert: action creationDateTime equals: self octoberFirstOf2014AtNoon
 ]
 
 { #category : #tests }

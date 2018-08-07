@@ -2,7 +2,7 @@ Class {
 	#name : #MetadataSystem,
 	#superclass : #System,
 	#instVars : [
-		'metadata'
+		'metadataSet'
 	],
 	#category : #'Cosmos-Metadata'
 }
@@ -18,52 +18,55 @@ MetadataSystem >> initialize [
 
 	super initialize.
 
-	metadata := Dictionary new.
+	metadataSet := Set new
+]
+
+{ #category : #querying }
+MetadataSystem >> metadataDescribing: anAspect of: anObject [
+
+	^ self
+		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata describedObject = anObject ] ]
+		ifFound: [ :foundMetadata | foundMetadata ]
+		ifNone: [ ObjectNotFound
+				signal: ('Metadata describing <1p> of <2p> not found' expandMacrosWith: anAspect with: anObject) ]
 ]
 
 { #category : #querying }
 MetadataSystem >> metadataFor: anObject [
 
-	^ self
-		metadataFor: anObject
-		ifFound: [ :foundMetadata | foundMetadata associations ]
-		ifNone: [ #() ]
-]
-
-{ #category : #'private-querying' }
-MetadataSystem >> metadataFor: anObject ifFound: ifFoundBlock ifNone: ifNoneBlock [
-
-	^ metadata at: anObject ifPresent: ifFoundBlock ifAbsent: ifNoneBlock
+	^ metadataSet select: [ :metadata | metadata describedObject = anObject ]
 ]
 
 { #category : #querying }
-MetadataSystem >> metadataFor: anObject of: aType [
+MetadataSystem >> objectWhere: anAspect is: aValue [
 
 	^ self
-		metadataFor: anObject
-		ifFound: [ :foundMetadata | foundMetadata at: aType ]
+		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata value = aValue ] ]
+		ifFound: [ :foundMetadata | foundMetadata describedObject ]
 		ifNone: [ ObjectNotFound
-				signal: ('Metadata of type <1p> not found for <2p>' expandMacrosWith: aType with: anObject) ]
+				signal: ('Object described <1p> as <2p> not found' expandMacrosWith: anAspect with: aValue) ]
+]
+
+{ #category : #'private-querying' }
+MetadataSystem >> oneMetadataFilteredBy: aFilter ifFound: ifFoundBlock ifNone: ifNoneBlock [
+
+	^ metadataSet
+		detect: aFilter
+		ifFound: ifFoundBlock
+		ifNone: ifNoneBlock
 ]
 
 { #category : #managing }
-MetadataSystem >> register: data of: aType for: anObject [
+MetadataSystem >> register: metadata [
 
-	self
-		metadataFor: anObject
-		ifFound: [ :foundMetadata | 
-			foundMetadata
-				at: aType
-				ifPresent: [ :foundMetadataForType | 
-					ConflictingObjectFound
-						signal: ('Metadata of type <1p> already defined for <2p>' expandMacrosWith: aType with: anObject) ]
-				ifAbsentPut: [ data ] ]
-		ifNone: [ metadata
-				at: anObject
-				put:
-					(Dictionary new
-						add: aType -> data;
-						yourself) ]
+	(metadataSet includes: metadata)
+		ifTrue: [ ConflictingObjectFound
+				signal:
+					('Metadata describing the <1p> of <2p> already exists in system'
+						expandMacrosWith: metadata aspect
+						with: metadata describedObject) ].
+
+	metadataSet add: metadata
 ]
 
 { #category : #'dependency resolution' }

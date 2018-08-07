@@ -117,7 +117,6 @@ DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
-
 DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType
@@ -125,7 +124,6 @@ DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
-
 DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 
 	^ [ :dataStream | 
@@ -169,6 +167,9 @@ DataAPIInstaller >> install [
 		addRegisterDataStreamRoute;
 		addBulkDataPointRegistrationRoute;
 		addCrossOriginResourceSharingRoute.
+		
+		"GET, POST data-streams/<id>/metadata"
+		"GET, POST data-streams/<id>/data-points"
 
 	^ interface
 ]

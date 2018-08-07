@@ -1,7 +1,7 @@
 Class {
 	#name : #DataStreamTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-Data-Tests-Model'
+	#category : #'Cosmos-Data-Tests'
 }
 
 { #category : #accessing }
@@ -13,7 +13,7 @@ DataStreamTest >> decemberTenthOf2016AtNoon [
 { #category : #accessing }
 DataStreamTest >> octoberFirstOf2014AtMidnight [
 
-	^ (October tenth, 2014) atMidnight
+	^ (October first, 2014) atMidnight
 ]
 
 { #category : #tests }

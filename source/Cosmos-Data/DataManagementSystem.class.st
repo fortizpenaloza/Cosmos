@@ -1,5 +1,7 @@
 "
-I'm a system that manages data. I allow the registration of streams and data points.
+I'm a system that manages data. I allow the registration of streams and data points on them.
+
+I also allow deregistration of streams.
 "
 Class {
 	#name : #DataManagementSystem,
@@ -7,9 +9,10 @@ Class {
 	#instVars : [
 		'dataStreams',
 		'timeSystem',
-		'eventNotificationSystem'
+		'eventNotificationSystem',
+		'metadataSystem'
 	],
-	#category : #'Cosmos-Data-SystemModel'
+	#category : #'Cosmos-Data'
 }
 
 { #category : #'system specification' }
@@ -19,7 +22,7 @@ DataManagementSystem class >> implementedInterface [
 ]
 
 { #category : #managing }
-DataManagementSystem >> deregisterStream: aDataStream [ 
+DataManagementSystem >> deregister: aDataStream [ 
 	
 	dataStreams remove: aDataStream 
 ]
@@ -31,28 +34,27 @@ DataManagementSystem >> initialize [
 
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self unresolvedSystemDependencyTo: #EventNotificationSystemInterface.
+	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
 
 	dataStreams := OrderedCollection new
 ]
 
 { #category : #managing }
-DataManagementSystem >> register: aValue toStreamNamed: aName [
-
-	| dataPoint |
-
-	dataPoint := DataPoint on: timeSystem dateTime holding: aValue.
+DataManagementSystem >> register: aDataStream [
 
 	self
-		streamNamed: aName
-		ifFound: [ :dataStream | self registerPoint: dataPoint to: dataStream ]
-		ifNone: [ ObjectNotFound
-				signal: 'Data stream not found in the system' ].
-
-	^ dataPoint
+		streamNamed: aDataStream name
+		ifFound:
+			[ :dataStream | ConflictingObjectFound signal: 'A data stream with that name already exists in system' ]
+		ifNone: [ 
+			dataStreams add: aDataStream.
+			
+			self registerIdentifierAsMetadataFor: aDataStream.
+			self registerRegistrationTimestampAsMetadataFor: aDataStream ]
 ]
 
 { #category : #'private-managing' }
-DataManagementSystem >> registerPoint: aDataPoint to: aDataStream [
+DataManagementSystem >> register: aDataPoint to: aDataStream [
 
 	aDataStream add: aDataPoint.
 
@@ -60,29 +62,47 @@ DataManagementSystem >> registerPoint: aDataPoint to: aDataStream [
 		notifySubscribersTo: (DataPointRegistrationEvent on: aDataStream)
 ]
 
-{ #category : #'private-managing' }
-DataManagementSystem >> registerStream: aDataStream [
+{ #category : #managing }
+DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
 
-	^ dataStreams add: aDataStream
+	self
+		streamNamed: aName
+		ifFound: [ :dataStream | self register: aDataPoint to: dataStream ]
+		ifNone: [ ObjectNotFound signal: 'Data stream not found in the system' ]
 ]
 
-{ #category : #managing }
-DataManagementSystem >> registerStreamNamed: aName [
+{ #category : #'private-managing' }
+DataManagementSystem >> registerIdentifierAsMetadataFor: aDataStream [
 
-	^ self
-		streamNamed: aName
-		ifFound: [ :dataStream | 
-			ConflictingObjectFound
-				signal: 'A data stream with that name already exists in system' ]
-		ifNone: [ self
-				registerStream: (DataStream named: aName createdOn: timeSystem dateTime) ]
+	metadataSystem
+		register: (Metadata about: aDataStream where: #identifier is: UUID new)
+]
+
+{ #category : #'private-managing' }
+DataManagementSystem >> registerRegistrationTimestampAsMetadataFor: aDataStream [
+
+  metadataSystem
+		register:
+			(Metadata
+				about: aDataStream
+				where: #registration_timestamp
+				is: timeSystem dateTime)
 ]
 
 { #category : #'dependency resolution' }
 DataManagementSystem >> resolveDependecies [
 
 	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self resolveSystemDependencyTo: #EventNotificationSystemInterface
+	eventNotificationSystem := self
+		resolveSystemDependencyTo: #EventNotificationSystemInterface.
+	metadataSystem := self
+		resolveSystemDependencyTo: #MetadataSystemInterface
+]
+
+{ #category : #querying }
+DataManagementSystem >> streamIdentifiedBy: anIdentifier ifFound: aBlockClosure ifNone: aBlockClosure3 [
+
+	^ metadataSystem objectWhere: #identifier is: anIdentifier
 ]
 
 { #category : #querying }

@@ -1,13 +1,19 @@
 Class {
 	#name : #DataManagementSystemUserStoryTests,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : 'Cosmos-Data-Tests-SystemModel'
+	#category : #'Cosmos-Data-Tests'
 }
 
-{ #category : #tests }
-DataManagementSystemUserStoryTests >> septemberSixth2015AtNoon [
+{ #category : #'as yet unclassified' }
+DataManagementSystemUserStoryTests >> currentIdentifier [
 
-	^ (September sixth , 2015) atNoon
+	^ 1
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
+
+	^ (October first , 2014) atNoon
 ]
 
 { #category : #running }
@@ -21,32 +27,40 @@ DataManagementSystemUserStoryTests >> setUpRequirements [
 { #category : #tests }
 DataManagementSystemUserStoryTests >> systemDateTime [
 
-	^ self septemberSixth2015AtNoon
+	^ self octoberFirstOf2014AtNoon
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> temperatureStream [
+
+	^ DataStream
+		named: 'Temperature'
+		createdOn: self octoberFirstOf2014AtNoon
 ]
 
 { #category : #tests }
 DataManagementSystemUserStoryTests >> testDataPointRegistration [
 
-	| dataStream |
-	
-	dataStream := self dataManagementSystem
-		registerStreamNamed: 'Temperature'.
+	| dataStream dataPoint |
 
-	self dataManagementSystem register: 10 toStreamNamed: dataStream name.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
+	
+	dataPoint := DataPoint on: self octoberFirstOf2014AtNoon holding: 10.
+	self dataManagementSystem register: dataPoint toStreamNamed: dataStream name.
 
 	self
 		withTheOnlyOneIn: dataStream dataPoints
-		do: [ :dataPoint | 
-			self
-				assert: dataPoint value equals: 10;
-				assert: dataPoint timestamp equals: self septemberSixth2015AtNoon ]
+		do: [ :foundDataPoint | self assert: dataPoint equals: foundDataPoint ]
 ]
 
 { #category : #tests }
 DataManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotFound [
 
 	self
-		should: [ self dataManagementSystem register: 10 toStreamNamed: 'Temperature' ]
+		should: [ self dataManagementSystem
+				register: (DataPoint on: self octoberFirstOf2014AtNoon holding: 10)
+				toStreamNamed: 'Wrong name' ]
 		raise: ObjectNotFound
 		withDescription: 'Data stream not found in the system'
 ]
@@ -56,12 +70,13 @@ DataManagementSystemUserStoryTests >> testDataStreamDeregistration [
 
 	| dataStream |
 
+	dataStream := self temperatureStream.
+
 	self assert: self dataManagementSystem streams isEmpty.
-	
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	self dataManagementSystem register: dataStream.
 	self deny: self dataManagementSystem streams isEmpty.
 
-	self dataManagementSystem deregisterStream: dataStream.
+	self dataManagementSystem deregister: dataStream.
 	self assert: self dataManagementSystem streams isEmpty
 ]
 
@@ -70,38 +85,66 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistration [
 
 	| dataStream |
 
-	dataStream := self dataManagementSystem
-		registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
 
+	self assert: self dataManagementSystem streams isEmpty.
+	self dataManagementSystem register: dataStream.
 	self
-		assert: dataStream name equals: 'Temperature';
-		assert: dataStream creationDateTime
-			equals: self timeSystem dateTime
+		withTheOnlyOneIn: self dataManagementSystem streams
+		do: [ :foundDataStream | self assert: dataStream equals: foundDataStream ]
 ]
 
 { #category : #tests }
 DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyExists [
 
-	self dataManagementSystem registerStreamNamed: 'Temperature'.
+	self dataManagementSystem register: self temperatureStream.
 
 	self
 		should:
-			[ self dataManagementSystem registerStreamNamed: 'Temperature' ]
+			[ self dataManagementSystem register: self temperatureStream ]
 		raise: ConflictingObjectFound
 		withDescription: 'A data stream with that name already exists in system'
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
+DataManagementSystemUserStoryTests >> testMetadata [
 
-	self dataManagementSystem registerStreamNamed: 'Temperature'.
+	| dataStream metadata |
+
+	dataStream := self temperatureStream.
+
+	self assert: (self metadataSystem metadataFor: dataStream) isEmpty.
+	self dataManagementSystem register: dataStream.
+
+	metadata := self metadataSystem metadataFor: dataStream.
+	self
+		assert: metadata size equals: 2;
+		assert: metadata hasTheSameElementsInTheSameOrderThat: nil
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
+
+	| dataStream |
+
+	dataStream := self dataManagementSystem register: self temperatureStream.
 
 	self dataManagementSystem
+		streamIdentifiedBy: self currentIdentifier
+		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
+		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
+
+	| dataStream |
+
+	dataStream := self temperatureStream.
+	
+	self dataManagementSystem register: dataStream.
+	self dataManagementSystem
 		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | 
-			self
-				assert: dataStream name equals: 'Temperature';
-				assert: dataStream creationDateTime equals: self timeSystem dateTime;
-				assert: dataStream dataPoints isEmpty ]
+		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
 		ifNone: [ self fail ]
 ]
