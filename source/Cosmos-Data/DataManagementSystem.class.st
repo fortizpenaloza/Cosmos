@@ -10,7 +10,8 @@ Class {
 		'dataStreams',
 		'timeSystem',
 		'eventNotificationSystem',
-		'metadataSystem'
+		'metadataSystem',
+		'identifierSystem'
 	],
 	#category : #'Cosmos-Data'
 }
@@ -35,6 +36,7 @@ DataManagementSystem >> initialize [
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self unresolvedSystemDependencyTo: #EventNotificationSystemInterface.
 	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
 
 	dataStreams := OrderedCollection new
 ]
@@ -75,18 +77,22 @@ DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
 DataManagementSystem >> registerIdentifierAsMetadataFor: aDataStream [
 
 	metadataSystem
-		register: (Metadata about: aDataStream where: #identifier is: UUID new)
+		register:
+			(Metadata
+				attaching: identifierSystem next
+				as: #identifier
+				of: aDataStream)
 ]
 
 { #category : #'private-managing' }
 DataManagementSystem >> registerRegistrationTimestampAsMetadataFor: aDataStream [
 
-  metadataSystem
+	metadataSystem
 		register:
 			(Metadata
-				about: aDataStream
-				where: #registration_timestamp
-				is: timeSystem dateTime)
+				attaching: timeSystem dateTime
+				as: #registration_timestamp
+				of: aDataStream)
 ]
 
 { #category : #'dependency resolution' }
@@ -96,13 +102,15 @@ DataManagementSystem >> resolveDependecies [
 	eventNotificationSystem := self
 		resolveSystemDependencyTo: #EventNotificationSystemInterface.
 	metadataSystem := self
-		resolveSystemDependencyTo: #MetadataSystemInterface
+		resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self
+		resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
 { #category : #querying }
-DataManagementSystem >> streamIdentifiedBy: anIdentifier ifFound: aBlockClosure ifNone: aBlockClosure3 [
+DataManagementSystem >> streamIdentifiedBy: anIdentifier ifFound: ifFoundBlock ifNone: ifNoneBlock [
 
-	^ metadataSystem objectWhere: #identifier is: anIdentifier
+	^ metadataSystem describedObjectBy: anIdentifier as: #identifier
 ]
 
 { #category : #querying }

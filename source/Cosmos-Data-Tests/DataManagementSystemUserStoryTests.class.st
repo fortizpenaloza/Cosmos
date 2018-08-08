@@ -4,12 +4,6 @@ Class {
 	#category : #'Cosmos-Data-Tests'
 }
 
-{ #category : #accessing }
-DataManagementSystemUserStoryTests >> currentIdentifier [
-
-	^ 1
-]
-
 { #category : #tests }
 DataManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 
@@ -101,7 +95,7 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyEx
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testMetadata [
+DataManagementSystemUserStoryTests >> testMetadataRegistrationOnDataStreamRegistration [
 
 	| dataStream metadata |
 
@@ -115,8 +109,14 @@ DataManagementSystemUserStoryTests >> testMetadata [
 		assert: metadata size equals: 2;
 		assert: metadata
 			equals:
-			{(Metadata about: dataStream where: #identifier is: 1).
-			(Metadata about: dataStream where: #registration_timestamp is: self systemDateTime)} asSet
+			{(Metadata
+				attaching: self currentIdentifier
+				as: #identifier
+				of: dataStream).
+			(Metadata
+				attaching: self systemDateTime
+				as: #registration_timestamp
+				of: dataStream)} asSet
 ]
 
 { #category : #tests }

@@ -30,9 +30,9 @@ MetadataSystemUserStoryTests >> testMetadataRegistration [
 	| metadata |
 
 	metadata := Metadata
-		about: self temperature
-		where: #identifier
-		is: UUID new.
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
 	self
 		assert: (self metadataSystem metadataFor: self temperature) isEmpty.
@@ -48,9 +48,9 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 	| metadata |
 
 	metadata := Metadata
-		about: self temperature
-		where: #identifier
-		is: UUID new.
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
 	self metadataSystem register: metadata.
 	self
@@ -64,14 +64,14 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 	| identifier registrationTimestamp |
 
 	identifier := Metadata
-		about: self temperature
-		where: #identifier
-		is: UUID new.
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
 	registrationTimestamp := Metadata
-		about: self temperature
-		where: #registration_timestamp
-		is: (December tenth , 2016) atMidnight.
+		attaching: (December tenth , 2016) atMidnight
+		as: #registration_timestamp
+		of: self temperature.
 
 	self metadataSystem register: identifier.
 	self metadataSystem register: registrationTimestamp.
@@ -89,56 +89,12 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 
 	identifier := UUID new.
 	metadata := Metadata
-		about: self temperature
-		where: #identifier
-		is: identifier.
+		attaching: identifier
+		as: #identifier
+		of: self temperature.
 
 	self metadataSystem register: metadata.
 	self
-		assert: (self metadataSystem objectWhere: #identifier is: identifier)
+		assert: (self metadataSystem describedObjectBy: identifier as: #identifier)
 		equals: self temperature
-]
-
-{ #category : #tests }
-MetadataSystemUserStoryTests >> testQueryingDescribedObjectFailsWhenInformationAndAspectDuplicated [
-
-	| temperatureIdentifier livingTemperatureIdentifier identifier |
-
-	identifier := UUID new.
-
-	temperatureIdentifier := Metadata
-		about: self temperature
-		where: #identifier
-		is: identifier.
-
-	livingTemperatureIdentifier := Metadata
-		about: self livingTemperature
-		where: #identifier
-		is: identifier.
-
-	self metadataSystem register: temperatureIdentifier.
-	self metadataSystem register: livingTemperatureIdentifier.
-	self
-		assert: (self metadataSystem objectWhere: #identifier is: identifier)
-		equals: self temperature
-]
-
-{ #category : #tests }
-MetadataSystemUserStoryTests >> testQueryingSingleMetadata [
-
-	| identifier metadata |
-
-	identifier := UUID new.
-	metadata := Metadata
-		about: self temperature
-		where: #identifier
-		is: identifier.
-
-	self metadataSystem register: metadata.
-	self
-		assert:
-			(self metadataSystem
-				metadataDescribing: #identifier
-				of: self temperature)
-		equals: metadata
 ]

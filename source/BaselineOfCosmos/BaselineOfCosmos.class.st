@@ -152,6 +152,15 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 ]
 
 { #category : #actions }
+BaselineOfCosmos >> registerIdentifierSystemInterface [
+
+	self
+		registerInterfaceAs: #IdentifierSystemInterface
+		named: 'Identifier System Interface'
+		declaring: #(#next)
+]
+
+{ #category : #actions }
 BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorSet [
 
 	SystemInterface
@@ -172,6 +181,7 @@ BaselineOfCosmos >> registerMetadataSystemInterface [
 BaselineOfCosmos >> registerSystemInterfaces [
 
 	self
+		registerIdentifierSystemInterface;
 		registerDataManagementSystemInterface;
 		registerMetadataSystemInterface;
 		registerCommandManagementSystemInterface;
@@ -188,7 +198,7 @@ BaselineOfCosmos >> registerTriggerManagementSystemInterface [
 		declaring: #(#registerNamed:triggering:afterDataPointWasRegisteredOn:ifSatisfies: #registerNamed:triggering:periodicallyEvery:ifSatisfies: #deregisterNamed: #havePassed: #dataPointRegisteredOn: #triggers)
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #dependencies }
 BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
@@ -196,16 +206,17 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		with: [ spec
 				repository: 'github://ba-st/Kepler:master/source';
 				loads: #('Development') ].
-	
+
 	spec
 		configuration: 'Teapot'
 		with: [ spec
 				versionString: #stable;
 				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ].
-			
+
 	spec
 		configuration: 'Roassal2'
-    		with: [  spec
-				versionString: #development;
+		with: [ spec
+				versionString: #stable;
+				loads: #('NoGlamour');
 				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
 ]

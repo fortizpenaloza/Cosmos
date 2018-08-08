@@ -15,7 +15,10 @@ MetadataTest >> testInstanceCreationAndAccessing [
 
 	| metadata |
 
-	metadata := Metadata about: self temperatureStream where: #unit_name is: 'celsius'.
+	metadata := Metadata
+		attaching: 'celsius'
+		as: #unit_name
+		of: self temperatureStream.
 	self
 		assert: metadata describedObject equals: self temperatureStream;
 		assert: metadata aspect equals: #unit_name;
@@ -27,7 +30,10 @@ MetadataTest >> testPrintOn [
 
 	| metadata |
 
-	metadata := Metadata about: self temperatureStream where: #unit_name is: 'celsius'.
+	metadata := Metadata
+		attaching: 'celsius'
+		as: #unit_name
+		of: self temperatureStream.
 	self
 		assert: metadata printString
 		equals:

@@ -9,17 +9,17 @@ Class {
 	#name : #Metadata,
 	#superclass : #Object,
 	#instVars : [
-		'value',
 		'aspect',
-		'describedObject'
+		'describedObject',
+		'data'
 	],
 	#category : #'Cosmos-Metadata'
 }
 
 { #category : #'instance creation' }
-Metadata class >> about: anObject where: anAspect is: aValue [
+Metadata class >> attaching: data as: anAspect of: anObject [
 
-	^ self new initializeAbout: anObject where: anAspect is: aValue
+	^ self new initializeAttaching: data as: anAspect of: anObject
 ]
 
 { #category : #comparing }
@@ -28,7 +28,7 @@ Metadata >> = anObject [
 	^ self == anObject
 		or: [ self class = anObject class
 				and: [ aspect = anObject aspect
-						and: [ describedObject = anObject describedObject and: [ value = anObject value ] ] ] ]
+						and: [ describedObject = anObject describedObject and: [ data = anObject value ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -46,15 +46,15 @@ Metadata >> describedObject [
 { #category : #comparing }
 Metadata >> hash [
 
-	^ (aspect hash bitXor: describedObject hash) bitXor: value hash
+	^ (aspect hash bitXor: describedObject hash) bitXor: data hash
 ]
 
 { #category : #initialization }
-Metadata >> initializeAbout: anObject where: anAspect is: aValue [
+Metadata >> initializeAttaching: aValue as: anAspect of: anObject [
 
 	aspect := anAspect.
 	describedObject := anObject.
-	value := aValue
+	data := aValue
 ]
 
 { #category : #printing }
@@ -66,11 +66,11 @@ Metadata >> printOn: aStream [
 	describedObject printOn: aStream.
 	aStream
 		nextPutAll: ' is '.
-	value printOn: aStream
+	data printOn: aStream
 ]
 
 { #category : #accessing }
 Metadata >> value [ 
 
-	^ value
+	^ data
 ]
