@@ -76,6 +76,8 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
+		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
@@ -87,7 +89,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model'
 		with:
-			#('Cosmos-Data' 'Cosmos-Metadata' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
+			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
 { #category : #'private-baselines' }
@@ -97,10 +99,12 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-Tests';
 		package: 'Cosmos-UserStoryTests'
 			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers') ];
-		package: 'Cosmos-Data-Tests'
-			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-Identifier-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Identifier') ];
 		package: 'Cosmos-Metadata-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Metadata') ];
+		package: 'Cosmos-Data-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Triggers-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Commands-Tests'
@@ -115,7 +119,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model-Tests'
 		with:
-			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
+			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
 { #category : #actions }
