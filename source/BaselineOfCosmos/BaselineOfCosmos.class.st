@@ -148,7 +148,7 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 	self
 		registerInterfaceAs: #DataManagementSystemInterface
 		named: 'Data Management System Interface'
-		declaring: #(#registerStreamNamed: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
+		declaring: #(#register: #deregister: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
 ]
 
 { #category : #actions }
@@ -165,7 +165,7 @@ BaselineOfCosmos >> registerMetadataSystemInterface [
 	self
 		registerInterfaceAs: #MetadataSystemInterface
 		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #metadataDescribing:of: #register:of:for:)
+		declaring: #(#metadataFor: #metadataDescribing:of: #register: #objectWhere:is:)
 ]
 
 { #category : #actions }

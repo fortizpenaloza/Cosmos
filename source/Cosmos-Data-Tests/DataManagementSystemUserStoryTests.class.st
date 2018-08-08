@@ -4,7 +4,7 @@ Class {
 	#category : #'Cosmos-Data-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DataManagementSystemUserStoryTests >> currentIdentifier [
 
 	^ 1
@@ -22,12 +22,6 @@ DataManagementSystemUserStoryTests >> setUpRequirements [
 	super
 		setUpRequirements;
 		requireDataManagementSystem
-]
-
-{ #category : #tests }
-DataManagementSystemUserStoryTests >> systemDateTime [
-
-	^ self octoberFirstOf2014AtNoon
 ]
 
 { #category : #tests }
@@ -119,7 +113,10 @@ DataManagementSystemUserStoryTests >> testMetadata [
 	metadata := self metadataSystem metadataFor: dataStream.
 	self
 		assert: metadata size equals: 2;
-		assert: metadata hasTheSameElementsInTheSameOrderThat: nil
+		assert: metadata
+			equals:
+			{(Metadata about: dataStream where: #identifier is: 1).
+			(Metadata about: dataStream where: #registration_timestamp is: self systemDateTime)} asSet
 ]
 
 { #category : #tests }

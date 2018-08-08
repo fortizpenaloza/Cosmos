@@ -4,6 +4,11 @@ Class {
 	#category : #'Cosmos-Data-Tests'
 }
 
+{ #category : #history }
+DataStreamTest class >> lastStoredRun [
+	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 626098000; yourself)); add: (#passed->((Set new) add: #testInstanceCreationAndAccessing; add: #testAccessingLastUpdate; add: #testAddingDataPoint; add: #testAccessingCurrentValue; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new))); yourself)
+]
+
 { #category : #accessing }
 DataStreamTest >> decemberTenthOf2016AtNoon [
 

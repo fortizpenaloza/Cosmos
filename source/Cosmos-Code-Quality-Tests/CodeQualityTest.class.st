@@ -4,6 +4,11 @@ Class {
 	#category : 'Cosmos-Code-Quality-Tests'
 }
 
+{ #category : #history }
+CodeQualityTest class >> lastStoredRun [
+	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 644624000; yourself)); add: (#passed->((Set new) add: #testMessageSentToSelfButNotImplemented; add: #testMessageImplementedButNotSent; add: #testSubclassReponsibilityImplementedInLeafClases; add: #testInstaceVariableNeitherReadNorWritten; add: #testMessageSentButNotImplemented; yourself)); add: (#failures->((Set new) add: #testMessagesMustBeCategorized; yourself)); add: (#errors->((Set new))); yourself)
+]
+
 { #category : #'tests support' }
 CodeQualityTest >> assertThereIsNoProblemsRunning: aRule [
 

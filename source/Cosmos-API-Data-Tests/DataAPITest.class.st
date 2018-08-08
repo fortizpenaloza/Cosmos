@@ -7,6 +7,11 @@ Class {
 	#category : #'Cosmos-API-Data-Tests'
 }
 
+{ #category : #history }
+DataAPITest class >> lastStoredRun [
+	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 645031000; yourself)); add: (#passed->((Set new) add: #testDataPointBulkRegistration; add: #testDataPointBulkRegistrationFailsWithMalformattedRequest; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new) add: #testDataStreamRegistration; add: #testQueryingDataStreamsSnapshot; add: #testDataStreamRegistrationFailsWithMalformattedRequest; add: #testQueryingStreamByName; add: #testDataStreamRegistrationFailsIfAlreadyExists; add: #testQueryingStreamByNameGivesNotFouldIfNotExists; yourself)); yourself)
+]
+
 { #category : #accessing }
 DataAPITest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
 
@@ -20,36 +25,22 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 	{
 		"name" : "Temperature",
 		"current-value" : 16,
-		"last-update" : "2015-09-06T12:00:00<1p>"
+		"last-update" : "2014-10-01T12:00:00<1p>"
 	},
 	{
 		"name" : "Pressure",
 		"current-value" : 1016,
-		"last-update" : "2015-09-06T12:00:00<1p>"
+		"last-update" : "2014-10-01T12:00:00<1p>"
 	},
 	{
 		"name" : "Humidity",
 		"current-value" : 72,
-		"last-update" : "2015-09-06T12:00:00<1p>"
+		"last-update" : "2014-10-01T12:00:00<1p>"
 	}
 ]' expandMacrosWith: TimeZones local offset
 ]
 
 { #category : #tests }
-
-DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
-
-	self
-		should: [ interface
-				streamBasedOn:
-					(self
-						getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
-		raise: HTTPClientError
-		withDescription: 'Data stream with that name not found'
-]
-
-{ #category : #tests }
-
 DataAPITest >> getDataStreamHttpRequest: uri [
 
 	^ TeaRequest
@@ -103,14 +94,14 @@ DataAPITest >> temperatureDataStreamAsJSON [
 	^ '{
 	"name" : "Temperature",
 	"current-value" : 16,
-	"last-update" : "2015-09-06T12:00:00<1p>",
+	"last-update" : "2014-10-01T12:00:00<1p>",
 	"data-points" : [
 		{
-			"timestamp" : "2015-09-06T12:00:00<1p>",
+			"timestamp" : "2014-10-01T12:00:00<1p>",
 			"value" : 16
 		},
 		{
-			"timestamp" : "2015-09-06T12:00:00<1p>",
+			"timestamp" : "2014-10-01T12:00:00<1p>",
 			"value" : 15.5
 		}
 	]
@@ -236,6 +227,18 @@ DataAPITest >> testQueryingStreamByName [
 	self
 		assert: response code equals: 200;
 		assert: response contents equals: self temperatureDataStreamAsJSON
+]
+
+{ #category : #tests }
+DataAPITest >> testQueryingStreamByNameGivesNotFouldIfNotExists [
+
+	self
+		should: [ interface
+				streamBasedOn:
+					(self
+						getDataStreamHttpRequest: 'http://COSMOS_URL/v1/data-streams?name=pH') ]
+		raise: HTTPClientError
+		withDescription: 'Data stream with that name not found'
 ]
 
 { #category : #accessing }
