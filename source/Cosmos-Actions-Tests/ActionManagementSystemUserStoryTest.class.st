@@ -7,10 +7,9 @@ Class {
 	#category : 'Cosmos-Actions-Tests-SystemModel'
 }
 
-{ #category : #accessing }
-ActionManagementSystemUserStoryTest >> septemberSixth2015AtNoon [
-
-	^ (September sixth, 2015) atNoon
+{ #category : #history }
+ActionManagementSystemUserStoryTest class >> lastStoredRun [
+	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 646306000; yourself)); add: (#passed->((Set new) add: #testActionEvaluation; add: #testQueringRegisteredActions; add: #testRegistrationFailsWhenActionAlreadyExists; add: #testDeregistration; yourself)); add: (#failures->((Set new) add: #testRegistration; yourself)); add: (#errors->((Set new))); yourself)
 ]
 
 { #category : #initialization }
@@ -101,7 +100,7 @@ ActionManagementSystemUserStoryTest >> testRegistration [
 
 	self
 		assert: action name equals: 'Send YO to Fran';
-		assert: action creationDateTime equals: self septemberSixth2015AtNoon
+		assert: action creationDateTime equals: self systemDateTime
 ]
 
 { #category : #tests }

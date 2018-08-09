@@ -65,6 +65,12 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #accessing }
+TriggerManagementSystemUserStoryTest >> temperatureStream [
+
+	^ DataStream named: 'Temperature' createdOn: self systemDateTime 
+]
+
+{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> tenMinutes [
 
 	^ TimeUnits minute with: 10
@@ -95,23 +101,22 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 
 	| dataStream trigger |
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
 
 	trigger := self triggerManagementSystem
 		registerNamed: 'Set triggered to true after data point registration'
-		triggering: self setTriggeredToTrue 
+		triggering: self setTriggeredToTrue
 		afterDataPointWasRegisteredOn: dataStream
 		ifSatisfies: AlwaysTriggeringCondition new.
 
 	self
 		assert: self triggerManagementSystem triggers
 		hasTheSameElementsInTheSameOrderThat: {trigger}.
-		
-	self triggerManagementSystem deregisterNamed: 'Set triggered to true after data point registration'.
-	
-	self assert: self triggerManagementSystem triggers isEmpty 
-	
 
+	self triggerManagementSystem
+		deregisterNamed: 'Set triggered to true after data point registration'.
+
+	self assert: self triggerManagementSystem triggers isEmpty
 ]
 
 { #category : #tests }
@@ -152,7 +157,7 @@ TriggerManagementSystemUserStoryTest >> testRegistrationToBeTriggeredOnDataPoint
 
 	| dataStream |
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
 
 	self triggerManagementSystem
 		registerNamed: 'Set triggered to true after data point registration'
@@ -169,7 +174,8 @@ TriggerManagementSystemUserStoryTest >> testTriggerOnDataPointRegistrationWhenSa
 
 	| dataStream |
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	self eventNotificationSystem
 		subscribe: self
@@ -183,9 +189,9 @@ TriggerManagementSystemUserStoryTest >> testTriggerOnDataPointRegistrationWhenSa
 		ifSatisfies: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11).
 
 	self deny: triggered.
-	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
+	self dataManagementSystem register: (DataPoint on: self systemDateTime holding: 12) toStreamNamed: dataStream name.
 	self deny: triggered.
-	self dataManagementSystem register: 10 toStreamNamed: dataStream name.
+	self dataManagementSystem register: (DataPoint on: self systemDateTime holding: 10) toStreamNamed: dataStream name.
 	self assert: triggered
 ]
 
@@ -224,7 +230,8 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIf
 		to: EvaluateActionEvent
 		toBeNotifiedSending: #evaluateActionOn:.
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
 		checkingIf: dataStream
@@ -238,7 +245,9 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIf
 
 	self deny: triggered.
 
-	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 12)
+		toStreamNamed: dataStream name.
 	self deny: triggered.
 
 	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
@@ -260,7 +269,8 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWh
 		to: EvaluateActionEvent
 		toBeNotifiedSending: #evaluateActionOn:.
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	condition := AndCompositeTriggeringCondition
 		with: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11)
@@ -276,11 +286,15 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWh
 
 	self deny: triggered.
 
-	self dataManagementSystem register: 10 toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 10)
+		toStreamNamed: dataStream name.
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
-	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 12)
+		toStreamNamed: dataStream name.
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
@@ -288,7 +302,9 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWh
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
-	self dataManagementSystem register: 10 toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 10)
+		toStreamNamed: dataStream name.
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self assert: triggered
 ]
@@ -296,9 +312,10 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWh
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testTriggeringOnDataPointRegistration [
 
-	|  dataStream |
+	| dataStream |
 
-	dataStream := self dataManagementSystem registerStreamNamed: 'Temperature'.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	self eventNotificationSystem
 		subscribe: self
@@ -312,6 +329,8 @@ TriggerManagementSystemUserStoryTest >> testTriggeringOnDataPointRegistration [
 		ifSatisfies: AlwaysTriggeringCondition new.
 
 	self deny: triggered.
-	self dataManagementSystem register: 12 toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 12)
+		toStreamNamed: dataStream name.
 	self assert: triggered
 ]

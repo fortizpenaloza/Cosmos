@@ -28,35 +28,37 @@ DataAPI >> initializeWorkingWithin: aContext [
 { #category : #API }
 DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
 
-	^ [ | rawData |
+	^ [ | registrationDateTime rawData |
 
+	registrationDateTime := self timeSystem dateTime.
 	rawData := context decode: anHttpRequest contents encodedAs: anHttpRequest contentType.
 
 	rawData
-		do:
-			[ :rawDataPoint | context register: (rawDataPoint at: 'value') toStreamNamed: (rawDataPoint at: 'data-stream') ].
+		do: [ :rawDataPoint | 
+			context
+				register: (DataPoint on: registrationDateTime holding: (rawDataPoint at: 'value'))
+				toStreamNamed: (rawDataPoint at: 'data-stream') ].
 
 	ZnResponse created: 'all' ]
 		on: KeyNotFound
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest:
-					('{"error":{"code":400,"message":"Expected key <1s> was not found"}'
-						expandMacrosWith: signal key) ]
+					('{"error":{"code":400,"message":"Expected key <1s> was not found"}' expandMacrosWith: signal key) ]
 ]
 
 { #category : #API }
 DataAPI >> registerStreamBasedOn: anHttpRequest [
 	
-	^ [ [ | rawStream name |
+	^ [ [ | rawStream dataStream |
 
 	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
-	name := rawStream at: #name.
+	dataStream := DataStream named: (rawStream at: #name) createdOn: self timeSystem dateTime.
 
-	self dataManagementSystem registerStreamNamed: name.
+	self dataManagementSystem register: dataStream.
 
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound
@@ -103,4 +105,10 @@ DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
 		ok:
 			(ZnEntity
 				json: (context encode: self dataManagementSystem streams to: mimeType))
+]
+
+{ #category : #'private - systems' }
+DataAPI >> timeSystem [
+	
+	^ context timeSystem
 ]

@@ -14,7 +14,7 @@ Class {
 		'lastUpdate',
 		'dataPoints'
 	],
-	#category : #'Cosmos-Data-Model'
+	#category : #'Cosmos-Data'
 }
 
 { #category : #'instance creation' }
@@ -34,7 +34,15 @@ DataStream class >> named: aName createdOn: aDateTime [
 	^ self new initializeNamed: aName createdOn: aDateTime
 ]
 
-{ #category : #adding }
+{ #category : #comparing }
+DataStream >> = anObject [
+
+	^ self == anObject
+		or: [ self class = anObject class
+				and: [ name = anObject name ] ]
+]
+
+{ #category : #'adding data points' }
 DataStream >> add: aDatapoint [
 
 	currentValue := Binding to: aDatapoint value.
@@ -59,6 +67,12 @@ DataStream >> currentValue [
 DataStream >> dataPoints [
 
 	^ dataPoints copy reversed
+]
+
+{ #category : #comparing }
+DataStream >> hash [
+
+	^ name hash
 ]
 
 { #category : #'initialize-release' }
