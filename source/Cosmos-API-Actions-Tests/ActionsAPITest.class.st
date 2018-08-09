@@ -14,6 +14,13 @@ ActionsAPITest >> actionJsonVersion1dot0dot0MimeType [
 ]
 
 { #category : #accessing }
+ActionsAPITest >> dateTimeFormattedAsISO8601 [
+
+	^ ISO8601DateTimeFormatter usingExtendedFormat
+		format: self systemDateTime
+]
+
+{ #category : #accessing }
 ActionsAPITest >> getActionsHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions') setAccept: self actionJsonVersion1dot0dot0MimeType
@@ -94,7 +101,8 @@ ActionsAPITest >> testQueringActions [
 					(ZnHeaders
 						withAll:
 							{('X-Auth-Email' -> 'patchinko@gmail.com').
-							('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')} asDictionary);
+							('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
+								asDictionary);
 				yourself).
 
 	response := interface actionsFor: self getActionsHttpRequest.
@@ -106,7 +114,7 @@ ActionsAPITest >> testQueringActions [
 			('[
 	{
 		"name" : "List DNS records",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"http_request" : {
 			"request_line" : {
 				"method" : "GET",
@@ -125,7 +133,7 @@ ActionsAPITest >> testQueringActions [
 			]
 		}
 	}
-]' expandMacrosWith: TimeZones local offset)
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }

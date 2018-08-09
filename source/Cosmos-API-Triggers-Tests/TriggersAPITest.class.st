@@ -17,7 +17,14 @@ TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
 	self
 		assert: aResponse code equals: 200;
-		assert: aResponse contents equals: (aString expandMacrosWith: TimeZones local offset)
+		assert: aResponse contents equals: (aString expandMacrosWith: self dateTimeFormattedAsISO8601)
+]
+
+{ #category : #accessing }
+TriggersAPITest >> dateTimeFormattedAsISO8601 [
+
+	^ ISO8601DateTimeFormatter usingExtendedFormat
+		format: self systemDateTime
 ]
 
 { #category : #accessing }
@@ -150,7 +157,7 @@ TriggersAPITest >> testGettingTriggers [
 			'[
 	{
 		"name" : "Set triggered to true after a data point was registered on Temperature",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
@@ -160,7 +167,7 @@ TriggersAPITest >> testGettingTriggers [
 	},
 	{
 		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "periodical",
@@ -202,7 +209,7 @@ TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWa
 			('[
 	{
 		"name" : "Set triggered to true after a data point was registered on Temperature",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
@@ -210,7 +217,7 @@ TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWa
 		},
 		"conditions" : [ ]
 	}
-]' expandMacrosWith: TimeZones local offset)
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -229,7 +236,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 			('[
 	{
 		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
@@ -246,7 +253,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 			}
 		]
 	}
-]' expandMacrosWith: TimeZones local offset)
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -273,7 +280,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 			('[
 	{
 		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "on_data_point_registration",
@@ -295,7 +302,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 			}
 		]
 	}
-]' expandMacrosWith: TimeZones local offset)
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -314,7 +321,7 @@ TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryF
 			('[
 	{
 		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "2014-10-01T12:00:00<1p>",
+		"created_on" : "<1s>",
 		"action" : "Set triggered to true",
 		"policy" : {
 			"type" : "periodical",
@@ -322,7 +329,7 @@ TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryF
 		},
 		"conditions" : [ ]
 	}
-]' expandMacrosWith: TimeZones local offset)
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }

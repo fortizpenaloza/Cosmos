@@ -25,19 +25,26 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 	{
 		"name" : "Temperature",
 		"current-value" : 16,
-		"last-update" : "2014-10-01T12:00:00<1p>"
+		"last-update" : "<1s>"
 	},
 	{
 		"name" : "Pressure",
 		"current-value" : 1016,
-		"last-update" : "2014-10-01T12:00:00<1p>"
+		"last-update" : "<1s>"
 	},
 	{
 		"name" : "Humidity",
 		"current-value" : 72,
-		"last-update" : "2014-10-01T12:00:00<1p>"
+		"last-update" : "<1s>"
 	}
-]' expandMacrosWith: TimeZones local offset
+]' expandMacrosWith: self dateTimeFormattedAsISO8601
+]
+
+{ #category : #accessing }
+DataAPITest >> dateTimeFormattedAsISO8601 [
+
+	^ ISO8601DateTimeFormatter usingExtendedFormat
+		format: self systemDateTime
 ]
 
 { #category : #tests }
@@ -94,18 +101,18 @@ DataAPITest >> temperatureDataStreamAsJSON [
 	^ '{
 	"name" : "Temperature",
 	"current-value" : 16,
-	"last-update" : "2014-10-01T12:00:00<1p>",
+	"last-update" : "<1s>",
 	"data-points" : [
 		{
-			"timestamp" : "2014-10-01T12:00:00<1p>",
+			"timestamp" : "<1s>",
 			"value" : 16
 		},
 		{
-			"timestamp" : "2014-10-01T12:00:00<1p>",
+			"timestamp" : "<1s>",
 			"value" : 15.5
 		}
 	]
-}' expandMacrosWith: TimeZones local offset
+}' expandMacrosWith: self dateTimeFormattedAsISO8601 
 ]
 
 { #category : #accessing }
