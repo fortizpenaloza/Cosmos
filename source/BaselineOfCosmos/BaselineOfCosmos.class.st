@@ -178,7 +178,7 @@ BaselineOfCosmos >> registerMetadataSystemInterface [
 	self
 		registerInterfaceAs: #MetadataSystemInterface
 		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #metadataDescribing:of: #register: #objectWhere:is:)
+		declaring: #(#metadataFor: #register: #describedObjectBy:as:)
 ]
 
 { #category : #actions }
@@ -221,6 +221,5 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		configuration: 'Roassal2'
 		with: [ spec
 				versionString: #stable;
-				loads: #('NoGlamour');
 				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
 ]
