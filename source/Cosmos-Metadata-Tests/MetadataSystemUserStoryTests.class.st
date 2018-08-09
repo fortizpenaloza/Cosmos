@@ -4,6 +4,12 @@ Class {
 	#category : #'Cosmos-Metadata-Tests'
 }
 
+{ #category : #accessing }
+MetadataSystemUserStoryTests >> livingTemperature [
+
+	^ DataStream named: 'Living temperature' createdOn: September sixth, 1979
+]
+
 { #category : #running }
 MetadataSystemUserStoryTests >> setUpRequirements [
 
@@ -13,31 +19,42 @@ MetadataSystemUserStoryTests >> setUpRequirements [
 ]
 
 { #category : #tests }
+MetadataSystemUserStoryTests >> temperature [
+
+	^ DataStream named: 'Temperature' createdOn: September sixth, 1979
+]
+
+{ #category : #tests }
 MetadataSystemUserStoryTests >> testMetadataRegistration [
 
-	| identifier |
+	| metadata |
 
-	identifier := UUID new.
+	metadata := Metadata
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
 	self
-		should: [ self metadataSystem metadataFor: 1 of: #identifier ]
-		raise: ObjectNotFound.
-	self metadataSystem register: identifier of: #identifier for: 1.
+		assert: (self metadataSystem metadataFor: self temperature) isEmpty.
+	self metadataSystem register: metadata.
 	self
-		assert: (self metadataSystem metadataFor: 1 of: #identifier)
-		equals: identifier
+		withTheOnlyOneIn: (self metadataSystem metadataFor: self temperature)
+		do: [ :foundMetadata | self assert: foundMetadata equals: metadata ]
 ]
 
 { #category : #tests }
 MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 
-	| identifier |
+	| metadata |
 
-	identifier := UUID new.
+	metadata := Metadata
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
+	self metadataSystem register: metadata.
 	self
-		should: [ self metadataSystem register: identifier of: #identifier for: 1 ]
+		should: [ self metadataSystem register: metadata ]
 		raise: ConflictingObjectFound
 ]
 
@@ -46,25 +63,38 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
 
-	identifier := UUID new.
-	registrationTimestamp := (December tenth , 2016) atMidnight.
+	identifier := Metadata
+		attaching: UUID new
+		as: #identifier
+		of: self temperature.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
-	self metadataSystem register: registrationTimestamp of: #registration_timestamp for: 1.
+	registrationTimestamp := Metadata
+		attaching: (December tenth , 2016) atMidnight
+		as: #registration_timestamp
+		of: self temperature.
+
+	self metadataSystem register: identifier.
+	self metadataSystem register: registrationTimestamp.
 	self
-		assert: (self metadataSystem metadataFor: 1)
+		assert: (self metadataSystem metadataFor: self temperature)
 		equals:
-			{(#registration_timestamp -> registrationTimestamp).
-			(#identifier -> identifier)}
+			{identifier.
+			registrationTimestamp} asSet
 ]
 
 { #category : #tests }
-MetadataSystemUserStoryTests >> testQueryingSingleMetadata [
+MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 
-	| identifier |
+	| identifier metadata |
 
 	identifier := UUID new.
+	metadata := Metadata
+		attaching: identifier
+		as: #identifier
+		of: self temperature.
 
-	self metadataSystem register: identifier of: #identifier for: 1.
-	self assert: (self metadataSystem metadataFor: 1 of: #identifier) equals: identifier
+	self metadataSystem register: metadata.
+	self
+		assert: (self metadataSystem describedObjectBy: identifier as: #identifier)
+		equals: self temperature
 ]

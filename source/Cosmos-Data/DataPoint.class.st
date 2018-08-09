@@ -11,7 +11,7 @@ Class {
 		'timestamp',
 		'value'
 	],
-	#category : #'Cosmos-Data-Model'
+	#category : #'Cosmos-Data'
 }
 
 { #category : #'instance creation' }

@@ -49,3 +49,9 @@ DataAPIContext >> register: aValue toStreamNamed: aName [
 
 	^ self dataManagementSystem register: aValue toStreamNamed: aName
 ]
+
+{ #category : #'private - systems' }
+DataAPIContext >> timeSystem [
+
+	^ cosmos systemImplementing: #TimeSystemInterface
+]

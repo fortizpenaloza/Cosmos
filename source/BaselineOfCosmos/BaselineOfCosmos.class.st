@@ -76,6 +76,8 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
+		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
@@ -87,7 +89,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model'
 		with:
-			#('Cosmos-Data' 'Cosmos-Metadata' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
+			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
 { #category : #'private-baselines' }
@@ -97,10 +99,12 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-Tests';
 		package: 'Cosmos-UserStoryTests'
 			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers') ];
-		package: 'Cosmos-Data-Tests'
-			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-Identifier-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Identifier') ];
 		package: 'Cosmos-Metadata-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Metadata') ];
+		package: 'Cosmos-Data-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Triggers-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Commands-Tests'
@@ -115,7 +119,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model-Tests'
 		with:
-			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Data-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
+			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
 { #category : #actions }
@@ -148,7 +152,16 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 	self
 		registerInterfaceAs: #DataManagementSystemInterface
 		named: 'Data Management System Interface'
-		declaring: #(#registerStreamNamed: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
+		declaring: #(#register: #deregister: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
+]
+
+{ #category : #actions }
+BaselineOfCosmos >> registerIdentifierSystemInterface [
+
+	self
+		registerInterfaceAs: #IdentifierSystemInterface
+		named: 'Identifier System Interface'
+		declaring: #(#next)
 ]
 
 { #category : #actions }
@@ -165,13 +178,14 @@ BaselineOfCosmos >> registerMetadataSystemInterface [
 	self
 		registerInterfaceAs: #MetadataSystemInterface
 		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #metadataFor:of: #register:of:for:)
+		declaring: #(#metadataFor: #register: #describedObjectBy:as:)
 ]
 
 { #category : #actions }
 BaselineOfCosmos >> registerSystemInterfaces [
 
 	self
+		registerIdentifierSystemInterface;
 		registerDataManagementSystemInterface;
 		registerMetadataSystemInterface;
 		registerCommandManagementSystemInterface;
@@ -188,7 +202,7 @@ BaselineOfCosmos >> registerTriggerManagementSystemInterface [
 		declaring: #(#registerNamed:triggering:afterDataPointWasRegisteredOn:ifSatisfies: #registerNamed:triggering:periodicallyEvery:ifSatisfies: #deregisterNamed: #havePassed: #dataPointRegisteredOn: #triggers)
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #dependencies }
 BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
@@ -196,16 +210,16 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		with: [ spec
 				repository: 'github://ba-st/Kepler:master/source';
 				loads: #('Development') ].
-	
+
 	spec
 		configuration: 'Teapot'
 		with: [ spec
 				versionString: #stable;
 				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ].
-			
+
 	spec
 		configuration: 'Roassal2'
-    		with: [  spec
-				versionString: #development;
+		with: [ spec
+				versionString: #stable;
 				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
 ]

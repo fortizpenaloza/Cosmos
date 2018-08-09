@@ -1,10 +1,10 @@
 "
-I'm an exception expecting to be raised when someone tries to query current value or last updated timestamp of an empty data stream.
+I'm a DataStreamIsEmpty, an Error indication someone tried to query current value or last updated timestamp of an empty data stream.
 "
 Class {
 	#name : #DataStreamIsEmpty,
 	#superclass : #Error,
-	#category : #'Cosmos-Data-Model'
+	#category : #'Cosmos-Data'
 }
 
 { #category : #signaling }
