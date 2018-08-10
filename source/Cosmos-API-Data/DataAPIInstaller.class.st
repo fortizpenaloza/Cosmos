@@ -126,22 +126,33 @@ DataAPIInstaller >> dataStreamMimeTypeVersion1dot0dot0 [
 { #category : #accessing }
 DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 
-	^ [ :dataStream | 
+	^ [ :dataStreams :context | 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
 				for: DataStream
-					do: [ :mapping | 
+					customDo: [ :mapping | 
 					mapping
-						mapAccessor: #name;
-						mapAccessor: #currentValue to: 'current-value';
-						mapAccessor: #lastUpdate to: 'last-update' ];
+						encoder: [ :dataStream | 
+							OrderedDictionary new
+								at: 'name' put: dataStream name;
+								at: 'current-value' put: dataStream currentValue;
+								at: 'last-update' put: dataStream lastUpdate;
+								at: 'metadata' put: (context metadataSystem metadataFor: dataStream);
+								yourself ] ];
+				for: Metadata
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :metadata | 
+							Dictionary new
+								at: metadata aspect put: metadata value;
+								yourself ] ];
 				for: DateTime
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
-				nextPut: dataStream ] ]
+				nextPut: dataStreams ] ]
 ]
 
 { #category : #accessing }

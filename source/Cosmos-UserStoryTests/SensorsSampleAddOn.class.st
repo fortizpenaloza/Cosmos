@@ -2,15 +2,15 @@ Class {
 	#name : #SensorsSampleAddOn,
 	#superclass : #Object,
 	#instVars : [
-		'rootSystem'
+		'cosmos'
 	],
-	#category : 'Cosmos-UserStoryTests'
+	#category : #'Cosmos-UserStoryTests'
 }
 
 { #category : #'instance creation' }
-SensorsSampleAddOn class >> on: aCompositeSystem [ 
+SensorsSampleAddOn class >> on: aCosmosSystem [ 
 
-	^self new initializeOn: aCompositeSystem 
+	^self new initializeOn: aCosmosSystem 
 ]
 
 { #category : #accessing }
@@ -22,51 +22,69 @@ SensorsSampleAddOn >> currentDateTime [
 { #category : #'private - systems' }
 SensorsSampleAddOn >> dataManagementSystem [
 
-	^ rootSystem systemImplementing: #DataManagementSystemInterface
+	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #initialization }
-SensorsSampleAddOn >> initializeOn: aCompositeSystem [ 
+SensorsSampleAddOn >> initializeOn: aCosmosSystem [ 
 	
-	rootSystem := aCompositeSystem 
+	cosmos := aCosmosSystem 
 ]
 
 { #category : #installing }
 SensorsSampleAddOn >> install [
 
-	| temperatureStream atmosphericPressureStream humidityStream |
+	self
+		registerTemperatureStreamWithSomeDataPoints;
+		registerAtmosphoricPressureStreamWithOneDataPoint;
+		registerHumidityStreamWithoutDataPoints
+]
 
-	temperatureStream := DataStream
-		named: 'Temperature'
-		createdOn: self currentDateTime.
-	self dataManagementSystem register: temperatureStream.
+{ #category : #'private - installing' }
+SensorsSampleAddOn >> registerAtmosphoricPressureStreamWithOneDataPoint [
+
+	self registerStreamNamed: 'Pressure'.
 	
-	atmosphericPressureStream := DataStream
-		named: 'Pressure'
-		createdOn: self currentDateTime.
-	self dataManagementSystem register: atmosphericPressureStream.
-	
-	humidityStream := DataStream 
-		named: 'Humidity' 
-		createdOn: self currentDateTime.
-	self dataManagementSystem register: humidityStream.
+	self dataManagementSystem
+		register: (DataPoint on: self currentDateTime holding: 1016)
+		toStreamNamed: 'Pressure'
+]
+
+{ #category : #'private - installing' }
+SensorsSampleAddOn >> registerHumidityStreamWithoutDataPoints [
+
+	self registerStreamNamed: 'Humidity'
+]
+
+{ #category : #'private - installing' }
+SensorsSampleAddOn >> registerStreamNamed: aName [
+
+	| dataStream |
+
+	dataStream := DataStream named: aName createdOn: self currentDateTime.
+	self dataManagementSystem register: dataStream
+]
+
+{ #category : #'private - installing' }
+SensorsSampleAddOn >> registerTemperatureStreamWithSomeDataPoints [
+
+	self registerStreamNamed: 'Temperature'.
 
 	self dataManagementSystem
 		register: (DataPoint on: self currentDateTime holding: 15.5)
-		toStreamNamed: temperatureStream name.
+		toStreamNamed: 'Temperature'.
+
 	self dataManagementSystem
 		register: (DataPoint on: self currentDateTime holding: 16)
-		toStreamNamed: temperatureStream name.
+		toStreamNamed: 'Temperature'.
+		
 	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 1016)
-		toStreamNamed: atmosphericPressureStream name.
-	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 72)
-		toStreamNamed: humidityStream name
+		register: (DataPoint on: self currentDateTime holding: 16.5)
+		toStreamNamed: 'Temperature'
 ]
 
 { #category : #'private - systems' }
 SensorsSampleAddOn >> timeSystem [
 
-	^ rootSystem systemImplementing: #TimeSystemInterface
+	^ cosmos systemImplementing: #TimeSystemInterface
 ]

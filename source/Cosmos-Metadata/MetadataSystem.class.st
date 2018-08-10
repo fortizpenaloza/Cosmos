@@ -1,3 +1,6 @@
+"
+I'm a System that manages cosmos' objects metadata.
+"
 Class {
 	#name : #MetadataSystem,
 	#superclass : #System,
@@ -11,6 +14,21 @@ Class {
 MetadataSystem class >> implementedInterface [
 	
 	^ SystemInterface >> #MetadataSystemInterface
+]
+
+{ #category : #'private - preconditions' }
+MetadataSystem >> assertIsNotAlreadyRegistered: metadata [
+
+	AssertionCheckerBuilder new
+		raising: ConflictingObjectFound;
+		checking: [ :asserter | 
+			asserter
+				refuse: [ metadataSet includes: metadata ]
+				because:
+					('Metadata describing the <1p> of <2p> already exists in system'
+						expandMacrosWith: metadata aspect
+						with: metadata describedObject) ];
+		buildAndCheck
 ]
 
 { #category : #querying }
@@ -49,12 +67,7 @@ MetadataSystem >> oneMetadataFilteredBy: aFilter ifFound: ifFoundBlock ifNone: i
 { #category : #managing }
 MetadataSystem >> register: metadata [
 
-	(metadataSet includes: metadata)
-		ifTrue: [ ConflictingObjectFound
-				signal:
-					('Metadata describing the <1p> of <2p> already exists in system'
-						expandMacrosWith: metadata aspect
-						with: metadata describedObject) ].
+	self assertIsNotAlreadyRegistered: metadata.
 
 	metadataSet add: metadata
 ]

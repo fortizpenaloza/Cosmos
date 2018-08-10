@@ -50,7 +50,8 @@ DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
 { #category : #API }
 DataAPI >> registerStreamBasedOn: anHttpRequest [
 	
-	^ [ [ | rawStream dataStream |
+	
+	^ [ [ | rawStream dataStream identifier|
 
 	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
@@ -59,8 +60,10 @@ DataAPI >> registerStreamBasedOn: anHttpRequest [
 	dataStream := DataStream named: (rawStream at: #name) createdOn: self timeSystem dateTime.
 
 	self dataManagementSystem register: dataStream.
+	
+	identifier := ((context metadataSystem metadataFor: dataStream) detect: [:metadata | metadata aspect = #identifier ]) value .
 
-	ZnResponse created: (ZnUrl fromString: 'localhost') ]
+	ZnResponse created: (ZnUrl fromString: ('localhost/<1p>' expandMacrosWith: identifier))  ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound, InstanceCreationFailed 
@@ -93,6 +96,14 @@ DataAPI >> streamNamed: aName encodedTo: mimeType [
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
+{ #category : #'private-API' }
+DataAPI >> streamsEncodedTo: mimeType [
+
+	^ [ context encode: self dataManagementSystem streams to: mimeType ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
+]
+
 { #category : #API }
 DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
 
@@ -103,8 +114,7 @@ DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
 
 	^ ZnResponse
 		ok:
-			(ZnEntity
-				json: (context encode: self dataManagementSystem streams to: mimeType))
+			(ZnEntity json: (self streamsEncodedTo: mimeType))
 ]
 
 { #category : #'private - systems' }

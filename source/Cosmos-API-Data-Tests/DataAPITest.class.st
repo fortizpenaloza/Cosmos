@@ -24,18 +24,42 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 	^ '[
 	{
 		"name" : "Temperature",
-		"current-value" : 16,
-		"last-update" : "<1s>"
+		"current-value" : 16.5,
+		"last-update" : "<1s>",
+		"metadata" : [
+			{
+				"registration_timestamp" : "<1s>"
+			},
+			{
+				"identifier" : 1
+			}
+		]
 	},
 	{
 		"name" : "Pressure",
 		"current-value" : 1016,
-		"last-update" : "<1s>"
+		"last-update" : "<1s>",
+		"metadata" : [
+			{
+				"registration_timestamp" : "<1s>"
+			},
+			{
+				"identifier" : 2
+			}
+		]
 	},
 	{
 		"name" : "Humidity",
-		"current-value" : 72,
-		"last-update" : "<1s>"
+		"current-value" : "N/A",
+		"last-update" : "N/A",
+		"metadata" : [
+			{
+				"identifier" : 3
+			},
+			{
+				"registration_timestamp" : "<1s>"
+			}
+		]
 	}
 ]' expandMacrosWith: self dateTimeFormattedAsISO8601
 ]
@@ -59,12 +83,18 @@ DataAPITest >> getDataStreamHttpRequest: uri [
 ]
 
 { #category : #accessing }
-DataAPITest >> getDataStreamSnapshotsRequest [
+DataAPITest >> getDataStreamSnapshotsHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/data-streams')
 		setAccept:
 			(ZnMimeType
 				fromString: 'application/vnd.cosmos.data-stream-snapshot+json; version=1.0.0')
+]
+
+{ #category : #running }
+DataAPITest >> identifierProvider [
+
+	^ SequentialNumberProvider new
 ]
 
 { #category : #accessing }
@@ -100,9 +130,13 @@ DataAPITest >> temperatureDataStreamAsJSON [
 
 	^ '{
 	"name" : "Temperature",
-	"current-value" : 16,
+	"current-value" : 16.5,
 	"last-update" : "<1s>",
 	"data-points" : [
+		{
+			"timestamp" : "<1s>",
+			"value" : 16.5
+		},
 		{
 			"timestamp" : "<1s>",
 			"value" : 16
@@ -157,18 +191,25 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 { #category : #tests }
 DataAPITest >> testDataStreamRegistration [
 
+	| response |
+
 	self dataManagementSystem
 		streamNamed: 'pH'
 		ifFound: [ :dataStream | self fail ]
 		ifNone: [ "do nothing" ].
 
-	interface
+	response := interface
 		registerStreamBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 				entity:
 					(ZnEntity
 						with: '{"name": "pH"}'
 						type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))).
+
+	self
+		assert: response code equals: 201;
+		assert: response location equals: '/localhost/4';
+		assert: response contentType equals: ZnMimeType textPlain.
 
 	self dataManagementSystem
 		streamNamed: 'pH'
@@ -216,7 +257,7 @@ DataAPITest >> testQueryingDataStreamsSnapshot [
 	| response |
 
 	response := interface
-		streamsSnapshotsBasedOn: self getDataStreamSnapshotsRequest.
+		streamsSnapshotsBasedOn: self getDataStreamSnapshotsHttpRequest.
 
 	self
 		assert: response code equals: 200;
