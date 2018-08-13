@@ -67,26 +67,14 @@ DataAPIInstaller >> addGetDataPointsRoute [
 
 	server
 		GET:
-			'/data-streams/<identifier:IsNumber>/data-points'
+			'/data-streams/<identifier:IsUUID>/data-points'
 				-> [ :request | interface getPointsBasedOn: request ].
 
 	mappingRegistry
-		register: [ :dataPoint | 
-			String
-				streamContents: [ :stream | 
-					(NeoJSONWriter on: stream)
-						for: DataPoint
-							do: [ :mapping | 
-							mapping
-								mapAccessor: #timestamp;
-								mapAccessor: #value ];
-						for: DateTime
-							customDo: [ :mapping | 
-							mapping
-								encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-						prettyPrint: true;
-						nextPut: dataPoint ] ]
-		asEncoderFor: (ZnMimeType fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+		register: self dataPointEncoderVersion1dot0dot0
+		asEncoderFor:
+			(ZnMimeType
+				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
 ]
 
 { #category : #'private-installing' }
@@ -123,6 +111,27 @@ DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
 DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
+]
+
+{ #category : #accessing }
+DataAPIInstaller >> dataPointEncoderVersion1dot0dot0 [
+
+	^ [ :dataPoint | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: DataPoint
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #timestamp;
+						mapAccessor: #value ];
+				for: DateTime
+					customDo: [ :mapping | 
+					mapping
+						encoder:
+							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				prettyPrint: true;
+				nextPut: dataPoint ] ]
 ]
 
 { #category : #accessing }
