@@ -45,7 +45,7 @@ MetadataSystem >> initialize [
 
 	super initialize.
 
-	metadataSet := Set new
+	metadataSet := OrderedCollection new
 ]
 
 { #category : #querying }

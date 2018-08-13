@@ -29,10 +29,10 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 		"last-update" : "<1s>",
 		"metadata" : [
 			{
-				"registration_timestamp" : "<1s>"
+				"identifier" : "<2s>"
 			},
 			{
-				"identifier" : "<2s>"
+				"registration_timestamp" : "<1s>"
 			}
 		]
 	},
@@ -42,10 +42,10 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 		"last-update" : "<1s>",
 		"metadata" : [
 			{
-				"registration_timestamp" : "<1s>"
+				"identifier" : "<3s>"
 			},
 			{
-				"identifier" : "<3s>"
+				"registration_timestamp" : "<1s>"
 			}
 		]
 	},
@@ -64,7 +64,7 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 	}
 ]'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
-		with: identifierSequence first asString36
+		with: self temperatureStreamIdentifier asString36
 		with: identifierSequence second asString36
 		with: identifierSequence third asString36
 ]

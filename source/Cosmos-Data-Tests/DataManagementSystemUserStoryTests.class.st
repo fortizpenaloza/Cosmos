@@ -116,7 +116,7 @@ DataManagementSystemUserStoryTests >> testMetadataRegistrationOnDataStreamRegist
 			(Metadata
 				attaching: self systemDateTime
 				as: #registration_timestamp
-				of: dataStream)} asSet
+				of: dataStream)} asOrderedCollection 
 ]
 
 { #category : #tests }
