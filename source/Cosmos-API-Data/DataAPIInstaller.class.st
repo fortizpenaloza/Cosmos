@@ -63,6 +63,33 @@ DataAPIInstaller >> addDeleteDataStreamRoute [
 ]
 
 { #category : #'private-installing' }
+DataAPIInstaller >> addGetDataPointsRoute [
+
+	server
+		GET:
+			'/data-streams/<identifier:IsNumber>/data-points'
+				-> [ :request | interface getPointsBasedOn: request ].
+
+	mappingRegistry
+		register: [ :dataPoint | 
+			String
+				streamContents: [ :stream | 
+					(NeoJSONWriter on: stream)
+						for: DataPoint
+							do: [ :mapping | 
+							mapping
+								mapAccessor: #timestamp;
+								mapAccessor: #value ];
+						for: DateTime
+							customDo: [ :mapping | 
+							mapping
+								encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+						prettyPrint: true;
+						nextPut: dataPoint ] ]
+		asEncoderFor: (ZnMimeType fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+]
+
+{ #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamRoute [
 
 	server
@@ -186,6 +213,7 @@ DataAPIInstaller >> install [
 	self
 		addGetDataStreamSnapshotsRoute;
 		addGetDataStreamRoute;
+		addGetDataPointsRoute;
 		addCreateDataStreamRoute;
 		addDeleteDataStreamRoute;
 		addCreateBulkDataPointsRoute;

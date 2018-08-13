@@ -82,6 +82,27 @@ DataAPI >> deleteStreamBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
+DataAPI >> getPointsBasedOn: anHttpRequest [
+
+
+	^ [ [ | mimeType encodedPoints identifier |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+	identifier := anHttpRequest at: #identifier.
+
+	encodedPoints := self dataManagementSystem 
+		streamIdentifiedBy: identifier
+		ifFound: [ :dataStream | context encode: dataStream dataPoints to: mimeType ]
+		ifNone: [ self halt ].
+
+	ZnResponse ok: (ZnEntity json: encodedPoints) ]
+		on: TeaNoSuchParam
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+]
+
+{ #category : #API }
 DataAPI >> getStreamBasedOn: anHttpRequest [
 
 	^ [ [ | mimeType identifier |
