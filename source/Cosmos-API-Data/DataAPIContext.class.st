@@ -23,17 +23,13 @@ DataAPIContext >> dataManagementSystem [
 { #category : #decoding }
 DataAPIContext >> decode: aJSON encodedAs: aMimeType [
 
-	| decoder |
-
-	decoder := mappingRegistry decoderFor: aMimeType.
-	^ decoder cull: aJSON
-
+	^ (mappingRegistry decoderFor: aMimeType) cull: aJSON cull: self
 ]
 
 { #category : #decoding }
 DataAPIContext >> encode: anObject to: aMimeType [
 
-	^ (mappingRegistry encoderFor: aMimeType) value: anObject
+	^ (mappingRegistry encoderFor: aMimeType) cull: anObject cull: self 
 ]
 
 { #category : #initialization }
@@ -42,6 +38,12 @@ DataAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:
 
 	cosmos := aCosmosSystem.
 	mappingRegistry := aMappingRegistry
+]
+
+{ #category : #systems }
+DataAPIContext >> metadataSystem [
+	
+	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #managing }

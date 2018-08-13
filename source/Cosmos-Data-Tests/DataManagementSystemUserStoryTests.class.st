@@ -116,7 +116,7 @@ DataManagementSystemUserStoryTests >> testMetadataRegistrationOnDataStreamRegist
 			(Metadata
 				attaching: self systemDateTime
 				as: #registration_timestamp
-				of: dataStream)} asSet
+				of: dataStream)} asOrderedCollection 
 ]
 
 { #category : #tests }
@@ -124,7 +124,8 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 
 	| dataStream |
 
-	dataStream := self dataManagementSystem register: self temperatureStream.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	self dataManagementSystem
 		streamIdentifiedBy: self currentIdentifier

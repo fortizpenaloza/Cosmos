@@ -114,7 +114,7 @@ TriggersAPIContext >> register: anEncodedTrigger encodedAs: aMimeType [
 	| decoder |
 
 	decoder := mappingRegistry decoderFor: aMimeType.
-	decoder value: anEncodedTrigger value: self
+	decoder cull: anEncodedTrigger cull: self
 ]
 
 { #category : #'private-decoders' }

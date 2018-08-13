@@ -1,5 +1,5 @@
 Class {
-	#name : #FixedNumberProvider,
+	#name : #FixedIdentifierProvider,
 	#superclass : #IdentifierProvider,
 	#instVars : [
 		'identifier'
@@ -8,25 +8,25 @@ Class {
 }
 
 { #category : #'instance creation' }
-FixedNumberProvider class >> providing: anIdentifier [
+FixedIdentifierProvider class >> providing: anIdentifier [
 
 	^ self new initializeProviding: anIdentifier 
 ]
 
 { #category : #'initialize-release' }
-FixedNumberProvider >> initializeProviding: anIdentifier [  
+FixedIdentifierProvider >> initializeProviding: anIdentifier [  
 
 	identifier := anIdentifier 
 ]
 
 { #category : #providing }
-FixedNumberProvider >> next [
+FixedIdentifierProvider >> next [
 
 	^ identifier
 ]
 
 { #category : #providing }
-FixedNumberProvider >> setNextTo: anIdentifier [
+FixedIdentifierProvider >> setNextTo: anIdentifier [
 
 	identifier := anIdentifier 
 ]

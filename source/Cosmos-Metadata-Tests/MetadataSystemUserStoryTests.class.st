@@ -63,10 +63,7 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
 
-	identifier := Metadata
-		attaching: UUID new
-		as: #identifier
-		of: self temperature.
+	identifier := Metadata attaching: UUID new as: #identifier of: self temperature.
 
 	registrationTimestamp := Metadata
 		attaching: (December tenth , 2016) atMidnight
@@ -79,7 +76,7 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 		assert: (self metadataSystem metadataFor: self temperature)
 		equals:
 			{identifier.
-			registrationTimestamp} asSet
+			registrationTimestamp} asOrderedCollection
 ]
 
 { #category : #tests }
@@ -95,6 +92,10 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 
 	self metadataSystem register: metadata.
 	self
-		assert: (self metadataSystem describedObjectBy: identifier as: #identifier)
+		assert:
+			(self metadataSystem
+				describedObjectBy: identifier
+				as: #identifier
+				ifNone: ifNoneBlock)
 		equals: self temperature
 ]

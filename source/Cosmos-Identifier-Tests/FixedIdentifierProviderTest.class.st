@@ -2,17 +2,17 @@
 A FixedNumberProviderTest is a test class for testing the behavior of FixedNumberProvider
 "
 Class {
-	#name : #FixedNumberProviderTest,
+	#name : #FixedIdentifierProviderTest,
 	#superclass : #TestCase,
 	#category : #'Cosmos-Identifier-Tests'
 }
 
 { #category : #'tests-providing' }
-FixedNumberProviderTest >> testNext [
+FixedIdentifierProviderTest >> testNext [
 
 	| provider |
 
-	provider := FixedNumberProvider providing: 3.
+	provider := FixedIdentifierProvider providing: 3.
 	self assert: provider next equals: 3.
 	self assert: provider next equals: 3.
 	provider setNextTo: 7.
