@@ -163,8 +163,7 @@ CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 						ifOriginAt: request
 						matchesAny: self allowedOrigins.
 
-					response ];
-		when: [ :request | self methodIsNotSafeOf: request ]
+					response ]
 ]
 
 { #category : #'private-activation' }
@@ -203,14 +202,6 @@ CosmosCommandLineHandler >> isDebugModeEnabled [
 
 	<ignoreForCoverage>
 	^ self hasOption: 'debug-mode'
-]
-
-{ #category : #'private-activation' }
-CosmosCommandLineHandler >> methodIsNotSafeOf: aRequest [
-
-	"According to Hypertext Transfer Protocol version 1.1 GET and HEAD are safe methods that SHOULD NOT have the significance of taking an action other than retrieval"
-
-	^ (#('HEAD' 'GET') includes: aRequest method) not
 ]
 
 { #category : #'private-accessing' }

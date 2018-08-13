@@ -10,7 +10,7 @@ Class {
 
 { #category : #history }
 DataAPITest class >> lastStoredRun [
-	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 645031000; yourself)); add: (#passed->((Set new) add: #testDataPointBulkRegistration; add: #testDataPointBulkRegistrationFailsWithMalformattedRequest; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new) add: #testDataStreamRegistration; add: #testGettingDataStreamsSnapshot; add: #testCreatingStreamFailsWithMalformattedRequest; add: #testGettingStreamByIdentifier; add: #testDataStreamRegistrationFailsIfAlreadyExists; add: #testGettingStreamWithWrongIdentifierGivesNotFound; yourself)); yourself)
+	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 645031000; yourself)); add: (#passed->((Set new) add: #testDataPointBulkRegistration; add: #testDataPointBulkRegistrationFailsWithMalformattedRequest; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new) add: #testDataStreamRegistration; add: #testGettingDataStreams; add: #testCreatingStreamFailsWithMalformattedRequest; add: #testGettingDataStreamByIdentifier; add: #testDataStreamRegistrationFailsIfAlreadyExists; add: #testGettingDataStreamWithWrongIdentifierGivesNotFound; yourself)); yourself)
 ]
 
 { #category : #accessing }
@@ -126,10 +126,27 @@ DataAPITest >> getDataStreamWithWrongIdentifierHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
+DataAPITest >> getTemperatureStreamDataPointsHttpRequest [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest
+				get:
+					'http://COSMOS_URL/data-streams/'
+						, self temperatureStreamIdentifier asString36 , '/data-points')
+				setAccept:
+					(ZnMimeType
+						fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0'))
+		pathParams: {(#identifier -> self temperatureStreamIdentifier)} asDictionary
+]
+
+{ #category : #'accessing - requests' }
 DataAPITest >> getTemperatureStreamHttpRequest [
 
 	^ self
-		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams/' , self temperatureStreamIdentifier asString36
+		getDataStreamHttpRequestTo:
+			'http://COSMOS_URL/data-streams/'
+				, self temperatureStreamIdentifier asString36
 		with: {(#identifier -> self temperatureStreamIdentifier)} asDictionary
 ]
 
@@ -336,20 +353,34 @@ DataAPITest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingDataStreamsSnapshot [
+DataAPITest >> testGettingDataPoints [
 
 	| response |
 
-	response := interface
-		getStreamsSnapshotsBasedOn: self getDataStreamSnapshotsHttpRequest.
+	response := interface getPointsBasedOn: self getTemperatureStreamDataPointsHttpRequest.
 
 	self
 		assert: response code equals: 200;
-		assert: response contents equals: self dataStreamsSnapshotAsJSON
+		assert: response contents
+			equals:
+			('[
+	{
+		"timestamp" : "<1s>",
+		"value" : 16.5
+	},
+	{
+		"timestamp" : "<1s>",
+		"value" : 16
+	},
+	{
+		"timestamp" : "<1s>",
+		"value" : 15.5
+	}
+]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingStreamByIdentifier [
+DataAPITest >> testGettingDataStreamByIdentifier [
 
 	| response |
 
@@ -362,7 +393,7 @@ DataAPITest >> testGettingStreamByIdentifier [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingStreamWithWrongIdentifierGivesNotFound [
+DataAPITest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
 		should: [ interface
@@ -373,6 +404,19 @@ DataAPITest >> testGettingStreamWithWrongIdentifierGivesNotFound [
 				assert: signal messageText
 					equals: 'Data stream with that identifier not found';
 				assert: signal code equals: 404 ]
+]
+
+{ #category : #tests }
+DataAPITest >> testGettingDataStreams [
+
+	| response |
+
+	response := interface
+		getStreamsSnapshotsBasedOn: self getDataStreamSnapshotsHttpRequest.
+
+	self
+		assert: response code equals: 200;
+		assert: response contents equals: self dataStreamsSnapshotAsJSON
 ]
 
 { #category : #accessing }
