@@ -64,8 +64,6 @@ TriggerManagementSystem >> deregisterNamed: aName [
 
 { #category : #'events handling' }
 TriggerManagementSystem >> havePassed: aTickEvent [
-
-	Transcript show: 'aca estoy'.
 	
 	(self triggersToTriggerPeriodicallyEvery: aTickEvent timePeriod)
 		do: [ :trigger | 

@@ -2,7 +2,8 @@ Class {
 	#name : #IdentifierSystem,
 	#superclass : #System,
 	#instVars : [
-		'identifierProvider'
+		'identifierProvider',
+		'metadataSystem'
 	],
 	#category : #'Cosmos-Identifier'
 }
@@ -21,19 +22,38 @@ IdentifierSystem class >> using: anIdentifierProvider [
 
 { #category : #initialization }
 IdentifierSystem >> initializeUsing: anIdentifierProvider [
-	
+
 	super initialize.
-	identifierProvider := anIdentifierProvider 
+	identifierProvider := anIdentifierProvider.
+
+	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface
 ]
 
-{ #category : #providing }
+{ #category : #'private - providing identifier' }
 IdentifierSystem >> next [
 	
 	^identifierProvider next 
 ]
 
+{ #category : #querying }
+IdentifierSystem >> objectIdentifiedBy: anIdentifier [
+
+	^ metadataSystem describedObjectBy: anIdentifier as: #identifier ifNone: nil
+]
+
+{ #category : #managing }
+IdentifierSystem >> registerIdentifierFor: anObject [
+	
+	metadataSystem
+		register:
+			(Metadata
+				attaching: self next
+				as: #identifier
+				of: anObject)
+]
+
 { #category : #initialization }
 IdentifierSystem >> resolveDependecies [
 
-	"do nothing"
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface
 ]
