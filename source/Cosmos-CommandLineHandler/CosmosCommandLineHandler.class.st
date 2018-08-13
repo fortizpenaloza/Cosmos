@@ -89,11 +89,12 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 	builder
 		add: (TimeSystem using: SystemTimeSource new);
 		add: EventNotificationSystem new;
+		add: MetadataSystem new;
+		add: (IdentifierSystem using: UUIDProvider new);
 		add: DataManagementSystem new;
 		add: TriggerManagementSystem new;
 		add: ActionManagementSystem new;
-		add: CommandManagementSystem new;
-		yourself.
+		add: CommandManagementSystem new.
 
 	cosmos := builder build.
 
