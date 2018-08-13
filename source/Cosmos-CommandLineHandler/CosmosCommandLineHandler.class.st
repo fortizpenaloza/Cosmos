@@ -61,12 +61,10 @@ CosmosCommandLineHandler >> activate [
 CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aRequest matchesAny: allowedOrigins [
 
 	<ignoreForCoverage>
-	[ allowedOrigins
+	allowedOrigins
 		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
 		ifFound: [ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
-		ifNone: [ "do nothing" ] ]
-		on: KeyNotFound
-		do: [ :signal | HTTPClientError signalBadRequest: 'Origin header expected not found' ]
+		ifNone: [ "do nothing" ]
 ]
 
 { #category : #'private-accessing' }
@@ -163,7 +161,8 @@ CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 						ifOriginAt: request
 						matchesAny: self allowedOrigins.
 
-					response ]
+					response ];
+		when: [ :request | request headers includesKey: 'Origin' ]
 ]
 
 { #category : #'private-activation' }

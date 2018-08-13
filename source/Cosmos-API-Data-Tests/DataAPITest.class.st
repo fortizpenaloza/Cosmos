@@ -247,7 +247,7 @@ DataAPITest >> testCreatingDataStream [
 
 	self
 		assert: response code equals: 201;
-		assert: response location equals: '/localhost/', identifierSequence last asString;
+		assert: response location equals: '/localhost/', identifierSequence last asString36;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self dataManagementSystem

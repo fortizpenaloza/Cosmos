@@ -57,7 +57,7 @@ DataAPI >> createStreamBasedOn: anHttpRequest [
 	ZnResponse
 		created:
 			(ZnUrl
-				fromString: ('localhost/<1p>' expandMacrosWith: identifier asString36)) ]
+				fromString: ('localhost/<1s>' expandMacrosWith: identifier asString36)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound , InstanceCreationFailed
