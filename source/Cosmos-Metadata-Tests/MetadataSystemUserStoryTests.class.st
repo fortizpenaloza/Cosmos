@@ -95,6 +95,10 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 
 	self metadataSystem register: metadata.
 	self
-		assert: (self metadataSystem describedObjectBy: identifier as: #identifier)
+		assert:
+			(self metadataSystem
+				describedObjectBy: identifier
+				as: #identifier
+				ifNone: ifNoneBlock)
 		equals: self temperature
 ]

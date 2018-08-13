@@ -10,16 +10,16 @@ Class {
 { #category : #initialization }
 IdentifierSystemTest >> setUp [
 
-	identifierProvider := FixedNumberProvider providing: self startingIndentifier
+	identifierProvider := FixedIdentifierProvider providing: self startingIndentifier
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 IdentifierSystemTest >> startingIndentifier [
 
 	^ 1
 ]
 
-{ #category : #initialization }
+{ #category : #tests }
 IdentifierSystemTest >> testNext [
 
 	| identifierSystem |

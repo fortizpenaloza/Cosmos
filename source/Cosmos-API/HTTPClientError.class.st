@@ -4,7 +4,7 @@ Class {
 	#category : #'Cosmos-API-Model'
 }
 
-{ #category : #signalling }
+{ #category : #signaling }
 HTTPClientError class >> signal: aCode describedBy: aFailureExplanation [
 
 	^ self new
@@ -18,16 +18,22 @@ HTTPClientError class >> signalBadRequest: aFailureExplanation [
 	^ self signal: 400 describedBy: aFailureExplanation
 ]
 
-{ #category : #signalling }
+{ #category : #signaling }
 HTTPClientError class >> signalConflict: aFailureExplanation [
 
 	^self signal: 409 describedBy: aFailureExplanation
 ]
 
-{ #category : #signalling }
+{ #category : #signaling }
 HTTPClientError class >> signalNotFound [
 
 	^self signal: 404 describedBy: 'Not found'
+]
+
+{ #category : #signaling }
+HTTPClientError class >> signalNotFound: aFailureExplanation [
+
+	^self signal: 404 describedBy: aFailureExplanation 
 ]
 
 { #category : #accessing }

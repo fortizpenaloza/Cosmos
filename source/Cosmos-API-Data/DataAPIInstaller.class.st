@@ -16,13 +16,22 @@ DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 ]
 
 { #category : #'private-installing' }
-DataAPIInstaller >> addBulkDataPointRegistrationRoute [
+DataAPIInstaller >> addCreateBulkDataPointsRoute [
 
 	server
-		POST: '/data-points' -> [ :request | interface registerBulkPointsBasedOn: request contents ];
+		POST: '/data-points' -> [ :request | interface createBulkPointsBasedOn: request contents ];
 		output: #text.
 
 	self registerBulkDataPointDecoderVersion1dot0dot0
+]
+
+{ #category : #'private-installing' }
+DataAPIInstaller >> addCreateDataStreamRoute [
+
+	server
+		POST:
+			'/data-streams'
+				-> [ :request | interface createStreamBasedOn: request ]
 ]
 
 { #category : #'private-installing' }
@@ -45,12 +54,21 @@ DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 ]
 
 { #category : #'private-installing' }
+DataAPIInstaller >> addDeleteDataStreamRoute [
+
+	server
+		DELETE:
+			'/data-streams/<identifier>'
+				-> [ :request | interface deleteStreamBasedOn: request ]
+]
+
+{ #category : #'private-installing' }
 DataAPIInstaller >> addGetDataStreamRoute [
 
 	server
 		GET:
-			'/data-streams/<name>'
-				-> [ :request | interface streamBasedOn: request ].
+			'/data-streams/<identifier:IsNumber>'
+				-> [ :request | interface getStreamBasedOn: request ].
 				
 	self registerDataStreamEncoderVersion1dot0dot0
 ]
@@ -59,19 +77,10 @@ DataAPIInstaller >> addGetDataStreamRoute [
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
 
-	server GET: '/data-streams' -> [ :request | interface streamsSnapshotsBasedOn: request ].
+	server GET: '/data-streams' -> [ :request | interface getStreamsSnapshotsBasedOn: request ].
 	
 	self registerDataStreamSnapshotEncoderVersion1dot0dot0
 	
-]
-
-{ #category : #'private-installing' }
-DataAPIInstaller >> addRegisterDataStreamRoute [
-
-	server
-		POST:
-			'/data-streams'
-				-> [ :request | interface registerStreamBasedOn: request ]
 ]
 
 { #category : #accessing }
@@ -138,7 +147,8 @@ DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 								at: 'name' put: dataStream name;
 								at: 'current-value' put: dataStream currentValue;
 								at: 'last-update' put: dataStream lastUpdate;
-								at: 'metadata' put: (context metadataSystem metadataFor: dataStream);
+								at: 'metadata'
+									put: (context metadataSystem metadataFor: dataStream);
 								yourself ] ];
 				for: Metadata
 					customDo: [ :mapping | 
@@ -150,7 +160,8 @@ DataAPIInstaller >> dataStreamSnapshotEncoderVersion1dot0dot0 [
 				for: DateTime
 					customDo: [ :mapping | 
 					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+						encoder:
+							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
 				nextPut: dataStreams ] ]
 ]
@@ -175,8 +186,9 @@ DataAPIInstaller >> install [
 	self
 		addGetDataStreamSnapshotsRoute;
 		addGetDataStreamRoute;
-		addRegisterDataStreamRoute;
-		addBulkDataPointRegistrationRoute;
+		addCreateDataStreamRoute;
+		addDeleteDataStreamRoute;
+		addCreateBulkDataPointsRoute;
 		addCrossOriginResourceSharingRoute.
 		
 		"GET, POST data-streams/<id>/metadata"

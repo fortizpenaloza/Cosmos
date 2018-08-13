@@ -32,13 +32,12 @@ MetadataSystem >> assertIsNotAlreadyRegistered: metadata [
 ]
 
 { #category : #querying }
-MetadataSystem >> describedObjectBy: data as: anAspect [
+MetadataSystem >> describedObjectBy: data as: anAspect ifNone: ifNoneBlock [
 
 	^ self
 		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata value = data ] ]
 		ifFound: [ :foundMetadata | foundMetadata describedObject ]
-		ifNone: [ ObjectNotFound
-				signal: ('Object described <1p> as <2p> not found' expandMacrosWith: anAspect with: data) ]
+		ifNone: ifNoneBlock
 ]
 
 { #category : #initialization }

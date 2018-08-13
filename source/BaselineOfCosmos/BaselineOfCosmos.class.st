@@ -42,7 +42,7 @@ BaselineOfCosmos >> baseline: spec [
 			spec postLoadDoIt: #postload:package: ]
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
@@ -57,7 +57,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 		with: #('Cosmos-API' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
@@ -72,7 +72,7 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 		with: #('Cosmos-API-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
@@ -92,7 +92,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
-{ #category : #'private-baselines' }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 
 	spec
@@ -128,7 +128,7 @@ BaselineOfCosmos >> postload: aLoader package: aPackageSpec [
 	self registerSystemInterfaces
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerActionManagementSystemInterface [
 
 	self
@@ -137,7 +137,7 @@ BaselineOfCosmos >> registerActionManagementSystemInterface [
 		declaring: #(#registerNamed:toEvaluate: #deregisterNamed: actions)
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerCommandManagementSystemInterface [
 
 	self
@@ -146,7 +146,7 @@ BaselineOfCosmos >> registerCommandManagementSystemInterface [
 		declaring: #(#enqueue:with: #dequeue #prioritizedCommands)
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerDataManagementSystemInterface [
 
 	self
@@ -155,7 +155,7 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 		declaring: #(#register: #deregister: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerIdentifierSystemInterface [
 
 	self
@@ -164,7 +164,7 @@ BaselineOfCosmos >> registerIdentifierSystemInterface [
 		declaring: #(#next)
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorSet [
 
 	SystemInterface
@@ -172,16 +172,16 @@ BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorS
 		to: (Interface named: aName declaring: aSelectorSet) 
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerMetadataSystemInterface [
 
 	self
 		registerInterfaceAs: #MetadataSystemInterface
 		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #register: #describedObjectBy:as:)
+		declaring: #(#metadataFor: #register: #describedObjectBy:as:ifNone:)
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerSystemInterfaces [
 
 	self
@@ -193,7 +193,7 @@ BaselineOfCosmos >> registerSystemInterfaces [
 		registerActionManagementSystemInterface
 ]
 
-{ #category : #actions }
+{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerTriggerManagementSystemInterface [
 
 	self

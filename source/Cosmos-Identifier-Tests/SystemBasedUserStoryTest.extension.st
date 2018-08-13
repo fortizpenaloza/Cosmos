@@ -9,7 +9,7 @@ SystemBasedUserStoryTest >> currentIdentifier [
 { #category : #'*Cosmos-Identifier-Tests' }
 SystemBasedUserStoryTest >> identifierProvider [
 
-	^ FixedNumberProvider providing: self currentIdentifier
+	^ FixedIdentifierProvider providing: self currentIdentifier
 ]
 
 { #category : #'*Cosmos-Identifier-Tests' }

@@ -124,7 +124,8 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 
 	| dataStream |
 
-	dataStream := self dataManagementSystem register: self temperatureStream.
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
 
 	self dataManagementSystem
 		streamIdentifiedBy: self currentIdentifier

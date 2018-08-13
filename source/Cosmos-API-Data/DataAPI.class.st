@@ -13,20 +13,8 @@ DataAPI class >> workingWithin: aContext [
 	^self new initializeWorkingWithin: aContext 
 ]
 
-{ #category : #systems }
-DataAPI >> dataManagementSystem [
-
-	^ context dataManagementSystem
-]
-
-{ #category : #initialization }
-DataAPI >> initializeWorkingWithin: aContext [
-
-	context := aContext
-]
-
 { #category : #API }
-DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
+DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 
 	^ [ | registrationDateTime rawData |
 
@@ -48,7 +36,7 @@ DataAPI >> registerBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> registerStreamBasedOn: anHttpRequest [
+DataAPI >> createStreamBasedOn: anHttpRequest [
 	
 	
 	^ [ [ | rawStream dataStream identifier|
@@ -70,28 +58,71 @@ DataAPI >> registerStreamBasedOn: anHttpRequest [
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
-{ #category : #API }
-DataAPI >> streamBasedOn: anHttpRequest [
+{ #category : #systems }
+DataAPI >> dataManagementSystem [
 
-	| mimeType aName |
+	^ context dataManagementSystem
+]
+
+{ #category : #API }
+DataAPI >> deleteStreamBasedOn: anHttpRequest [
+
+	^ [ | identifier |
+
+	identifier := anHttpRequest at: #identifier.
+
+	self dataManagementSystem
+		streamIdentifiedBy: identifier
+		ifFound: [ :foundStream | 
+			self dataManagementSystem deregister: foundStream.
+			ZnResponse noContent ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+]
+
+{ #category : #API }
+DataAPI >> getStreamBasedOn: anHttpRequest [
+
+	^ [ [ | mimeType identifier |
 
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
-	aName := anHttpRequest at: #name.
+	identifier := anHttpRequest at: #identifier.
 
-	^ [ ZnResponse
-		ok:
-			(ZnEntity json: (self streamNamed: aName encodedTo: mimeType)) ]
+	ZnResponse
+		ok: (ZnEntity json: (self streamNamed: identifier encodedTo: mimeType)) ]
+		on: TeaNoSuchParam
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
 		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+]
+
+{ #category : #API }
+DataAPI >> getStreamsSnapshotsBasedOn: anHttpRequest [
+
+	| mimeType |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+
+
+	^ ZnResponse
+		ok:
+			(ZnEntity json: (self streamsEncodedTo: mimeType))
+]
+
+{ #category : #initialization }
+DataAPI >> initializeWorkingWithin: aContext [
+
+	context := aContext
 ]
 
 { #category : #'private-API' }
 DataAPI >> streamNamed: aName encodedTo: mimeType [
 
 	^ [ self dataManagementSystem
-		streamNamed: aName
+		streamIdentifiedBy: aName
 		ifFound: [ :dataStream | context encode: dataStream to: mimeType ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that name not found' ] ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -102,19 +133,6 @@ DataAPI >> streamsEncodedTo: mimeType [
 	^ [ context encode: self dataManagementSystem streams to: mimeType ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
-]
-
-{ #category : #API }
-DataAPI >> streamsSnapshotsBasedOn: anHttpRequest [
-
-	| mimeType |
-
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-
-
-	^ ZnResponse
-		ok:
-			(ZnEntity json: (self streamsEncodedTo: mimeType))
 ]
 
 { #category : #'private - systems' }

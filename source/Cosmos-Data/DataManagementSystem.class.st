@@ -110,7 +110,12 @@ DataManagementSystem >> resolveDependecies [
 { #category : #querying }
 DataManagementSystem >> streamIdentifiedBy: anIdentifier ifFound: ifFoundBlock ifNone: ifNoneBlock [
 
-	^ metadataSystem describedObjectBy: anIdentifier as: #identifier
+	^ ifFoundBlock
+		value:
+			(metadataSystem
+				describedObjectBy: anIdentifier
+				as: #identifier
+				ifNone: ifNoneBlock)
 ]
 
 { #category : #querying }
