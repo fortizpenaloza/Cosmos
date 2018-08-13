@@ -46,12 +46,6 @@ DataAPIContext >> metadataSystem [
 	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #managing }
-DataAPIContext >> register: aValue toStreamNamed: aName [
-
-	^ self dataManagementSystem register: aValue toStreamNamed: aName
-]
-
 { #category : #'private - systems' }
 DataAPIContext >> timeSystem [
 

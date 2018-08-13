@@ -16,15 +16,15 @@ DataAPI class >> workingWithin: aContext [
 { #category : #API }
 DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 
-	^ [ | registrationDateTime rawData |
+	^ [ | timestamp rawData |
 
-	registrationDateTime := self timeSystem dateTime.
+	timestamp := self currentDateTime.
 	rawData := context decode: anHttpRequest contents encodedAs: anHttpRequest contentType.
 
 	rawData
 		do: [ :rawDataPoint | 
-			context
-				register: (DataPoint on: registrationDateTime holding: (rawDataPoint at: 'value'))
+			self dataManagementSystem
+				register: (DataPoint on: timestamp holding: (rawDataPoint at: 'value'))
 				toStreamNamed: (rawDataPoint at: 'data-stream') ].
 
 	ZnResponse created: 'all' ]
@@ -32,30 +32,42 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest:
-					('{"error":{"code":400,"message":"Expected key <1s> was not found"}' expandMacrosWith: signal key) ]
+					('{"error":{"code":400,"message":"Expected key <1s> was not found"}'
+						expandMacrosWith: signal key) ]
 ]
 
 { #category : #API }
 DataAPI >> createStreamBasedOn: anHttpRequest [
-	
-	
-	^ [ [ | rawStream dataStream identifier|
+
+	^ [ [ | rawStream dataStream identifier |
 
 	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
-	dataStream := DataStream named: (rawStream at: #name) createdOn: self timeSystem dateTime.
+	dataStream := DataStream
+		named: (rawStream at: #name)
+		createdOn: self currentDateTime.
 
 	self dataManagementSystem register: dataStream.
-	
-	identifier := ((context metadataSystem metadataFor: dataStream) detect: [:metadata | metadata aspect = #identifier ]) value .
 
-	ZnResponse created: (ZnUrl fromString: ('localhost/<1p>' expandMacrosWith: identifier))  ]
+	identifier := ((context metadataSystem metadataFor: dataStream)
+		detect: [ :metadata | metadata aspect = #identifier ]) value.
+
+	ZnResponse
+		created:
+			(ZnUrl
+				fromString: ('localhost/<1p>' expandMacrosWith: identifier asString36)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound, InstanceCreationFailed 
+		on: KeyNotFound , InstanceCreationFailed
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+]
+
+{ #category : #'private - accessing' }
+DataAPI >> currentDateTime [
+
+	^ self timeSystem dateTime
 ]
 
 { #category : #systems }
@@ -93,7 +105,7 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 	encodedPoints := self dataManagementSystem 
 		streamIdentifiedBy: identifier
 		ifFound: [ :dataStream | context encode: dataStream dataPoints to: mimeType ]
-		ifNone: [ self halt ].
+		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
 		on: TeaNoSuchParam

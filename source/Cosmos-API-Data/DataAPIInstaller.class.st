@@ -19,7 +19,7 @@ DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 DataAPIInstaller >> addCreateBulkDataPointsRoute [
 
 	server
-		POST: '/data-points' -> [ :request | interface createBulkPointsBasedOn: request contents ];
+		POST: '/data-points' -> [ :request | interface createBulkPointsBasedOn: request ];
 		output: #text.
 
 	self registerBulkDataPointDecoderVersion1dot0dot0
@@ -58,7 +58,7 @@ DataAPIInstaller >> addDeleteDataStreamRoute [
 
 	server
 		DELETE:
-			'/data-streams/<identifier>'
+			'/data-streams/<identifier:IsUUID>'
 				-> [ :request | interface deleteStreamBasedOn: request ]
 ]
 
@@ -82,7 +82,7 @@ DataAPIInstaller >> addGetDataStreamRoute [
 
 	server
 		GET:
-			'/data-streams/<identifier:IsNumber>'
+			'/data-streams/<identifier:IsUUID>'
 				-> [ :request | interface getStreamBasedOn: request ].
 				
 	self registerDataStreamEncoderVersion1dot0dot0
