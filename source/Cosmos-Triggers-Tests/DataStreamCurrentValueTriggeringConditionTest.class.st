@@ -21,12 +21,6 @@ DataStreamCurrentValueTriggeringConditionTest >> currentValue [
 	^ currentValue
 ]
 
-{ #category : #accessing }
-DataStreamCurrentValueTriggeringConditionTest >> decemberTenthOf2016AtNoon [
-
-	^ (December tenth , 2016) atNoon
-]
-
 { #category : #tests }
 DataStreamCurrentValueTriggeringConditionTest >> testIsSafisfied [
 

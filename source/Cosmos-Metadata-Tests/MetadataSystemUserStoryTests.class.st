@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+MetadataSystemUserStoryTests >> identifier [
+
+	^ UUID new
+]
+
+{ #category : #accessing }
 MetadataSystemUserStoryTests >> livingTemperature [
 
 	^ DataStream named: 'Living temperature'
@@ -18,7 +24,7 @@ MetadataSystemUserStoryTests >> setUpRequirements [
 		requireMetadataSystem
 ]
 
-{ #category : #tests }
+{ #category : #accessing }
 MetadataSystemUserStoryTests >> temperature [
 
 	^ DataStream named: 'Temperature'
@@ -30,7 +36,7 @@ MetadataSystemUserStoryTests >> testMetadataRegistration [
 	| metadata |
 
 	metadata := Metadata
-		attaching: UUID new
+		attaching: self identifier
 		as: #identifier
 		of: self temperature.
 
@@ -48,7 +54,7 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 	| metadata |
 
 	metadata := Metadata
-		attaching: UUID new
+		attaching: self identifier
 		as: #identifier
 		of: self temperature.
 
@@ -62,8 +68,13 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
+	
+	self assert: (self metadataSystem metadataFor: self temperature) isEmpty.
 
-	identifier := Metadata attaching: UUID new as: #identifier of: self temperature.
+	identifier := Metadata
+		attaching: self identifier
+		as: #identifier
+		of: self temperature.
 
 	registrationTimestamp := Metadata
 		attaching: (December tenth , 2016) atMidnight
@@ -84,7 +95,8 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 
 	| identifier metadata |
 
-	identifier := UUID new.
+	identifier := self identifier.
+
 	metadata := Metadata
 		attaching: identifier
 		as: #identifier
@@ -96,6 +108,23 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 			(self metadataSystem
 				describedObjectBy: identifier
 				as: #identifier
-				ifNone: ifNoneBlock)
+				ifNone: [ self fail ])
 		equals: self temperature
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testQueryingDescribedObjectFails [
+
+	| metadata |
+
+	metadata := Metadata attaching: 'celsius' as: #unit_singular of: self temperature.
+
+	self metadataSystem register: metadata.
+
+	self
+		should: [ self metadataSystem
+				describedObjectBy: 'meter'
+				as: #unit_singular
+				ifNone: [ Error signal ] ]
+		raise: Error
 ]

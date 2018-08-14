@@ -15,12 +15,6 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> dateTime [
 ]
 
 { #category : #accessing }
-DataStreamHasNotBeenUpdatedTriggeringConditionTest >> decemberTenthOf2016AtNoon [
-
-	^ (December tenth , 2016) atNoon
-]
-
-{ #category : #accessing }
 DataStreamHasNotBeenUpdatedTriggeringConditionTest >> lastUpdate [
 
 	^ lastUpdate
