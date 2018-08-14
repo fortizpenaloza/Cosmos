@@ -15,12 +15,6 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> dateTime [
 ]
 
 { #category : #accessing }
-DataStreamHasNotBeenUpdatedTriggeringConditionTest >> decemberTenthOf2016AtNoon [
-
-	^ (December tenth , 2016) atNoon
-]
-
-{ #category : #accessing }
 DataStreamHasNotBeenUpdatedTriggeringConditionTest >> lastUpdate [
 
 	^ lastUpdate
@@ -32,14 +26,11 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> testIsSafisfiedWhenDataStr
 	| condition |
 
 	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
-		checkingIf:
-			(DataStream
-				named: 'Temperature'
-				createdOn: self decemberTenthOf2016AtNoon)
+		checkingIf: (DataStream named: 'Temperature')
 		hasNotBeenUpdatedForMoreThan: (TimeUnits minute with: 10).
 
 	self
-		should: [ (condition isSatisfiedOn: self) ]
+		should: [ condition isSatisfiedOn: self ]
 		raise: DataStreamIsEmpty
 		withDescription: 'Last update date and time has not been initialized'
 ]

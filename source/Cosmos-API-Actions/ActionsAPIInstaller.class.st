@@ -76,7 +76,7 @@ ActionsAPIInstaller >> addCrossOriginResourceSharingRoute [
 					response headers
 						at: 'Access-Control-Allow-Headers'
 							put: 'Access-Control-Allow-Origin, Content-Type, Accept';
-						at: 'Access-Control-Allow-Methods' put: 'POST, GET';
+						at: 'Access-Control-Allow-Methods' put: 'POST, GET, DELETE, PUT';
 						at: 'Access-Control-Max-Age' put: '86400'.
 
 					response ]

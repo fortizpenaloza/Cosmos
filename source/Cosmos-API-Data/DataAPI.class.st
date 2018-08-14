@@ -45,9 +45,7 @@ DataAPI >> createStreamBasedOn: anHttpRequest [
 		propertyNamesAsSymbols: true;
 		next.
 
-	dataStream := DataStream
-		named: (rawStream at: #name)
-		createdOn: self currentDateTime.
+	dataStream := DataStream named: (rawStream at: #name).
 
 	self dataManagementSystem register: dataStream.
 

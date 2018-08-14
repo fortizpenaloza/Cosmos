@@ -23,6 +23,9 @@ IdentifierSystemUserStoryTest >> testIdentifierRegistration [
 
 	self identifierSystem registerIdentifierFor: 'name'.
 	self
-		assert: (self identifierSystem objectIdentifiedBy: self startingIndentifier)
+		assert:
+			(self identifierSystem
+				objectIdentifiedBy: self startingIndentifier
+				ifNone: [ self fail ])
 		equals: 'name'
 ]

@@ -61,7 +61,7 @@ SensorsSampleAddOn >> registerStreamNamed: aName [
 
 	| dataStream |
 
-	dataStream := DataStream named: aName createdOn: self currentDateTime.
+	dataStream := DataStream named: aName.
 	self dataManagementSystem register: dataStream
 ]
 

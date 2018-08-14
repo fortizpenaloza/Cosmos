@@ -10,12 +10,6 @@ DataStreamTest class >> lastStoredRun [
 ]
 
 { #category : #accessing }
-DataStreamTest >> decemberTenthOf2016AtNoon [
-
-	^ (December tenth , 2016) atNoon
-]
-
-{ #category : #accessing }
 DataStreamTest >> octoberFirstOf2014AtMidnight [
 
 	^ (October first, 2014) atMidnight
@@ -26,9 +20,7 @@ DataStreamTest >> testAccessingCurrentValue [
 
 	| dataStream dataPoint |
 
-	dataStream := DataStream
-		named: 'Temperature'
-		createdOn: self decemberTenthOf2016AtNoon.
+	dataStream := DataStream named: 'Temperature'.
 
 	self
 		should: [ dataStream currentValue ]
@@ -47,9 +39,7 @@ DataStreamTest >> testAccessingLastUpdate [
 
 	| dataStream dataPoint |
 
-	dataStream := DataStream
-		named: 'Temperature'
-		createdOn: self decemberTenthOf2016AtNoon.
+	dataStream := DataStream named: 'Temperature'.
 
 	self
 		should: [ dataStream lastUpdate ]
@@ -68,9 +58,7 @@ DataStreamTest >> testAddingDataPoint [
 
 	| dataStream |
 
-	dataStream := DataStream
-		named: 'Temperature'
-		createdOn: self decemberTenthOf2016AtNoon.
+	dataStream := DataStream named: 'Temperature'.
 
 	self assert: dataStream dataPoints isEmpty.
 
@@ -86,13 +74,9 @@ DataStreamTest >> testInstanceCreationAndAccessing [
 
 	| dataStream |
 
-	dataStream := DataStream
-		named: 'Temperature'
-		createdOn: self octoberFirstOf2014AtMidnight.
+	dataStream := DataStream named: 'Temperature'.
 
 	self
 		assert: dataStream name equals: 'Temperature';
-		assert: dataStream creationDateTime
-			equals: self octoberFirstOf2014AtMidnight;
 		assert: dataStream dataPoints isEmpty
 ]

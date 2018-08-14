@@ -15,12 +15,6 @@ CommandManagementSystem class >> implementedInterface [
 	^ SystemInterface >> #CommandManagementSystemInterface
 ]
 
-{ #category : #'instance creation' }
-CommandManagementSystem class >> new [
-
-	^ super new initialize
-]
-
 { #category : #managing }
 CommandManagementSystem >> dequeue [
 
@@ -49,7 +43,7 @@ CommandManagementSystem >> enqueue: aCommand with: aPriority [
 	^ prioritizedCommand 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 CommandManagementSystem >> initialize [
 
 	super initialize.

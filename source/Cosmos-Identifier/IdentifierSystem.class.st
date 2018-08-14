@@ -36,9 +36,12 @@ IdentifierSystem >> next [
 ]
 
 { #category : #querying }
-IdentifierSystem >> objectIdentifiedBy: anIdentifier [
+IdentifierSystem >> objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock [
 
-	^ metadataSystem describedObjectBy: anIdentifier as: #identifier ifNone: nil
+	^ metadataSystem
+		describedObjectBy: anIdentifier
+		as: #identifier
+		ifNone: ifNoneBlock
 ]
 
 { #category : #managing }
