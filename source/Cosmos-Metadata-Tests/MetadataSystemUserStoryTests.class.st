@@ -10,12 +10,6 @@ MetadataSystemUserStoryTests >> identifier [
 	^ UUID new
 ]
 
-{ #category : #accessing }
-MetadataSystemUserStoryTests >> livingTemperature [
-
-	^ DataStream named: 'Living temperature'
-]
-
 { #category : #running }
 MetadataSystemUserStoryTests >> setUpRequirements [
 

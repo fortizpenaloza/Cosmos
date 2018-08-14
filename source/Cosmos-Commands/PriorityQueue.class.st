@@ -1,3 +1,8 @@
+"
+I'm a priority queueu.
+
+I know how to queue and dequeue objects. Objects dequeue according to its priority. 
+"
 Class {
 	#name : #PriorityQueue,
 	#superclass : #Object,
