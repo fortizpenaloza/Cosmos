@@ -21,9 +21,7 @@ DataManagementSystemUserStoryTests >> setUpRequirements [
 { #category : #tests }
 DataManagementSystemUserStoryTests >> temperatureStream [
 
-	^ DataStream
-		named: 'Temperature'
-		createdOn: self octoberFirstOf2014AtNoon
+	^ DataStream named: 'Temperature'
 ]
 
 { #category : #tests }

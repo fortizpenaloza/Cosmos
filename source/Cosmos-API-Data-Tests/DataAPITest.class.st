@@ -255,7 +255,6 @@ DataAPITest >> testCreatingDataStream [
 		ifFound: [ :dataStream | 
 			self
 				assert: dataStream name equals: 'pH';
-				assert: dataStream creationDateTime equals: self timeSystem dateTime;
 				assert: dataStream dataPoints isEmpty ]
 		ifNone: [ self fail ]
 ]

@@ -9,7 +9,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'creationDateTime',
 		'currentValue',
 		'lastUpdate',
 		'dataPoints'
@@ -27,11 +26,11 @@ DataStream class >> assertIsNotEmpty: aName [
 ]
 
 { #category : #'instance creation' }
-DataStream class >> named: aName createdOn: aDateTime [
+DataStream class >> named: aName [
 
 	self assertIsNotEmpty: aName.
 
-	^ self new initializeNamed: aName createdOn: aDateTime
+	^ self new initializeNamed: aName
 ]
 
 { #category : #comparing }
@@ -52,12 +51,6 @@ DataStream >> add: aDatapoint [
 ]
 
 { #category : #accessing }
-DataStream >> creationDateTime [
-
-	^ creationDateTime 
-]
-
-{ #category : #accessing }
 DataStream >> currentValue [
 
 	^ currentValue content
@@ -75,11 +68,10 @@ DataStream >> hash [
 	^ name hash
 ]
 
-{ #category : #'initialize-release' }
-DataStream >> initializeNamed: aName createdOn: aDateTime [
+{ #category : #initialization }
+DataStream >> initializeNamed: aName [
 
 	name := aName.
-	creationDateTime := aDateTime.
 
 	currentValue := Binding
 		undefinedExplainedBy: 'Current value has not been initialized'

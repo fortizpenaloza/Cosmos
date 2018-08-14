@@ -6,8 +6,8 @@ Class {
 
 { #category : #accessing }
 MetadataTest >> temperatureStream [
-	
-	^ DataStream named: 'Temperature' createdOn: December tenth , 2016
+
+	^ DataStream named: 'Temperature'
 ]
 
 { #category : #tests }

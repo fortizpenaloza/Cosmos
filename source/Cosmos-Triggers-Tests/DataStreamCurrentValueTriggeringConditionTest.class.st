@@ -50,11 +50,11 @@ DataStreamCurrentValueTriggeringConditionTest >> testIsSafisfiedWhenDataStreamCu
 	| condition |
 
 	condition := DataStreamCurrentValueTriggeringCondition
-		of: (DataStream named: 'Test' createdOn: self decemberTenthOf2016AtNoon)
+		of: (DataStream named: 'Test')
 		isLessThan: 10.
 
 	self
-		should: [ (condition isSatisfiedOn: self) ]
-		raise: DataStreamIsEmpty 
+		should: [ condition isSatisfiedOn: self ]
+		raise: DataStreamIsEmpty
 		withDescription: 'Current value has not been initialized'
 ]

@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 MetadataSystemUserStoryTests >> livingTemperature [
 
-	^ DataStream named: 'Living temperature' createdOn: September sixth, 1979
+	^ DataStream named: 'Living temperature'
 ]
 
 { #category : #running }
@@ -21,7 +21,7 @@ MetadataSystemUserStoryTests >> setUpRequirements [
 { #category : #tests }
 MetadataSystemUserStoryTests >> temperature [
 
-	^ DataStream named: 'Temperature' createdOn: September sixth, 1979
+	^ DataStream named: 'Temperature'
 ]
 
 { #category : #tests }

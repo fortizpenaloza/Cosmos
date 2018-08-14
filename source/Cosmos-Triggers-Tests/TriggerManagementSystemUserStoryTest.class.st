@@ -67,7 +67,7 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 { #category : #accessing }
 TriggerManagementSystemUserStoryTest >> temperatureStream [
 
-	^ DataStream named: 'Temperature' createdOn: self systemDateTime 
+	^ DataStream named: 'Temperature'
 ]
 
 { #category : #accessing }
