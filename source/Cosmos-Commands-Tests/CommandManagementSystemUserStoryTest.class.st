@@ -4,11 +4,6 @@ Class {
 	#category : 'Cosmos-Commands-Tests-SystemModel'
 }
 
-{ #category : #history }
-CommandManagementSystemUserStoryTest class >> lastStoredRun [
-	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 625354000; yourself)); add: (#passed->((Set new) add: #testDequeuingCommandsFollowsItsPriority; add: #testQueryingPrioritizedCommands; add: #testDequeuingFromQueueFailsIfEmpty; add: #testEnqueuingAndThenDequeuingCommand; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new))); yourself)
-]
-
 { #category : #running }
 CommandManagementSystemUserStoryTest >> setUpRequirements [
 

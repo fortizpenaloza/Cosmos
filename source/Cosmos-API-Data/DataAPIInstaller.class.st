@@ -15,7 +15,7 @@ DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addCreateBulkDataPointsRoute [
 
 	server
@@ -25,7 +25,7 @@ DataAPIInstaller >> addCreateBulkDataPointsRoute [
 	self registerBulkDataPointDecoderVersion1dot0dot0
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addCreateDataStreamRoute [
 
 	server
@@ -34,7 +34,7 @@ DataAPIInstaller >> addCreateDataStreamRoute [
 				-> [ :request | interface createStreamBasedOn: request ]
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 
 	server
@@ -53,7 +53,7 @@ DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 					response ]
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addDeleteDataStreamRoute [
 
 	server
@@ -62,7 +62,7 @@ DataAPIInstaller >> addDeleteDataStreamRoute [
 				-> [ :request | interface deleteStreamBasedOn: request ]
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addGetDataPointsRoute [
 
 	server
@@ -77,7 +77,7 @@ DataAPIInstaller >> addGetDataPointsRoute [
 				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addGetDataStreamRoute [
 
 	server
@@ -88,7 +88,7 @@ DataAPIInstaller >> addGetDataStreamRoute [
 	self registerDataStreamEncoderVersion1dot0dot0
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'private - installing' }
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
 

@@ -30,7 +30,7 @@ CommandsAPI >> decode: aKey from: aDictionary with: aParser [
 		ifNotFound: [ DecodingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 CommandsAPI >> initializeMappings [
 
 	prioritizedCommandMapping := [ :object | 
@@ -47,7 +47,7 @@ CommandsAPI >> initializeMappings [
 				nextPut: object ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 CommandsAPI >> initializeWorkingWith: aCompositeSystem [
 
 	rootSystem := aCompositeSystem.
