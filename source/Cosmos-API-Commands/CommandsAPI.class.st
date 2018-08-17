@@ -37,12 +37,11 @@ CommandsAPI >> initializeMappings [
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
-				for: PrioritizedCommand
+				for: CommandWithPriority
 					do: [ :mapping | 
 					mapping
 						mapAccessor: #command;
 						mapAccessor: #priority ];
-				for: HighPriority customDo: [ :mapping | mapping encoder: [ :priority | 'High' ] ];
 				prettyPrint: true;
 				nextPut: object ] ]
 ]
@@ -79,21 +78,7 @@ CommandsAPI >> parse: aKey from: aDictionary with: aParser ifNotFound: aNotFound
 { #category : #querying }
 CommandsAPI >> prioritizedCommands [
 
-	^ prioritizedCommandMapping value: (self commandManagementSystem prioritizedCommands )
-]
-
-{ #category : #parsers }
-CommandsAPI >> priorityParser [
-
-	| priorities |
-
-	priorities := Dictionary new
-		at: 'high' put: QueuePriority high;
-		at: 'medium' put: QueuePriority medium;
-		at: 'low' put: QueuePriority low;
-		yourself.
-
-	^ [ :string | priorities at: string ifAbsent: [ DecodingFailed signal: 'lalal' ] ]
+	^ prioritizedCommandMapping value: (self commandManagementSystem commands )
 ]
 
 { #category : #'pushing-popping' }
@@ -107,5 +92,5 @@ CommandsAPI >> push: aJSON [
 
 	^ self commandManagementSystem
 		enqueue: (rawCommand at: #command)
-		with: (self decode: #priority from: rawCommand with: self priorityParser)
+		with: (rawCommand at:  #priority)
 ]

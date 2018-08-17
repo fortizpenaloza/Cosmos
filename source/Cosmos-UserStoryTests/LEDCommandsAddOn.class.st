@@ -42,5 +42,5 @@ LEDCommandsAddOn >> install [
 
 	self commandManagementSystem
 		enqueue: self class turnOnLedCommand
-		with: QueuePriority high
+		with: 100
 ]
