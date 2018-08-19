@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'timeSystem',
 		'priorityQueue',
-		'commands'
+		'commands',
+		'metadataSystem',
+		'identifierSystem'
 	],
 	#category : #'Cosmos-Commands'
 }
@@ -21,7 +23,7 @@ CommandManagementSystem >> commands [
 	^ commands copy
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 CommandManagementSystem >> dequeuedCommand [
 
 	| commandWithPriority |
@@ -45,7 +47,9 @@ CommandManagementSystem >> initialize [
 
 	super initialize.
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-
+	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
+	
 	commands := OrderedCollection new.
 	priorityQueue := PriorityQueue empty
 ]
@@ -64,11 +68,33 @@ CommandManagementSystem >> register: aCommandWithPriority [
 	commands add: aCommandWithPriority.
 	priorityQueue
 		enqueue: aCommandWithPriority
-		with: aCommandWithPriority priority
+		with: aCommandWithPriority priority.
+		
+	self registerIdentifierFor: aCommandWithPriority.
+	self registerRegistrationTimestampFor: aCommandWithPriority
+]
+
+{ #category : #'private - managing' }
+CommandManagementSystem >> registerIdentifierFor: aCommandWithPriority [ 
+
+	identifierSystem registerIdentifierFor: aCommandWithPriority
+]
+
+{ #category : #'private - managing' }
+CommandManagementSystem >> registerRegistrationTimestampFor: aCommandWithPriority [ 
+
+	metadataSystem
+		register:
+			(Metadata
+				attaching: timeSystem dateTime
+				as: #registration_timestamp
+				of: aCommandWithPriority)
 ]
 
 { #category : #'dependency resolution' }
 CommandManagementSystem >> resolveDependecies [
 
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface
+	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]

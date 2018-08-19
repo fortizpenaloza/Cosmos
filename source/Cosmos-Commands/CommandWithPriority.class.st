@@ -8,7 +8,7 @@ Class {
 	#category : #'Cosmos-Commands'
 }
 
-{ #category : #'Instance Creation' }
+{ #category : #'instance creation' }
 CommandWithPriority class >> holding: aCommand and: aPriority [
 
 	^ self new initializeHolding: aCommand and: aPriority
@@ -34,14 +34,14 @@ CommandWithPriority >> hash [
 	^ command hash bitXor: priority hash
 ]
 
-{ #category : #Initialization }
+{ #category : #initialization }
 CommandWithPriority >> initializeHolding: aCommand and: aPriority [
 
 	command := aCommand .
 	priority := aPriority 
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 CommandWithPriority >> priority [
 
 	^ priority

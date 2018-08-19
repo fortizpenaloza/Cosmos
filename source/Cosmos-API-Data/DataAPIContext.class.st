@@ -14,19 +14,13 @@ DataAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingR
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
-{ #category : #systems }
-DataAPIContext >> dataManagementSystem [
-	
-	^ cosmos systemImplementing: #DataManagementSystemInterface
-]
-
-{ #category : #decoding }
+{ #category : #'encoding - decoding' }
 DataAPIContext >> decode: aJSON encodedAs: aMimeType [
 
 	^ (mappingRegistry decoderFor: aMimeType) cull: aJSON cull: self
 ]
 
-{ #category : #decoding }
+{ #category : #'encoding - decoding' }
 DataAPIContext >> encode: anObject to: aMimeType [
 
 	^ (mappingRegistry encoderFor: aMimeType) cull: anObject cull: self 
@@ -46,7 +40,13 @@ DataAPIContext >> metadataSystem [
 	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #'private - systems' }
+{ #category : #systems }
+DataAPIContext >> systemImplementing: anInterfaceName [
+	
+	^ cosmos systemImplementing: anInterfaceName
+]
+
+{ #category : #systems }
 DataAPIContext >> timeSystem [
 
 	^ cosmos systemImplementing: #TimeSystemInterface

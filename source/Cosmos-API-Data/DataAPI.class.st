@@ -37,11 +37,11 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> createStreamBasedOn: anHttpRequest [
+DataAPI >> createStreamBasedOn: aHttpRequest [
 
 	^ [ [ | rawStream dataStream identifier |
 
-	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
+	rawStream := (NeoJSONReader on: aHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
@@ -49,7 +49,7 @@ DataAPI >> createStreamBasedOn: anHttpRequest [
 
 	self dataManagementSystem register: dataStream.
 
-	identifier := ((context metadataSystem metadataFor: dataStream)
+	identifier := ((self metadataSystem metadataFor: dataStream)
 		detect: [ :metadata | metadata aspect = #identifier ]) value.
 
 	ZnResponse
@@ -71,7 +71,7 @@ DataAPI >> currentDateTime [
 { #category : #systems }
 DataAPI >> dataManagementSystem [
 
-	^ context dataManagementSystem
+	^ context systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #API }
@@ -145,6 +145,12 @@ DataAPI >> getStreamsSnapshotsBasedOn: anHttpRequest [
 DataAPI >> initializeWorkingWithin: aContext [
 
 	context := aContext
+]
+
+{ #category : #systems }
+DataAPI >> metadataSystem [
+	
+	^ context systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private-API' }

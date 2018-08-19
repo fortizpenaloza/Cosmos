@@ -93,6 +93,28 @@ CommandManagementSystemUserStoryTest >> testQueryingCommands [
 ]
 
 { #category : #tests }
+CommandManagementSystemUserStoryTest >> testRegisteredMetadataOnCommandRegistration [
+
+	| commandWithPriority metadata |
+
+	commandWithPriority := self turnOnLedWithHighPriority.
+
+	self assert: (self metadataSystem metadataFor: commandWithPriority) isEmpty.
+	self commandManagementSystem register: commandWithPriority.
+
+	metadata := self metadataSystem metadataFor: commandWithPriority.
+	self
+		assert: metadata size equals: 2;
+		assert: metadata
+			equals:
+			{(Metadata attaching: self currentIdentifier as: #identifier of: commandWithPriority).
+			(Metadata
+				attaching: self systemDateTime
+				as: #registration_timestamp
+				of: commandWithPriority)} asOrderedCollection
+]
+
+{ #category : #tests }
 CommandManagementSystemUserStoryTest >> testRegisteringCommands [
 
 	| turnOnLedWithHighPriority |

@@ -9,6 +9,9 @@ SystemBasedUserStoryTest >> commandManagementSystem [
 { #category : #'*Cosmos-Commands-Tests-SystemModel' }
 SystemBasedUserStoryTest >> requireCommandManagementSystem [
 
-	self requireTimeSystem.
-	systemBuilder add: (CommandManagementSystem new)
+	self
+		requireTimeSystem;
+		requireIdentifierSystem.
+
+	systemBuilder add: CommandManagementSystem new
 ]

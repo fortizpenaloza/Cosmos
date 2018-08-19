@@ -1,5 +1,5 @@
 "
-I'm a priority queueu.
+I'm a priority queue..
 
 I know how to queue and dequeue objects. Objects dequeue according to its priority. 
 "
@@ -12,19 +12,19 @@ Class {
 	#category : #'Cosmos-Commands'
 }
 
-{ #category : #'Instance Creation' }
+{ #category : #'instance creation' }
 PriorityQueue class >> empty [
 	
 	^ super new initialize 
 ]
 
-{ #category : #'Enqueuing - Dequeiung' }
+{ #category : #'enqueuing - dequeiung' }
 PriorityQueue >> dequeue [
 
 	^ elements removeLast element 
 ]
 
-{ #category : #'Enqueuing - Dequeiung' }
+{ #category : #'enqueuing - dequeiung' }
 PriorityQueue >> enqueue: anElement with: aPriority [
 
 	| element |
@@ -34,13 +34,13 @@ PriorityQueue >> enqueue: anElement with: aPriority [
 	elements add: element 
 ]
 
-{ #category : #Initialization }
+{ #category : #initialization }
 PriorityQueue >> initialize [
 
 	elements := SortedCollection sortBlock: [ :x :y | x priority < y priority ].
 ]
 
-{ #category : #Testing }
+{ #category : #testing }
 PriorityQueue >> isEmpty [
 
 	^ elements isEmpty

@@ -52,7 +52,7 @@ DataManagementSystem >> register: aDataStream [
 		ifNone: [ self registerWithMetadata: aDataStream ]
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> register: aDataPoint to: aDataStream [
 
 	aDataStream add: aDataPoint.
@@ -70,13 +70,13 @@ DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
 		ifNone: [ ObjectNotFound signal: 'Data stream not found in the system' ]
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> registerIdentifierFor: aDataStream [
 
 	identifierSystem registerIdentifierFor: aDataStream
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 
 	metadataSystem
@@ -87,7 +87,7 @@ DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 				of: aDataStream)
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> registerWithMetadata: aDataStream [
 
 	dataStreams add: aDataStream.

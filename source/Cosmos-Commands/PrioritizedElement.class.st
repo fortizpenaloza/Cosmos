@@ -8,26 +8,26 @@ Class {
 	#category : #'Cosmos-Commands'
 }
 
-{ #category : #'Instance Creation' }
+{ #category : #'instance creation' }
 PrioritizedElement class >> holding: anElement with: aPriority [ 
 	
 	^ self new initializeHolding: anElement with: aPriority
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 PrioritizedElement >> element [
 
 	^ element
 ]
 
-{ #category : #Initialization }
+{ #category : #initialization }
 PrioritizedElement >> initializeHolding: anElement with: aPriority [
 
 	element := anElement.
 	priority := aPriority
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 PrioritizedElement >> priority [
 
 	^ priority

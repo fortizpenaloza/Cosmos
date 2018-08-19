@@ -20,6 +20,18 @@ IdentifierSystem class >> using: anIdentifierProvider [
 	^ self new initializeUsing: anIdentifierProvider 
 ]
 
+{ #category : #querying }
+IdentifierSystem >> identifierOf: anObject [
+
+	| a |
+
+	a := (metadataSystem metadataFor: anObject)
+		detect: [ :metadata | metadata aspect = #identifier ]
+		ifNone: [ ObjectNotFound signal: ('Identifier for <1p> not found' expandMacrosWith: anObject) ].
+
+	^ a value
+]
+
 { #category : #initialization }
 IdentifierSystem >> initializeUsing: anIdentifierProvider [
 
