@@ -5,7 +5,7 @@ Class {
 		'dateFormatter',
 		'timeOfDayFormatter'
 	],
-	#category : #'Cosmos-API-Formatting'
+	#category : #'Cosmos-API-Encoding'
 }
 
 { #category : #'instance creation' }

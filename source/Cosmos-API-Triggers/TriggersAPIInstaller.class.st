@@ -56,7 +56,7 @@ TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
 { #category : #initialization }
 TriggersAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRegistry new.
+	mappingRegistry := MappingRuleSet new.
 	interface := TriggersAPI
 		workingWithin: (TriggersAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
 	server := aServer

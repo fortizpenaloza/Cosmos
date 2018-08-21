@@ -3,22 +3,41 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'mimeType',
-		'mapper'
+		'mapper',
+		'scope',
+		'isDefault'
 	],
 	#category : #'Cosmos-API-Model'
 }
 
 { #category : #'instance creation' }
-MappingRule class >> applying: aMapper for: aMimeType [
-	
-	^ self new initializeApplying: aMapper for: aMimeType
+MappingRule class >> applying: aMapper for: aMimeType at: aScope [
+
+	^ self new
+		initializeApplying: aMapper
+		for: aMimeType
+		at: aScope
+]
+
+{ #category : #accessing }
+MappingRule >> beDefault [
+
+	isDefault := true
 ]
 
 { #category : #initialization }
-MappingRule >> initializeApplying: aMapper for: aMimeType [
+MappingRule >> initializeApplying: aMapper for: aMimeType at: aScope [ 
 
 	mapper := aMapper.
-	mimeType := aMimeType
+	mimeType := aMimeType.
+	scope := aScope.
+	isDefault := false
+]
+
+{ #category : #testing }
+MappingRule >> isDefault [
+
+	^ isDefault
 ]
 
 { #category : #accessing }
@@ -31,4 +50,10 @@ MappingRule >> mapper [
 MappingRule >> mimeType [
 
 	^ mimeType
+]
+
+{ #category : #accessing }
+MappingRule >> scope [
+
+	^ scope
 ]

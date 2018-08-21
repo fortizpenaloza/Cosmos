@@ -119,7 +119,7 @@ CommandsAPIInstaller >> commandPlainTextEncoder [
 { #category : #initialization }
 CommandsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRegistry new.
+	mappingRegistry := MappingRuleSet new.
 	interface := CommandsAPI
 		workingWithin: (CommandsAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
 	server := aServer

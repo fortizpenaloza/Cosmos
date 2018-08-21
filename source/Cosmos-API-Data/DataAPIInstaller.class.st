@@ -212,7 +212,7 @@ DataAPIInstaller >> dataStreamSnapshotMimeTypeVersion1dot0dot0 [
 { #category : #initialization }
 DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRegistry new.
+	mappingRegistry := MappingRuleSet new.
 	interface := DataAPI workingWithin: (DataAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
 	server := aServer
 ]
