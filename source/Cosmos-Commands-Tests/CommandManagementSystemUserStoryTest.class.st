@@ -73,7 +73,7 @@ CommandManagementSystemUserStoryTest >> testNextCommandsFailsOnEmptyCommands [
 CommandManagementSystemUserStoryTest >> testQueryingCommands [
 
 	| turnOnLedWithMediumPriority turnOnLedWithLowPriority turnOnLedWithHighPriority |
-
+	
 	turnOnLedWithMediumPriority := self turnOnLedWithMediumPriority.
 	self commandManagementSystem register: turnOnLedWithMediumPriority.
 

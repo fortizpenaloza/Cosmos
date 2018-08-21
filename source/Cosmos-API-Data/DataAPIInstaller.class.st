@@ -71,10 +71,11 @@ DataAPIInstaller >> addGetDataPointsRoute [
 				-> [ :request | interface getPointsBasedOn: request ].
 
 	mappingRegistry
-		register: self dataPointEncoderVersion1dot0dot0
+		add: self dataPointEncoderVersion1dot0dot0
 		asEncoderFor:
 			(ZnMimeType
 				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+		at: #data_points
 ]
 
 { #category : #'private - installing' }
@@ -238,22 +239,25 @@ DataAPIInstaller >> install [
 DataAPIInstaller >> registerBulkDataPointDecoderVersion1dot0dot0 [
 
 	mappingRegistry
-		register: self bulkDataPointDecoderVersion1dot0dot0
+		add: self bulkDataPointDecoderVersion1dot0dot0
 		asDecoderFor: self bulkDataPointMimeTypeVersion1dot0dot0
+		at: #data_points
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamEncoderVersion1dot0dot0 [
 
 	mappingRegistry
-		register: self dataStreamEncoderVersion1dot0dot0
+		add: self dataStreamEncoderVersion1dot0dot0
 		asEncoderFor: self dataStreamMimeTypeVersion1dot0dot0
+		at: #data_streams
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamSnapshotEncoderVersion1dot0dot0 [
 
 	mappingRegistry
-		register: self dataStreamSnapshotEncoderVersion1dot0dot0
+		add: self dataStreamSnapshotEncoderVersion1dot0dot0
 		asEncoderFor: self dataStreamSnapshotMimeTypeVersion1dot0dot0
+		at: #data_streams
 ]

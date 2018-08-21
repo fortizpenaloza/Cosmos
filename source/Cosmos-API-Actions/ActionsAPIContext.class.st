@@ -33,7 +33,8 @@ ActionsAPIContext >> decode: aKey from: aDictionary with: aParser [
 { #category : #enconding }
 ActionsAPIContext >> encode: anActionCollection to: aMimeType [
 
-	^ (mappingRegistry encoderFor: aMimeType) value: anActionCollection
+	^ (mappingRegistry encoderFor: aMimeType at: nil)
+		value: anActionCollection
 ]
 
 { #category : #'private-parsers' }

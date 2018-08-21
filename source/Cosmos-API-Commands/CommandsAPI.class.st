@@ -2,7 +2,6 @@ Class {
 	#name : #CommandsAPI,
 	#superclass : #Object,
 	#instVars : [
-		'prioritizedCommandMapping',
 		'context'
 	],
 	#category : #'Cosmos-API-Commands'
@@ -14,7 +13,13 @@ CommandsAPI class >> workingWithin: aContext [
 	^ self new initializeWorkingWithin: aContext
 ]
 
-{ #category : #systems }
+{ #category : #'private - API' }
+CommandsAPI >> acceptMimeTypeOf: aHttpRequest [
+
+	^ ZnMimeType fromString: aHttpRequest accept
+]
+
+{ #category : #'private - systems' }
 CommandsAPI >> commandManagementSystem [
 
 	^ context systemImplementing: #CommandManagementSystemInterface
@@ -23,34 +28,33 @@ CommandsAPI >> commandManagementSystem [
 { #category : #API }
 CommandsAPI >> createCommandBasedOn: aHttpRequest [
 
-	| rawCommand commandWithPriority identifier |
+	| contentType commandWithPriority commandWithPriorityLocation |
 
-	rawCommand := (NeoJSONReader on: aHttpRequest contents readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	commandWithPriority := CommandWithPriority
-		holding: (rawCommand at: #command)
-		and: (rawCommand at: #priority).
+	contentType := ZnMimeType applicationJson.
+	
+	commandWithPriority  := context
+		decode: aHttpRequest contents
+		encodedAs: contentType.
 
 	self commandManagementSystem register: commandWithPriority.
 
-	identifier := self identifierSystem identifierOf: commandWithPriority.
+	commandWithPriorityLocation := self locationOf: commandWithPriority.
 
-	^ ZnResponse
-		created:
-			(ZnUrl
-				fromString: ('localhost/<1s>' expandMacrosWith: identifier asString36))
+	^ ZnResponse created: commandWithPriorityLocation
 ]
 
-{ #category : #decoding }
-CommandsAPI >> decode: aKey from: aDictionary with: aParser [
+{ #category : #API }
+CommandsAPI >> getCommandsBasedOn: aHttpRequest [
 
-	^ self
-		parse: aKey
-		from: aDictionary
-		with: aParser
-		ifNotFound: [ DecodingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
+	| mimeType encodedCommands |
+
+	mimeType := self acceptMimeTypeOf: aHttpRequest.
+
+	encodedCommands := context
+		encode: self commandManagementSystem commands
+		to: mimeType.
+
+	^ ZnResponse ok: (ZnEntity json: encodedCommands)
 ]
 
 { #category : #'private - systems' }
@@ -60,66 +64,30 @@ CommandsAPI >> identifierSystem [
 ]
 
 { #category : #initialization }
-CommandsAPI >> initializeMappings [
-
-	prioritizedCommandMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: CommandWithPriority
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #command;
-						mapAccessor: #priority ];
-				prettyPrint: true;
-				nextPut: object ] ]
-]
-
-{ #category : #initialization }
 CommandsAPI >> initializeWorkingWithin: aContext [
 
-	context := aContext.
-	self initializeMappings
+	context := aContext
 ]
 
-{ #category : #querying }
-CommandsAPI >> nextCommandAsJSON [
+{ #category : #'private - API' }
+CommandsAPI >> locationOf: commandWithPriority [
 
-	^ prioritizedCommandMapping
-		value: self commandManagementSystem dequeue
-]
-
-{ #category : #querying }
-CommandsAPI >> nextCommandAsPlainText [
-
-	^ self commandManagementSystem dequeue command
-]
-
-{ #category : #decoding }
-CommandsAPI >> parse: aKey from: aDictionary with: aParser ifNotFound: aNotFoundBlock [
-
-	^ aDictionary
-		at: aKey
-		ifPresent: [ :rawData | aParser value: rawData ]
-		ifAbsent: aNotFoundBlock
-]
-
-{ #category : #querying }
-CommandsAPI >> prioritizedCommands [
-
-	^ prioritizedCommandMapping value: (self commandManagementSystem commands )
+	^ ZnUrl
+		fromString:
+			('localhost/<1s>'
+				expandMacrosWith: (self identifierSystem identifierOf: commandWithPriority) asString36)
 ]
 
 { #category : #API }
-CommandsAPI >> push: aJSON [
+CommandsAPI >> nextCommandBasedOn: aHttpRequest [
 
-	| rawCommand |
+	| mimeType encodedCommand |
 
-	rawCommand := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
+	mimeType := self acceptMimeTypeOf: aHttpRequest.
 
-	^ self commandManagementSystem
-		enqueue: (rawCommand at: #command)
-		with: (rawCommand at:  #priority)
+	encodedCommand := context
+		encode: self commandManagementSystem nextCommand
+		to: mimeType.
+
+	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
 ]

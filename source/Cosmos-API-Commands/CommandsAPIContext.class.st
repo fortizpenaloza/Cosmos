@@ -14,6 +14,22 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
+{ #category : #'as yet unclassified' }
+CommandsAPIContext >> decode: aJSON encodedAs: aSchema [
+
+	^ (mappingRegistry decoderFor: aSchema at: nil)
+		cull: aJSON
+		cull: self
+]
+
+{ #category : #'encoding - decoding' }
+CommandsAPIContext >> encode: anObject to: aMimeType [
+
+	^ (mappingRegistry encoderFor: aMimeType at: nil)
+		cull: anObject
+		cull: self
+]
+
 { #category : #initialization }
 CommandsAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:  
 	aMappingRegistry [
@@ -22,7 +38,7 @@ CommandsAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:
 	mappingRegistry := aMappingRegistry
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #systems }
 CommandsAPIContext >> systemImplementing: anInterfaceName [
 	
 	^ cosmos systemImplementing: anInterfaceName

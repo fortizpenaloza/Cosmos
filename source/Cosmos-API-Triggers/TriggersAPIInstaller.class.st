@@ -46,6 +46,13 @@ TriggersAPIInstaller >> addUnregisterTriggerRoute [
 		output: #text
 ]
 
+{ #category : #accessing }
+TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
+
+	^ ZnMimeType
+		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
+]
+
 { #category : #initialization }
 TriggersAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
@@ -70,16 +77,18 @@ TriggersAPIInstaller >> install [
 TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
 	mappingRegistry
-		register: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self triggerMimeTypeVersion1dot0dot0
+		add: self triggerJsonDecoderVersion1dot0dot0
+		asDecoderFor: self applicationJsonVersion1dot0dot0
+		at: #triggers
 ]
 
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
 	mappingRegistry
-		register: self triggerJsonEnconderVersion1dot0dot0
-		asEncoderFor: self triggerMimeTypeVersion1dot0dot0
+		add: self triggerJsonEnconderVersion1dot0dot0
+		asEncoderFor: self applicationJsonVersion1dot0dot0
+		at: #triggers
 ]
 
 { #category : #'private-encoding' }
@@ -192,11 +201,4 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
 				nextPut: trigger ] ]
-]
-
-{ #category : #accessing }
-TriggersAPIInstaller >> triggerMimeTypeVersion1dot0dot0 [
-
-	^ ZnMimeType
-		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
 ]

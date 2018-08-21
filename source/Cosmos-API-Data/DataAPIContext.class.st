@@ -15,15 +15,19 @@ DataAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingR
 ]
 
 { #category : #'encoding - decoding' }
-DataAPIContext >> decode: aJSON encodedAs: aMimeType [
+DataAPIContext >> decode: aJSON encodedAs: aSchema [
 
-	^ (mappingRegistry decoderFor: aMimeType) cull: aJSON cull: self
+	^ (mappingRegistry decoderFor: aSchema at: nil)
+		cull: aJSON
+		cull: self
 ]
 
 { #category : #'encoding - decoding' }
-DataAPIContext >> encode: anObject to: aMimeType [
+DataAPIContext >> encode: anObject to: aSchema [
 
-	^ (mappingRegistry encoderFor: aMimeType) cull: anObject cull: self 
+	^ (mappingRegistry encoderFor: aSchema at: nil)
+		cull: anObject
+		cull: self
 ]
 
 { #category : #initialization }

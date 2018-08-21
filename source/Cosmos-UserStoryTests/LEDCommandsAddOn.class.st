@@ -41,6 +41,11 @@ LEDCommandsAddOn >> initializeOn: aCompositeSystem [
 LEDCommandsAddOn >> install [
 
 	self commandManagementSystem
-		enqueue: self class turnOnLedCommand
-		with: 100
+		register: (CommandWithPriority holding: self class turnOnLedCommand and: 100).
+
+	self commandManagementSystem
+		register: (CommandWithPriority holding: self class turnOffLedCommand and: 50).
+
+	self commandManagementSystem
+		register: (CommandWithPriority holding: self class turnOnLedCommand and: 1)
 ]

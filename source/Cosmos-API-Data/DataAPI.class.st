@@ -68,7 +68,7 @@ DataAPI >> currentDateTime [
 	^ self timeSystem dateTime
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 DataAPI >> dataManagementSystem [
 
 	^ context systemImplementing: #DataManagementSystemInterface
@@ -113,12 +113,12 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> getStreamBasedOn: anHttpRequest [
+DataAPI >> getStreamBasedOn: aHttpRequest [
 
 	^ [ [ | mimeType identifier |
 
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-	identifier := anHttpRequest at: #identifier.
+	mimeType := ZnMimeType fromString: aHttpRequest accept.
+	identifier := aHttpRequest at: #identifier.
 
 	ZnResponse
 		ok: (ZnEntity json: (self streamNamed: identifier encodedTo: mimeType)) ]
@@ -147,13 +147,13 @@ DataAPI >> initializeWorkingWithin: aContext [
 	context := aContext
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 DataAPI >> metadataSystem [
 	
 	^ context systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #'private-API' }
+{ #category : #'private - API' }
 DataAPI >> streamNamed: aName encodedTo: mimeType [
 
 	^ [ self dataManagementSystem
@@ -164,7 +164,7 @@ DataAPI >> streamNamed: aName encodedTo: mimeType [
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
-{ #category : #'private-API' }
+{ #category : #'private - API' }
 DataAPI >> streamsEncodedTo: mimeType [
 
 	^ [ context encode: self dataManagementSystem streams to: mimeType ]
