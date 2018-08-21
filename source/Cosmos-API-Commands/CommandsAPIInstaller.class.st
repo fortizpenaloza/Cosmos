@@ -2,9 +2,9 @@ Class {
 	#name : #CommandsAPIInstaller,
 	#superclass : #Object,
 	#instVars : [
-		'mappingRegistry',
 		'interface',
-		'server'
+		'server',
+		'mappingRuleSetBuilder'
 	],
 	#category : #'Cosmos-API-Commands'
 }
@@ -18,25 +18,25 @@ CommandsAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 { #category : #'installing - encoders and decoders' }
 CommandsAPIInstaller >> addCommandJsonDecoderVersion1dot0dot0Mapping [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self commandJsonDecoderVersion1dot0dot0
-		asDecoderFor: self applicationJsonVersion1dot0dot0
+		asDefaultDecoderFor: self applicationJsonVersion1dot0dot0
 		at: #commands
 ]
 
 { #category : #'installing - encoders and decoders' }
 CommandsAPIInstaller >> addCommandJsonEncoderVersion1dot0dot0Mapping [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self commandJsonEncoderVersion1dot0dot0
-		asEncoderFor: self applicationJsonVersion1dot0dot0
+		asDefaultEncoderFor: self applicationJsonVersion1dot0dot0
 		at: #commands
 ]
 
 { #category : #'installing - encoders and decoders' }
 CommandsAPIInstaller >> addCommandPlainTextEncoderMapping [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self commandPlainTextEncoder
 		asEncoderFor: self textPlain
 		at: #commands
@@ -46,22 +46,23 @@ CommandsAPIInstaller >> addCommandPlainTextEncoderMapping [
 CommandsAPIInstaller >> addCreateCommandsRoute [
 
 	server
-		POST: '/commands' -> [ :request | interface createCommandBasedOn: request ].
-	self addCommandJsonDecoderVersion1dot0dot0Mapping
+		POST: '/commands' -> [ :request | interface createCommandBasedOn: request ]
 ]
 
 { #category : #'installing - routes' }
 CommandsAPIInstaller >> addDeleteCommandsRoute [
 
-	server DELETE: '/commands/<identifier:IsUUID>' -> [ :request | interface deleteCommandBasedOn: request ]
+	server
+		DELETE:
+			'/commands/<identifier:IsUUID>'
+				-> [ :request | interface deleteCommandBasedOn: request ]
 ]
 
 { #category : #'installing - routes' }
 CommandsAPIInstaller >> addGetCommandsRoute [
 
 	server
-		GET: '/commands' -> [ :request | interface getCommandsBasedOn: request ].
-	self addCommandJsonEncoderVersion1dot0dot0Mapping
+		GET: '/commands' -> [ :request | interface getCommandsBasedOn: request ]
 ]
 
 { #category : #'installing - routes' }
@@ -69,9 +70,8 @@ CommandsAPIInstaller >> addNextCommandRoute [
 
 	server
 		POST:
-			'/commands/next'
-				-> [ :request | interface nextCommandBasedOn: request ].
-	self addCommandPlainTextEncoderMapping
+			'/commands/getNext'
+				-> [ :request | interface nextCommandBasedOn: request ]
 ]
 
 { #category : #'MIME types' }
@@ -119,9 +119,18 @@ CommandsAPIInstaller >> commandPlainTextEncoder [
 { #category : #initialization }
 CommandsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRuleSet new.
+	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+	self
+		addCommandJsonDecoderVersion1dot0dot0Mapping;
+		addCommandJsonEncoderVersion1dot0dot0Mapping;
+		addCommandPlainTextEncoderMapping.
+
 	interface := CommandsAPI
-		workingWithin: (CommandsAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
+		workingWithin:
+			(CommandsAPIContext
+				workingWith: aCosmosSystem
+				queryingMappingsTo: mappingRuleSetBuilder build).
+
 	server := aServer
 ]
 

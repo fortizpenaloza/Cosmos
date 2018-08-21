@@ -14,10 +14,10 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'encoding - decoding' }
 CommandsAPIContext >> decode: aJSON encodedAs: aSchema [
 
-	^ (mappingRegistry decoderFor: aSchema at: nil)
+	^ (mappingRegistry decoderFor: aSchema at: #commands)
 		cull: aJSON
 		cull: self
 ]
@@ -25,7 +25,7 @@ CommandsAPIContext >> decode: aJSON encodedAs: aSchema [
 { #category : #'encoding - decoding' }
 CommandsAPIContext >> encode: anObject to: aMimeType [
 
-	^ (mappingRegistry encoderFor: aMimeType at: nil)
+	^ (mappingRegistry encoderFor: aMimeType at: #commands)
 		cull: anObject
 		cull: self
 ]
