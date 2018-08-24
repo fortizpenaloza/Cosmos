@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'server',
 		'interface',
-		'mappingRegistry'
+		'mappingRuleSetBuilder'
 	],
 	#category : #'Cosmos-API-Triggers'
 }
@@ -19,9 +19,7 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 TriggersAPIInstaller >> addGetTriggersRoute [
 
 	server
-		GET: '/triggers' -> [ :request | interface triggersHandling: request ].
-		
-	self registerTriggerJsonEncoderVersion1dot0dot0
+		GET: '/triggers' -> [ :request | interface triggersHandling: request ]
 ]
 
 { #category : #'private-installing' }
@@ -29,9 +27,7 @@ TriggersAPIInstaller >> addRegisterTriggerRoute [
 
 	server
 		POST: '/triggers' -> [ :request | interface registerHandling: request ];
-		output: #text.
-		
-	self registerTriggerJsonDecoderVersion1dot0dot0
+		output: #text
 ]
 
 { #category : #'private-installing' }
@@ -56,9 +52,18 @@ TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
 { #category : #initialization }
 TriggersAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRuleSet new.
+	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+
+	self 
+		registerTriggerJsonEncoderVersion1dot0dot0;
+		registerTriggerJsonDecoderVersion1dot0dot0.
+
 	interface := TriggersAPI
-		workingWithin: (TriggersAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
+		workingWithin:
+			(TriggersAPIContext
+				workingWith: aCosmosSystem
+				queryingMappingsTo: mappingRuleSetBuilder build).
+
 	server := aServer
 ]
 
@@ -76,18 +81,18 @@ TriggersAPIInstaller >> install [
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self applicationJsonVersion1dot0dot0
+		asDefaultDecoderFor: self applicationJsonVersion1dot0dot0
 		within: #triggers
 ]
 
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self triggerJsonEnconderVersion1dot0dot0
-		asEncoderFor: self applicationJsonVersion1dot0dot0
+		asDefaultEncoderFor: self applicationJsonVersion1dot0dot0
 		within: #triggers
 ]
 

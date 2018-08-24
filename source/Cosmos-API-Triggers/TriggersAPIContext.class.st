@@ -114,7 +114,7 @@ TriggersAPIContext >> register: anEncodedTrigger encodedAs: aMimeType [
 
 	| decoder |
 
-	decoder := mappingRegistry decoderFor: aMimeType within: nil.
+	decoder := mappingRegistry decoderFor: aMimeType within: #triggers.
 	decoder cull: anEncodedTrigger cull: self
 ]
 

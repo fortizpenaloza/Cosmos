@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'server',
 		'interface',
-		'mappingRegistry'
+		'mappingRuleSetBuilder'
 	],
 	#category : #'Cosmos-API-Actions'
 }
@@ -95,9 +95,7 @@ ActionsAPIInstaller >> addDeregisterActionRoute [
 { #category : #'private-installing' }
 ActionsAPIInstaller >> addGetActionsRoute [
 
-	server GET: '/actions' -> [ :request | interface actionsFor: request ].
-	
-	self registerActionJsonEncoderVersion1dot0dot0
+	server GET: '/actions' -> [ :request | interface actionsFor: request ]
 ]
 
 { #category : #'private-installing' }
@@ -109,8 +107,11 @@ ActionsAPIInstaller >> addRegisterActionRoute [
 { #category : #initialization }
 ActionsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRuleSet new.
-	interface := ActionsAPI workingWithin: (ActionsAPIContext workingWith: aCosmosSystem  queryingMappingsTo: mappingRegistry).
+	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+		
+	self registerActionJsonEncoderVersion1dot0dot0.
+	
+	interface := ActionsAPI workingWithin: (ActionsAPIContext workingWith: aCosmosSystem  queryingMappingsTo: mappingRuleSetBuilder build).
 	server := aServer
 ]
 
@@ -129,8 +130,8 @@ ActionsAPIInstaller >> install [
 { #category : #'private-encoding' }
 ActionsAPIInstaller >> registerActionJsonEncoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self actionJsonEncoderVersion1dot0dot0
-		asEncoderFor: self actionJsonVersion1dot0dot0MimeType
+		asDefaultEncoderFor: self actionJsonVersion1dot0dot0MimeType
 		within: #actions
 ]

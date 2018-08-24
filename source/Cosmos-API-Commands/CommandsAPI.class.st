@@ -35,7 +35,26 @@ CommandsAPI >> createCommandBasedOn: aHttpRequest [
 	commandWithPriority := context
 		decode: aHttpRequest contents
 		encodedAs: contentType
-		within: aKeyRepresentingScope.
+		within: #commands.
+
+	self commandManagementSystem register: commandWithPriority.
+
+	commandWithPriorityLocation := self locationOf: commandWithPriority.
+
+	^ ZnResponse created: commandWithPriorityLocation
+]
+
+{ #category : #API }
+CommandsAPI >> deleteCommandBasedOn: aHttpRequest [
+
+	| contentType commandWithPriority commandWithPriorityLocation |
+
+	contentType := ZnMimeType applicationJson.
+
+	commandWithPriority := context
+		decode: aHttpRequest contents
+		encodedAs: contentType
+		within: #commands.
 
 	self commandManagementSystem register: commandWithPriority.
 
