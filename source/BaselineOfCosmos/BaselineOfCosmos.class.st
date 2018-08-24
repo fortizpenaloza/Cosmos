@@ -143,7 +143,7 @@ BaselineOfCosmos >> registerCommandManagementSystemInterface [
 	self
 		registerInterfaceAs: #CommandManagementSystemInterface
 		named: 'Command Management System Interface'
-		declaring: #(#register: #deregister: #nextCommand #commnands)
+		declaring: #(#register: #deregister: #nextCommand #commands)
 ]
 
 { #category : #'registering interfaces' }
