@@ -9,75 +9,85 @@ Class {
 }
 
 { #category : #managing }
-MappingRuleSetBuilder >> add: aReader asDecoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSetBuilder >> add: aReader asDecoderFor: aMediaType within: aKeyRepresentingScope [
 
 	| decodingRule |
 
+	self assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
+
 	decodingRule := MappingRule
 		applying: aReader
-		for: aMimeType
-		at: aKeyRepresentingScope.
+		for: aMediaType
+		within: aKeyRepresentingScope.
 
-	decodingRules
-		detect: [ :rule | rule mimeType = aMimeType and: [ rule scope = aKeyRepresentingScope ] ]
-		ifFound:
-			[ :foundRule | ConflictingObjectFound signal: 'Decoder for that MIME type already registered' ]
-		ifNone: [ decodingRules add: decodingRule ]
+	decodingRules add: decodingRule
 ]
 
 { #category : #managing }
-MappingRuleSetBuilder >> add: aReader asDefaultDecoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSetBuilder >> add: aReader asDefaultDecoderFor: aMediaType within: aKeyRepresentingScope [
 
 	| decodingRule |
 
+	self assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
+
 	decodingRule := MappingRule
 		applying: aReader
-		for: aMimeType
-		at: aKeyRepresentingScope.
-	
+		for: aMediaType
+		within: aKeyRepresentingScope.
+
 	decodingRule beDefault.
-
-	decodingRules
-		detect: [ :rule | rule mimeType = aMimeType and: [ rule scope = aKeyRepresentingScope ] ]
-		ifFound:
-			[ :foundRule | ConflictingObjectFound signal: 'Decoder for that MIME type already registered' ]
-		ifNone: [ decodingRules add: decodingRule ]
+	
+	decodingRules add: decodingRule
 ]
 
 { #category : #managing }
-MappingRuleSetBuilder >> add: aWriter asDefaultEncoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSetBuilder >> add: aWriter asDefaultEncoderFor: aMediaType within: aKeyRepresentingScope [
 
 	| encodingRule |
 
 	encodingRule := MappingRule
 		applying: aWriter
-		for: aMimeType
-		at: aKeyRepresentingScope.
+		for: aMediaType
+		within: aKeyRepresentingScope.
 		
 	encodingRule beDefault.
 
 	encodingRules
-		detect: [ :rule | rule mimeType = aMimeType and: [ rule scope = aKeyRepresentingScope ] ]
+		detect: [ :rule | rule mediaType = aMediaType and: [ rule scope = aKeyRepresentingScope ] ]
 		ifFound:
 			[ :foundRule | ConflictingObjectFound signal: 'Encoder for that MIME type already registered' ]
 		ifNone: [ encodingRules add: encodingRule ]
 ]
 
 { #category : #managing }
-MappingRuleSetBuilder >> add: aWriter asEncoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSetBuilder >> add: aWriter asEncoderFor: aMediaType within: aKeyRepresentingScope [
 
 	| mappingRule |
 
 	mappingRule := MappingRule
 		applying: aWriter
-		for: aMimeType
-		at: aKeyRepresentingScope.
+		for: aMediaType
+		within: aKeyRepresentingScope.
 
 	encodingRules
-		detect: [ :rule | rule mimeType = aMimeType and: [ rule scope = aKeyRepresentingScope ] ]
+		detect: [ :rule | rule mediaType = aMediaType and: [ rule scope = aKeyRepresentingScope ] ]
 		ifFound:
 			[ :foundRule | ConflictingObjectFound signal: 'Encoder for that MIME type already registered' ]
 		ifNone: [ encodingRules add: mappingRule ]
+]
+
+{ #category : #'private - preconditions' }
+MappingRuleSetBuilder >> assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope [
+
+	AssertionCheckerBuilder new
+		raising: ConflictingObjectFound;
+		checking: [ :asserter | 
+			asserter
+				enforce: [ decodingRules
+						noneSatisfy:
+							[ :rule | rule mediaType = aMediaType and: [ rule scope = aKeyRepresentingScope ] ] ]
+				because: 'Decoder for that MIME type already registered' ];
+		buildAndCheck
 ]
 
 { #category : #managing }

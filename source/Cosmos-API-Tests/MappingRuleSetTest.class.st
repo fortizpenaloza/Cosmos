@@ -31,16 +31,16 @@ MappingRuleSetTest >> testQueryingDecoderForAnyMimeTypeGivesDefault [
 	mappingRuleSetBuilder
 		add: self triggerJsonDecoderVersion1dot0dot0
 		asDecoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSetBuilder
 		add: self triggerJsonDecoderVersion1dot0dot1
 		asDefaultDecoderFor: self applicationJsonVersion1dot0dot1
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSet := mappingRuleSetBuilder build.
 
-	decoder := mappingRuleSet decoderFor: ZnMimeType any at: #triggers.
+	decoder := mappingRuleSet decoderFor: ZnMimeType any within: #triggers.
 	self assert: decoder equals: self triggerJsonDecoderVersion1dot0dot1
 ]
 
@@ -54,12 +54,12 @@ MappingRuleSetTest >> testQueryingDecoderNotRegisteredMimeTypeGivesObjectNotFoun
 	mappingRuleSetBuilder
 		add: self triggerTextDecoder
 		asDefaultDecoderFor: self textPlain
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSet := mappingRuleSetBuilder build.
 
 	self
-		should: [ mappingRuleSet decoderFor: self applicationJsonVersion1dot0dot0 at: #triggers ]
+		should: [ mappingRuleSet decoderFor: self applicationJsonVersion1dot0dot0 within: #triggers ]
 		raise: ObjectNotFound
 ]
 
@@ -73,18 +73,18 @@ MappingRuleSetTest >> testQueryingDecoderSpecificVersion [
 	mappingRuleSetBuilder
 		add: self triggerJsonDecoderVersion1dot0dot0
 		asDecoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSetBuilder
 		add: self triggerJsonDecoderVersion1dot0dot1
 		asDefaultDecoderFor: self applicationJsonVersion1dot0dot1
-		at: #triggers.
+		within: #triggers.
 		
 	mappingRuleSet :=	mappingRuleSetBuilder build.
 
 	decoder := mappingRuleSet
 		decoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers.
+		within: #triggers.
 	self assert: decoder equals: self triggerJsonDecoderVersion1dot0dot0
 ]
 
@@ -98,16 +98,16 @@ MappingRuleSetTest >> testQueryingEncoderForAnyMimeTypeGivesDefault [
 	mappingRuleSetBuilder
 		add: self triggerJsonEncoderVersion1dot0dot0
 		asEncoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSetBuilder
 		add: self triggerJsonEncoderVersion1dot0dot1
 		asDefaultEncoderFor: self applicationJsonVersion1dot0dot1
-		at: #triggers.
+		within: #triggers.
 
 	mappingRuleSet := mappingRuleSetBuilder build.
 
-	encoder := mappingRuleSet encoderFor: ZnMimeType any at: #triggers.
+	encoder := mappingRuleSet encoderFor: ZnMimeType any within: #triggers.
 	self assert: encoder equals: self triggerJsonEncoderVersion1dot0dot1
 ]
 

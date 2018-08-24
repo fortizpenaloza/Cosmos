@@ -15,16 +15,16 @@ MappingRuleSet class >> consistingOf: encodingRules and: decodingRules [
 ]
 
 { #category : #querying }
-MappingRuleSet >> decoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSet >> decoderFor: aMediaType within: aScope [
 
 	| rule |
 
 	^ self
-		decodingRulesMatching: aMimeType
-		at: aKeyRepresentingScope
+		decodingRulesMatching: aMediaType
+		within: aScope
 		ifFound: [ :foundRules | 
 			rule := foundRules
-				detect: [ :mappingRule | mappingRule mimeType = aMimeType ]
+				detect: [ :mappingRule | mappingRule mediaType = aMediaType ]
 				ifFound: [ :mappingRule | mappingRule ]
 				ifNone: [ foundRules detect: #isDefault ].
 
@@ -33,40 +33,43 @@ MappingRuleSet >> decoderFor: aMimeType at: aKeyRepresentingScope [
 ]
 
 { #category : #'private - querying' }
-MappingRuleSet >> decodingRulesMatching: aMimeType at: aKeyRepresentingScope ifFound: aFoundBlock ifNone: aNoneBlock [
+MappingRuleSet >> decodingRulesMatching: aMediaType within: aScope ifFound: aFoundBlock ifNone: aNoneBlock [
 
-	| filteredRules |
-
-	filteredRules := decodingRules
-		select: [ :decodingRule | 
-			(decodingRule mimeType matches: aMimeType)
-				and: [ decodingRule scope = aKeyRepresentingScope ] ].
-
-	^ filteredRules isEmpty
-		ifTrue: aNoneBlock
-		ifFalse: [ aFoundBlock value: filteredRules ]
+	^ self
+		with: decodingRules
+		matching: aMediaType
+		within: aScope
+		ifFound: aFoundBlock
+		ifNone: aNoneBlock
 ]
 
 { #category : #querying }
-MappingRuleSet >> encoderFor: aMimeType at: aKeyRepresentingScope [
+MappingRuleSet >> encoderFor: aMediaType within: aScope [
 
-	| filteredRules rule |
+	| rule |
 
-	filteredRules := encodingRules
-		select: [ :mappingRule | 
-			(mappingRule mimeType matches: aMimeType)
-				and: [ mappingRule scope = aKeyRepresentingScope ] ].
-
-	filteredRules
-		ifEmpty: [ ObjectNotFound signal: 'Encoder not found for given MIME type' ]
-		ifNotEmpty: [ rule := filteredRules
-				detect: [ :mappingRule | mappingRule mimeType = aMimeType ]
+	^ self
+		encodingRulesMatching: aMediaType
+		within: aScope
+		ifFound: [ :foundRules | 
+			rule := foundRules
+				detect: [ :mappingRule | mappingRule mediaType = aMediaType ]
 				ifFound: [ :mappingRule | mappingRule ]
-				ifNone: [ filteredRules size = 1
-						ifTrue: [ filteredRules anyOne ]
-						ifFalse: [ filteredRules detect: #isDefault ] ].
+				ifNone: [ foundRules detect: #isDefault ].
 
-			^ rule mapper ]
+			rule mapper ]
+		ifNone: [ ObjectNotFound signal: 'Encoder not found for given MIME type' ]
+]
+
+{ #category : #'private - querying' }
+MappingRuleSet >> encodingRulesMatching: aMediaType within: aScope ifFound: aFoundBlock ifNone: aNoneBlock [
+
+	^ self
+		with: encodingRules 
+		matching: aMediaType
+		within: aScope
+		ifFound: aFoundBlock
+		ifNone: aNoneBlock
 ]
 
 { #category : #initialization }
@@ -74,4 +77,19 @@ MappingRuleSet >> initializeConsistingOf: aCollectionOfEncodingRules and: aColle
 	
 	encodingRules := aCollectionOfEncodingRules.
 	decodingRules := aCollectionOfDecodingRules
+]
+
+{ #category : #'private - querying' }
+MappingRuleSet >> with: aMappingRuleSet matching: aMediaType within: aScope ifFound: aFoundBlock ifNone: aNoneBlock [
+
+	| filteredRules |
+
+	filteredRules := aMappingRuleSet
+		select: [ :mappingRule | 
+			(mappingRule mediaType matches: aMediaType)
+				and: [ mappingRule scope = aScope ] ].
+
+	^ filteredRules isEmpty
+		ifTrue: aNoneBlock
+		ifFalse: [ aFoundBlock value: filteredRules ]
 ]

@@ -31,10 +31,11 @@ CommandsAPI >> createCommandBasedOn: aHttpRequest [
 	| contentType commandWithPriority commandWithPriorityLocation |
 
 	contentType := ZnMimeType applicationJson.
-	
-	commandWithPriority  := context
+
+	commandWithPriority := context
 		decode: aHttpRequest contents
-		encodedAs: contentType.
+		encodedAs: contentType
+		within: aKeyRepresentingScope.
 
 	self commandManagementSystem register: commandWithPriority.
 
@@ -52,7 +53,8 @@ CommandsAPI >> getCommandsBasedOn: aHttpRequest [
 
 	encodedCommands := context
 		encode: self commandManagementSystem commands
-		to: mimeType.
+		to: mimeType
+		within: #commands.
 
 	^ ZnResponse ok: (ZnEntity json: encodedCommands)
 ]
@@ -87,7 +89,8 @@ CommandsAPI >> nextCommandBasedOn: aHttpRequest [
 
 	encodedCommand := context
 		encode: self commandManagementSystem nextCommand
-		to: mimeType.
+		to: mimeType
+		within: #commands.
 
 	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
 ]

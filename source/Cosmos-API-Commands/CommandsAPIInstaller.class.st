@@ -21,7 +21,7 @@ CommandsAPIInstaller >> addCommandJsonDecoderVersion1dot0dot0Mapping [
 	mappingRuleSetBuilder
 		add: self commandJsonDecoderVersion1dot0dot0
 		asDefaultDecoderFor: self applicationJsonVersion1dot0dot0
-		at: #commands
+		within: #commands
 ]
 
 { #category : #'installing - encoders and decoders' }
@@ -30,7 +30,7 @@ CommandsAPIInstaller >> addCommandJsonEncoderVersion1dot0dot0Mapping [
 	mappingRuleSetBuilder
 		add: self commandJsonEncoderVersion1dot0dot0
 		asDefaultEncoderFor: self applicationJsonVersion1dot0dot0
-		at: #commands
+		within: #commands
 ]
 
 { #category : #'installing - encoders and decoders' }
@@ -39,7 +39,7 @@ CommandsAPIInstaller >> addCommandPlainTextEncoderMapping [
 	mappingRuleSetBuilder
 		add: self commandPlainTextEncoder
 		asEncoderFor: self textPlain
-		at: #commands
+		within: #commands
 ]
 
 { #category : #'installing - routes' }
@@ -120,6 +120,7 @@ CommandsAPIInstaller >> commandPlainTextEncoder [
 CommandsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+	
 	self
 		addCommandJsonDecoderVersion1dot0dot0Mapping;
 		addCommandJsonEncoderVersion1dot0dot0Mapping;

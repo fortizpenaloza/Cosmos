@@ -132,5 +132,5 @@ ActionsAPIInstaller >> registerActionJsonEncoderVersion1dot0dot0 [
 	mappingRegistry
 		add: self actionJsonEncoderVersion1dot0dot0
 		asEncoderFor: self actionJsonVersion1dot0dot0MimeType
-		at: #actions
+		within: #actions
 ]

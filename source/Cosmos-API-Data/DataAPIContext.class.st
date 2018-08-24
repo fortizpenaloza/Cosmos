@@ -15,17 +15,17 @@ DataAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingR
 ]
 
 { #category : #'encoding - decoding' }
-DataAPIContext >> decode: aJSON encodedAs: aSchema [
+DataAPIContext >> decode: aJSON encodedAs: aMediaType within: aKeyRepresentingScope [
 
-	^ (mappingRegistry decoderFor: aSchema at: nil)
+	^ (mappingRegistry decoderFor: aMediaType within: aKeyRepresentingScope)
 		cull: aJSON
 		cull: self
 ]
 
 { #category : #'encoding - decoding' }
-DataAPIContext >> encode: anObject to: aSchema [
+DataAPIContext >> encode: anObject to: aMediaType within: aKeyRepresentingScope [
 
-	^ (mappingRegistry encoderFor: aSchema at: nil)
+	^ (mappingRegistry encoderFor: aMediaType within: aKeyRepresentingScope)
 		cull: anObject
 		cull: self
 ]

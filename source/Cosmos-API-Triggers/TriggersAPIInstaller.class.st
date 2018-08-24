@@ -79,7 +79,7 @@ TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 	mappingRegistry
 		add: self triggerJsonDecoderVersion1dot0dot0
 		asDecoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers
+		within: #triggers
 ]
 
 { #category : #'private-installing' }
@@ -88,7 +88,7 @@ TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 	mappingRegistry
 		add: self triggerJsonEnconderVersion1dot0dot0
 		asEncoderFor: self applicationJsonVersion1dot0dot0
-		at: #triggers
+		within: #triggers
 ]
 
 { #category : #'private-encoding' }

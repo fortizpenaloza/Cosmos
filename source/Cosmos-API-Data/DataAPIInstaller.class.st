@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'server',
 		'interface',
-		'mappingRegistry'
+		'mappingRuleSetBuilder'
 	],
 	#category : #'Cosmos-API-Data'
 }
@@ -20,9 +20,7 @@ DataAPIInstaller >> addCreateBulkDataPointsRoute [
 
 	server
 		POST: '/data-points' -> [ :request | interface createBulkPointsBasedOn: request ];
-		output: #text.
-
-	self registerBulkDataPointDecoderVersion1dot0dot0
+		output: #text
 ]
 
 { #category : #'private - installing' }
@@ -68,14 +66,7 @@ DataAPIInstaller >> addGetDataPointsRoute [
 	server
 		GET:
 			'/data-streams/<identifier:IsUUID>/data-points'
-				-> [ :request | interface getPointsBasedOn: request ].
-
-	mappingRegistry
-		add: self dataPointEncoderVersion1dot0dot0
-		asEncoderFor:
-			(ZnMimeType
-				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
-		at: #data_points
+				-> [ :request | interface getPointsBasedOn: request ]
 ]
 
 { #category : #'private - installing' }
@@ -84,19 +75,14 @@ DataAPIInstaller >> addGetDataStreamRoute [
 	server
 		GET:
 			'/data-streams/<identifier:IsUUID>'
-				-> [ :request | interface getStreamBasedOn: request ].
-				
-	self registerDataStreamEncoderVersion1dot0dot0
+				-> [ :request | interface getStreamBasedOn: request ]
 ]
 
 { #category : #'private - installing' }
 DataAPIInstaller >> addGetDataStreamSnapshotsRoute [
 
-
-	server GET: '/data-streams' -> [ :request | interface getStreamsSnapshotsBasedOn: request ].
-	
-	self registerDataStreamSnapshotEncoderVersion1dot0dot0
-	
+	server
+		GET: '/data-streams' -> [ :request | interface getStreamsSnapshotsBasedOn: request ]
 ]
 
 { #category : #accessing }
@@ -212,8 +198,17 @@ DataAPIInstaller >> dataStreamSnapshotMimeTypeVersion1dot0dot0 [
 { #category : #initialization }
 DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRuleSet new.
-	interface := DataAPI workingWithin: (DataAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
+	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+
+	self
+		registerBulkDataPointDecoderVersion1dot0dot0;
+		registerDataStreamSnapshotEncoderVersion1dot0dot0;
+		registerDataStreamEncoderVersion1dot0dot0;
+		registerDataPointEncoderVersion1dot0dot0.
+
+	interface := DataAPI
+		workingWithin: (DataAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRuleSetBuilder build).
+		
 	server := aServer
 ]
 
@@ -238,26 +233,37 @@ DataAPIInstaller >> install [
 { #category : #accessing }
 DataAPIInstaller >> registerBulkDataPointDecoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self bulkDataPointDecoderVersion1dot0dot0
-		asDecoderFor: self bulkDataPointMimeTypeVersion1dot0dot0
-		at: #data_points
+		asDefaultDecoderFor: self bulkDataPointMimeTypeVersion1dot0dot0
+		within: #data_points
+]
+
+{ #category : #accessing }
+DataAPIInstaller >> registerDataPointEncoderVersion1dot0dot0 [
+
+	mappingRuleSetBuilder
+		add: self dataPointEncoderVersion1dot0dot0
+		asDefaultEncoderFor:
+			(ZnMimeType
+				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+		within: #data_points
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamEncoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self dataStreamEncoderVersion1dot0dot0
-		asEncoderFor: self dataStreamMimeTypeVersion1dot0dot0
-		at: #data_streams
+		asDefaultEncoderFor: self dataStreamMimeTypeVersion1dot0dot0
+		within: #data_streams
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamSnapshotEncoderVersion1dot0dot0 [
 
-	mappingRegistry
+	mappingRuleSetBuilder
 		add: self dataStreamSnapshotEncoderVersion1dot0dot0
 		asEncoderFor: self dataStreamSnapshotMimeTypeVersion1dot0dot0
-		at: #data_streams
+		within: #data_streams
 ]

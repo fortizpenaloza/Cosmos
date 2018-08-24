@@ -15,17 +15,17 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 ]
 
 { #category : #'encoding - decoding' }
-CommandsAPIContext >> decode: aJSON encodedAs: aSchema [
+CommandsAPIContext >> decode: aJSON encodedAs: aMediaType within: aKeyRepresentingScope [
 
-	^ (mappingRegistry decoderFor: aSchema at: #commands)
+	^ (mappingRegistry decoderFor: aMediaType within: #commands)
 		cull: aJSON
 		cull: self
 ]
 
 { #category : #'encoding - decoding' }
-CommandsAPIContext >> encode: anObject to: aMimeType [
+CommandsAPIContext >> encode: anObject to: aMediaType within: aKeyRepresentingScope [
 
-	^ (mappingRegistry encoderFor: aMimeType at: #commands)
+	^ (mappingRegistry encoderFor: aMediaType within: aKeyRepresentingScope)
 		cull: anObject
 		cull: self
 ]

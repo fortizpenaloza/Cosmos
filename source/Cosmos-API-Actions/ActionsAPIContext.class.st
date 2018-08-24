@@ -31,9 +31,9 @@ ActionsAPIContext >> decode: aKey from: aDictionary with: aParser [
 ]
 
 { #category : #enconding }
-ActionsAPIContext >> encode: anActionCollection to: aMimeType [
+ActionsAPIContext >> encode: anActionCollection to: aMediaType withing: aKeyRepresentingScope [
 
-	^ (mappingRegistry encoderFor: aMimeType at: nil)
+	^ (mappingRegistry encoderFor: aMediaType within: aKeyRepresentingScope)
 		value: anActionCollection
 ]
 

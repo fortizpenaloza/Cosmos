@@ -19,7 +19,11 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 	^ [ | timestamp rawData |
 
 	timestamp := self currentDateTime.
-	rawData := context decode: anHttpRequest contents encodedAs: anHttpRequest contentType.
+
+	rawData := context
+		decode: anHttpRequest contents
+		encodedAs: anHttpRequest contentType
+		within: self dataPointKey.
 
 	rawData
 		do: [ :rawDataPoint | 
@@ -74,6 +78,12 @@ DataAPI >> dataManagementSystem [
 	^ context systemImplementing: #DataManagementSystemInterface
 ]
 
+{ #category : #'private - scopes' }
+DataAPI >> dataPointKey [
+
+	^ #data_points
+]
+
 { #category : #API }
 DataAPI >> deleteStreamBasedOn: anHttpRequest [
 
@@ -94,15 +104,15 @@ DataAPI >> deleteStreamBasedOn: anHttpRequest [
 { #category : #API }
 DataAPI >> getPointsBasedOn: anHttpRequest [
 
-
 	^ [ [ | mimeType encodedPoints identifier |
 
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
 	identifier := anHttpRequest at: #identifier.
 
-	encodedPoints := self dataManagementSystem 
+	encodedPoints := self dataManagementSystem
 		streamIdentifiedBy: identifier
-		ifFound: [ :dataStream | context encode: dataStream dataPoints to: mimeType ]
+		ifFound:
+			[ :dataStream | context encode: dataStream dataPoints to: mimeType within: #data_points ]
 		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
@@ -158,16 +168,20 @@ DataAPI >> streamNamed: aName encodedTo: mimeType [
 
 	^ [ self dataManagementSystem
 		streamIdentifiedBy: aName
-		ifFound: [ :dataStream | context encode: dataStream to: mimeType ]
+		ifFound:
+			[ :dataStream | context encode: dataStream to: mimeType within: #data_streams ]
 		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #'private - API' }
-DataAPI >> streamsEncodedTo: mimeType [
+DataAPI >> streamsEncodedTo: aMediaType [
 
-	^ [ context encode: self dataManagementSystem streams to: mimeType ]
+	^ [ context
+		encode: self dataManagementSystem streams
+		to: aMediaType
+		within: #data_streams ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]

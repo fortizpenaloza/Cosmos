@@ -2,21 +2,21 @@ Class {
 	#name : #MappingRule,
 	#superclass : #Object,
 	#instVars : [
-		'mimeType',
 		'mapper',
 		'scope',
-		'isDefault'
+		'isDefault',
+		'mediaType'
 	],
 	#category : #'Cosmos-API-Model'
 }
 
 { #category : #'instance creation' }
-MappingRule class >> applying: aMapper for: aMimeType at: aScope [
+MappingRule class >> applying: aMapper for: aMediaType within: aScope [
 
 	^ self new
 		initializeApplying: aMapper
-		for: aMimeType
-		at: aScope
+		for: aMediaType
+		within: aScope
 ]
 
 { #category : #accessing }
@@ -26,10 +26,10 @@ MappingRule >> beDefault [
 ]
 
 { #category : #initialization }
-MappingRule >> initializeApplying: aMapper for: aMimeType at: aScope [ 
+MappingRule >> initializeApplying: aMapper for: aMediaType within: aScope [ 
 
 	mapper := aMapper.
-	mimeType := aMimeType.
+	mediaType := aMediaType.
 	scope := aScope.
 	isDefault := false
 ]
@@ -47,9 +47,9 @@ MappingRule >> mapper [
 ]
 
 { #category : #accessing }
-MappingRule >> mimeType [
+MappingRule >> mediaType [
 
-	^ mimeType
+	^ mediaType
 ]
 
 { #category : #accessing }
