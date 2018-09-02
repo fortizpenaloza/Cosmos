@@ -112,8 +112,9 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 	encodedPoints := self dataManagementSystem
 		streamIdentifiedBy: identifier
 		ifFound:
-			[ :dataStream | context encode: dataStream dataPoints to: mimeType within: #data_points ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ].
+			[ :dataStream | context encode: dataStream dataPoints of: #data_points to: mimeType ]
+		ifNone:
+			[ ObjectNotFound signal: 'Data stream with that identifier not found' ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
 		on: TeaNoSuchParam
@@ -169,8 +170,9 @@ DataAPI >> streamNamed: aName encodedTo: mimeType [
 	^ [ self dataManagementSystem
 		streamIdentifiedBy: aName
 		ifFound:
-			[ :dataStream | context encode: dataStream to: mimeType within: #data_streams ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
+			[ :dataStream | context encode: dataStream of: #data_streams to: mimeType ]
+		ifNone:
+			[ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -180,8 +182,8 @@ DataAPI >> streamsEncodedTo: aMediaType [
 
 	^ [ context
 		encode: self dataManagementSystem streams
-		to: aMediaType
-		within: #data_streams ]
+		of: #data_streams
+		to: aMediaType ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]

@@ -131,7 +131,7 @@ ActionsAPIInstaller >> install [
 ActionsAPIInstaller >> registerActionJsonEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self actionJsonEncoderVersion1dot0dot0
-		asDefaultEncoderFor: self actionJsonVersion1dot0dot0MimeType
-		within: #actions
+		addDefaultRuleToEncode: #actions
+		to: self actionJsonVersion1dot0dot0MimeType
+		using: self actionJsonEncoderVersion1dot0dot0
 ]

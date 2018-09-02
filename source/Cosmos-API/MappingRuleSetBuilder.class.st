@@ -8,72 +8,79 @@ Class {
 	#category : #'Cosmos-API-Model'
 }
 
-{ #category : #managing }
-MappingRuleSetBuilder >> add: aReader asDecoderFor: aMediaType within: aKeyRepresentingScope [
+{ #category : #configuring }
+MappingRuleSetBuilder >> addDefaultRuleToDecode: aMediaType to: aKeyRepresentingObjectType using: aReader [
 
 	| decodingRule |
 
-	self assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
-
-	decodingRule := MappingRule
-		applying: aReader
-		for: aMediaType
-		within: aKeyRepresentingScope.
-
-	decodingRules add: decodingRule
-]
-
-{ #category : #managing }
-MappingRuleSetBuilder >> add: aReader asDefaultDecoderFor: aMediaType within: aKeyRepresentingScope [
-
-	| decodingRule |
-
-	self assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
-
-	decodingRule := MappingRule
-		applying: aReader
-		for: aMediaType
-		within: aKeyRepresentingScope.
-
+	decodingRule := self
+		ruleToDecode: aMediaType
+		to: aKeyRepresentingObjectType
+		using: aReader.
+		
 	decodingRule beDefault.
-	
 	decodingRules add: decodingRule
 ]
 
-{ #category : #managing }
-MappingRuleSetBuilder >> add: aWriter asDefaultEncoderFor: aMediaType within: aKeyRepresentingScope [
+{ #category : #configuring }
+MappingRuleSetBuilder >> addDefaultRuleToEncode: aKeyRepresentingObjectType to: aMediaType using: aWriter [
 
 	| encodingRule |
 
-	self assertEncoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
-
-	encodingRule := MappingRule
-		applying: aWriter
-		for: aMediaType
-		within: aKeyRepresentingScope.
+	encodingRule := self
+		ruleToEncode: aMediaType
+		to: aKeyRepresentingObjectType
+		using: aWriter.
 		
 	encodingRule beDefault.
-	
-	encodingRules add: encodingRule 
+	encodingRules add: encodingRule
 ]
 
-{ #category : #managing }
-MappingRuleSetBuilder >> add: aWriter asEncoderFor: aMediaType within: aKeyRepresentingScope [
+{ #category : #configuring }
+MappingRuleSetBuilder >> addRuleToDecode: aMediaType to: aKeyRepresentingObjectType using: aReader [
 
-	| mappingRule |
-	
-	self assertEncoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope.
+	| decodingRule |
 
-	mappingRule := MappingRule
-		applying: aWriter
-		for: aMediaType
-		within: aKeyRepresentingScope.
+	decodingRule := self
+		ruleToDecode: aMediaType
+		to: aKeyRepresentingObjectType
+		using: aReader.
+
+	decodingRules add: decodingRule
+]
+
+{ #category : #configuring }
+MappingRuleSetBuilder >> addRuleToEncode: aKeyRepreseningObjectType to: aMediaType using: aWriter [
+
+	| encodingRule |
+
+	encodingRule := self
+		ruleToEncode: aMediaType
+		to: aKeyRepreseningObjectType
+		using: aWriter.
 		
-	encodingRules add: mappingRule	
+	encodingRules add: encodingRule
 ]
 
 { #category : #'private - preconditions' }
-MappingRuleSetBuilder >> assertDecoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope [
+MappingRuleSetBuilder >> assertThereIsOnlyOneDefaultRuleForEachObjectType [
+
+	AssertionCheckerBuilder new
+		checking: [ :asserter | 
+			asserter
+				enforce: [ (decodingRules groupedBy: #objectType) values
+						allSatisfy:
+							[ :groupedDecodingRules | (groupedDecodingRules count: [ :decodingRule | decodingRule isDefault ]) = 1 ] ]
+					because: 'You must provide a default decoder for each scope';
+				enforce: [ (encodingRules groupedBy: #objectType) values
+						allSatisfy:
+							[ :groupedEncodingRules | (groupedEncodingRules count: [ :encodingRule | encodingRule isDefault ]) = 1 ] ]
+					because: 'You must provide a default decoder for each scope' ];
+		buildAndCheck
+]
+
+{ #category : #'private - preconditions' }
+MappingRuleSetBuilder >> assertThereIsntConfiguredRuleToDecode: aMediaType to: anObjectType [
 
 	AssertionCheckerBuilder new
 		raising: ConflictingObjectFound;
@@ -81,37 +88,28 @@ MappingRuleSetBuilder >> assertDecoderNotAlreadyRegisteredFor: aMediaType within
 			asserter
 				enforce: [ decodingRules
 						noneSatisfy:
-							[ :rule | rule mediaType = aMediaType and: [ rule scope = aKeyRepresentingScope ] ] ]
+							[ :rule | rule mediaType = aMediaType and: [ rule objectType = anObjectType ] ] ]
 				because: 'Decoder for that MIME type already registered' ];
 		buildAndCheck
 ]
 
 { #category : #'private - preconditions' }
-MappingRuleSetBuilder >> assertEncoderNotAlreadyRegisteredFor: aMediaType within: aKeyRepresentingScope [
+MappingRuleSetBuilder >> assertThereIsntConfiguredRuleToEncode: anObjectType to: aMediaType [
 
 	AssertionCheckerBuilder new
 		raising: ConflictingObjectFound;
 		checking: [ :asserter | 
 			asserter
 				enforce: [ encodingRules
-						noneSatisfy: [ :rule | rule mediaType = aMediaType and: [ rule scope = aKeyRepresentingScope ] ] ]
+						noneSatisfy: [ :rule | rule mediaType = aMediaType and: [ rule objectType = anObjectType ] ] ]
 				because: 'Encoder for that MIME type already registered' ];
 		buildAndCheck
 ]
 
-{ #category : #managing }
+{ #category : #building }
 MappingRuleSetBuilder >> build [
 
-	AssertionCheckerBuilder new
-		checking: [ :asserter | 
-			asserter
-				enforce: [ (decodingRules groupedBy: #scope) values
-						allSatisfy: [ :rules | (rules count: [ :rule | rule isDefault ]) = 1 ] ]
-					because: 'You must provide a default decoder for each scope';
-				enforce: [ (encodingRules groupedBy: #scope) values
-						allSatisfy: [ :rules | (rules count: [ :rule | rule isDefault ]) = 1 ] ]
-					because: 'You must provide a default decoder for each scope' ];
-		buildAndCheck.
+	self assertThereIsOnlyOneDefaultRuleForEachObjectType.
 
 	^ MappingRuleSet consistingOf: encodingRules and: decodingRules
 ]
@@ -121,4 +119,30 @@ MappingRuleSetBuilder >> initialize [
 
 	encodingRules := OrderedCollection new.
 	decodingRules := OrderedCollection new
+]
+
+{ #category : #'private - configuring' }
+MappingRuleSetBuilder >> ruleToDecode: aMediaType to: aKeyRepresentingObjectType using: aReader [
+
+	self
+		assertThereIsntConfiguredRuleToDecode: aMediaType
+		to: aKeyRepresentingObjectType.
+
+	^ MappingRule
+		decoding: aMediaType
+		to: aKeyRepresentingObjectType
+		using: aReader
+]
+
+{ #category : #'private - configuring' }
+MappingRuleSetBuilder >> ruleToEncode: aMediaType to: aKeyRepresentingObjectType using: aWriter [
+
+	self
+		assertThereIsntConfiguredRuleToEncode: aKeyRepresentingObjectType
+		to: aMediaType.
+		
+	^ MappingRule
+		encoding: aKeyRepresentingObjectType
+		to: aMediaType
+		using: aWriter
 ]

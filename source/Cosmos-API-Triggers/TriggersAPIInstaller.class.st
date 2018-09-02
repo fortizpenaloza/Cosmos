@@ -82,18 +82,18 @@ TriggersAPIInstaller >> install [
 TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self triggerJsonDecoderVersion1dot0dot0
-		asDefaultDecoderFor: self applicationJsonVersion1dot0dot0
-		within: #triggers
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		to: #triggers
+		using: self triggerJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self triggerJsonEnconderVersion1dot0dot0
-		asDefaultEncoderFor: self applicationJsonVersion1dot0dot0
-		within: #triggers
+		addDefaultRuleToEncode: #triggers
+		to: self applicationJsonVersion1dot0dot0
+		using: self triggerJsonEnconderVersion1dot0dot0
 ]
 
 { #category : #'private-encoding' }

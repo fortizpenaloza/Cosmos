@@ -66,8 +66,8 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 				json:
 					(context
 						encode: self triggerManagementSystem triggers
-						to: mimeType
-						within: #triggers)) ]
+						of: #triggers
+						to: mimeType)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: ObjectNotFound

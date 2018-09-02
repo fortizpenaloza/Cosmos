@@ -234,36 +234,36 @@ DataAPIInstaller >> install [
 DataAPIInstaller >> registerBulkDataPointDecoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self bulkDataPointDecoderVersion1dot0dot0
-		asDefaultDecoderFor: self bulkDataPointMimeTypeVersion1dot0dot0
-		within: #data_points
+		addDefaultRuleToDecode: self bulkDataPointMimeTypeVersion1dot0dot0
+		to: #data_points
+		using: self bulkDataPointDecoderVersion1dot0dot0
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataPointEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self dataPointEncoderVersion1dot0dot0
-		asDefaultEncoderFor:
+		addDefaultRuleToEncode: #data_points
+		to:
 			(ZnMimeType
 				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
-		within: #data_points
+		using: self dataPointEncoderVersion1dot0dot0
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self dataStreamEncoderVersion1dot0dot0
-		asDefaultEncoderFor: self dataStreamMimeTypeVersion1dot0dot0
-		within: #data_streams
+		addDefaultRuleToEncode: #data_streams
+		to: self dataStreamMimeTypeVersion1dot0dot0
+		using: self dataStreamEncoderVersion1dot0dot0
 ]
 
 { #category : #accessing }
 DataAPIInstaller >> registerDataStreamSnapshotEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
-		add: self dataStreamSnapshotEncoderVersion1dot0dot0
-		asEncoderFor: self dataStreamSnapshotMimeTypeVersion1dot0dot0
-		within: #data_streams
+		addRuleToEncode: #data_streams
+		to: self dataStreamSnapshotMimeTypeVersion1dot0dot0
+		using: self dataStreamSnapshotEncoderVersion1dot0dot0
 ]

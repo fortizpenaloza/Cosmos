@@ -72,8 +72,8 @@ CommandsAPI >> getCommandsBasedOn: aHttpRequest [
 
 	encodedCommands := context
 		encode: self commandManagementSystem commands
-		to: mimeType
-		within: #commands.
+		of: #commands
+		to: mimeType.
 
 	^ ZnResponse ok: (ZnEntity json: encodedCommands)
 ]
@@ -108,8 +108,8 @@ CommandsAPI >> nextCommandBasedOn: aHttpRequest [
 
 	encodedCommand := context
 		encode: self commandManagementSystem nextCommand
-		to: mimeType
-		within: #commands.
+		of: #commands
+		to: mimeType.
 
 	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
 ]

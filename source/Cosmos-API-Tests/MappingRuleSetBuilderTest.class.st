@@ -24,15 +24,15 @@ MappingRuleSetBuilderTest >> testAddingDecoderForAlreadyAddedMimeTypeFails [
 	mappingRegistry := MappingRuleSetBuilder new.
 
 	mappingRegistry
-		add: self triggerJsonDecoderVersion1dot0dot0
-		asEncoderFor: ZnMimeType textPlain
-		within: #triggers.
+		addRuleToDecode: ZnMimeType textPlain
+		to: #triggers
+		using: self triggerJsonDecoderVersion1dot0dot0.
 
 	self
 		should: [ mappingRegistry
-				add: self triggerJsonDecoderVersion1dot0dot0
-				asEncoderFor: ZnMimeType textPlain
-				within: #triggers ]
+				addRuleToDecode: ZnMimeType textPlain
+				to: #triggers
+				using: self triggerJsonDecoderVersion1dot0dot0 ]
 		raise: ConflictingObjectFound
 ]
 
@@ -44,39 +44,39 @@ MappingRuleSetBuilderTest >> testAddingEncoderForAlreadyAddedMimeTypeFails [
 	mappingRegistry := MappingRuleSetBuilder new.
 
 	mappingRegistry
-		add: self triggerJsonEncoderVersion1dot0dot0
-		asEncoderFor: ZnMimeType textPlain
-		within: #triggers.
+		addRuleToEncode: #triggers
+		to: ZnMimeType textPlain
+		using: self triggerJsonEncoderVersion1dot0dot0.
 
 	self
 		should: [ mappingRegistry
-				add: self triggerJsonEncoderVersion1dot0dot0
-				asEncoderFor: ZnMimeType textPlain
-				within: #triggers ]
+				addRuleToEncode: #triggers
+				to: ZnMimeType textPlain
+				using: self triggerJsonEncoderVersion1dot0dot0 ]
 		raise: ConflictingObjectFound
 ]
 
 { #category : #tests }
 MappingRuleSetBuilderTest >> testBuilding [
 
-	| mappingRuleSetBuilder mapping |
+	| mappingRuleSetBuilder |
 
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
 
 	mappingRuleSetBuilder
-		add: self triggerJsonDecoderVersion1dot0dot1
-		asDefaultDecoderFor: self applicationJsonVersion1dot0dot1
-		within: #trigger.
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot1
+		to: #trigger
+		using: self triggerJsonDecoderVersion1dot0dot1.
 
 	mappingRuleSetBuilder
-		add: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self applicationJsonVersion1dot0dot0
-		within: #trigger.
+		addRuleToDecode: self applicationJsonVersion1dot0dot0
+		to: #trigger
+		using: self triggerJsonDecoderVersion1dot0dot0.
 
 	mappingRuleSetBuilder
-		add: self triggerJsonDecoderVersion1dot0dot0
-		asDefaultEncoderFor: self applicationJsonVersion1dot0dot0
-		within: #trigger.
+		addDefaultRuleToEncode: #trigger
+		to: self applicationJsonVersion1dot0dot0
+		using: self triggerJsonDecoderVersion1dot0dot0.
 
 	self shouldnt: [ mappingRuleSetBuilder build ] raise: Error
 ]
@@ -89,9 +89,9 @@ MappingRuleSetBuilderTest >> testBuildingFailsBecauseMustProvideDefault [
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
 
 	mappingRuleSetBuilder
-		add: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self applicationJsonVersion1dot0dot0
-		within: #triggers.
+		addRuleToDecode: self applicationJsonVersion1dot0dot0
+		to: #triggers
+		using: self triggerJsonDecoderVersion1dot0dot0.
 
 	self should: [ mappingRuleSetBuilder build ] raise: AssertionFailed
 ]

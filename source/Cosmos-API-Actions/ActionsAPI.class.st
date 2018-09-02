@@ -29,7 +29,11 @@ ActionsAPI >> actionsFor: anHttpRequest [
 	^ [ [ ZnResponse
 		ok:
 			(ZnEntity
-				json: (context encode: self actionManagementSystem actions to: mimeType within: #actions)) ]
+				json:
+					(context
+						encode: self actionManagementSystem actions
+						of: #actions
+						to: mimeType)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: ObjectNotFound

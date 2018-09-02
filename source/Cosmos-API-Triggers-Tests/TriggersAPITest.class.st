@@ -197,7 +197,7 @@ TriggersAPITest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion 
 						setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0')) ]
 		raise: HTTPClientError
 		withExceptionDo:
-			[ :signal | self assert: signal messageText equals: 'Encoder not found for given schema' ]
+			[ :signal | self assert: signal messageText equals: 'Encoder not found for given media type' ]
 ]
 
 { #category : #tests }
