@@ -7,7 +7,7 @@ Class {
 { #category : #'type constraint' }
 IsUUID class >> matchesTo: aString [
 
-	^ true
+	^  '[\da-z]+' asRegex matches: aString
 ]
 
 { #category : #'type constraint' }

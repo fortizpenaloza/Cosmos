@@ -41,15 +41,6 @@ DataManagementSystem >> initialize [
 	dataStreams := OrderedCollection new
 ]
 
-{ #category : #'private-managing' }
-DataManagementSystem >> register2: aDataStream [
-
-	dataStreams add: aDataStream.
-
-	self registerIdentifierFor: aDataStream.
-	self registerRegistrationTimestampFor: aDataStream
-]
-
 { #category : #managing }
 DataManagementSystem >> register: aDataStream [
 
@@ -58,10 +49,10 @@ DataManagementSystem >> register: aDataStream [
 		ifFound: [ :dataStream | 
 			ConflictingObjectFound
 				signal: 'A data stream with that name already exists in system' ]
-		ifNone: [ self register2: aDataStream ]
+		ifNone: [ self registerWithMetadata: aDataStream ]
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> register: aDataPoint to: aDataStream [
 
 	aDataStream add: aDataPoint.
@@ -79,13 +70,13 @@ DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
 		ifNone: [ ObjectNotFound signal: 'Data stream not found in the system' ]
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> registerIdentifierFor: aDataStream [
 
 	identifierSystem registerIdentifierFor: aDataStream
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 
 	metadataSystem
@@ -94,6 +85,15 @@ DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 				attaching: timeSystem dateTime
 				as: #registration_timestamp
 				of: aDataStream)
+]
+
+{ #category : #'private - managing' }
+DataManagementSystem >> registerWithMetadata: aDataStream [
+
+	dataStreams add: aDataStream.
+
+	self registerIdentifierFor: aDataStream.
+	self registerRegistrationTimestampFor: aDataStream
 ]
 
 { #category : #'dependency resolution' }

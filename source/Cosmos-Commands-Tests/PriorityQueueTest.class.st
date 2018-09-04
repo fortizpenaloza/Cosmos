@@ -1,8 +1,26 @@
 Class {
 	#name : #PriorityQueueTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-Commands-Tests-Model'
+	#category : #'Cosmos-Commands-Tests'
 }
+
+{ #category : #tests }
+PriorityQueueTest >> highestPriority [
+
+	^ 100
+]
+
+{ #category : #tests }
+PriorityQueueTest >> lowestPriority [
+
+	^ 1
+]
+
+{ #category : #tests }
+PriorityQueueTest >> mediumPriority [
+
+	^ 50
+]
 
 { #category : #tests }
 PriorityQueueTest >> testDequeuingFailsWhenQueueIsEmpty [
@@ -10,7 +28,10 @@ PriorityQueueTest >> testDequeuingFailsWhenQueueIsEmpty [
 	| priorityQueue |
 
 	priorityQueue := PriorityQueue empty.
-	self should: [ priorityQueue dequeue ] raise: QueueIsEmpty withDescription: 'Queue is empty'
+	self
+		should: [ priorityQueue dequeue ]
+		raise: CollectionIsEmpty 
+		withDescription: 'a SortedCollection() is empty'
 ]
 
 { #category : #tests }
@@ -19,15 +40,15 @@ PriorityQueueTest >> testDequeuingRepectsEnqueuingOrderWhenQueueHasElementsWithS
 	| priorityQueue |
 
 	priorityQueue := PriorityQueue empty.
-	priorityQueue enqueue: 2 with: QueuePriority low.
-	priorityQueue enqueue: 3 with: QueuePriority low.
-	priorityQueue enqueue: 4 with: QueuePriority high.
-	priorityQueue enqueue: 5 with: QueuePriority high.
+	priorityQueue enqueue: 'a' with: self lowestPriority.
+	priorityQueue enqueue: 'b' with: self lowestPriority.
+	priorityQueue enqueue: 'c' with: self highestPriority.
+	priorityQueue enqueue: 'd' with: self highestPriority.
 
-	self assert: priorityQueue dequeue equals: 4.
-	self assert: priorityQueue dequeue equals: 5.
-	self assert: priorityQueue dequeue equals: 2.
-	self assert: priorityQueue dequeue equals: 3
+	self assert: priorityQueue dequeue equals: 'c'.
+	self assert: priorityQueue dequeue equals: 'd'.
+	self assert: priorityQueue dequeue equals: 'a'.
+	self assert: priorityQueue dequeue equals: 'b'
 ]
 
 { #category : #tests }
@@ -36,13 +57,13 @@ PriorityQueueTest >> testDequeuingRespectsEnqueuedElementPriority [
 	| priorityQueue |
 
 	priorityQueue := PriorityQueue empty.
-	priorityQueue enqueue: 2 with: QueuePriority low.
-	priorityQueue enqueue: 3 with: QueuePriority medium.
-	priorityQueue enqueue: 4 with: QueuePriority high.
+	priorityQueue enqueue: 'a' with: self lowestPriority.
+	priorityQueue enqueue: 'b' with: self mediumPriority.
+	priorityQueue enqueue: 'c' with: self highestPriority.
 
-	self assert: priorityQueue dequeue equals: 4.
-	self assert: priorityQueue dequeue equals: 3.
-	self assert: priorityQueue dequeue equals: 2
+	self assert: priorityQueue dequeue equals: 'c'.
+	self assert: priorityQueue dequeue equals: 'b'.
+	self assert: priorityQueue dequeue equals: 'a'
 ]
 
 { #category : #tests }

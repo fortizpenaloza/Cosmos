@@ -14,22 +14,18 @@ DataAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingR
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
-{ #category : #systems }
-DataAPIContext >> dataManagementSystem [
-	
-	^ cosmos systemImplementing: #DataManagementSystemInterface
+{ #category : #'encoding - decoding' }
+DataAPIContext >> decode: aJSON encodedAs: aMediaType within: aKeyRepresentingScope [
+
+	^ (mappingRegistry ruleToDecode: aMediaType to: aKeyRepresentingScope)
+		applyOn: aJSON
+		within: self
 ]
 
-{ #category : #decoding }
-DataAPIContext >> decode: aJSON encodedAs: aMimeType [
+{ #category : #'encoding - decoding' }
+DataAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
 
-	^ (mappingRegistry decoderFor: aMimeType) cull: aJSON cull: self
-]
-
-{ #category : #decoding }
-DataAPIContext >> encode: anObject to: aMimeType [
-
-	^ (mappingRegistry encoderFor: aMimeType) cull: anObject cull: self 
+	^ (mappingRegistry ruleToEncode: aKeyRepresentingObjectType to: aMediaType) applyOn: anObject within: self
 ]
 
 { #category : #initialization }
@@ -46,7 +42,13 @@ DataAPIContext >> metadataSystem [
 	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #'private - systems' }
+{ #category : #systems }
+DataAPIContext >> systemImplementing: anInterfaceName [
+	
+	^ cosmos systemImplementing: anInterfaceName
+]
+
+{ #category : #systems }
 DataAPIContext >> timeSystem [
 
 	^ cosmos systemImplementing: #TimeSystemInterface

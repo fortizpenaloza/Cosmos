@@ -31,9 +31,11 @@ ActionsAPIContext >> decode: aKey from: aDictionary with: aParser [
 ]
 
 { #category : #enconding }
-ActionsAPIContext >> encode: anActionCollection to: aMimeType [
+ActionsAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
 
-	^ (mappingRegistry encoderFor: aMimeType) value: anActionCollection
+	^ (mappingRegistry
+		ruleToEncode: aKeyRepresentingObjectType
+		to: aMediaType) applyOn: anObject within: self
 ]
 
 { #category : #'private-parsers' }

@@ -1,5 +1,5 @@
 "
-I'm a priority queueu.
+I'm a priority queue..
 
 I know how to queue and dequeue objects. Objects dequeue according to its priority. 
 "
@@ -7,11 +7,9 @@ Class {
 	#name : #PriorityQueue,
 	#superclass : #Object,
 	#instVars : [
-		'lowPrioritizedElements',
-		'mediumPrioritizedElements',
-		'highPrioritizedElements'
+		'elements'
 	],
-	#category : #'Cosmos-Commands-Model'
+	#category : #'Cosmos-Commands'
 }
 
 { #category : #'instance creation' }
@@ -20,55 +18,30 @@ PriorityQueue class >> empty [
 	^ super new initialize 
 ]
 
-{ #category : #'enqueuing-dequeiung' }
+{ #category : #'enqueuing - dequeiung' }
 PriorityQueue >> dequeue [
 
-	^ highPrioritizedElements
-		ifEmpty: [ mediumPrioritizedElements
-				ifEmpty: [ lowPrioritizedElements
-						ifEmpty: [ QueueIsEmpty signal: 'Queue is empty' ]
-						ifNotEmpty: [ :collection | collection removeFirst ] ]
-				ifNotEmpty: [ :collection | collection removeFirst ] ]
-		ifNotEmpty: [ :collection | collection removeFirst ]
+	^ elements removeLast element 
 ]
 
-{ #category : #'enqueuing-dequeiung' }
-PriorityQueue >> enqueue: anElement with: aPriority [ 
+{ #category : #'enqueuing - dequeiung' }
+PriorityQueue >> enqueue: anElement with: aPriority [
 
-	aPriority enqueue: anElement into: self
+	| element |
+
+	element := PrioritizedElement holding: anElement with: aPriority.
+
+	elements add: element 
 ]
 
-{ #category : #'enqueuing-dequeiung' }
-PriorityQueue >> enqueueWithHighPriority: anElementWithPriority [ 
-
-	highPrioritizedElements add: anElementWithPriority 
-]
-
-{ #category : #'enqueuing-dequeiung' }
-PriorityQueue >> enqueueWithLowPriority: anElementWithPriority [ 
-	
-	lowPrioritizedElements add: anElementWithPriority 
-]
-
-{ #category : #'enqueuing-dequeiung' }
-PriorityQueue >> enqueueWithMediumPriority: anElementWithPriority [ 
-	
-	mediumPrioritizedElements add: anElementWithPriority 
-]
-
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 PriorityQueue >> initialize [
 
-	lowPrioritizedElements := OrderedCollection new.
-	mediumPrioritizedElements := OrderedCollection new.
-	highPrioritizedElements := OrderedCollection new
+	elements := SortedCollection sortBlock: [ :x :y | x priority < y priority ].
 ]
 
 { #category : #testing }
 PriorityQueue >> isEmpty [
 
-	^ (Array
-		with: lowPrioritizedElements
-		with: mediumPrioritizedElements
-		with: highPrioritizedElements) allSatisfy: [ :collection | collection isEmpty ]
+	^ elements isEmpty
 ]

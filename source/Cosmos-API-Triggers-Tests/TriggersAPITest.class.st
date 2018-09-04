@@ -12,6 +12,13 @@ TriggersAPITest class >> lastStoredRun [
 	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 619431000; yourself)); add: (#passed->((Set new))); add: (#failures->((Set new))); add: (#errors->((Set new) add: #testRegistrationOfPeriodicalTrigger; add: #testGettingTriggersFailsWhenRequestingInvalidResourceVersion; add: #testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature; add: #testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes; add: #testGettingTriggers; add: #testRegistrationOfDataPointRegistered; add: #testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven; add: #testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM; yourself)); yourself)
 ]
 
+{ #category : #accessing }
+TriggersAPITest >> applicationJsonVersion1dot0dot0 [
+
+	^ ZnMimeType
+		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
+]
+
 { #category : #'tests support' }
 TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
@@ -49,7 +56,7 @@ TriggersAPITest >> fiveMinutes [
 TriggersAPITest >> getTriggersHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-		setAccept: self triggerMimeTypeVersion1dot0dot0
+		setAccept: self applicationJsonVersion1dot0dot0
 ]
 
 { #category : #accessing }
@@ -190,7 +197,7 @@ TriggersAPITest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion 
 						setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0')) ]
 		raise: HTTPClientError
 		withExceptionDo:
-			[ :signal | self assert: signal messageText equals: 'Encoder not found for given schema' ]
+			[ :signal | self assert: signal messageText equals: 'Encoder not found for given media type' ]
 ]
 
 { #category : #tests }
@@ -357,7 +364,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 	},
 	"conditions" : [ ]
 }'
-						type: self triggerMimeTypeVersion1dot0dot0)).
+						type: self applicationJsonVersion1dot0dot0)).
 
 	self
 		assert: response code equals: 201;
@@ -397,7 +404,7 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 	},
 	"conditions" : [ ]
 }'
-						type: self triggerMimeTypeVersion1dot0dot0)).
+						type: self applicationJsonVersion1dot0dot0)).
 						
 	self
 		assert: response code equals: 201;
@@ -411,11 +418,4 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 					equals: 'Set triggered to true periodically every 5 minutes';
 				assert: trigger creationDateTime equals: self timeSystem dateTime ]
 		ifNone: [ self fail ]
-]
-
-{ #category : #accessing }
-TriggersAPITest >> triggerMimeTypeVersion1dot0dot0 [
-
-	^ ZnMimeType
-		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
 ]

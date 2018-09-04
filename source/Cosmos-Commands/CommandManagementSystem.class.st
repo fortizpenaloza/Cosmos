@@ -3,10 +3,12 @@ Class {
 	#superclass : #System,
 	#instVars : [
 		'timeSystem',
-		'prioritizedCommands',
-		'priorityQueue'
+		'priorityQueue',
+		'commands',
+		'metadataSystem',
+		'identifierSystem'
 	],
-	#category : #'Cosmos-Commands-SystemModel'
+	#category : #'Cosmos-Commands'
 }
 
 { #category : #'system specification' }
@@ -15,32 +17,29 @@ CommandManagementSystem class >> implementedInterface [
 	^ SystemInterface >> #CommandManagementSystemInterface
 ]
 
-{ #category : #managing }
-CommandManagementSystem >> dequeue [
+{ #category : #querying }
+CommandManagementSystem >> commands [
 
-	^ [ | prioritizedCommand |
-			prioritizedCommand := priorityQueue dequeue.
-			self unregister: prioritizedCommand.
-			prioritizedCommand ]
-		on: QueueIsEmpty
-		do: [ :signal | signal signal: 'Command priority queue is empty' ]
+	^ commands copy
+]
+
+{ #category : #'private - managing' }
+CommandManagementSystem >> dequeuedCommand [
+
+	| commandWithPriority |
+
+	commandWithPriority := priorityQueue dequeue.
+
+	[ commands includes: commandWithPriority ]
+		whileFalse: [ commandWithPriority := priorityQueue dequeue ].
+
+	^ commandWithPriority
 ]
 
 { #category : #managing }
-CommandManagementSystem >> enqueue: aCommand with: aPriority [
+CommandManagementSystem >> deregister: aCommandWithPriority [
 
-	| prioritizedCommand |
-
-	prioritizedCommand := PrioritizedCommand
-		holding: aCommand
-		with: aPriority
-		on: timeSystem dateTime.
-		
-	priorityQueue enqueue: prioritizedCommand with: aPriority.
-
-	self register: prioritizedCommand.
-
-	^ prioritizedCommand 
+	commands remove: aCommandWithPriority
 ]
 
 { #category : #initialization }
@@ -48,31 +47,54 @@ CommandManagementSystem >> initialize [
 
 	super initialize.
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-
-	prioritizedCommands := OrderedCollection new.
+	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
+	
+	commands := OrderedCollection new.
 	priorityQueue := PriorityQueue empty
 ]
 
-{ #category : #querying }
-CommandManagementSystem >> prioritizedCommands [
+{ #category : #managing }
+CommandManagementSystem >> nextCommand [
 
-	^ prioritizedCommands copy
+	^ [ commands remove: self dequeuedCommand ]
+		on: CollectionIsEmpty
+		do: [ :signal | signal signal: 'Command priority queue is empty' ]
 ]
 
-{ #category : #'private-managing' }
-CommandManagementSystem >> register: aPrioritizedCommand [
+{ #category : #managing }
+CommandManagementSystem >> register: aCommandWithPriority [
 
-	prioritizedCommands add: aPrioritizedCommand
+	commands add: aCommandWithPriority.
+	priorityQueue
+		enqueue: aCommandWithPriority
+		with: aCommandWithPriority priority.
+		
+	self registerIdentifierFor: aCommandWithPriority.
+	self registerRegistrationTimestampFor: aCommandWithPriority
+]
+
+{ #category : #'private - managing' }
+CommandManagementSystem >> registerIdentifierFor: aCommandWithPriority [ 
+
+	identifierSystem registerIdentifierFor: aCommandWithPriority
+]
+
+{ #category : #'private - managing' }
+CommandManagementSystem >> registerRegistrationTimestampFor: aCommandWithPriority [ 
+
+	metadataSystem
+		register:
+			(Metadata
+				attaching: timeSystem dateTime
+				as: #registration_timestamp
+				of: aCommandWithPriority)
 ]
 
 { #category : #'dependency resolution' }
 CommandManagementSystem >> resolveDependecies [
 
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface
-]
-
-{ #category : #'private-managing' }
-CommandManagementSystem >> unregister: aPrioritizedCommand [
-
-	prioritizedCommands remove: aPrioritizedCommand 
+	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]

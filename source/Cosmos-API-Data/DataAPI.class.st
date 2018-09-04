@@ -19,7 +19,11 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 	^ [ | timestamp rawData |
 
 	timestamp := self currentDateTime.
-	rawData := context decode: anHttpRequest contents encodedAs: anHttpRequest contentType.
+
+	rawData := context
+		decode: anHttpRequest contents
+		encodedAs: anHttpRequest contentType
+		within: self dataPointKey.
 
 	rawData
 		do: [ :rawDataPoint | 
@@ -37,11 +41,11 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> createStreamBasedOn: anHttpRequest [
+DataAPI >> createStreamBasedOn: aHttpRequest [
 
 	^ [ [ | rawStream dataStream identifier |
 
-	rawStream := (NeoJSONReader on: anHttpRequest contents readStream)
+	rawStream := (NeoJSONReader on: aHttpRequest contents readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
@@ -49,7 +53,7 @@ DataAPI >> createStreamBasedOn: anHttpRequest [
 
 	self dataManagementSystem register: dataStream.
 
-	identifier := ((context metadataSystem metadataFor: dataStream)
+	identifier := ((self metadataSystem metadataFor: dataStream)
 		detect: [ :metadata | metadata aspect = #identifier ]) value.
 
 	ZnResponse
@@ -68,10 +72,16 @@ DataAPI >> currentDateTime [
 	^ self timeSystem dateTime
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 DataAPI >> dataManagementSystem [
 
-	^ context dataManagementSystem
+	^ context systemImplementing: #DataManagementSystemInterface
+]
+
+{ #category : #'private - scopes' }
+DataAPI >> dataPointKey [
+
+	^ #data_points
 ]
 
 { #category : #API }
@@ -94,16 +104,17 @@ DataAPI >> deleteStreamBasedOn: anHttpRequest [
 { #category : #API }
 DataAPI >> getPointsBasedOn: anHttpRequest [
 
-
 	^ [ [ | mimeType encodedPoints identifier |
 
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
 	identifier := anHttpRequest at: #identifier.
 
-	encodedPoints := self dataManagementSystem 
+	encodedPoints := self dataManagementSystem
 		streamIdentifiedBy: identifier
-		ifFound: [ :dataStream | context encode: dataStream dataPoints to: mimeType ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ].
+		ifFound:
+			[ :dataStream | context encode: dataStream dataPoints of: #data_points to: mimeType ]
+		ifNone:
+			[ ObjectNotFound signal: 'Data stream with that identifier not found' ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
 		on: TeaNoSuchParam
@@ -113,12 +124,12 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> getStreamBasedOn: anHttpRequest [
+DataAPI >> getStreamBasedOn: aHttpRequest [
 
 	^ [ [ | mimeType identifier |
 
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-	identifier := anHttpRequest at: #identifier.
+	mimeType := ZnMimeType fromString: aHttpRequest accept.
+	identifier := aHttpRequest at: #identifier.
 
 	ZnResponse
 		ok: (ZnEntity json: (self streamNamed: identifier encodedTo: mimeType)) ]
@@ -147,21 +158,32 @@ DataAPI >> initializeWorkingWithin: aContext [
 	context := aContext
 ]
 
-{ #category : #'private-API' }
+{ #category : #'private - systems' }
+DataAPI >> metadataSystem [
+	
+	^ context systemImplementing: #MetadataSystemInterface
+]
+
+{ #category : #'private - API' }
 DataAPI >> streamNamed: aName encodedTo: mimeType [
 
 	^ [ self dataManagementSystem
 		streamIdentifiedBy: aName
-		ifFound: [ :dataStream | context encode: dataStream to: mimeType ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
+		ifFound:
+			[ :dataStream | context encode: dataStream of: #data_streams to: mimeType ]
+		ifNone:
+			[ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
-{ #category : #'private-API' }
-DataAPI >> streamsEncodedTo: mimeType [
+{ #category : #'private - API' }
+DataAPI >> streamsEncodedTo: aMediaType [
 
-	^ [ context encode: self dataManagementSystem streams to: mimeType ]
+	^ [ context
+		encode: self dataManagementSystem streams
+		of: #data_streams
+		to: aMediaType ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]

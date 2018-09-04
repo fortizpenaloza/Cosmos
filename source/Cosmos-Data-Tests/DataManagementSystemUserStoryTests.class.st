@@ -93,31 +93,6 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyEx
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testMetadataRegistrationOnDataStreamRegistration [
-
-	| dataStream metadata |
-
-	dataStream := self temperatureStream.
-
-	self assert: (self metadataSystem metadataFor: dataStream) isEmpty.
-	self dataManagementSystem register: dataStream.
-
-	metadata := self metadataSystem metadataFor: dataStream.
-	self
-		assert: metadata size equals: 2;
-		assert: metadata
-			equals:
-			{(Metadata
-				attaching: self currentIdentifier
-				as: #identifier
-				of: dataStream).
-			(Metadata
-				attaching: self systemDateTime
-				as: #registration_timestamp
-				of: dataStream)} asOrderedCollection 
-]
-
-{ #category : #tests }
 DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 
 	| dataStream |
@@ -143,4 +118,29 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 		streamNamed: 'Temperature'
 		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
 		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> testRegisteredMetadataOnDataStreamRegistration [
+
+	| dataStream metadata |
+
+	dataStream := self temperatureStream.
+
+	self assert: (self metadataSystem metadataFor: dataStream) isEmpty.
+	self dataManagementSystem register: dataStream.
+
+	metadata := self metadataSystem metadataFor: dataStream.
+	self
+		assert: metadata size equals: 2;
+		assert: metadata
+			equals:
+			{(Metadata
+				attaching: self currentIdentifier
+				as: #identifier
+				of: dataStream).
+			(Metadata
+				attaching: self systemDateTime
+				as: #registration_timestamp
+				of: dataStream)} asOrderedCollection 
 ]

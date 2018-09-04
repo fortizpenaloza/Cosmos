@@ -96,9 +96,11 @@ TriggersAPIContext >> decodeTriggeringPolicyFrom: aJSON [
 ]
 
 { #category : #encoding }
-TriggersAPIContext >> encode: aTriggerCollection to: aMimeType [
+TriggersAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
 
-	^ (mappingRegistry encoderFor: aMimeType) value: aTriggerCollection
+	^ (mappingRegistry
+		ruleToEncode: aKeyRepresentingObjectType
+		to: aMediaType) applyOn: anObject within: self
 ]
 
 { #category : #initialization }
@@ -113,8 +115,8 @@ TriggersAPIContext >> register: anEncodedTrigger encodedAs: aMimeType [
 
 	| decoder |
 
-	decoder := mappingRegistry decoderFor: aMimeType.
-	decoder cull: anEncodedTrigger cull: self
+	decoder := mappingRegistry ruleToDecode: aMimeType to: #triggers.
+	decoder applyOn: anEncodedTrigger within: self
 ]
 
 { #category : #'private-decoders' }

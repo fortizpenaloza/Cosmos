@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'server',
 		'interface',
-		'mappingRegistry'
+		'mappingRuleSetBuilder'
 	],
 	#category : #'Cosmos-API-Triggers'
 }
@@ -19,9 +19,7 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 TriggersAPIInstaller >> addGetTriggersRoute [
 
 	server
-		GET: '/triggers' -> [ :request | interface triggersHandling: request ].
-		
-	self registerTriggerJsonEncoderVersion1dot0dot0
+		GET: '/triggers' -> [ :request | interface triggersHandling: request ]
 ]
 
 { #category : #'private-installing' }
@@ -29,9 +27,7 @@ TriggersAPIInstaller >> addRegisterTriggerRoute [
 
 	server
 		POST: '/triggers' -> [ :request | interface registerHandling: request ];
-		output: #text.
-		
-	self registerTriggerJsonDecoderVersion1dot0dot0
+		output: #text
 ]
 
 { #category : #'private-installing' }
@@ -46,12 +42,28 @@ TriggersAPIInstaller >> addUnregisterTriggerRoute [
 		output: #text
 ]
 
+{ #category : #accessing }
+TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
+
+	^ ZnMimeType
+		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
+]
+
 { #category : #initialization }
 TriggersAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
-	mappingRegistry := MappingRegistry new.
+	mappingRuleSetBuilder := MappingRuleSetBuilder new.
+
+	self 
+		registerTriggerJsonEncoderVersion1dot0dot0;
+		registerTriggerJsonDecoderVersion1dot0dot0.
+
 	interface := TriggersAPI
-		workingWithin: (TriggersAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRegistry).
+		workingWithin:
+			(TriggersAPIContext
+				workingWith: aCosmosSystem
+				queryingMappingsTo: mappingRuleSetBuilder build).
+
 	server := aServer
 ]
 
@@ -69,17 +81,19 @@ TriggersAPIInstaller >> install [
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
-	mappingRegistry
-		register: self triggerJsonDecoderVersion1dot0dot0
-		asDecoderFor: self triggerMimeTypeVersion1dot0dot0
+	mappingRuleSetBuilder
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		to: #triggers
+		using: self triggerJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'private-installing' }
 TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
-	mappingRegistry
-		register: self triggerJsonEnconderVersion1dot0dot0
-		asEncoderFor: self triggerMimeTypeVersion1dot0dot0
+	mappingRuleSetBuilder
+		addDefaultRuleToEncode: #triggers
+		to: self applicationJsonVersion1dot0dot0
+		using: self triggerJsonEnconderVersion1dot0dot0
 ]
 
 { #category : #'private-encoding' }
@@ -192,11 +206,4 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				prettyPrint: true;
 				nextPut: trigger ] ]
-]
-
-{ #category : #accessing }
-TriggersAPIInstaller >> triggerMimeTypeVersion1dot0dot0 [
-
-	^ ZnMimeType
-		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
 ]

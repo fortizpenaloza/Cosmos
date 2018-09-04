@@ -61,7 +61,13 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 	mimeType := ZnMimeType fromString: anHttpRequest accept.
 
 	^ [ [ [ ZnResponse
-		ok: (ZnEntity json: (context encode: self triggerManagementSystem triggers to: mimeType)) ]
+		ok:
+			(ZnEntity
+				json:
+					(context
+						encode: self triggerManagementSystem triggers
+						of: #triggers
+						to: mimeType)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: ObjectNotFound

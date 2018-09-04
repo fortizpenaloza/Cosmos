@@ -2,110 +2,114 @@ Class {
 	#name : #CommandsAPI,
 	#superclass : #Object,
 	#instVars : [
-		'rootSystem',
-		'prioritizedCommandMapping'
+		'context'
 	],
 	#category : #'Cosmos-API-Commands'
 }
 
 { #category : #'instance creation' }
-CommandsAPI class >> workingWith: aCompositeSystem [
-
-	^ self new initializeWorkingWith: aCompositeSystem 
+CommandsAPI class >> workingWithin: aContext [
+	
+	^ self new initializeWorkingWithin: aContext
 ]
 
-{ #category : #systems }
+{ #category : #'private - API' }
+CommandsAPI >> acceptMimeTypeOf: aHttpRequest [
+
+	^ ZnMimeType fromString: aHttpRequest accept
+]
+
+{ #category : #'private - systems' }
 CommandsAPI >> commandManagementSystem [
 
-	^ rootSystem systemImplementing: #CommandManagementSystemInterface
+	^ context systemImplementing: #CommandManagementSystemInterface
 ]
 
-{ #category : #decoding }
-CommandsAPI >> decode: aKey from: aDictionary with: aParser [
+{ #category : #API }
+CommandsAPI >> createCommandBasedOn: aHttpRequest [
 
-	^ self
-		parse: aKey
-		from: aDictionary
-		with: aParser
-		ifNotFound: [ DecodingFailed signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
+	| contentType commandWithPriority commandWithPriorityLocation |
+
+	contentType := ZnMimeType applicationJson.
+
+	commandWithPriority := context
+		decode: aHttpRequest contents
+		encodedAs: contentType
+		within: #commands.
+
+	self commandManagementSystem register: commandWithPriority.
+
+	commandWithPriorityLocation := self locationOf: commandWithPriority.
+
+	^ ZnResponse created: commandWithPriorityLocation
 ]
 
-{ #category : #'initialize-release' }
-CommandsAPI >> initializeMappings [
+{ #category : #API }
+CommandsAPI >> deleteCommandBasedOn: aHttpRequest [
 
-	prioritizedCommandMapping := [ :object | 
-	String
-		streamContents: [ :stream | 
-			(NeoJSONWriter on: stream)
-				for: PrioritizedCommand
-					do: [ :mapping | 
-					mapping
-						mapAccessor: #command;
-						mapAccessor: #priority ];
-				for: HighPriority customDo: [ :mapping | mapping encoder: [ :priority | 'High' ] ];
-				prettyPrint: true;
-				nextPut: object ] ]
+	| contentType commandWithPriority commandWithPriorityLocation |
+
+	contentType := ZnMimeType applicationJson.
+
+	commandWithPriority := context
+		decode: aHttpRequest contents
+		encodedAs: contentType
+		within: #commands.
+
+	self commandManagementSystem register: commandWithPriority.
+
+	commandWithPriorityLocation := self locationOf: commandWithPriority.
+
+	^ ZnResponse created: commandWithPriorityLocation
 ]
 
-{ #category : #'initialize-release' }
-CommandsAPI >> initializeWorkingWith: aCompositeSystem [
+{ #category : #API }
+CommandsAPI >> getCommandsBasedOn: aHttpRequest [
 
-	rootSystem := aCompositeSystem.
-	self initializeMappings
+	| mimeType encodedCommands |
+
+	mimeType := self acceptMimeTypeOf: aHttpRequest.
+
+	encodedCommands := context
+		encode: self commandManagementSystem commands
+		of: #commands
+		to: mimeType.
+
+	^ ZnResponse ok: (ZnEntity json: encodedCommands)
 ]
 
-{ #category : #querying }
-CommandsAPI >> nextCommandAsJSON [
+{ #category : #'private - systems' }
+CommandsAPI >> identifierSystem [
 
-	^ prioritizedCommandMapping
-		value: self commandManagementSystem dequeue
+	^ context systemImplementing: #IdentifierSystemInterface
 ]
 
-{ #category : #querying }
-CommandsAPI >> nextCommandAsPlainText [
+{ #category : #initialization }
+CommandsAPI >> initializeWorkingWithin: aContext [
 
-	^ self commandManagementSystem dequeue command
+	context := aContext
 ]
 
-{ #category : #decoding }
-CommandsAPI >> parse: aKey from: aDictionary with: aParser ifNotFound: aNotFoundBlock [
+{ #category : #'private - API' }
+CommandsAPI >> locationOf: commandWithPriority [
 
-	^ aDictionary
-		at: aKey
-		ifPresent: [ :rawData | aParser value: rawData ]
-		ifAbsent: aNotFoundBlock
+	^ ZnUrl
+		fromString:
+			('localhost/<1s>'
+				expandMacrosWith: (self identifierSystem identifierOf: commandWithPriority) asString36)
 ]
 
-{ #category : #querying }
-CommandsAPI >> prioritizedCommands [
+{ #category : #API }
+CommandsAPI >> nextCommandBasedOn: aHttpRequest [
 
-	^ prioritizedCommandMapping value: (self commandManagementSystem prioritizedCommands )
-]
+	| mimeType encodedCommand |
 
-{ #category : #parsers }
-CommandsAPI >> priorityParser [
+	mimeType := self acceptMimeTypeOf: aHttpRequest.
 
-	| priorities |
+	encodedCommand := context
+		encode: self commandManagementSystem nextCommand
+		of: #commands
+		to: mimeType.
 
-	priorities := Dictionary new
-		at: 'high' put: QueuePriority high;
-		at: 'medium' put: QueuePriority medium;
-		at: 'low' put: QueuePriority low;
-		yourself.
-
-	^ [ :string | priorities at: string ifAbsent: [ DecodingFailed signal: 'lalal' ] ]
-]
-
-{ #category : #'pushing-popping' }
-CommandsAPI >> push: aJSON [
-
-	| rawCommand |
-
-	rawCommand := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	^ self commandManagementSystem
-		enqueue: (rawCommand at: #command)
-		with: (self decode: #priority from: rawCommand with: self priorityParser)
+	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
 ]
