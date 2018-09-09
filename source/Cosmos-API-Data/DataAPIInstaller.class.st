@@ -96,7 +96,7 @@ DataAPIInstaller >> addGetDataStreamsRoute [
 				-> [ :request | interface getStreamsBasedOn: request ]
 ]
 
-{ #category : #'MIME types' }
+{ #category : #'media types' }
 DataAPIInstaller >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
@@ -111,7 +111,7 @@ DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
 		next ]
 ]
 
-{ #category : #'MIME types' }
+{ #category : #'media types' }
 DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
