@@ -8,17 +8,18 @@ Class {
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
-{ #category : #history }
-CommandsAPITest class >> lastStoredRun [
-	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 645979000; yourself)); add: (#passed->((Set new) add: #testNextCommandFormattedAsJson; add: #testCreatingCommand; add: #testGettingCommands; add: #testNextCommandFormattedAsPlainText; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new))); yourself)
-]
-
 { #category : #accessing }
 CommandsAPITest >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType applicationJson
 		parameters: {('version' -> '1.0.0')} asDictionary;
 		yourself
+]
+
+{ #category : #accessing }
+CommandsAPITest >> commandWithMediumPriorityIdentifier [
+
+	^ identifierSequence second
 ]
 
 { #category : #accessing }
@@ -82,6 +83,29 @@ CommandsAPITest >> testCreatingCommand [
 			self
 				assert: commandWithPriority command equals: 'TURN_ON_LED';
 				assert: commandWithPriority priority equals: 100 ]
+]
+
+{ #category : #tests }
+CommandsAPITest >> testDeletingCommand [
+
+	| response |
+
+	self installLedCommandsAddOn.
+
+	self assert: self commandManagementSystem commands size equals: 3.
+
+	response := interface
+		deleteCommandBasedOn:
+			(TeaRequest
+				fromZnRequest:
+					(ZnRequest
+						delete: 'http://COSMOS_URL/commands/' , self commandWithMediumPriorityIdentifier asString36)
+				pathParams: {(#identifier -> self commandWithMediumPriorityIdentifier)} asDictionary).
+
+
+	self
+		assert: response code equals: 204;
+		assert: self commandManagementSystem commands size equals: 2
 ]
 
 { #category : #tests }

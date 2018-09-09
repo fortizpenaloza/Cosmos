@@ -7,11 +7,6 @@ Class {
 	#category : 'Cosmos-PeriodicalScheduler-Tests'
 }
 
-{ #category : #history }
-ScheduledTaskTest class >> lastStoredRun [
-	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 645387000; yourself)); add: (#passed->((Set new) add: #testInstanceCreationAndAccessing; add: #testExecution; yourself)); add: (#failures->((Set new))); add: (#errors->((Set new))); yourself)
-]
-
 { #category : #accessing }
 ScheduledTaskTest >> oneMinute [
 

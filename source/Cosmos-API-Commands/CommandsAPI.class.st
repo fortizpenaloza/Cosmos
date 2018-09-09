@@ -26,14 +26,14 @@ CommandsAPI >> commandManagementSystem [
 ]
 
 { #category : #API }
-CommandsAPI >> createCommandBasedOn: aHttpRequest [
+CommandsAPI >> createCommandBasedOn: anHttpRequest [
 
 	| contentType commandWithPriority commandWithPriorityLocation |
 
 	contentType := ZnMimeType applicationJson.
 
 	commandWithPriority := context
-		decode: aHttpRequest contents
+		decode: anHttpRequest contents
 		encodedAs: contentType
 		within: #commands.
 
@@ -45,30 +45,27 @@ CommandsAPI >> createCommandBasedOn: aHttpRequest [
 ]
 
 { #category : #API }
-CommandsAPI >> deleteCommandBasedOn: aHttpRequest [
+CommandsAPI >> deleteCommandBasedOn: anHttpRequest [
 
-	| contentType commandWithPriority commandWithPriorityLocation |
+	^ [ | identifier |
 
-	contentType := ZnMimeType applicationJson.
+	identifier := anHttpRequest at: #identifier.
 
-	commandWithPriority := context
-		decode: aHttpRequest contents
-		encodedAs: contentType
-		within: #commands.
-
-	self commandManagementSystem register: commandWithPriority.
-
-	commandWithPriorityLocation := self locationOf: commandWithPriority.
-
-	^ ZnResponse created: commandWithPriorityLocation
+	self commandManagementSystem
+		withCommandIdentifiedBy: identifier
+		do: [ :commandWithPriority | 
+			self commandManagementSystem deregister: commandWithPriority.
+			ZnResponse noContent ] ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
 { #category : #API }
-CommandsAPI >> getCommandsBasedOn: aHttpRequest [
+CommandsAPI >> getCommandsBasedOn: anHttpRequest [
 
 	| mimeType encodedCommands |
 
-	mimeType := self acceptMimeTypeOf: aHttpRequest.
+	mimeType := self acceptMimeTypeOf: anHttpRequest.
 
 	encodedCommands := context
 		encode: self commandManagementSystem commands
@@ -100,11 +97,11 @@ CommandsAPI >> locationOf: commandWithPriority [
 ]
 
 { #category : #API }
-CommandsAPI >> nextCommandBasedOn: aHttpRequest [
+CommandsAPI >> nextCommandBasedOn: anHttpRequest [
 
 	| mimeType encodedCommand |
 
-	mimeType := self acceptMimeTypeOf: aHttpRequest.
+	mimeType := self acceptMimeTypeOf: anHttpRequest.
 
 	encodedCommand := context
 		encode: self commandManagementSystem nextCommand
