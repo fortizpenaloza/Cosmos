@@ -28,13 +28,19 @@ Metadata >> = anObject [
 	^ self == anObject
 		or: [ self class = anObject class
 				and: [ aspect = anObject aspect
-						and: [ describedObject = anObject describedObject and: [ data = anObject value ] ] ] ]
+						and: [ describedObject = anObject describedObject and: [ data = anObject data ] ] ] ]
 ]
 
 { #category : #accessing }
 Metadata >> aspect [
 
 	^ aspect
+]
+
+{ #category : #accessing }
+Metadata >> data [
+
+	^ data
 ]
 
 { #category : #accessing }
@@ -67,10 +73,4 @@ Metadata >> printOn: aStream [
 	aStream
 		nextPutAll: ' is '.
 	data printOn: aStream
-]
-
-{ #category : #accessing }
-Metadata >> value [ 
-
-	^ data
 ]

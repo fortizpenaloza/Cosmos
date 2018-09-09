@@ -34,7 +34,7 @@ MappingRuleSet >> defaultDecodingRuleFor: anObjectType withMediaTypeMatching: aM
 	^ ((self does: aMediaType match: defaultDecodingRule mediaType)
 		or: [ self isWildcard: aMediaType ])
 		ifTrue: [ defaultDecodingRule ]
-		ifFalse: [ ObjectNotFound signal: 'Decoder not found for given media type' ]
+		ifFalse: [ MappingNotFound signal: 'Decoder not found for given media type' ]
 ]
 
 { #category : #'private - querying' }
@@ -47,7 +47,7 @@ MappingRuleSet >> defaultEncodingRuleFor: anObjectType withMediaTypeMatching: aM
 	^ ((self does: aMediaType match: defaultEncodingRule mediaType)
 		or: [ self isWildcard: aMediaType ])
 		ifTrue: [ defaultEncodingRule ]
-		ifFalse: [ ObjectNotFound signal: 'Encoder not found for given media type' ]
+		ifFalse: [ MappingNotFound signal: 'Encoder not found for given media type' ]
 ]
 
 { #category : #'private - querying' }

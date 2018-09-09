@@ -28,14 +28,14 @@ CommandsAPI >> commandManagementSystem [
 { #category : #API }
 CommandsAPI >> createCommandBasedOn: anHttpRequest [
 
-	| contentType commandWithPriority commandWithPriorityLocation |
+	| mediaType commandWithPriority commandWithPriorityLocation |
 
-	contentType := ZnMimeType applicationJson.
+	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
 	commandWithPriority := context
 		decode: anHttpRequest contents
-		encodedAs: contentType
-		within: #commands.
+		encodedAs: mediaType
+		to: #commands.
 
 	self commandManagementSystem register: commandWithPriority.
 

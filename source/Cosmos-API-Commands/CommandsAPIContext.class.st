@@ -15,9 +15,9 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 ]
 
 { #category : #'encoding - decoding' }
-CommandsAPIContext >> decode: aJSON encodedAs: aMediaType within: aKeyRepresentingScope [
+CommandsAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
 
-	^ (mappingRegistry ruleToDecode: aMediaType to: #commands)
+	^ (mappingRegistry ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
 		applyOn: aJSON
 		within: self
 ]

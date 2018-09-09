@@ -23,13 +23,13 @@ IdentifierSystem class >> using: anIdentifierProvider [
 { #category : #querying }
 IdentifierSystem >> identifierOf: anObject [
 
-	| a |
+	| identifierMetadata |
 
-	a := (metadataSystem metadataFor: anObject)
+	identifierMetadata := (metadataSystem metadataFor: anObject)
 		detect: [ :metadata | metadata aspect = #identifier ]
 		ifNone: [ ObjectNotFound signal: ('Identifier for <1p> not found' expandMacrosWith: anObject) ].
 
-	^ a value
+	^ identifierMetadata data
 ]
 
 { #category : #initialization }

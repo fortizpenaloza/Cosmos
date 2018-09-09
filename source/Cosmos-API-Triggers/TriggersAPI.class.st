@@ -70,7 +70,7 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 						to: mimeType)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: ObjectNotFound
+		on: MappingNotFound 
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
 		on: DecodingFailed
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]

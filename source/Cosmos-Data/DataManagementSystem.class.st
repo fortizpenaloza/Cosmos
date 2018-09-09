@@ -109,13 +109,6 @@ DataManagementSystem >> resolveDependecies [
 ]
 
 { #category : #querying }
-DataManagementSystem >> streamIdentifiedBy: anIdentifier ifFound: ifFoundBlock ifNone: ifNoneBlock [
-
-	^ ifFoundBlock
-		value: (identifierSystem objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock)
-]
-
-{ #category : #querying }
 DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
 	^ dataStreams 	
@@ -128,4 +121,14 @@ DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlo
 DataManagementSystem >> streams [
 
 	^ dataStreams copy 
+]
+
+{ #category : #querying }
+DataManagementSystem >> withStreamIdentifiedBy: anIdentifier do: aBlock [
+
+	aBlock
+		value:
+			(identifierSystem
+				objectIdentifiedBy: anIdentifier
+				ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ])
 ]

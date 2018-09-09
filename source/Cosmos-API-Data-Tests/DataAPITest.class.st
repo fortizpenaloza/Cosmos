@@ -8,7 +8,13 @@ Class {
 	#category : #'Cosmos-API-Data-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - media types' }
+DataAPITest >> applicationJsonVersion1dot0dot0 [
+
+	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+]
+
+{ #category : #'accessing - media types' }
 DataAPITest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
@@ -17,47 +23,7 @@ DataAPITest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
 { #category : #'expected results' }
 DataAPITest >> dataStreamsSnapshotAsJSON [
 
-	^ '[
-	{
-		"name" : "Temperature",
-		"current-value" : 16.5,
-		"last-update" : "<1s>",
-		"metadata" : [
-			{
-				"identifier" : "<2s>"
-			},
-			{
-				"registration_timestamp" : "<1s>"
-			}
-		]
-	},
-	{
-		"name" : "Pressure",
-		"current-value" : 1016,
-		"last-update" : "<1s>",
-		"metadata" : [
-			{
-				"identifier" : "<3s>"
-			},
-			{
-				"registration_timestamp" : "<1s>"
-			}
-		]
-	},
-	{
-		"name" : "Humidity",
-		"current-value" : "N/A",
-		"last-update" : "N/A",
-		"metadata" : [
-			{
-				"identifier" : "<4s>"
-			},
-			{
-				"registration_timestamp" : "<1s>"
-			}
-		]
-	}
-]'
+	^ '[{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current-value":1016,"last-update":"<1s>","metadata":[{"identifier":"<3s>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current-value":"N/A","last-update":"N/A","metadata":[{"identifier":"<4s>"},{"registration_timestamp":"<1s>"}]}]'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
 		with: self temperatureStreamIdentifier asString36
 		with: identifierSequence second asString36
@@ -98,18 +64,17 @@ DataAPITest >> getDataStreamHttpRequestTo: uri with: params [
 		fromZnRequest:
 			((ZnRequest get: uri)
 				setAccept:
-					(ZnMimeType
-						fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))
+					(self applicationJsonVersion1dot0dot0))
 		pathParams: params
 ]
 
 { #category : #'accessing - requests' }
 DataAPITest >> getDataStreamSnapshotsHttpRequest [
 
-	^ (ZnRequest get: 'http://COSMOS_URL/data-streams')
-		setAccept:
-			(ZnMimeType
-				fromString: 'application/vnd.cosmos.data-stream-snapshot+json; version=1.0.0')
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: 'http://COSMOS_URL/data-streams')
+				setAccept: self applicationJsonVersion1dot0dot0)
 ]
 
 { #category : #'accessing - requests' }
@@ -186,25 +151,9 @@ DataAPITest >> setUpRequirements [
 { #category : #'expected results' }
 DataAPITest >> temperatureDataStreamAsJSON [
 
-	^ '{
-	"name" : "Temperature",
-	"current-value" : 16.5,
-	"last-update" : "<1s>",
-	"data-points" : [
-		{
-			"timestamp" : "<1s>",
-			"value" : 16.5
-		},
-		{
-			"timestamp" : "<1s>",
-			"value" : 16
-		},
-		{
-			"timestamp" : "<1s>",
-			"value" : 15.5
-		}
-	]
-}' expandMacrosWith: self dateTimeFormattedAsISO8601 
+	^ '{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]}'
+		expandMacrosWith: self dateTimeFormattedAsISO8601
+		with: self temperatureStreamIdentifier asString36 
 ]
 
 { #category : #accessing }
@@ -237,12 +186,13 @@ DataAPITest >> testCreatingDataStream [
 			((ZnRequest post: 'http://COSMOS_URL/data-streams')
 				entity:
 					(ZnEntity
-						with: '{"name": "pH"}'
-						type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))).
+						with: '{"name":"pH"}'
+						type: self applicationJsonVersion1dot0dot0)).
 
 	self
 		assert: response code equals: 201;
-		assert: response location equals: '/localhost/', identifierSequence last asString36;
+		assert: response location
+			equals: '/localhost/' , identifierSequence last asString36;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self dataManagementSystem
@@ -262,9 +212,24 @@ DataAPITest >> testCreatingDataStreamFailsIfAlreadyExists [
 				createStreamBasedOn:
 					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 						entity:
+							(ZnEntity 
+								with: '{"name":"Temperature"}' 
+								type: self applicationJsonVersion1dot0dot0)) ]
+		raise: HTTPClientError
+		withDescription: 'A data stream with that name already exists in system'
+]
+
+{ #category : #tests }
+DataAPITest >> testCreatingDataStreamFailsWithWrongMediaType [
+
+	self
+		should: [ interface
+				createStreamBasedOn:
+					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
+						entity:
 							(ZnEntity
-								with: '{"name": "Temperature"}'
-								type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))) ]
+								with: '{"name":"Temperature"}'
+								type: self applicationJsonVersion1dot0dot0)) ]
 		raise: HTTPClientError
 		withDescription: 'A data stream with that name already exists in system'
 ]
@@ -278,10 +243,10 @@ DataAPITest >> testCreatingStreamFailsWithMalformattedRequest [
 					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 						entity:
 							(ZnEntity
-								with: '{"xxx": "Temperature"}'
+								with: '{"name":"pH"}'
 								type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))) ]
 		raise: HTTPClientError
-		withDescription: 'key #name not found in Dictionary'
+		withDescription: 'Decoder not found for given media type'
 ]
 
 { #category : #tests }
@@ -379,7 +344,7 @@ DataAPITest >> testGettingDataStreamByIdentifier [
 	| response |
 
 	response := interface
-		getStreamBasedOn: self getTemperatureStreamHttpRequest.
+		getStreamsBasedOn: self getTemperatureStreamHttpRequest.
 
 	self
 		assert: response code equals: 200;
@@ -391,7 +356,7 @@ DataAPITest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
 		should: [ interface
-				getStreamBasedOn: self getDataStreamWithWrongIdentifierHttpRequest ]
+				getStreamsBasedOn: self getDataStreamWithWrongIdentifierHttpRequest ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
@@ -406,7 +371,7 @@ DataAPITest >> testGettingDataStreams [
 	| response |
 
 	response := interface
-		getStreamsSnapshotsBasedOn: self getDataStreamSnapshotsHttpRequest.
+		getStreamsBasedOn: self getDataStreamSnapshotsHttpRequest.
 
 	self
 		assert: response code equals: 200;
