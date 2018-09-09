@@ -98,3 +98,13 @@ CommandManagementSystem >> resolveDependecies [
 	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
 	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
+
+{ #category : #querying }
+CommandManagementSystem >> withCommandIdentifiedBy: anIdentifier do: aBlock [
+
+	^ aBlock
+		value:
+			(identifierSystem
+				objectIdentifiedBy: anIdentifier
+				ifNone: [ ObjectNotFound signal: 'Command with that identifier not found' ])
+]

@@ -41,6 +41,7 @@ CosmosCommandLineHandler class >> commandName [
 { #category : #accessing }
 CosmosCommandLineHandler class >> description [
 
+	<ignoreForCoverage>
 	^ 'Install Cosmos and its API'
 ]
 

@@ -7,11 +7,6 @@ Class {
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
-{ #category : #history }
-TriggersAPITest class >> lastStoredRun [
-	^ ((Dictionary new) add: (#timeStamp->(DateAndTime basicNew instVarAt: 1 put: 6510; instVarAt: 2 put: (Duration seconds: -10800 nanoSeconds: 0); instVarAt: 3 put: 2458339; instVarAt: 4 put: 619431000; yourself)); add: (#passed->((Set new))); add: (#failures->((Set new))); add: (#errors->((Set new) add: #testRegistrationOfPeriodicalTrigger; add: #testGettingTriggersFailsWhenRequestingInvalidResourceVersion; add: #testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature; add: #testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes; add: #testGettingTriggers; add: #testRegistrationOfDataPointRegistered; add: #testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven; add: #testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM; yourself)); yourself)
-]
-
 { #category : #accessing }
 TriggersAPITest >> applicationJsonVersion1dot0dot0 [
 
