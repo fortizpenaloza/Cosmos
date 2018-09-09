@@ -162,12 +162,6 @@ DataAPI >> locationOf: dataStream [
 ]
 
 { #category : #'private - systems' }
-DataAPI >> metadataSystem [
-	
-	^ context systemImplementing: #MetadataSystemInterface
-]
-
-{ #category : #'private - systems' }
 DataAPI >> timeSystem [
 	
 	^ context timeSystem
