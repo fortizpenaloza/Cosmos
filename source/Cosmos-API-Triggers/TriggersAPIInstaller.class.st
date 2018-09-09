@@ -15,14 +15,33 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'installing - routes' }
+TriggersAPIInstaller >> addCrossOriginResourceSharingRoute [
+
+	server
+		OPTIONS:
+			'/triggers'
+				-> [ :request | 
+					| response |
+
+					response := ZnResponse noContent.
+
+					response headers
+						at: 'Access-Control-Allow-Headers' put: 'Access-Control-Allow-Origin, Content-Type, Accept';
+						at: 'Access-Control-Allow-Methods' put: 'POST, GET, DELETE, PUT';
+						at: 'Access-Control-Max-Age' put: '86400'.
+
+					response ]
+]
+
+{ #category : #'installing - routes' }
 TriggersAPIInstaller >> addGetTriggersRoute [
 
 	server
 		GET: '/triggers' -> [ :request | interface triggersHandling: request ]
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'installing - routes' }
 TriggersAPIInstaller >> addRegisterTriggerRoute [
 
 	server
@@ -30,7 +49,7 @@ TriggersAPIInstaller >> addRegisterTriggerRoute [
 		output: #text
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'installing - routes' }
 TriggersAPIInstaller >> addUnregisterTriggerRoute [
 
 	server
@@ -42,7 +61,7 @@ TriggersAPIInstaller >> addUnregisterTriggerRoute [
 		output: #text
 ]
 
-{ #category : #accessing }
+{ #category : #'media types' }
 TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType
@@ -73,12 +92,13 @@ TriggersAPIInstaller >> install [
 	self
 		addGetTriggersRoute;
 		addRegisterTriggerRoute;
-		addUnregisterTriggerRoute.
+		addUnregisterTriggerRoute;
+		addCrossOriginResourceSharingRoute.
 		
 	^ interface
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'installing - encoders and decoders' }
 TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
@@ -87,7 +107,7 @@ TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
 		using: self triggerJsonDecoderVersion1dot0dot0
 ]
 
-{ #category : #'private-installing' }
+{ #category : #'installing - encoders and decoders' }
 TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
@@ -96,7 +116,7 @@ TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
 		using: self triggerJsonEnconderVersion1dot0dot0
 ]
 
-{ #category : #'private-encoding' }
+{ #category : #'encoders and decoders' }
 TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
@@ -114,7 +134,7 @@ TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
 		nextAs: #TriggerRegistration ]
 ]
 
-{ #category : #'private-encoding' }
+{ #category : #'encoders and decoders' }
 TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 
 	^ [ :trigger | 
