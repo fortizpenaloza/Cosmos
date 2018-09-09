@@ -101,9 +101,8 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 	self dataManagementSystem register: dataStream.
 
 	self dataManagementSystem
-		streamIdentifiedBy: self currentIdentifier
-		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
-		ifNone: [ self fail ]
+		withStreamIdentifiedBy: self currentIdentifier
+		do: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
 ]
 
 { #category : #tests }

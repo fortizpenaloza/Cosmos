@@ -36,6 +36,12 @@ HTTPClientError class >> signalNotFound: aFailureExplanation [
 	^self signal: 404 describedBy: aFailureExplanation 
 ]
 
+{ #category : #signaling }
+HTTPClientError class >> signalUnsupportedMediaType: aFailureExplanation [
+
+	^ self signal: 415 describedBy: aFailureExplanation
+]
+
 { #category : #accessing }
 HTTPClientError >> code [
 

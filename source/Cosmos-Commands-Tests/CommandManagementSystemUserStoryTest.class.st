@@ -131,12 +131,6 @@ CommandManagementSystemUserStoryTest >> testRegisteringCommands [
 ]
 
 { #category : #accessing }
-CommandManagementSystemUserStoryTest >> turnOffLedCommand [
-
-	^ LEDCommandsAddOn turnOffLedCommand
-]
-
-{ #category : #accessing }
 CommandManagementSystemUserStoryTest >> turnOnLedCommand [
 
 	^ LEDCommandsAddOn turnOnLedCommand

@@ -23,7 +23,7 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 	rawData := context
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
-		within: self dataPointKey.
+		to: self dataPointsKey.
 
 	rawData
 		do: [ :rawDataPoint | 
@@ -41,29 +41,26 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> createStreamBasedOn: aHttpRequest [
+DataAPI >> createStreamBasedOn: anHttpRequest [
 
-	^ [ [ | rawStream dataStream identifier |
+	^  [ [ [ | dataStream dataStreamLocation |
 
-	rawStream := (NeoJSONReader on: aHttpRequest contents readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	dataStream := DataStream named: (rawStream at: #name).
+	dataStream := context
+		decode: anHttpRequest contents
+		encodedAs: anHttpRequest contentType
+		to: #data_streams.
 
 	self dataManagementSystem register: dataStream.
 
-	identifier := ((self metadataSystem metadataFor: dataStream)
-		detect: [ :metadata | metadata aspect = #identifier ]) value.
+	dataStreamLocation := self locationOf: dataStream.
 
-	ZnResponse
-		created:
-			(ZnUrl
-				fromString: ('localhost/<1s>' expandMacrosWith: identifier asString36)) ]
+	ZnResponse created: dataStreamLocation ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: KeyNotFound , InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
+		on: MappingNotFound
+		do: [ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ]
 ]
 
 { #category : #'private - accessing' }
@@ -78,8 +75,8 @@ DataAPI >> dataManagementSystem [
 	^ context systemImplementing: #DataManagementSystemInterface
 ]
 
-{ #category : #'private - scopes' }
-DataAPI >> dataPointKey [
+{ #category : #'private - object types' }
+DataAPI >> dataPointsKey [
 
 	^ #data_points
 ]
@@ -87,16 +84,12 @@ DataAPI >> dataPointKey [
 { #category : #API }
 DataAPI >> deleteStreamBasedOn: anHttpRequest [
 
-	^ [ | identifier |
-
-	identifier := anHttpRequest at: #identifier.
-
+	^ [ 
 	self dataManagementSystem
-		streamIdentifiedBy: identifier
-		ifFound: [ :foundStream | 
-			self dataManagementSystem deregister: foundStream.
-			ZnResponse noContent ]
-		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
+		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
+		do: [ :dataStream | self dataManagementSystem deregister: dataStream ].
+
+	ZnResponse noContent ]
 		on: ObjectNotFound
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
@@ -104,17 +97,17 @@ DataAPI >> deleteStreamBasedOn: anHttpRequest [
 { #category : #API }
 DataAPI >> getPointsBasedOn: anHttpRequest [
 
-	^ [ [ | mimeType encodedPoints identifier |
+	^ [ [ | mediaType encodedPoints |
 
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-	identifier := anHttpRequest at: #identifier.
+	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
-	encodedPoints := self dataManagementSystem
-		streamIdentifiedBy: identifier
-		ifFound:
-			[ :dataStream | context encode: dataStream dataPoints of: #data_points to: mimeType ]
-		ifNone:
-			[ ObjectNotFound signal: 'Data stream with that identifier not found' ].
+	self dataManagementSystem
+		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
+		do: [ :dataStream | 
+			encodedPoints := context
+				encode: dataStream dataPoints
+				of: #data_points
+				to: mediaType ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
 		on: TeaNoSuchParam
@@ -124,32 +117,35 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> getStreamBasedOn: aHttpRequest [
+DataAPI >> getStreamsBasedOn: anHttpRequest [
 
-	^ [ [ | mimeType identifier |
+	^ [ [ [ | mediaType streamsToEncode encodedStreams |
 
-	mimeType := ZnMimeType fromString: aHttpRequest accept.
-	identifier := aHttpRequest at: #identifier.
+	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
-	ZnResponse
-		ok: (ZnEntity json: (self streamNamed: identifier encodedTo: mimeType)) ]
+	self
+		withIdentifierProvidedIn: anHttpRequest
+		do: [ :identifier | 
+			self dataManagementSystem
+				withStreamIdentifiedBy: identifier
+				do: [ :dataStream | streamsToEncode := dataStream ] ]
+		ifNone: [ streamsToEncode := self dataManagementSystem streams ].
+
+	encodedStreams := context encode: streamsToEncode of: #data_streams to: mediaType.
+
+	ZnResponse ok: (ZnEntity json: encodedStreams) ]
 		on: TeaNoSuchParam
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
 		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+		do: [ :signal | HTTPClientError signalNotFound: signal messageText ] ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
 ]
 
-{ #category : #API }
-DataAPI >> getStreamsSnapshotsBasedOn: anHttpRequest [
+{ #category : #'private - systems' }
+DataAPI >> identifierSystem [
 
-	| mimeType |
-
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-
-
-	^ ZnResponse
-		ok:
-			(ZnEntity json: (self streamsEncodedTo: mimeType))
+	^ context systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
@@ -158,38 +154,34 @@ DataAPI >> initializeWorkingWithin: aContext [
 	context := aContext
 ]
 
+{ #category : #'private - API' }
+DataAPI >> locationOf: dataStream [
+
+	^ ZnUrl
+		fromString: ('localhost/<1s>' expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
+]
+
 { #category : #'private - systems' }
 DataAPI >> metadataSystem [
 	
 	^ context systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #'private - API' }
-DataAPI >> streamNamed: aName encodedTo: mimeType [
-
-	^ [ self dataManagementSystem
-		streamIdentifiedBy: aName
-		ifFound:
-			[ :dataStream | context encode: dataStream of: #data_streams to: mimeType ]
-		ifNone:
-			[ ObjectNotFound signal: 'Data stream with that identifier not found' ] ]
-		on: DataStreamIsEmpty
-		do: [ :signal | signal resume: 'N/A' ]
-]
-
-{ #category : #'private - API' }
-DataAPI >> streamsEncodedTo: aMediaType [
-
-	^ [ context
-		encode: self dataManagementSystem streams
-		of: #data_streams
-		to: aMediaType ]
-		on: DataStreamIsEmpty
-		do: [ :signal | signal resume: 'N/A' ]
-]
-
 { #category : #'private - systems' }
 DataAPI >> timeSystem [
 	
 	^ context timeSystem
+]
+
+{ #category : #'private - API' }
+DataAPI >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+
+	| identifierProvided |
+
+	identifierProvided := true.
+	anHttpRequest at: #identifier ifAbsent: [ identifierProvided := false ].
+
+	identifierProvided
+		ifTrue: [ aBlock value: (anHttpRequest at: #identifier) ]
+		ifFalse: ifNoneBlock
 ]

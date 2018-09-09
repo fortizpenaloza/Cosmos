@@ -129,7 +129,7 @@ MappingRuleSetTest >> testQueryingDecodingRuleByNotRegisteredMediaTypeGivesObjec
 		should: [ mappingRuleSet
 				ruleToDecode: self applicationJsonVersion1dot0dot0
 				to: #triggers ]
-		raise: ObjectNotFound
+		raise: MappingNotFound
 ]
 
 { #category : #tests }
@@ -155,7 +155,7 @@ MappingRuleSetTest >> testQueryingDecodingRuleByNotRegisteredSpecificVersionGive
 		should: [ mappingRuleSet
 				ruleToDecode: self applicationJsonVersion1dot1dot0
 				to: #triggers ]
-		raise: ObjectNotFound
+		raise: MappingNotFound
 ]
 
 { #category : #tests }

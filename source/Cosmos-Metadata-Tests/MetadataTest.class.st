@@ -22,7 +22,7 @@ MetadataTest >> testInstanceCreationAndAccessing [
 	self
 		assert: metadata describedObject equals: self temperatureStream;
 		assert: metadata aspect equals: #unit_name;
-		assert: metadata value equals: 'celsius'
+		assert: metadata data equals: 'celsius'
 ]
 
 { #category : #tests }
@@ -40,5 +40,5 @@ MetadataTest >> testPrintOn [
 			('<1p> of <2p> is <3p>'
 				expandMacrosWith: metadata aspect
 				with: metadata describedObject
-				with: metadata value)
+				with: metadata data)
 ]

@@ -35,7 +35,7 @@ MetadataSystem >> assertIsNotAlreadyRegistered: metadata [
 MetadataSystem >> describedObjectBy: data as: anAspect ifNone: ifNoneBlock [
 
 	^ self
-		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata value = data ] ]
+		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata data = data ] ]
 		ifFound: [ :foundMetadata | foundMetadata describedObject ]
 		ifNone: ifNoneBlock
 ]
@@ -54,7 +54,7 @@ MetadataSystem >> metadataFor: anObject [
 	^ metadataSet select: [ :metadata | metadata describedObject = anObject ]
 ]
 
-{ #category : #'private-querying' }
+{ #category : #'private - querying' }
 MetadataSystem >> oneMetadataFilteredBy: aFilter ifFound: ifFoundBlock ifNone: ifNoneBlock [
 
 	^ metadataSet
