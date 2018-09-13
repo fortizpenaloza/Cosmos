@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'cosmos',
-		'mappingRegistry'
+		'mappingRuleSet'
 	],
 	#category : #'Cosmos-API-Data'
 }
@@ -14,42 +14,32 @@ DataAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMappingR
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
-{ #category : #'encoding - decoding' }
+{ #category : #'encoding and decoding' }
 DataAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
 
-	^ (mappingRegistry ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
 		applyOn: aJSON
 		within: self
 ]
 
-{ #category : #'encoding - decoding' }
+{ #category : #'encoding and decoding' }
 DataAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
 
-	^ (mappingRegistry ruleToEncode: aKeyRepresentingObjectType to: aMediaType) applyOn: anObject within: self
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: self
 ]
 
 { #category : #initialization }
 DataAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:  
-	aMappingRegistry [
+	aMappingRuleSet [
 
 	cosmos := aCosmosSystem.
-	mappingRegistry := aMappingRegistry
-]
-
-{ #category : #systems }
-DataAPIContext >> metadataSystem [
-	
-	^ cosmos systemImplementing: #MetadataSystemInterface
+	mappingRuleSet := aMappingRuleSet
 ]
 
 { #category : #systems }
 DataAPIContext >> systemImplementing: anInterfaceName [
 	
 	^ cosmos systemImplementing: anInterfaceName
-]
-
-{ #category : #systems }
-DataAPIContext >> timeSystem [
-
-	^ cosmos systemImplementing: #TimeSystemInterface
 ]

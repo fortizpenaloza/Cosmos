@@ -31,13 +31,11 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 				register: (DataPoint on: timestamp holding: (rawDataPoint at: 'value'))
 				toStreamNamed: (rawDataPoint at: 'data-stream') ].
 
-	ZnResponse created: 'all' ]
+	ZnResponse created: 'multiple' ]
 		on: KeyNotFound
 		do: [ :signal | 
 			HTTPClientError
-				signalBadRequest:
-					('{"error":{"code":400,"message":"Expected key <1s> was not found"}'
-						expandMacrosWith: signal key) ]
+				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
 ]
 
 { #category : #API }
@@ -164,7 +162,7 @@ DataAPI >> locationOf: dataStream [
 { #category : #'private - systems' }
 DataAPI >> timeSystem [
 	
-	^ context timeSystem
+	^ context systemImplementing: #TimeSystemInterface
 ]
 
 { #category : #'private - API' }

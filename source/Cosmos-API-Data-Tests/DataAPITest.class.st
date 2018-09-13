@@ -43,7 +43,7 @@ DataAPITest >> deleteInexistantStreamHttpRequest [
 	^ TeaRequest
 		fromZnRequest:
 			(ZnRequest
-				delete: 'http://COSMOS_URL/data-streams/wrong_identifier' )
+				delete: 'http://COSMOS_URL/data-streams' )
 		pathParams: {(#identifier -> 'wrong_identifier')} asDictionary
 ]
 
@@ -51,9 +51,7 @@ DataAPITest >> deleteInexistantStreamHttpRequest [
 DataAPITest >> deleteTemperatureStreamHttpRequest [
 
 	^ TeaRequest
-		fromZnRequest:
-			(ZnRequest
-				delete: 'http://COSMOS_URL/data-streams/' , self temperatureStreamIdentifier asString36)
+		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/data-streams')
 		pathParams: {(#identifier -> self temperatureStreamIdentifier)} asDictionary
 ]
 
@@ -81,7 +79,7 @@ DataAPITest >> getDataStreamSnapshotsHttpRequest [
 DataAPITest >> getDataStreamWithWrongIdentifierHttpRequest [
 
 	^ self
-		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams?name=pH'
+		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams'
 		with: {(#identifier -> 'wrong')} asDictionary 
 ]
 
@@ -104,9 +102,7 @@ DataAPITest >> getTemperatureStreamDataPointsHttpRequest [
 DataAPITest >> getTemperatureStreamHttpRequest [
 
 	^ self
-		getDataStreamHttpRequestTo:
-			'http://COSMOS_URL/data-streams/'
-				, self temperatureStreamIdentifier asString36
+		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams/'
 		with: {(#identifier -> self temperatureStreamIdentifier)} asDictionary
 ]
 
@@ -153,7 +149,7 @@ DataAPITest >> temperatureDataStreamAsJSON [
 
 	^ '{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]}'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
-		with: self temperatureStreamIdentifier asString36 
+		with: self temperatureStreamIdentifier asString36
 ]
 
 { #category : #accessing }
@@ -276,7 +272,7 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 		should:
 			[ interface createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest ]
 		raise: HTTPClientError
-		withDescription: '{"error":{"code":400,"message":"Expected key data-stream was not found"}'
+		withDescription: 'Expected key data-stream was not found'
 ]
 
 { #category : #tests }
