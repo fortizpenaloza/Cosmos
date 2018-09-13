@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'cosmos',
-		'mappingRegistry'
+		'mappingRuleSet'
 	],
 	#category : #'Cosmos-API-Commands'
 }
@@ -14,28 +14,27 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 	^ self new initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRegistry
 ]
 
-{ #category : #'encoding - decoding' }
+{ #category : #'encoding and decoding' }
 CommandsAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
 
-	^ (mappingRegistry ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
 		applyOn: aJSON
 		within: self
 ]
 
-{ #category : #'encoding - decoding' }
+{ #category : #'encoding and decoding' }
 CommandsAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
 
-	^ (mappingRegistry
-		ruleToEncode: aKeyRepresentingObjectType
-		to: aMediaType) applyOn: anObject within: self
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: self
 ]
 
 { #category : #initialization }
-CommandsAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo:  
-	aMappingRegistry [
+CommandsAPIContext >> initializeWorkingWith: aCosmosSystem queryingMappingsTo: aMappingRuleSet [
 
 	cosmos := aCosmosSystem.
-	mappingRegistry := aMappingRegistry
+	mappingRuleSet := aMappingRuleSet
 ]
 
 { #category : #systems }

@@ -15,6 +15,15 @@ DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
+{ #category : #'installing - encoders and decoders' }
+DataAPIInstaller >> addBulkDataPointDecoderVersion1dot0dot0Mapping [
+
+	mappingRuleSetBuilder
+		addDefaultRuleToDecode: self bulkDataPointMimeTypeVersion1dot0dot0
+		to: #data_points
+		using: self bulkDataPointDecoderVersion1dot0dot0
+]
+
 { #category : #'installing - routes' }
 DataAPIInstaller >> addCreateBulkDataPointsRoute [
 
@@ -52,12 +61,23 @@ DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 ]
 
 { #category : #'installing - encoders and decoders' }
+DataAPIInstaller >> addDataPointEncoderVersion1dot0dot0Mapping [
+
+	mappingRuleSetBuilder
+		addDefaultRuleToEncode: #data_points
+		to:
+			(ZnMimeType
+				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+		using: self dataPointJsonEncoderVersion1dot0dot0
+]
+
+{ #category : #'installing - encoders and decoders' }
 DataAPIInstaller >> addDataStreamDecoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
 		to: #data_streams
-		using: self dataStreamDecoderVersion1dot0dot0
+		using: self dataStreamJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'installing - encoders and decoders' }
@@ -66,7 +86,7 @@ DataAPIInstaller >> addDataStreamEncoderVersion1dot0dot0Mapping [
 	mappingRuleSetBuilder
 		addDefaultRuleToEncode: #data_streams
 		to: self applicationJsonVersion1dot0dot0 
-		using: self dataStreamEncoderVersion1dot0dot0
+		using: self dataStreamJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'installing - routes' }
@@ -118,7 +138,7 @@ DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataPointEncoderVersion1dot0dot0 [
+DataAPIInstaller >> dataPointJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataPoint | 
 	String
@@ -139,7 +159,7 @@ DataAPIInstaller >> dataPointEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataStreamDecoderVersion1dot0dot0 [
+DataAPIInstaller >> dataStreamJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -151,7 +171,7 @@ DataAPIInstaller >> dataStreamDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
+DataAPIInstaller >> dataStreamJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataStreams :context | 
 	String
@@ -165,7 +185,8 @@ DataAPIInstaller >> dataStreamEncoderVersion1dot0dot0 [
 								at: 'name' put: dataStream name;
 								at: 'current-value' put: dataStream currentValue;
 								at: 'last-update' put: dataStream lastUpdate;
-								at: 'metadata' put: (context metadataSystem metadataFor: dataStream);
+								at: 'metadata'
+									put: ((context systemImplementing: #MetadataSystemInterface) metadataFor: dataStream);
 								yourself ] ];
 				for: Metadata
 					customDo: [ :mapping | 
@@ -189,8 +210,8 @@ DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 	self
 		addDataStreamDecoderVersion1dot0dot0Mapping;
 		addDataStreamEncoderVersion1dot0dot0Mapping;
-		registerBulkDataPointDecoderVersion1dot0dot0;
-		registerDataPointEncoderVersion1dot0dot0.
+		addBulkDataPointDecoderVersion1dot0dot0Mapping;
+		addDataPointEncoderVersion1dot0dot0Mapping.
 
 	interface := DataAPI
 		workingWithin: (DataAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRuleSetBuilder build).
@@ -213,24 +234,4 @@ DataAPIInstaller >> install [
 		"GET, POST data-streams/<id>/data-points"
 
 	^ interface
-]
-
-{ #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> registerBulkDataPointDecoderVersion1dot0dot0 [
-
-	mappingRuleSetBuilder
-		addDefaultRuleToDecode: self bulkDataPointMimeTypeVersion1dot0dot0
-		to: #data_points
-		using: self bulkDataPointDecoderVersion1dot0dot0
-]
-
-{ #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> registerDataPointEncoderVersion1dot0dot0 [
-
-	mappingRuleSetBuilder
-		addDefaultRuleToEncode: #data_points
-		to:
-			(ZnMimeType
-				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
-		using: self dataPointEncoderVersion1dot0dot0
 ]
