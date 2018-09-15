@@ -15,6 +15,12 @@ RouteSpecification class >> handling: anHttpMethod at: aResourceLocation sending
 	^ self new initializeHandling: anHttpMethod at: aResourceLocation sending: aMessage
 ]
 
+{ #category : #decorating }
+RouteSpecification >> asCORSAwareRoute [
+	
+	^ AllowingCrossOriginResourceSharingDecorator decorating: self
+]
+
 { #category : #accessing }
 RouteSpecification >> httpMethod [
 

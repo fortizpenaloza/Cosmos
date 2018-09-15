@@ -1,8 +1,18 @@
 Class {
 	#name : #PetsWebService,
 	#superclass : #Object,
+	#instVars : [
+		'rootSystem',
+		'mappingRuleSet'
+	],
 	#category : #'Cosmos-API-Tests-Example'
 }
+
+{ #category : #'instance creation' }
+PetsWebService class >> workingWith: aCompositeSystem [ 
+	
+	^ self new initializeWorkingWith: aCompositeSystem 
+]
 
 { #category : #API }
 PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
@@ -16,6 +26,13 @@ PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 	self petManagementSystem register: pet.
 
 	^ ZnResponse created: (self locationOf: pet)
+]
+
+{ #category : #initialization }
+PetsWebService >> initializeWorkingWith: aCompositeSystem [ 
+
+		rootSystem := aCompositeSystem .
+		mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: self specification) build
 ]
 
 { #category : #accessing }
