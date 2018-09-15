@@ -4,7 +4,7 @@ Class {
 	#category : #'Cosmos-API-Tests-Example'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 
 	| mediaType pet |
@@ -16,4 +16,10 @@ PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 	self petManagementSystem register: pet.
 
 	^ ZnResponse created: (self locationOf: pet)
+]
+
+{ #category : #accessing }
+PetsWebService >> specification [
+
+	^ PetsWebServiceSpecification new
 ]
