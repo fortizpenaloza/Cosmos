@@ -16,9 +16,9 @@ RouteSpecification class >> handling: anHttpMethod at: aResourceLocation sending
 ]
 
 { #category : #decorating }
-RouteSpecification >> asCORSAwareRoute [
+RouteSpecification >> asCorsAware [
 	
-	^ AllowingCrossOriginResourceSharingDecorator decorating: self
+	^ CorsAwareRouteSpecification for: self
 ]
 
 { #category : #accessing }

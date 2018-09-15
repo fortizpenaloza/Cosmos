@@ -17,5 +17,5 @@ PetsWebServiceSpecification >> getPetsRoute [
 
 	route := RouteSpecification handling: #GET at: '/pets' sending: #getPetsBasedOn:within:.
 
-	^ route asCORSAwareRoute
+	^ route asCorsAware
 ]
