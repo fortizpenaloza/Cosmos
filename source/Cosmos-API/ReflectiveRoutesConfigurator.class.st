@@ -25,7 +25,7 @@ ReflectiveRoutesConfigurator >> addRoutesOf: aWebService [
 	(self specifiedRoutesOn: aWebService specification)
 		do: [ :route | configurator configure: route ].
 
-	configurator installCrossOriginSharingRoutes
+	configurator configureCrossOriginSharingRoutes
 ]
 
 { #category : #initialization }
