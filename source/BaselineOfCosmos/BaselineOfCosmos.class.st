@@ -46,7 +46,7 @@ BaselineOfCosmos >> baseline: spec [
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API' with: [ spec requires: 'Teapot' ];
+		package: 'Cosmos-API-Common' with: [ spec requires: 'Teapot' ];
 		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API' 'Cosmos-Data') ];
 		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API' 'Cosmos-Commands') ];
 		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API' 'Cosmos-Actions') ];
@@ -54,14 +54,14 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 	
 	spec
 		group: 'Cosmos-API-Model'
-		with: #('Cosmos-API' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
+		with: #('Cosmos-API-Common' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
 ]
 
 { #category : #'private - baselines' }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Tests' with: [ spec requires: #('Cosmos-API' 'Cosmos-UserStoryTests') ];
+		package: 'Cosmos-API-Common-Tests' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-API-Data-Tests' with: [ spec requires: #('Cosmos-API-Data' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-API-Commands-Tests' with: [ spec requires: #('Cosmos-API-Commands' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-API-Actions-Tests' with: [ spec requires: #('Cosmos-API-Actions' 'Cosmos-UserStoryTests') ];
@@ -69,7 +69,7 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
 		group: 'Cosmos-API-Model-Tests'
-		with: #('Cosmos-API-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
+		with: #('Cosmos-API-Common-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
 ]
 
 { #category : #'private - baselines' }
