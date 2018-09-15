@@ -24,3 +24,9 @@ CorsAwareRouteSpecification >> initializeFor: aRouteSpecification [
 
 	specification := aRouteSpecification
 ]
+
+{ #category : #'as yet unclassified' }
+CorsAwareRouteSpecification >> specification [
+
+	^ specification
+]

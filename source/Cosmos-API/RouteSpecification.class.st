@@ -15,6 +15,12 @@ RouteSpecification class >> handling: anHttpMethod at: aResourceLocation sending
 	^ self new initializeHandling: anHttpMethod at: aResourceLocation sending: aMessage
 ]
 
+{ #category : #'as yet unclassified' }
+RouteSpecification >> accept: aRouteConfigurator [
+
+	aRouteConfigurator configureRouteFrom: self  
+]
+
 { #category : #decorating }
 RouteSpecification >> asCorsAware [
 	

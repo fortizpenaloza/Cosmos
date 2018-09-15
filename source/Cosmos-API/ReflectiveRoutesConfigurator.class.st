@@ -19,11 +19,11 @@ ReflectiveRoutesConfigurator >> addRoutesOf: aWebService [
 	| configurator |
 
 	configurator := RouteConfigurator
-		on: teapot
+		appliedTo: teapot
 		sendingMessagesTo: aWebService.
 
-	(self specifiedRoutesOn: aWebService specification)
-		do: [ :route | configurator configure: route ].
+	(self specifiedRoutesFor: aWebService)
+		do: [ :routeSpecification | configurator addFrom: routeSpecification ].
 
 	configurator configureCrossOriginSharingRoutes
 ]
@@ -31,13 +31,13 @@ ReflectiveRoutesConfigurator >> addRoutesOf: aWebService [
 { #category : #initialization }
 ReflectiveRoutesConfigurator >> initializeAppliedTo: aTeapot [ 
 	
-	teapot := aTeapot 
+	teapot := aTeapot
 ]
 
 { #category : #accessing }
-ReflectiveRoutesConfigurator >> specifiedRoutesOn: aWebServiceSpecification [
+ReflectiveRoutesConfigurator >> specifiedRoutesFor: aWebService [
 
 	^ (UnaryMessageSendingCollector
 		sendingAllMessagesEndingWith: 'Route'
-		to: aWebServiceSpecification) value
+		to: aWebService specification) value
 ]
