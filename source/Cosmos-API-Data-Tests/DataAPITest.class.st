@@ -107,6 +107,12 @@ DataAPITest >> getTemperatureStreamHttpRequest [
 ]
 
 { #category : #accessing }
+DataAPITest >> httpRequestContext [
+
+	^ HttpRequestContext new
+]
+
+{ #category : #accessing }
 DataAPITest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 

@@ -53,7 +53,10 @@ MappingRuleSet >> defaultEncodingRuleFor: anObjectType withMediaTypeMatching: aM
 { #category : #'private - querying' }
 MappingRuleSet >> defaultRuleIn: mappingRules for: anObjectType [
 
-	^ mappingRules detect: [ :decodingRule | decodingRule objectType = anObjectType and: [ decodingRule isDefault ] ]
+	^ mappingRules
+		detect:
+			[ :decodingRule | decodingRule objectType = anObjectType and: [ decodingRule isDefault ] ]
+		ifNone: [ MappingNotFound signal ]
 ]
 
 { #category : #'private - testing media type' }

@@ -2,10 +2,18 @@ Class {
 	#name : #DataWebService,
 	#superclass : #Object,
 	#instVars : [
-		'context'
+		'context',
+		'cosmos',
+		'mappingRuleSet'
 	],
 	#category : #'Cosmos-API-Data'
 }
+
+{ #category : #'instance creation' }
+DataWebService class >> workingWith: aCosmosSystem [
+	
+	^ self new initializeWorkingWith: aCosmosSystem
+]
 
 { #category : #'instance creation' }
 DataWebService class >> workingWithin: aContext [ 
@@ -22,7 +30,7 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
 	timestamp := self currentDateTime.
 
-	rawData := context
+	rawData := self
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
 		to: self dataPointsKey.
@@ -45,7 +53,7 @@ DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ [ | dataStream dataStreamLocation |
 
-	dataStream := context
+	dataStream := self
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
 		to: self dataStreamsKey.
@@ -73,7 +81,7 @@ DataWebService >> currentDateTime [
 { #category : #'private - systems' }
 DataWebService >> dataManagementSystem [
 
-	^ context systemImplementing: #DataManagementSystemInterface
+	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
@@ -86,6 +94,14 @@ DataWebService >> dataPointsKey [
 DataWebService >> dataStreamsKey [
 
 	^ #data_streams
+]
+
+{ #category : #'deconding and encoding' }
+DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
+
+	^ (mappingRuleSet
+		ruleToDecode: aMediaType
+		to: aKeyRepresentingObjectType) applyOn: aJSON within: self
 ]
 
 { #category : #API }
@@ -152,13 +168,15 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 { #category : #'private - systems' }
 DataWebService >> identifierSystem [
 
-	^ context systemImplementing: #IdentifierSystemInterface
+	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-DataWebService >> initializeWorkingWithin: aContext [
+DataWebService >> initializeWorkingWith: aCosmosSystem [
 
-	context := aContext
+	cosmos := aCosmosSystem.
+	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
+		for: self specification) build
 ]
 
 { #category : #'private - API' }
@@ -170,7 +188,7 @@ DataWebService >> locationOf: dataStream [
 				expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
 ]
 
-{ #category : #API }
+{ #category : #specification }
 DataWebService >> specification [
 
 	^ DataWebServiceSpecification new
@@ -179,7 +197,7 @@ DataWebService >> specification [
 { #category : #'private - systems' }
 DataWebService >> timeSystem [
 	
-	^ context systemImplementing: #TimeSystemInterface
+	^ cosmos systemImplementing: #TimeSystemInterface
 ]
 
 { #category : #'private - API' }
