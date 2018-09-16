@@ -16,7 +16,7 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 ]
 
 { #category : #'installing - routes' }
-TriggersAPIInstaller >> addCrossOriginResourceSharingRoute [
+TriggersAPIInstaller >> addCrossOriginResourceSharingRouteXX [
 
 	server
 		OPTIONS:
@@ -93,7 +93,7 @@ TriggersAPIInstaller >> install [
 		addGetTriggersRoute;
 		addRegisterTriggerRoute;
 		addUnregisterTriggerRoute;
-		addCrossOriginResourceSharingRoute.
+		addCrossOriginResourceSharingRouteXX.
 		
 	^ interface
 ]

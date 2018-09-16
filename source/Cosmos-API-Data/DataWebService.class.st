@@ -170,6 +170,12 @@ DataWebService >> locationOf: dataStream [
 				expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
 ]
 
+{ #category : #API }
+DataWebService >> specification [
+
+	^ DataWebServiceSpecification new
+]
+
 { #category : #'private - systems' }
 DataWebService >> timeSystem [
 	

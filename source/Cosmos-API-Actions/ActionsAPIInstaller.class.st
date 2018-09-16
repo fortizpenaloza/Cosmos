@@ -63,7 +63,7 @@ ActionsAPIInstaller >> actionJsonVersion1dot0dot0MimeType [
 ]
 
 { #category : #'private-installing' }
-ActionsAPIInstaller >> addCrossOriginResourceSharingRoute [
+ActionsAPIInstaller >> addCrossOriginResourceSharingRouteXX [
 
 	server
 		OPTIONS:
@@ -122,7 +122,7 @@ ActionsAPIInstaller >> install [
 		addGetActionsRoute;
 		addRegisterActionRoute;
 		addDeregisterActionRoute;
-		addCrossOriginResourceSharingRoute.
+		addCrossOriginResourceSharingRouteXX.
 
 	^ interface
 ]

@@ -108,7 +108,7 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	server := self teapot.
 
-	(DataAPIInstaller toInstallOn: server workingWith: cosmos) install.
+	(DataWebServiceSpecification toInstallOn: server workingWith: cosmos) install.
 	(TriggersAPIInstaller toInstallOn: server workingWith: cosmos)
 		install.
 	(ActionsAPIInstaller toInstallOn: server workingWith: cosmos) install.

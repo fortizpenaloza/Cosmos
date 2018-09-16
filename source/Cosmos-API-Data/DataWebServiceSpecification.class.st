@@ -1,5 +1,5 @@
 Class {
-	#name : #DataAPIInstaller,
+	#name : #DataWebServiceSpecification,
 	#superclass : #Object,
 	#instVars : [
 		'server',
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+DataWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
 
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
 { #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> addBulkDataPointDecoderVersion1dot0dot0Mapping [
+DataWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToDecode: self bulkDataPointMimeTypeVersion1dot0dot0
@@ -24,17 +24,8 @@ DataAPIInstaller >> addBulkDataPointDecoderVersion1dot0dot0Mapping [
 		using: self bulkDataPointDecoderVersion1dot0dot0
 ]
 
-{ #category : #'installing - routes' }
-DataAPIInstaller >> addCreateDataStreamRoute [
-
-	server
-		POST:
-			'/data-streams'
-				-> [ :request | interface createStreamBasedOn: request within: aContext ]
-]
-
-{ #category : #'installing - routes' }
-DataAPIInstaller >> addCrossOriginResourceSharingRoute [
+{ #category : #routes }
+DataWebServiceSpecification >> addCrossOriginResourceSharingRouteXX [
 
 	server
 		OPTIONS:
@@ -53,7 +44,7 @@ DataAPIInstaller >> addCrossOriginResourceSharingRoute [
 ]
 
 { #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> addDataPointEncoderVersion1dot0dot0Mapping [
+DataWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToEncode: #data_points
@@ -64,7 +55,7 @@ DataAPIInstaller >> addDataPointEncoderVersion1dot0dot0Mapping [
 ]
 
 { #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> addDataStreamDecoderVersion1dot0dot0Mapping [
+DataWebServiceSpecification >> addDataStreamDecoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
@@ -73,7 +64,7 @@ DataAPIInstaller >> addDataStreamDecoderVersion1dot0dot0Mapping [
 ]
 
 { #category : #'installing - encoders and decoders' }
-DataAPIInstaller >> addDataStreamEncoderVersion1dot0dot0Mapping [
+DataWebServiceSpecification >> addDataStreamEncoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToEncode: #data_streams
@@ -81,23 +72,14 @@ DataAPIInstaller >> addDataStreamEncoderVersion1dot0dot0Mapping [
 		using: self dataStreamJsonEncoderVersion1dot0dot0
 ]
 
-{ #category : #'installing - routes' }
-DataAPIInstaller >> addDeleteDataStreamRoute [
-
-	server
-		DELETE:
-			'/data-streams/<identifier:IsUUID>'
-				-> [ :request | interface deleteStreamBasedOn: request within: self httpRequestContext ]
-]
-
-{ #category : #'media types' }
-DataAPIInstaller >> applicationJsonVersion1dot0dot0 [
+{ #category : #'accessing - media types' }
+DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
+DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -105,14 +87,14 @@ DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
 		next ]
 ]
 
-{ #category : #'media types' }
-DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
+{ #category : #'accessing - media types' }
+DataWebServiceSpecification >> bulkDataPointMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
 ]
 
-{ #category : #'installing - routes' }
-DataAPIInstaller >> createBulkDataPointsRoute [
+{ #category : #routes }
+DataWebServiceSpecification >> createBulkDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -120,8 +102,17 @@ DataAPIInstaller >> createBulkDataPointsRoute [
 		sending: #createBulkPointsBasedOn:within:
 ]
 
+{ #category : #routes }
+DataWebServiceSpecification >> createDataStreamRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: '/data-streams'
+		sending: #createStreamBasedOn:within:
+]
+
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataPointJsonEncoderVersion1dot0dot0 [
+DataWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataPoint | 
 	String
@@ -142,7 +133,7 @@ DataAPIInstaller >> dataPointJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataStreamJsonDecoderVersion1dot0dot0 [
+DataWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -154,7 +145,7 @@ DataAPIInstaller >> dataStreamJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataAPIInstaller >> dataStreamJsonEncoderVersion1dot0dot0 [
+DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataStreams :context | 
 	String
@@ -185,8 +176,17 @@ DataAPIInstaller >> dataStreamJsonEncoderVersion1dot0dot0 [
 				nextPut: dataStreams ] ]
 ]
 
-{ #category : #'installing - routes' }
-DataAPIInstaller >> getDataPointsRoute [
+{ #category : #routes }
+DataWebServiceSpecification >> deleteDataStreamRoute [
+
+	^ RouteSpecification
+		handling: #DELETE
+		at: '/data-streams/<identifier:IsUUID>'
+		sending: #deleteStreamBasedOn:within:
+]
+
+{ #category : #routes }
+DataWebServiceSpecification >> getDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -194,8 +194,8 @@ DataAPIInstaller >> getDataPointsRoute [
 		sending: #getPointsBasedOn:within:
 ]
 
-{ #category : #'installing - routes' }
-DataAPIInstaller >> getDataStreamsRoute [
+{ #category : #routes }
+DataWebServiceSpecification >> getDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -204,7 +204,7 @@ DataAPIInstaller >> getDataStreamsRoute [
 ]
 
 { #category : #initialization }
-DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
+DataWebServiceSpecification >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
 
@@ -221,15 +221,15 @@ DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 ]
 
 { #category : #installing }
-DataAPIInstaller >> install [
+DataWebServiceSpecification >> install [
 
 	self
-		addCreateDataStreamRoute;
+		createDataStreamRoute;
 		getDataStreamsRoute;
-		addDeleteDataStreamRoute;	
+		deleteDataStreamRoute;	
 		getDataPointsRoute;
 		createBulkDataPointsRoute;
-		addCrossOriginResourceSharingRoute.
+		addCrossOriginResourceSharingRouteXX.
 		
 		"GET, POST data-streams/<id>/metadata"
 		"GET, POST data-streams/<id>/data-points"
