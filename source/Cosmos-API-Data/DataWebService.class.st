@@ -14,9 +14,11 @@ DataWebService class >> workingWithin: aContext [
 ]
 
 { #category : #API }
-DataWebService >> createBulkPointsBasedOn: anHttpRequest [
+DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ | timestamp rawData |
+
+	aContext hold: self currentDateTime under: 'request_timestamp'.
 
 	timestamp := self currentDateTime.
 
@@ -39,14 +41,14 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataWebService >> createStreamBasedOn: anHttpRequest [
+DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
-	^  [ [ [ | dataStream dataStreamLocation |
+	^ [ [ [ | dataStream dataStreamLocation |
 
 	dataStream := context
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
-		to: #data_streams.
+		to: self dataStreamsKey.
 
 	self dataManagementSystem register: dataStream.
 
@@ -58,7 +60,8 @@ DataWebService >> createStreamBasedOn: anHttpRequest [
 		on: KeyNotFound , InstanceCreationFailed
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
 		on: MappingNotFound
-		do: [ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ]
+		do:
+			[ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ]
 ]
 
 { #category : #'private - accessing' }
@@ -79,8 +82,14 @@ DataWebService >> dataPointsKey [
 	^ #data_points
 ]
 
+{ #category : #'private - object types' }
+DataWebService >> dataStreamsKey [
+
+	^ #data_streams
+]
+
 { #category : #API }
-DataWebService >> deleteStreamBasedOn: anHttpRequest [
+DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ 
 	self dataManagementSystem
@@ -93,7 +102,7 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataWebService >> getPointsBasedOn: anHttpRequest [
+DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ | mediaType encodedPoints |
 
@@ -115,7 +124,7 @@ DataWebService >> getPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataWebService >> getStreamsBasedOn: anHttpRequest [
+DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ [ | mediaType streamsToEncode encodedStreams |
 
@@ -156,7 +165,9 @@ DataWebService >> initializeWorkingWithin: aContext [
 DataWebService >> locationOf: dataStream [
 
 	^ ZnUrl
-		fromString: ('localhost/<1s>' expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
+		fromString:
+			('localhost/<1s>'
+				expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
 ]
 
 { #category : #'private - systems' }

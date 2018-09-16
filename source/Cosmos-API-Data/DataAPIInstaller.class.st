@@ -25,20 +25,12 @@ DataAPIInstaller >> addBulkDataPointDecoderVersion1dot0dot0Mapping [
 ]
 
 { #category : #'installing - routes' }
-DataAPIInstaller >> addCreateBulkDataPointsRoute [
-
-	server
-		POST: '/data-points' -> [ :request | interface createBulkPointsBasedOn: request ];
-		output: #text
-]
-
-{ #category : #'installing - routes' }
 DataAPIInstaller >> addCreateDataStreamRoute [
 
 	server
 		POST:
 			'/data-streams'
-				-> [ :request | interface createStreamBasedOn: request ]
+				-> [ :request | interface createStreamBasedOn: request within: aContext ]
 ]
 
 { #category : #'installing - routes' }
@@ -95,25 +87,7 @@ DataAPIInstaller >> addDeleteDataStreamRoute [
 	server
 		DELETE:
 			'/data-streams/<identifier:IsUUID>'
-				-> [ :request | interface deleteStreamBasedOn: request ]
-]
-
-{ #category : #'installing - routes' }
-DataAPIInstaller >> addGetDataPointsRoute [
-
-	server
-		GET:
-			'/data-streams/<identifier:IsUUID>/data-points'
-				-> [ :request | interface getPointsBasedOn: request ]
-]
-
-{ #category : #'installing - routes' }
-DataAPIInstaller >> addGetDataStreamsRoute [
-
-	server
-		GET:
-			'/data-streams/<identifier:IsUUID>'
-				-> [ :request | interface getStreamsBasedOn: request ]
+				-> [ :request | interface deleteStreamBasedOn: request within: self httpRequestContext ]
 ]
 
 { #category : #'media types' }
@@ -135,6 +109,15 @@ DataAPIInstaller >> bulkDataPointDecoderVersion1dot0dot0 [
 DataAPIInstaller >> bulkDataPointMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
+]
+
+{ #category : #'installing - routes' }
+DataAPIInstaller >> createBulkDataPointsRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: '/data-points'
+		sending: #createBulkPointsBasedOn:within:
 ]
 
 { #category : #'encoders and decoders' }
@@ -202,6 +185,24 @@ DataAPIInstaller >> dataStreamJsonEncoderVersion1dot0dot0 [
 				nextPut: dataStreams ] ]
 ]
 
+{ #category : #'installing - routes' }
+DataAPIInstaller >> getDataPointsRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: '/data-streams/<identifier:IsUUID>/data-points'
+		sending: #getPointsBasedOn:within:
+]
+
+{ #category : #'installing - routes' }
+DataAPIInstaller >> getDataStreamsRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: '/data-streams/<identifier:IsUUID>'
+		sending: #getStreamsBasedOn:within:
+]
+
 { #category : #initialization }
 DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
@@ -224,10 +225,10 @@ DataAPIInstaller >> install [
 
 	self
 		addCreateDataStreamRoute;
-		addGetDataStreamsRoute;
+		getDataStreamsRoute;
 		addDeleteDataStreamRoute;	
-		addGetDataPointsRoute;
-		addCreateBulkDataPointsRoute;
+		getDataPointsRoute;
+		createBulkDataPointsRoute;
 		addCrossOriginResourceSharingRoute.
 		
 		"GET, POST data-streams/<id>/metadata"

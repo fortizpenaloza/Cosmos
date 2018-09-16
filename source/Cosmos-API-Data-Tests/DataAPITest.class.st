@@ -183,7 +183,8 @@ DataAPITest >> testCreatingDataStream [
 				entity:
 					(ZnEntity
 						with: '{"name":"pH"}'
-						type: self applicationJsonVersion1dot0dot0)).
+						type: self applicationJsonVersion1dot0dot0))
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 201;
@@ -208,9 +209,10 @@ DataAPITest >> testCreatingDataStreamFailsIfAlreadyExists [
 				createStreamBasedOn:
 					((ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 						entity:
-							(ZnEntity 
-								with: '{"name":"Temperature"}' 
-								type: self applicationJsonVersion1dot0dot0)) ]
+							(ZnEntity
+								with: '{"name":"Temperature"}'
+								type: self applicationJsonVersion1dot0dot0))
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withDescription: 'A data stream with that name already exists in system'
 ]
@@ -225,7 +227,8 @@ DataAPITest >> testCreatingDataStreamFailsWithWrongMediaType [
 						entity:
 							(ZnEntity
 								with: '{"name":"Temperature"}'
-								type: self applicationJsonVersion1dot0dot0)) ]
+								type: self applicationJsonVersion1dot0dot0))
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withDescription: 'A data stream with that name already exists in system'
 ]
@@ -240,7 +243,10 @@ DataAPITest >> testCreatingStreamFailsWithMalformattedRequest [
 						entity:
 							(ZnEntity
 								with: '{"name":"pH"}'
-								type: (ZnMimeType fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0'))) ]
+								type:
+									(ZnMimeType
+										fromString: 'application/vnd.cosmos.data-stream+json; version=1.0.0')))
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withDescription: 'Decoder not found for given media type'
 ]
@@ -257,7 +263,8 @@ DataAPITest >> testDataPointBulkRegistration [
 	self deny: pressure currentValue = 89.
 
 	response := interface
-		createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsHttpRequest.
+		createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsHttpRequest
+		within: self httpRequestContext.
 
 	self assert: response code equals: 201.
 
@@ -269,8 +276,9 @@ DataAPITest >> testDataPointBulkRegistration [
 DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 
 	self
-		should:
-			[ interface createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest ]
+		should: [ interface
+				createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withDescription: 'Expected key data-stream was not found'
 ]
@@ -285,7 +293,9 @@ DataAPITest >> testDeletingDataStream [
 		ifFound: [ :dataStream | "do nothing" ]
 		ifNone: [ self fail ].
 
-	response := interface deleteStreamBasedOn: self deleteTemperatureStreamHttpRequest.
+	response := interface
+		deleteStreamBasedOn: self deleteTemperatureStreamHttpRequest
+		within: self httpRequestContext.
 
 	self dataManagementSystem
 		streamNamed: 'Temperature'
@@ -299,11 +309,14 @@ DataAPITest >> testDeletingDataStream [
 DataAPITest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
-		should: [ interface deleteStreamBasedOn: self deleteInexistantStreamHttpRequest  ]
+		should: [ interface
+				deleteStreamBasedOn: self deleteInexistantStreamHttpRequest
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
-				assert: signal messageText equals: 'Data stream with that identifier not found';
+				assert: signal messageText
+					equals: 'Data stream with that identifier not found';
 				assert: signal code equals: 404 ]
 ]
 
@@ -312,7 +325,9 @@ DataAPITest >> testGettingDataPoints [
 
 	| response |
 
-	response := interface getPointsBasedOn: self getTemperatureStreamDataPointsHttpRequest.
+	response := interface
+		getPointsBasedOn: self getTemperatureStreamDataPointsHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
@@ -340,7 +355,8 @@ DataAPITest >> testGettingDataStreamByIdentifier [
 	| response |
 
 	response := interface
-		getStreamsBasedOn: self getTemperatureStreamHttpRequest.
+		getStreamsBasedOn: self getTemperatureStreamHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
@@ -352,7 +368,8 @@ DataAPITest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
 		should: [ interface
-				getStreamsBasedOn: self getDataStreamWithWrongIdentifierHttpRequest ]
+				getStreamsBasedOn: self getDataStreamWithWrongIdentifierHttpRequest
+				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
@@ -367,7 +384,8 @@ DataAPITest >> testGettingDataStreams [
 	| response |
 
 	response := interface
-		getStreamsBasedOn: self getDataStreamSnapshotsHttpRequest.
+		getStreamsBasedOn: self getDataStreamSnapshotsHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
