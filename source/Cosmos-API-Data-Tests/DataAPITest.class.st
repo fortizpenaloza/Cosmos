@@ -131,7 +131,8 @@ DataAPITest >> setUp [
 
 	super setUp.
 
-	interface := (DataAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install.
+	interface := DataWebService workingWith: rootSystem.
+	 		
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
