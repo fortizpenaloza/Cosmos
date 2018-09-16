@@ -1,5 +1,5 @@
 Class {
-	#name : #DataAPI,
+	#name : #DataWebService,
 	#superclass : #Object,
 	#instVars : [
 		'context'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataAPI class >> workingWithin: aContext [ 
+DataWebService class >> workingWithin: aContext [ 
 	
 	^self new initializeWorkingWithin: aContext 
 ]
 
 { #category : #API }
-DataAPI >> createBulkPointsBasedOn: anHttpRequest [
+DataWebService >> createBulkPointsBasedOn: anHttpRequest [
 
 	^ [ | timestamp rawData |
 
@@ -39,7 +39,7 @@ DataAPI >> createBulkPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> createStreamBasedOn: anHttpRequest [
+DataWebService >> createStreamBasedOn: anHttpRequest [
 
 	^  [ [ [ | dataStream dataStreamLocation |
 
@@ -62,25 +62,25 @@ DataAPI >> createStreamBasedOn: anHttpRequest [
 ]
 
 { #category : #'private - accessing' }
-DataAPI >> currentDateTime [
+DataWebService >> currentDateTime [
 
 	^ self timeSystem dateTime
 ]
 
 { #category : #'private - systems' }
-DataAPI >> dataManagementSystem [
+DataWebService >> dataManagementSystem [
 
 	^ context systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
-DataAPI >> dataPointsKey [
+DataWebService >> dataPointsKey [
 
 	^ #data_points
 ]
 
 { #category : #API }
-DataAPI >> deleteStreamBasedOn: anHttpRequest [
+DataWebService >> deleteStreamBasedOn: anHttpRequest [
 
 	^ [ 
 	self dataManagementSystem
@@ -93,7 +93,7 @@ DataAPI >> deleteStreamBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> getPointsBasedOn: anHttpRequest [
+DataWebService >> getPointsBasedOn: anHttpRequest [
 
 	^ [ [ | mediaType encodedPoints |
 
@@ -115,7 +115,7 @@ DataAPI >> getPointsBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-DataAPI >> getStreamsBasedOn: anHttpRequest [
+DataWebService >> getStreamsBasedOn: anHttpRequest [
 
 	^ [ [ [ | mediaType streamsToEncode encodedStreams |
 
@@ -141,32 +141,32 @@ DataAPI >> getStreamsBasedOn: anHttpRequest [
 ]
 
 { #category : #'private - systems' }
-DataAPI >> identifierSystem [
+DataWebService >> identifierSystem [
 
 	^ context systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-DataAPI >> initializeWorkingWithin: aContext [
+DataWebService >> initializeWorkingWithin: aContext [
 
 	context := aContext
 ]
 
 { #category : #'private - API' }
-DataAPI >> locationOf: dataStream [
+DataWebService >> locationOf: dataStream [
 
 	^ ZnUrl
 		fromString: ('localhost/<1s>' expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
 ]
 
 { #category : #'private - systems' }
-DataAPI >> timeSystem [
+DataWebService >> timeSystem [
 	
 	^ context systemImplementing: #TimeSystemInterface
 ]
 
 { #category : #'private - API' }
-DataAPI >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+DataWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
 
 	| identifierProvided |
 

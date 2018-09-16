@@ -12,5 +12,5 @@ ReflectiveMappingRuleSetBuilderTest >> testBuilding [
 	mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: PetsWebServiceSpecification new)
 		build.
 		
-	self assert: mappingRuleSet equals: nil
+	self fail
 ]

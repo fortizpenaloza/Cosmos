@@ -13,7 +13,7 @@ MappingRuleSetBuilderTest >> applicationJsonVersion1dot0dot0 [
 { #category : #accessing }
 MappingRuleSetBuilderTest >> applicationJsonVersion1dot0dot1 [
 
-	^ ZnMimeType fromString: 'application/json; version=1.0.1'
+	^ ZnMimeType fromString: 'application/json;version=1.0.1'
 ]
 
 { #category : #tests }
@@ -104,12 +104,12 @@ MappingRuleSetBuilderTest >> triggerJsonDecoderVersion1dot0dot0 [
 
 { #category : #accessing }
 MappingRuleSetBuilderTest >> triggerJsonDecoderVersion1dot0dot1 [
-	
-	^#triggerJsonDecoderVersion1dot0dot1
+
+	^ #triggerJsonDecoderVersion1dot0dot1
 ]
 
 { #category : #accessing }
 MappingRuleSetBuilderTest >> triggerJsonEncoderVersion1dot0dot0 [
-	
+
 	^ #triggerJsonEncoderVersion1dot0dot0
 ]

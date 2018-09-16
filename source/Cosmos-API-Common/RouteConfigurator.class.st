@@ -21,10 +21,10 @@ RouteConfigurator >> configureAsCorsAwareRoute: aCorsAwareRouteSpecification [
 	| specification |
 
 	specification := aCorsAwareRouteSpecification specification.
-
+	 
 	routesAllowingCors
 		at: specification resourceLocation
-		ifPresent: [ :methods | methods add: specification httpMethod ]
+		ifPresent: [ :httpMethods | httpMethods add: specification httpMethod ]
 		ifAbsentPut: (OrderedCollection with: specification httpMethod).
 
 	specification accept: self
@@ -33,24 +33,26 @@ RouteConfigurator >> configureAsCorsAwareRoute: aCorsAwareRouteSpecification [
 { #category : #configuring }
 RouteConfigurator >> configureCrossOriginSharingRoutes [
 
-	teapot
-		OPTIONS:
-			routesAllowingCors keys first
-				-> (CrossOriginResourceSharingHandler allowing: routesAllowingCors values first)
+	routesAllowingCors keys
+		do: [ :resourceLocation | 
+			teapot
+				OPTIONS:
+					resourceLocation
+						-> (CrossOriginResourceSharingHandler allowing: (routesAllowingCors at: resourceLocation)) ]
 ]
 
 { #category : #'private - configuring' }
-RouteConfigurator >> configureRoute: aRouteSpecification [ 
-	
+RouteConfigurator >> configureRoute: aRouteSpecification [
+
 	teapot
 		perform: (aRouteSpecification httpMethod , ':') asSymbol
 		with:
 			aRouteSpecification resourceLocation
 				-> [ :request | 
-					webService  
+					webService
 						perform: aRouteSpecification message
 						with: request
-						with: (HttpRequestContext new) ]
+						with: HttpRequestContext new ]
 ]
 
 { #category : #initialization }

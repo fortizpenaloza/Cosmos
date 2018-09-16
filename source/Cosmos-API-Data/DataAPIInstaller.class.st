@@ -213,7 +213,7 @@ DataAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 		addBulkDataPointDecoderVersion1dot0dot0Mapping;
 		addDataPointEncoderVersion1dot0dot0Mapping.
 
-	interface := DataAPI
+	interface := DataWebService
 		workingWithin: (DataAPIContext workingWith: aCosmosSystem queryingMappingsTo: mappingRuleSetBuilder build).
 		
 	server := aServer

@@ -21,7 +21,7 @@ PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 
 	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
-	pet := aContext decode: anHttpRequest contents encodedAs: mediaType to: #pets.
+	pet := self decode: anHttpRequest contents encodedAs: mediaType to: #pets.
 
 	self petManagementSystem register: pet.
 
@@ -35,7 +35,7 @@ PetsWebService >> initializeWorkingWith: aCompositeSystem [
 		mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: self specification) build
 ]
 
-{ #category : #accessing }
+{ #category : #spec }
 PetsWebService >> specification [
 
 	^ PetsWebServiceSpecification new

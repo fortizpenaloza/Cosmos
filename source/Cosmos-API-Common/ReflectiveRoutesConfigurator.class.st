@@ -16,16 +16,16 @@ ReflectiveRoutesConfigurator class >> appliedTo: aTeapot [
 { #category : #configuring }
 ReflectiveRoutesConfigurator >> addRoutesOf: aWebService [
 
-	| configurator |
+	| routeConfigurator |
 
-	configurator := RouteConfigurator
+	routeConfigurator := RouteConfigurator
 		appliedTo: teapot
 		sendingMessagesTo: aWebService.
 
 	(self specifiedRoutesFor: aWebService)
-		do: [ :routeSpecification | routeSpecification accept: configurator ].
+		do: [ :routeSpecification | routeSpecification accept: routeConfigurator ].
 
-	configurator configureCrossOriginSharingRoutes
+	routeConfigurator configureCrossOriginSharingRoutes
 ]
 
 { #category : #initialization }
