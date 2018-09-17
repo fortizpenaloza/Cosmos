@@ -33,7 +33,8 @@ ActionsAPI >> actionsFor: anHttpRequest [
 					(context
 						encode: self actionManagementSystem actions
 						of: #actions
-						to: mimeType)) ]
+						to: mimeType
+						within: aContext)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: ObjectNotFound

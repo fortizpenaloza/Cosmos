@@ -21,7 +21,11 @@ PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 
 	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
-	pet := self decode: anHttpRequest contents encodedAs: mediaType to: #pets.
+	pet := self
+		decode: anHttpRequest contents
+		encodedAs: mediaType
+		to: #pets
+		within: aContext.
 
 	self petManagementSystem register: pet.
 

@@ -14,7 +14,7 @@ DataWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSy
 DataWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self bulkDataPointMimeTypeVersion1dot0dot0
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0 
 		to: #data_points
 		using: self bulkDataPointDecoderVersion1dot0dot0
 ]
@@ -57,16 +57,18 @@ DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
+	^ [ :aJSON :context | | timestamp |
+
+	timestamp := context objectUnder: #request_timestamp ifNone: [ self halt ].
+
 	(NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next ]
-]
-
-{ #category : #'media types' }
-DataWebServiceSpecification >> bulkDataPointMimeTypeVersion1dot0dot0 [
-
-	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
+		for: DataPoint
+			customDo:
+				[ :mapping | mapping decoder: [ :rawPoint | 
+						DataPoint 
+							on: timestamp 
+							holding: (rawPoint at: #value) ] ];
+		nextAs: DataPoint ]
 ]
 
 { #category : #'specification - routes' }
@@ -136,7 +138,7 @@ DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 								at: 'current-value' put: dataStream currentValue;
 								at: 'last-update' put: dataStream lastUpdate;
 								at: 'metadata'
-									put: ((context systemImplementing: #MetadataSystemInterface) metadataFor: dataStream);
+									put: ((context objectUnder: #metadata_system ifNone: [self halt]) metadataFor: dataStream);
 								yourself ] ];
 				for: Metadata
 					customDo: [ :mapping | 

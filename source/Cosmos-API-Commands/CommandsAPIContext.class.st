@@ -15,7 +15,7 @@ CommandsAPIContext class >> workingWith: aCosmosSystem queryingMappingsTo: aMapp
 ]
 
 { #category : #'encoding and decoding' }
-CommandsAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
+CommandsAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: anObject [
 
 	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
 		applyOn: aJSON
@@ -23,11 +23,11 @@ CommandsAPIContext >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingOb
 ]
 
 { #category : #'encoding and decoding' }
-CommandsAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType [
+CommandsAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
 
 	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
 		applyOn: anObject
-		within: self
+		within: aContext
 ]
 
 { #category : #initialization }

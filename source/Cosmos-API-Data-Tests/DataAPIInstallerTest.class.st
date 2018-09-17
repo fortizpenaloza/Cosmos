@@ -10,7 +10,9 @@ DataAPIInstallerTest >> testInstallation [
 	| teapot |
 
 	teapot := Teapot on.
-	(DataWebServiceSpecification toInstallOn: teapot workingWith: self) install.
+
+	(ReflectiveRoutesConfigurator appliedTo: teapot)
+		addRoutesOf: (DataWebService workingWith: self).
 
 	self assert: teapot routes size equals: 6
 ]

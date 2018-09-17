@@ -26,14 +26,15 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ | timestamp rawData |
 
-	aContext hold: self currentDateTime under: 'request_timestamp'.
-
-	timestamp := self currentDateTime.
+	aContext hold: self currentDateTime under: #request_timestamp.
 
 	rawData := self
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
-		to: self dataPointsKey.
+		to: self dataPointsKey
+		within: aContext.
+		
+	self halt.
 
 	rawData
 		do: [ :rawDataPoint | 
@@ -56,7 +57,8 @@ DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 	dataStream := self
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
-		to: self dataStreamsKey.
+		to: self dataStreamsKey
+		within: aContext.
 
 	self dataManagementSystem register: dataStream.
 
@@ -97,7 +99,7 @@ DataWebService >> dataStreamsKey [
 ]
 
 { #category : #'deconding and encoding' }
-DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType [
+DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: anObject [
 
 	^ (mappingRuleSet
 		ruleToDecode: aMediaType
@@ -117,6 +119,14 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
+{ #category : #'as yet unclassified' }
+DataWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
+
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: aContext
+]
+
 { #category : #API }
 DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
@@ -127,10 +137,11 @@ DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 	self dataManagementSystem
 		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
 		do: [ :dataStream | 
-			encodedPoints := context
+			encodedPoints := self
 				encode: dataStream dataPoints
 				of: #data_points
-				to: mediaType ].
+				to: mediaType
+				within: aContext ].
 
 	ZnResponse ok: (ZnEntity json: encodedPoints) ]
 		on: TeaNoSuchParam
@@ -154,7 +165,15 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 				do: [ :dataStream | streamsToEncode := dataStream ] ]
 		ifNone: [ streamsToEncode := self dataManagementSystem streams ].
 
-	encodedStreams := context encode: streamsToEncode of: #data_streams to: mediaType.
+	aContext
+		hold: (cosmos systemImplementing: #MetadataSystemInterface)
+		under: #metadata_system.
+
+	encodedStreams := self
+		encode: streamsToEncode
+		of: #data_streams
+		to: mediaType
+		within: aContext.
 
 	ZnResponse ok: (ZnEntity json: encodedStreams) ]
 		on: TeaNoSuchParam

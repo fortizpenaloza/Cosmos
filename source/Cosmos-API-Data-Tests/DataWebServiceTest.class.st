@@ -1,5 +1,5 @@
 Class {
-	#name : #DataAPITest,
+	#name : #DataWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'interface',
@@ -9,19 +9,19 @@ Class {
 }
 
 { #category : #'accessing - media types' }
-DataAPITest >> applicationJsonVersion1dot0dot0 [
+DataWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'accessing - media types' }
-DataAPITest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
+DataWebServiceTest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
 ]
 
 { #category : #'expected results' }
-DataAPITest >> dataStreamsSnapshotAsJSON [
+DataWebServiceTest >> dataStreamsSnapshotAsJSON [
 
 	^ '[{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current-value":1016,"last-update":"<1s>","metadata":[{"identifier":"<3s>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current-value":"N/A","last-update":"N/A","metadata":[{"identifier":"<4s>"},{"registration_timestamp":"<1s>"}]}]'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
@@ -31,14 +31,14 @@ DataAPITest >> dataStreamsSnapshotAsJSON [
 ]
 
 { #category : #accessing }
-DataAPITest >> dateTimeFormattedAsISO8601 [
+DataWebServiceTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> deleteInexistantStreamHttpRequest [
+DataWebServiceTest >> deleteInexistantStreamHttpRequest [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -48,7 +48,7 @@ DataAPITest >> deleteInexistantStreamHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> deleteTemperatureStreamHttpRequest [
+DataWebServiceTest >> deleteTemperatureStreamHttpRequest [
 
 	^ TeaRequest
 		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/data-streams')
@@ -56,7 +56,7 @@ DataAPITest >> deleteTemperatureStreamHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> getDataStreamHttpRequestTo: uri with: params [
+DataWebServiceTest >> getDataStreamHttpRequestTo: uri with: params [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -67,7 +67,7 @@ DataAPITest >> getDataStreamHttpRequestTo: uri with: params [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> getDataStreamSnapshotsHttpRequest [
+DataWebServiceTest >> getDataStreamSnapshotsHttpRequest [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -76,7 +76,7 @@ DataAPITest >> getDataStreamSnapshotsHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> getDataStreamWithWrongIdentifierHttpRequest [
+DataWebServiceTest >> getDataStreamWithWrongIdentifierHttpRequest [
 
 	^ self
 		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams'
@@ -84,7 +84,7 @@ DataAPITest >> getDataStreamWithWrongIdentifierHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> getTemperatureStreamDataPointsHttpRequest [
+DataWebServiceTest >> getTemperatureStreamDataPointsHttpRequest [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -99,7 +99,7 @@ DataAPITest >> getTemperatureStreamDataPointsHttpRequest [
 ]
 
 { #category : #'accessing - requests' }
-DataAPITest >> getTemperatureStreamHttpRequest [
+DataWebServiceTest >> getTemperatureStreamHttpRequest [
 
 	^ self
 		getDataStreamHttpRequestTo: 'http://COSMOS_URL/data-streams/'
@@ -107,19 +107,19 @@ DataAPITest >> getTemperatureStreamHttpRequest [
 ]
 
 { #category : #accessing }
-DataAPITest >> httpRequestContext [
+DataWebServiceTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
 { #category : #accessing }
-DataAPITest >> identifierProvider [
+DataWebServiceTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
 { #category : #accessing }
-DataAPITest >> pressureStream [
+DataWebServiceTest >> pressureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Pressure'
@@ -128,7 +128,7 @@ DataAPITest >> pressureStream [
 ]
 
 { #category : #running }
-DataAPITest >> setUp [
+DataWebServiceTest >> setUp [
 
 	identifierSequence := {UUID new.
 	UUID new.
@@ -143,7 +143,7 @@ DataAPITest >> setUp [
 ]
 
 { #category : #running }
-DataAPITest >> setUpRequirements [
+DataWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -152,7 +152,7 @@ DataAPITest >> setUpRequirements [
 ]
 
 { #category : #'expected results' }
-DataAPITest >> temperatureDataStreamAsJSON [
+DataWebServiceTest >> temperatureDataStreamAsJSON [
 
 	^ '{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]}'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
@@ -160,7 +160,7 @@ DataAPITest >> temperatureDataStreamAsJSON [
 ]
 
 { #category : #accessing }
-DataAPITest >> temperatureStream [
+DataWebServiceTest >> temperatureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Temperature'
@@ -169,13 +169,13 @@ DataAPITest >> temperatureStream [
 ]
 
 { #category : #accessing }
-DataAPITest >> temperatureStreamIdentifier [
+DataWebServiceTest >> temperatureStreamIdentifier [
 
 	^ identifierSequence first
 ]
 
 { #category : #tests }
-DataAPITest >> testCreatingDataStream [
+DataWebServiceTest >> testCreatingDataStream [
 
 	| response |
 
@@ -209,7 +209,7 @@ DataAPITest >> testCreatingDataStream [
 ]
 
 { #category : #tests }
-DataAPITest >> testCreatingDataStreamFailsIfAlreadyExists [
+DataWebServiceTest >> testCreatingDataStreamFailsIfAlreadyExists [
 
 	self
 		should: [ interface
@@ -225,7 +225,7 @@ DataAPITest >> testCreatingDataStreamFailsIfAlreadyExists [
 ]
 
 { #category : #tests }
-DataAPITest >> testCreatingDataStreamFailsWithWrongMediaType [
+DataWebServiceTest >> testCreatingDataStreamFailsWithWrongMediaType [
 
 	self
 		should: [ interface
@@ -241,7 +241,7 @@ DataAPITest >> testCreatingDataStreamFailsWithWrongMediaType [
 ]
 
 { #category : #tests }
-DataAPITest >> testCreatingStreamFailsWithMalformattedRequest [
+DataWebServiceTest >> testCreatingStreamFailsWithMalformattedRequest [
 
 	self
 		should: [ interface
@@ -259,7 +259,7 @@ DataAPITest >> testCreatingStreamFailsWithMalformattedRequest [
 ]
 
 { #category : #tests }
-DataAPITest >> testDataPointBulkRegistration [
+DataWebServiceTest >> testDataPointBulkRegistration [
 
 	| response temperature pressure |
 
@@ -280,7 +280,7 @@ DataAPITest >> testDataPointBulkRegistration [
 ]
 
 { #category : #tests }
-DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
+DataWebServiceTest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 
 	self
 		should: [ interface
@@ -291,7 +291,7 @@ DataAPITest >> testDataPointBulkRegistrationFailsWithMalformattedRequest [
 ]
 
 { #category : #tests }
-DataAPITest >> testDeletingDataStream [
+DataWebServiceTest >> testDeletingDataStream [
 
 	| response |
 
@@ -313,7 +313,7 @@ DataAPITest >> testDeletingDataStream [
 ]
 
 { #category : #tests }
-DataAPITest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
+DataWebServiceTest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
 		should: [ interface
@@ -328,7 +328,7 @@ DataAPITest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingDataPoints [
+DataWebServiceTest >> testGettingDataPoints [
 
 	| response |
 
@@ -357,7 +357,7 @@ DataAPITest >> testGettingDataPoints [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingDataStreamByIdentifier [
+DataWebServiceTest >> testGettingDataStreamByIdentifier [
 
 	| response |
 
@@ -371,7 +371,7 @@ DataAPITest >> testGettingDataStreamByIdentifier [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
+DataWebServiceTest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
 		should: [ interface
@@ -386,7 +386,7 @@ DataAPITest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 ]
 
 { #category : #tests }
-DataAPITest >> testGettingDataStreams [
+DataWebServiceTest >> testGettingDataStreams [
 
 	| response |
 
@@ -400,7 +400,7 @@ DataAPITest >> testGettingDataStreams [
 ]
 
 { #category : #accessing }
-DataAPITest >> updateTemperatureAndPressureDataStreamsHttpRequest [
+DataWebServiceTest >> updateTemperatureAndPressureDataStreamsHttpRequest [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 		entity:
@@ -420,7 +420,7 @@ DataAPITest >> updateTemperatureAndPressureDataStreamsHttpRequest [
 ]
 
 { #category : #accessing }
-DataAPITest >> updateTemperatureAndPressureDataStreamsMalformattedRequest [
+DataWebServiceTest >> updateTemperatureAndPressureDataStreamsMalformattedRequest [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
 		entity:
