@@ -2,7 +2,6 @@ Class {
 	#name : #DataWebService,
 	#superclass : #Object,
 	#instVars : [
-		'context',
 		'cosmos',
 		'mappingRuleSet'
 	],
@@ -117,7 +116,7 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'deconding and encoding' }
 DataWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
 
 	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)

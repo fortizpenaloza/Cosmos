@@ -32,14 +32,36 @@ PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
 	^ ZnResponse created: (self locationOf: pet)
 ]
 
-{ #category : #initialization }
-PetsWebService >> initializeWorkingWith: aCompositeSystem [ 
+{ #category : #'encoding and decoding' }
+PetsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
 
-		rootSystem := aCompositeSystem .
-		mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: self specification) build
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+		applyOn: aJSON
+		within: aContext
 ]
 
-{ #category : #spec }
+{ #category : #'encoding and decoding' }
+PetsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
+
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: aContext
+]
+
+{ #category : #initialization }
+PetsWebService >> initializeWorkingWith: aCompositeSystem [
+
+	rootSystem := aCompositeSystem.
+	mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: self specification) build
+]
+
+{ #category : #systems }
+PetsWebService >> petManagementSystem [
+
+	^ rootSystem systemImplementing: #PetManagementSystemInterface
+]
+
+{ #category : #accessing }
 PetsWebService >> specification [
 
 	^ PetsWebServiceSpecification new
