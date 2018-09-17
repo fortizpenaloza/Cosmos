@@ -34,19 +34,17 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 		to: self dataPointsKey
 		within: aContext.
 		
-	self halt.
-
 	rawData
 		do: [ :rawDataPoint | 
 			self dataManagementSystem
-				register: (DataPoint on: timestamp holding: (rawDataPoint at: 'value'))
-				toStreamNamed: (rawDataPoint at: 'data-stream') ].
+				register: rawDataPoint value
+				toStreamNamed: rawDataPoint key ].
 
 	ZnResponse created: 'multiple' ]
-		on: KeyNotFound
+		on: ObjectNotFound 
 		do: [ :signal | 
 			HTTPClientError
-				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
+				signalBadRequest: signal messageText ]
 ]
 
 { #category : #API }
@@ -99,11 +97,11 @@ DataWebService >> dataStreamsKey [
 ]
 
 { #category : #'deconding and encoding' }
-DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: anObject [
+DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
 
-	^ (mappingRuleSet
-		ruleToDecode: aMediaType
-		to: aKeyRepresentingObjectType) applyOn: aJSON within: self
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+		applyOn: aJSON
+		within: aContext
 ]
 
 { #category : #API }

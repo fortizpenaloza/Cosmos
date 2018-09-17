@@ -57,18 +57,21 @@ DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON :context | | timestamp |
+	^ [ :aJSON :context | 
+	| timestamp |
 
 	timestamp := context objectUnder: #request_timestamp ifNone: [ self halt ].
 
 	(NeoJSONReader on: aJSON readStream)
+		for: #ArrayOfPair customDo: [ :mapping | mapping listOfElementSchema: Association ];
+		for: Association
+			do: [ :mapping | 
+			mapping mapInstVar: #key to: #data_stream.
+			(mapping mapInstVar: #value) valueSchema: DataPoint ];
 		for: DataPoint
 			customDo:
-				[ :mapping | mapping decoder: [ :rawPoint | 
-						DataPoint 
-							on: timestamp 
-							holding: (rawPoint at: #value) ] ];
-		nextAs: DataPoint ]
+				[ :mapping | mapping decoder: [ :value | DataPoint on: timestamp holding: value ] ];
+		nextAs: #ArrayOfPair ]
 ]
 
 { #category : #'specification - routes' }

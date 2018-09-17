@@ -14,12 +14,6 @@ DataWebServiceTest >> applicationJsonVersion1dot0dot0 [
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
-{ #category : #'accessing - media types' }
-DataWebServiceTest >> dataPointCollectionMimeTypeVersion1dot0dot0 [
-
-	^ ZnMimeType fromString: 'application/vnd.cosmos.data-point+json; version=1.0.0'
-]
-
 { #category : #'expected results' }
 DataWebServiceTest >> dataStreamsSnapshotAsJSON [
 
@@ -287,7 +281,7 @@ DataWebServiceTest >> testDataPointBulkRegistrationFailsWithMalformattedRequest 
 				createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest
 				within: self httpRequestContext ]
 		raise: HTTPClientError
-		withDescription: 'Expected key data-stream was not found'
+		withDescription: 'Data stream not found in the system'
 ]
 
 { #category : #tests }
@@ -408,15 +402,15 @@ DataWebServiceTest >> updateTemperatureAndPressureDataStreamsHttpRequest [
 				with:
 					'[
 			{
-				"data-stream" : "Temperature",
+				"data_stream" : "Temperature",
 				"value" : 24
 			},
 			{
-				"data-stream" : "Pressure",
+				"data_stream" : "Pressure",
 				"value" : 89
 			}
 		]'
-				type: self dataPointCollectionMimeTypeVersion1dot0dot0)
+				type: self applicationJsonVersion1dot0dot0)
 ]
 
 { #category : #accessing }
@@ -432,9 +426,9 @@ DataWebServiceTest >> updateTemperatureAndPressureDataStreamsMalformattedRequest
 				"value" : 24
 			},
 			{
-				"data-stream" : "Pressure",
+				"data_stream" : "Pressure",
 				"value" : 89
 			}
 		]'
-				type: self dataPointCollectionMimeTypeVersion1dot0dot0)
+				type: self applicationJsonVersion1dot0dot0)
 ]
