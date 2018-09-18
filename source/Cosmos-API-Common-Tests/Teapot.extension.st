@@ -1,6 +1,6 @@
 Extension { #name : #Teapot }
 
-{ #category : #'*Cosmos-API-Data-Tests' }
+{ #category : #'*Cosmos-API-Common-Tests' }
 Teapot >> routes [
 	
 	^ dynamicRouter routes
