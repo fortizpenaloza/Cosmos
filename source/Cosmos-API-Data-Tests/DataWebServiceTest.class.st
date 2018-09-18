@@ -17,7 +17,7 @@ DataWebServiceTest >> applicationJsonVersion1dot0dot0 [
 { #category : #'expected results' }
 DataWebServiceTest >> dataStreamsSnapshotAsJSON [
 
-	^ '[{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current-value":1016,"last-update":"<1s>","metadata":[{"identifier":"<3s>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current-value":"N/A","last-update":"N/A","metadata":[{"identifier":"<4s>"},{"registration_timestamp":"<1s>"}]}]'
+	^ '[{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current_value":1016,"last_update":"<1s>","metadata":[{"identifier":"<3s>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current_value":"N/A","last_update":"N/A","metadata":[{"identifier":"<4s>"},{"registration_timestamp":"<1s>"}]}]'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
 		with: self temperatureStreamIdentifier asString36
 		with: identifierSequence second asString36
@@ -148,7 +148,7 @@ DataWebServiceTest >> setUpRequirements [
 { #category : #'expected results' }
 DataWebServiceTest >> temperatureDataStreamAsJSON [
 
-	^ '{"name":"Temperature","current-value":16.5,"last-update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]}'
+	^ '{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2s>"},{"registration_timestamp":"<1s>"}]}'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
 		with: self temperatureStreamIdentifier asString36
 ]

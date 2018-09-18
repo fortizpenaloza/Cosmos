@@ -95,7 +95,7 @@ DataWebService >> dataStreamsKey [
 	^ #data_streams
 ]
 
-{ #category : #'deconding and encoding' }
+{ #category : #'private - deconding and encoding' }
 DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
 
 	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
@@ -116,7 +116,7 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
-{ #category : #'deconding and encoding' }
+{ #category : #'private - deconding and encoding' }
 DataWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
 
 	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)

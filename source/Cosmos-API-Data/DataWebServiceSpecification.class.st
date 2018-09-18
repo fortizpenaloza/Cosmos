@@ -57,8 +57,7 @@ DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON :context | 
-	| timestamp |
+	^ [ :aJSON :context | | timestamp |
 
 	timestamp := context objectUnder: #request_timestamp ifNone: [ self halt ].
 
@@ -69,8 +68,7 @@ DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 			mapping mapInstVar: #key to: #data_stream.
 			(mapping mapInstVar: #value) valueSchema: DataPoint ];
 		for: DataPoint
-			customDo:
-				[ :mapping | mapping decoder: [ :value | DataPoint on: timestamp holding: value ] ];
+			customDo: [ :mapping | mapping decoder: [ :value | DataPoint on: timestamp holding: value ] ];
 		nextAs: #ArrayOfPair ]
 ]
 
@@ -128,7 +126,10 @@ DataWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 
-	^ [ :dataStreams :context | 
+	^ [ :dataStreams :context | | metadataSystem |
+	
+	metadataSystem := context objectUnder: #metadata_system ifNone: [ self halt ].
+
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
@@ -138,10 +139,9 @@ DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 						encoder: [ :dataStream | 
 							OrderedDictionary new
 								at: 'name' put: dataStream name;
-								at: 'current-value' put: dataStream currentValue;
-								at: 'last-update' put: dataStream lastUpdate;
-								at: 'metadata'
-									put: ((context objectUnder: #metadata_system ifNone: [self halt]) metadataFor: dataStream);
+								at: 'current_value' put: dataStream currentValue;
+								at: 'last_update' put: dataStream lastUpdate;
+								at: 'metadata' put: (metadataSystem metadataFor: dataStream);
 								yourself ] ];
 				for: Metadata
 					customDo: [ :mapping | 
