@@ -65,13 +65,13 @@ CommandsAPITest >> testCreatingCommand [
 		createCommandBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/commands')
 				entity:
-					(ZnEntity
-						json:
-							'{"command":"TURN_ON_LED","priority":100}')).
+					(ZnEntity json: '{"command":"TURN_ON_LED","priority":100}'))
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 201;
-		assert: response location equals: '/localhost/' , identifierSequence first asString36;
+		assert: response location
+			equals: '/localhost/' , identifierSequence first asString36;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self
@@ -96,8 +96,13 @@ CommandsAPITest >> testDeletingCommand [
 			(TeaRequest
 				fromZnRequest:
 					(ZnRequest
-						delete: 'http://COSMOS_URL/commands/' , self commandWithMediumPriorityIdentifier asString36)
-				pathParams: {(#identifier -> self commandWithMediumPriorityIdentifier)} asDictionary).
+						delete:
+							'http://COSMOS_URL/commands/'
+								, self commandWithMediumPriorityIdentifier asString36)
+				pathParams:
+					{(#identifier -> self commandWithMediumPriorityIdentifier)}
+						asDictionary)
+		within: self httpRequestContext.
 
 
 	self
@@ -111,11 +116,12 @@ CommandsAPITest >> testGettingCommands [
 	| response |
 
 	self installLedCommandsAddOn.
-	
+
 	response := interface
 		getCommandsBasedOn:
 			((ZnRequest get: 'http://COSMOS_URL/commands')
-				setAccept: self applicationJsonVersion1dot0dot0).
+				setAccept: self applicationJsonVersion1dot0dot0)
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
@@ -133,13 +139,18 @@ CommandsAPITest >> testNextCommandFormattedAsJson [
 
 	response := interface
 		nextCommandBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/commands/next') setAccept: self applicationJsonVersion1dot0dot0).
+			((ZnRequest post: 'http://COSMOS_URL/commands/next')
+				setAccept: self applicationJsonVersion1dot0dot0)
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0.
+		assert: response contentType
+			equals: self applicationJsonVersion1dot0dot0.
 
-	self assert: response contents equals: '{"command":"TURN_ON_LED","priority":100}'
+	self
+		assert: response contents
+		equals: '{"command":"TURN_ON_LED","priority":100}'
 ]
 
 { #category : #tests }
@@ -151,7 +162,9 @@ CommandsAPITest >> testNextCommandFormattedAsPlainText [
 
 	response := interface
 		nextCommandBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/commands/next') setAccept: ZnMimeType textPlain).
+			((ZnRequest post: 'http://COSMOS_URL/commands/next')
+				setAccept: ZnMimeType textPlain)
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;

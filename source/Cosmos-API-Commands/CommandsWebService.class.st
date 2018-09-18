@@ -21,11 +21,11 @@ CommandsWebService >> commandManagementSystem [
 ]
 
 { #category : #API }
-CommandsWebService >> createCommandBasedOn: anHttpRequest [
+CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 
-	| mediaType commandWithPriority commandWithPriorityLocation |
+	| mediaType commandWithPriority |
 
-	mediaType := ZnMimeType fromString: anHttpRequest accept.
+	mediaType := self mediaTypeOf: anHttpRequest.
 
 	commandWithPriority := cosmos
 		decode: anHttpRequest contents
@@ -35,13 +35,11 @@ CommandsWebService >> createCommandBasedOn: anHttpRequest [
 
 	self commandManagementSystem register: commandWithPriority.
 
-	commandWithPriorityLocation := self locationOf: commandWithPriority.
-
-	^ ZnResponse created: commandWithPriorityLocation
+	^ ZnResponse created: (self locationOf: commandWithPriority)
 ]
 
 { #category : #API }
-CommandsWebService >> deleteCommandBasedOn: anHttpRequest [
+CommandsWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
 
 	^ [ | identifier |
 
@@ -57,7 +55,7 @@ CommandsWebService >> deleteCommandBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-CommandsWebService >> getCommandsBasedOn: anHttpRequest [
+CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
 	| mimeType encodedCommands |
 
@@ -102,7 +100,7 @@ CommandsWebService >> mediaTypeOf: aHttpRequest [
 ]
 
 { #category : #API }
-CommandsWebService >> nextCommandBasedOn: anHttpRequest [
+CommandsWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
 
 	| mimeType encodedCommand |
 
