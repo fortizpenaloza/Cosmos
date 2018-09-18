@@ -27,7 +27,7 @@ CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 
 	mediaType := self mediaTypeOf: anHttpRequest.
 
-	commandWithPriority := cosmos
+	commandWithPriority := self
 		decode: anHttpRequest contents
 		encodedAs: mediaType
 		to: #commands
@@ -36,6 +36,14 @@ CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 	self commandManagementSystem register: commandWithPriority.
 
 	^ ZnResponse created: (self locationOf: commandWithPriority)
+]
+
+{ #category : #'encoding and decoding' }
+CommandsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
+
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+		applyOn: aJSON
+		within: aContext
 ]
 
 { #category : #API }
@@ -54,6 +62,14 @@ CommandsWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
+{ #category : #'encoding and decoding' }
+CommandsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
+
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: aContext
+]
+
 { #category : #API }
 CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
@@ -61,7 +77,7 @@ CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
 	mimeType := self mediaTypeOf: anHttpRequest.
 
-	encodedCommands := cosmos
+	encodedCommands := self
 		encode: self commandManagementSystem commands
 		of: #commands
 		to: mimeType
@@ -106,7 +122,7 @@ CommandsWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
 
 	mimeType := self mediaTypeOf: anHttpRequest.
 
-	encodedCommand := cosmos
+	encodedCommand := self
 		encode: self commandManagementSystem nextCommand
 		of: #commands
 		to: mimeType

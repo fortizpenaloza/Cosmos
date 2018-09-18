@@ -1,5 +1,5 @@
 Class {
-	#name : #CommandsAPITest,
+	#name : #CommandsWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'interface',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #accessing }
-CommandsAPITest >> applicationJsonVersion1dot0dot0 [
+CommandsWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType applicationJson
 		parameters: {('version' -> '1.0.0')} asDictionary;
@@ -17,36 +17,42 @@ CommandsAPITest >> applicationJsonVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
-CommandsAPITest >> commandWithMediumPriorityIdentifier [
+CommandsWebServiceTest >> commandWithMediumPriorityIdentifier [
 
 	^ identifierSequence second
 ]
 
 { #category : #accessing }
-CommandsAPITest >> identifierProvider [
+CommandsWebServiceTest >> httpRequestContext [
+
+	^ HttpRequestContext new
+]
+
+{ #category : #accessing }
+CommandsWebServiceTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
 { #category : #'tests - support' }
-CommandsAPITest >> installLedCommandsAddOn [
+CommandsWebServiceTest >> installLedCommandsAddOn [
 
 	^ (LEDCommandsAddOn on: rootSystem) install
 ]
 
 { #category : #running }
-CommandsAPITest >> setUp [
+CommandsWebServiceTest >> setUp [
 
 	identifierSequence := {UUID new.
 	UUID new}.
 
 	super setUp.
 
-	interface := (CommandsWebServiceSpecification toInstallOn: Teapot on workingWith: rootSystem) install
+	interface := CommandsWebService workingWith: rootSystem
 ]
 
 { #category : #running }
-CommandsAPITest >> setUpRequirements [
+CommandsWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -55,7 +61,7 @@ CommandsAPITest >> setUpRequirements [
 ]
 
 { #category : #tests }
-CommandsAPITest >> testCreatingCommand [
+CommandsWebServiceTest >> testCreatingCommand [
 
 	| response |
 
@@ -83,7 +89,7 @@ CommandsAPITest >> testCreatingCommand [
 ]
 
 { #category : #tests }
-CommandsAPITest >> testDeletingCommand [
+CommandsWebServiceTest >> testDeletingCommand [
 
 	| response |
 
@@ -111,7 +117,7 @@ CommandsAPITest >> testDeletingCommand [
 ]
 
 { #category : #tests }
-CommandsAPITest >> testGettingCommands [
+CommandsWebServiceTest >> testGettingCommands [
 
 	| response |
 
@@ -131,7 +137,7 @@ CommandsAPITest >> testGettingCommands [
 ]
 
 { #category : #tests }
-CommandsAPITest >> testNextCommandFormattedAsJson [
+CommandsWebServiceTest >> testNextCommandFormattedAsJson [
 
 	| response |
 
@@ -154,7 +160,7 @@ CommandsAPITest >> testNextCommandFormattedAsJson [
 ]
 
 { #category : #tests }
-CommandsAPITest >> testNextCommandFormattedAsPlainText [
+CommandsWebServiceTest >> testNextCommandFormattedAsPlainText [
 
 	| response |
 
