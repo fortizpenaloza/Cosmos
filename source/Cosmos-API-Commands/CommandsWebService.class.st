@@ -116,3 +116,9 @@ CommandsWebService >> nextCommandBasedOn: anHttpRequest [
 
 	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
 ]
+
+{ #category : #specification }
+CommandsWebService >> specification [
+
+	^ CommandsWebServiceSpecification new
+]

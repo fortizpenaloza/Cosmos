@@ -4,66 +4,34 @@ Class {
 	#category : #'Cosmos-API-Commands'
 }
 
-{ #category : #'installing - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0Mapping [
+{ #category : #'specification - encoders and decoders' }
+CommandsWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
-	mappingRuleSetBuilder
+	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
 		to: #commands
 		using: self commandJsonDecoderVersion1dot0dot0
 ]
 
-{ #category : #'installing - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0Mapping [
+{ #category : #'specification - encoders and decoders' }
+CommandsWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
-	mappingRuleSetBuilder
+	aBuilder
 		addDefaultRuleToEncode: #commands
 		to: self applicationJsonVersion1dot0dot0
 		using: self commandJsonEncoderVersion1dot0dot0
 ]
 
-{ #category : #'installing - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandPlainTextEncoderMapping [
+{ #category : #'specification - encoders and decoders' }
+CommandsWebServiceSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
 
-	mappingRuleSetBuilder
+	aBuilder
 		addRuleToEncode: #commands
 		to: self textPlain
 		using: self commandPlainTextEncoder
 ]
 
-{ #category : #'installing - routes' }
-CommandsWebServiceSpecification >> addCreateCommandsRoute [
-
-	server
-		POST: '/commands' -> [ :request | interface createCommandBasedOn: request ]
-]
-
-{ #category : #'installing - routes' }
-CommandsWebServiceSpecification >> addDeleteCommandsRoute [
-
-	server
-		DELETE:
-			'/commands/<identifier:IsUUID>'
-				-> [ :request | interface deleteCommandBasedOn: request ]
-]
-
-{ #category : #'installing - routes' }
-CommandsWebServiceSpecification >> addGetCommandsRoute [
-
-	server
-		GET: '/commands' -> [ :request | interface getCommandsBasedOn: request ]
-]
-
-{ #category : #'installing - routes' }
-CommandsWebServiceSpecification >> addNextCommandRoute [
-
-	server
-		POST:
-			'/commands/getNext'
-				-> [ :request | interface nextCommandBasedOn: request ]
-]
-
-{ #category : #'MIME types' }
+{ #category : #'media types' }
 CommandsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
@@ -103,19 +71,44 @@ CommandsWebServiceSpecification >> commandPlainTextEncoder [
 	^ [ :commandWithPriority | commandWithPriority command ]
 ]
 
-{ #category : #installing }
-CommandsWebServiceSpecification >> install [
+{ #category : #'specification - routes' }
+CommandsWebServiceSpecification >> createCommandsRoute [
 
-	self
-		addCreateCommandsRoute;
-		addGetCommandsRoute;
-		addDeleteCommandsRoute;
-		addNextCommandRoute.
-				
-	^ interface
+	^ RouteSpecification
+		handling: #POST
+		at: '/commands'
+		sending: #createCommandBasedOn:within:
 ]
 
-{ #category : #'MIME types' }
+{ #category : #'specification - routes' }
+CommandsWebServiceSpecification >> deleteCommandsRoute [
+
+	^ RouteSpecification
+		handling: #DELETE
+		at: '/commands/<identifier:IsUUID>'
+		sending: #deleteCommandBasedOn:within:
+]
+
+{ #category : #'specification - routes' }
+CommandsWebServiceSpecification >> getCommandsRoute [
+
+	^ RouteSpecification 
+		handling: #GET 
+		at: '/commands'
+	 	sending: #getCommandsBasedOn:within:
+]
+
+{ #category : #'specification - routes' }
+CommandsWebServiceSpecification >> getNextCommandRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: '/commands/getNext'
+		sending: #nextCommandBasedOn:within:
+
+]
+
+{ #category : #'media types' }
 CommandsWebServiceSpecification >> textPlain [
 
 	^ ZnMimeType fromString: 'text/plain;charset=utf-8'
