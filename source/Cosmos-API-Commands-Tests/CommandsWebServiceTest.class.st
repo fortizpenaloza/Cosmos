@@ -178,3 +178,15 @@ CommandsWebServiceTest >> testNextCommandFormattedAsPlainText [
 
 	self assert: response contents equals: 'TURN_ON_LED'
 ]
+
+{ #category : #tests }
+CommandsWebServiceTest >> testRoutesConfiguration [
+
+	| teapot |
+
+	teapot := Teapot on.
+
+	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
+
+	self assert: teapot routes size equals: 4
+]
