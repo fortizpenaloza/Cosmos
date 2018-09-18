@@ -1,38 +1,33 @@
 Class {
-	#name : #CommandsAPI,
+	#name : #CommandsWebService,
 	#superclass : #Object,
 	#instVars : [
-		'context'
+		'cosmos',
+		'mappingRuleSet'
 	],
 	#category : #'Cosmos-API-Commands'
 }
 
 { #category : #'instance creation' }
-CommandsAPI class >> workingWithin: aContext [
+CommandsWebService class >> workingWith: aCosmosSystem [
 	
-	^ self new initializeWorkingWithin: aContext
-]
-
-{ #category : #'private - API' }
-CommandsAPI >> acceptMimeTypeOf: aHttpRequest [
-
-	^ ZnMimeType fromString: aHttpRequest accept
+	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #'private - systems' }
-CommandsAPI >> commandManagementSystem [
+CommandsWebService >> commandManagementSystem [
 
-	^ context systemImplementing: #CommandManagementSystemInterface
+	^ cosmos systemImplementing: #CommandManagementSystemInterface
 ]
 
 { #category : #API }
-CommandsAPI >> createCommandBasedOn: anHttpRequest [
+CommandsWebService >> createCommandBasedOn: anHttpRequest [
 
 	| mediaType commandWithPriority commandWithPriorityLocation |
 
 	mediaType := ZnMimeType fromString: anHttpRequest accept.
 
-	commandWithPriority := context
+	commandWithPriority := cosmos
 		decode: anHttpRequest contents
 		encodedAs: mediaType
 		to: #commands
@@ -46,7 +41,7 @@ CommandsAPI >> createCommandBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-CommandsAPI >> deleteCommandBasedOn: anHttpRequest [
+CommandsWebService >> deleteCommandBasedOn: anHttpRequest [
 
 	^ [ | identifier |
 
@@ -62,13 +57,13 @@ CommandsAPI >> deleteCommandBasedOn: anHttpRequest [
 ]
 
 { #category : #API }
-CommandsAPI >> getCommandsBasedOn: anHttpRequest [
+CommandsWebService >> getCommandsBasedOn: anHttpRequest [
 
 	| mimeType encodedCommands |
 
-	mimeType := self acceptMimeTypeOf: anHttpRequest.
+	mimeType := self mediaTypeOf: anHttpRequest.
 
-	encodedCommands := context
+	encodedCommands := cosmos
 		encode: self commandManagementSystem commands
 		of: #commands
 		to: mimeType
@@ -78,19 +73,21 @@ CommandsAPI >> getCommandsBasedOn: anHttpRequest [
 ]
 
 { #category : #'private - systems' }
-CommandsAPI >> identifierSystem [
+CommandsWebService >> identifierSystem [
 
-	^ context systemImplementing: #IdentifierSystemInterface
+	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-CommandsAPI >> initializeWorkingWithin: aContext [
+CommandsWebService >> initializeWorkingWith: aCosmosSystem [
 
-	context := aContext
+	cosmos := aCosmosSystem.
+	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
+		for: self specification) build
 ]
 
 { #category : #'private - API' }
-CommandsAPI >> locationOf: commandWithPriority [
+CommandsWebService >> locationOf: commandWithPriority [
 
 	^ ZnUrl
 		fromString:
@@ -98,14 +95,20 @@ CommandsAPI >> locationOf: commandWithPriority [
 				expandMacrosWith: (self identifierSystem identifierOf: commandWithPriority) asString36)
 ]
 
+{ #category : #'private - API' }
+CommandsWebService >> mediaTypeOf: aHttpRequest [
+
+	^ ZnMimeType fromString: aHttpRequest accept
+]
+
 { #category : #API }
-CommandsAPI >> nextCommandBasedOn: anHttpRequest [
+CommandsWebService >> nextCommandBasedOn: anHttpRequest [
 
 	| mimeType encodedCommand |
 
-	mimeType := self acceptMimeTypeOf: anHttpRequest.
+	mimeType := self mediaTypeOf: anHttpRequest.
 
-	encodedCommand := context
+	encodedCommand := cosmos
 		encode: self commandManagementSystem nextCommand
 		of: #commands
 		to: mimeType

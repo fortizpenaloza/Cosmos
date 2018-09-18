@@ -4,12 +4,6 @@ Class {
 	#category : #'Cosmos-API-Data'
 }
 
-{ #category : #'instance creation' }
-DataWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
-
-	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
-]
-
 { #category : #'specification - encoders and decoders' }
 DataWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0MappingIn: aBuilder [
 

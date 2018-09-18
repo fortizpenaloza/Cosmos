@@ -42,7 +42,7 @@ CommandsAPITest >> setUp [
 
 	super setUp.
 
-	interface := (CommandsAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install
+	interface := (CommandsWebServiceSpecification toInstallOn: Teapot on workingWith: rootSystem) install
 ]
 
 { #category : #running }
@@ -67,10 +67,7 @@ CommandsAPITest >> testCreatingCommand [
 				entity:
 					(ZnEntity
 						json:
-							'{
-	"command" : "TURN_ON_LED",
-	"priority" : 100
-}')).
+							'{"command":"TURN_ON_LED","priority":100}')).
 
 	self
 		assert: response code equals: 201;

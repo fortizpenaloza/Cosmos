@@ -1,22 +1,11 @@
 Class {
-	#name : #CommandsAPIInstaller,
+	#name : #CommandsWebServiceSpecification,
 	#superclass : #Object,
-	#instVars : [
-		'interface',
-		'server',
-		'mappingRuleSetBuilder'
-	],
 	#category : #'Cosmos-API-Commands'
 }
 
-{ #category : #'instance creation' }
-CommandsAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
-
-	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
-]
-
 { #category : #'installing - encoders and decoders' }
-CommandsAPIInstaller >> addCommandJsonDecoderVersion1dot0dot0Mapping [
+CommandsWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
@@ -25,7 +14,7 @@ CommandsAPIInstaller >> addCommandJsonDecoderVersion1dot0dot0Mapping [
 ]
 
 { #category : #'installing - encoders and decoders' }
-CommandsAPIInstaller >> addCommandJsonEncoderVersion1dot0dot0Mapping [
+CommandsWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0Mapping [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToEncode: #commands
@@ -34,7 +23,7 @@ CommandsAPIInstaller >> addCommandJsonEncoderVersion1dot0dot0Mapping [
 ]
 
 { #category : #'installing - encoders and decoders' }
-CommandsAPIInstaller >> addCommandPlainTextEncoderMapping [
+CommandsWebServiceSpecification >> addCommandPlainTextEncoderMapping [
 
 	mappingRuleSetBuilder
 		addRuleToEncode: #commands
@@ -43,14 +32,14 @@ CommandsAPIInstaller >> addCommandPlainTextEncoderMapping [
 ]
 
 { #category : #'installing - routes' }
-CommandsAPIInstaller >> addCreateCommandsRoute [
+CommandsWebServiceSpecification >> addCreateCommandsRoute [
 
 	server
 		POST: '/commands' -> [ :request | interface createCommandBasedOn: request ]
 ]
 
 { #category : #'installing - routes' }
-CommandsAPIInstaller >> addDeleteCommandsRoute [
+CommandsWebServiceSpecification >> addDeleteCommandsRoute [
 
 	server
 		DELETE:
@@ -59,14 +48,14 @@ CommandsAPIInstaller >> addDeleteCommandsRoute [
 ]
 
 { #category : #'installing - routes' }
-CommandsAPIInstaller >> addGetCommandsRoute [
+CommandsWebServiceSpecification >> addGetCommandsRoute [
 
 	server
 		GET: '/commands' -> [ :request | interface getCommandsBasedOn: request ]
 ]
 
 { #category : #'installing - routes' }
-CommandsAPIInstaller >> addNextCommandRoute [
+CommandsWebServiceSpecification >> addNextCommandRoute [
 
 	server
 		POST:
@@ -75,28 +64,26 @@ CommandsAPIInstaller >> addNextCommandRoute [
 ]
 
 { #category : #'MIME types' }
-CommandsAPIInstaller >> applicationJsonVersion1dot0dot0 [
+CommandsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'encoders and decoders' }
-CommandsAPIInstaller >> commandJsonDecoderVersion1dot0dot0 [
+CommandsWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | (NeoJSONReader
-		on: aJSON readStream)
+	^ [ :aJSON | 
+	(NeoJSONReader on: aJSON readStream)
 		for: CommandWithPriority
 			customDo: [ :mapping | 
 			mapping
-				decoder: [ :rawCommand | 
-					CommandWithPriority
-						holding: (rawCommand at: #command)
-						and: (rawCommand at: #priority) ] ];
-		nextAs: CommandWithPriority ].
+				decoder:
+					[ :rawCommand | CommandWithPriority holding: (rawCommand at: #command) and: (rawCommand at: #priority) ] ];
+		nextAs: CommandWithPriority ]
 ]
 
 { #category : #'encoders and decoders' }
-CommandsAPIInstaller >> commandJsonEncoderVersion1dot0dot0 [
+CommandsWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
 
 	^ [ :commandWithPriority | 
 	String
@@ -111,32 +98,13 @@ CommandsAPIInstaller >> commandJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-CommandsAPIInstaller >> commandPlainTextEncoder [
+CommandsWebServiceSpecification >> commandPlainTextEncoder [
 
 	^ [ :commandWithPriority | commandWithPriority command ]
 ]
 
-{ #category : #initialization }
-CommandsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
-
-	mappingRuleSetBuilder := MappingRuleSetBuilder new.
-	
-	self
-		addCommandJsonDecoderVersion1dot0dot0Mapping;
-		addCommandJsonEncoderVersion1dot0dot0Mapping;
-		addCommandPlainTextEncoderMapping.
-
-	interface := CommandsAPI
-		workingWithin:
-			(CommandsAPIContext
-				workingWith: aCosmosSystem
-				queryingMappingsTo: mappingRuleSetBuilder build).
-
-	server := aServer
-]
-
 { #category : #installing }
-CommandsAPIInstaller >> install [
+CommandsWebServiceSpecification >> install [
 
 	self
 		addCreateCommandsRoute;
@@ -148,7 +116,7 @@ CommandsAPIInstaller >> install [
 ]
 
 { #category : #'MIME types' }
-CommandsAPIInstaller >> textPlain [
+CommandsWebServiceSpecification >> textPlain [
 
 	^ ZnMimeType fromString: 'text/plain;charset=utf-8'
 ]

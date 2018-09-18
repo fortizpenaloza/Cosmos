@@ -14,16 +14,10 @@ DataWebService class >> workingWith: aCosmosSystem [
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
-{ #category : #'instance creation' }
-DataWebService class >> workingWithin: aContext [ 
-	
-	^self new initializeWorkingWithin: aContext 
-]
-
 { #category : #API }
 DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
-	^ [ | timestamp rawData |
+	^ [ | rawData |
 
 	aContext hold: self currentDateTime under: #request_timestamp.
 
@@ -129,7 +123,7 @@ DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ | mediaType encodedPoints |
 
-	mediaType := ZnMimeType fromString: anHttpRequest accept.
+	mediaType := self mediaTypeOf: anHttpRequest.
 
 	self dataManagementSystem
 		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
@@ -152,7 +146,7 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ [ | mediaType streamsToEncode encodedStreams |
 
-	mediaType := ZnMimeType fromString: anHttpRequest accept.
+	mediaType := self mediaTypeOf: anHttpRequest.
 
 	self
 		withIdentifierProvidedIn: anHttpRequest
@@ -196,12 +190,18 @@ DataWebService >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - API' }
-DataWebService >> locationOf: dataStream [
+DataWebService >> locationOf: aDataStream [
 
 	^ ZnUrl
 		fromString:
 			('localhost/<1s>'
-				expandMacrosWith: (self identifierSystem identifierOf: dataStream) asString36)
+				expandMacrosWith: (self identifierSystem identifierOf: aDataStream) asString36)
+]
+
+{ #category : #'private - API' }
+DataWebService >> mediaTypeOf: anHttpRequest [
+
+	^ ZnMimeType fromString: anHttpRequest accept
 ]
 
 { #category : #specification }

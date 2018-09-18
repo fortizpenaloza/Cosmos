@@ -104,18 +104,21 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	<ignoreForCoverage>
-	| server |
+	| teapot configurator |
 
-	server := self teapot.
+	teapot := self teapot.
+	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
 
-	(DataWebServiceSpecification toInstallOn: server workingWith: cosmos) install.
-	(TriggersAPIInstaller toInstallOn: server workingWith: cosmos)
-		install.
-	(ActionsAPIInstaller toInstallOn: server workingWith: cosmos) install.
-	self configureAllowOriginAfterFilterOn: server.
-	self configureExceptionHandlerOn: server.
+	configurator
+		addRoutesOf: (DataWebService workingWith: cosmos);
+		addRoutesOf: (CommandsWebService workingWith: cosmos).
 
-	server start
+	(TriggersAPIInstaller toInstallOn: teapot workingWith: cosmos) install.
+	(ActionsAPIInstaller toInstallOn: teapot workingWith: cosmos) install.
+	self configureAllowOriginAfterFilterOn: teapot.
+	self configureExceptionHandlerOn: teapot.
+
+	teapot start
 ]
 
 { #category : #'private-activation' }
