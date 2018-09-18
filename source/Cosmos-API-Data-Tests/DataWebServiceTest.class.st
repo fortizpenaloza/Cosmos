@@ -393,6 +393,18 @@ DataWebServiceTest >> testGettingDataStreams [
 		assert: response contents equals: self dataStreamsSnapshotAsJSON
 ]
 
+{ #category : #tests }
+DataWebServiceTest >> testRoutesConfiguration [
+
+	| teapot |
+
+	teapot := Teapot on.
+
+	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
+
+	self assert: teapot routes size equals: 6
+]
+
 { #category : #accessing }
 DataWebServiceTest >> updateTemperatureAndPressureDataStreamsHttpRequest [
 
