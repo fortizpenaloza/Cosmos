@@ -101,7 +101,6 @@ DataWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
 					mapping
 						encoder:
 							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
 				nextPut: dataPoint ] ]
 ]
 

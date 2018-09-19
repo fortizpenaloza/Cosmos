@@ -52,7 +52,6 @@ ActionsAPIInstaller >> actionJsonEncoderVersion1dot0dot0 [
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
 				nextPut: action ] ]
 ]
 
