@@ -1,5 +1,5 @@
 Class {
-	#name : #BlockEvaluationPolicy,
+	#name : #EvaluateBlockPolicy,
 	#superclass : #ActionEvaluationPolicy,
 	#instVars : [
 		'block'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-BlockEvaluationPolicy class >> for: aBlock [ 
+EvaluateBlockPolicy class >> for: aBlock [ 
 
 	^ self new initializeFor: aBlock
 ]
 
 { #category : #evaluating }
-BlockEvaluationPolicy >> evaluateWith: anActionEvaluatorConfiguration [
+EvaluateBlockPolicy >> evaluateWith: anActionEvaluatorConfiguration [
 
 	block value
 ]
 
 { #category : #'initialize-release' }
-BlockEvaluationPolicy >> initializeFor: aBlock [
+EvaluateBlockPolicy >> initializeFor: aBlock [
 
 	block := aBlock
 ]

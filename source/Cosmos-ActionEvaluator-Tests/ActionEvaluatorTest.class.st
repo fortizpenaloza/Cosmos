@@ -8,18 +8,35 @@ Class {
 ActionEvaluatorTest >> testActionBlockEvaluation [
 
 	| evaluated |
-	
+
 	evaluated := false.
 	self deny: evaluated.
-	
+
 	ActionEvaluator new
 		evaluate:
 			(Action
 				named: 'Send YO to Fran'
-				createdOn: (October first , 2014) atNoon
-				toEvaluate: (BlockEvaluationPolicy for: [ evaluated := true ])).
-	
+				evaluating: (EvaluateBlockPolicy for: [ evaluated := true ])).
+
 	self assert: evaluated
+]
+
+{ #category : #tests }
+ActionEvaluatorTest >> testActionEvaluationTroughtEventNotification [
+
+	| actionEvaluator action actionWasEvaluated |
+	
+	actionWasEvaluated := false.
+	action := Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ actionWasEvaluated := true ]).
+	actionEvaluator := ActionEvaluator new.
+	
+	self deny: actionWasEvaluated.
+	
+	actionEvaluator evaluateOn: (EvaluateActionEvent of: action).
+
+	self assert: actionWasEvaluated
 ]
 
 { #category : #tests }
@@ -32,13 +49,12 @@ ActionEvaluatorTest >> testActionHTTPRequestEvaluation [
 
 	actionEvaluationConfiguration := PluggableMockObject new
 		respondTo: #httpClient
-		with: [ 
-			PluggableMockObject new
+		with: [ PluggableMockObject new
 				respondTo: #request: with: [  ];
-				respondTo: #get with: [ evaluated := true ] 
-		].
+				respondTo: #get with: [ evaluated := true ] ].
 
-	evaluator := ActionEvaluator configuredBy: actionEvaluationConfiguration.
+	evaluator := ActionEvaluator
+		configuredBy: actionEvaluationConfiguration.
 	request := ZnRequest get: 'http://zn.stfx.eu/zn/small.html'.
 
 	self deny: evaluated.
@@ -47,7 +63,6 @@ ActionEvaluatorTest >> testActionHTTPRequestEvaluation [
 		evaluate:
 			(Action
 				named: 'Send YO to Fran'
-				createdOn: (October first , 2014) atNoon
-				toEvaluate: (HTTPRequestEvaluationPolicy for: request)).
+				evaluating: (SendHttpRequestPolicy sending: request)).
 	self assert: evaluated
 ]

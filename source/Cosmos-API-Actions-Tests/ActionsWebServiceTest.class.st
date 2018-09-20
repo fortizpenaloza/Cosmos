@@ -1,5 +1,5 @@
 Class {
-	#name : #ActionsAPITest,
+	#name : #ActionsWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'interface'
@@ -8,34 +8,34 @@ Class {
 }
 
 { #category : #accessing }
-ActionsAPITest >> actionJsonVersion1dot0dot0MimeType [
+ActionsWebServiceTest >> actionJsonVersion1dot0dot0MimeType [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.action+json; version=1.0.0'
 ]
 
 { #category : #accessing }
-ActionsAPITest >> dateTimeFormattedAsISO8601 [
+ActionsWebServiceTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
 { #category : #accessing }
-ActionsAPITest >> getActionsHttpRequest [
+ActionsWebServiceTest >> getActionsHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions') setAccept: self actionJsonVersion1dot0dot0MimeType
 ]
 
 { #category : #running }
-ActionsAPITest >> setUp [
+ActionsWebServiceTest >> setUp [
 
 	super setUp.
 
-	interface := (ActionsAPIInstaller toInstallOn: Teapot on workingWith: rootSystem) install
+	interface := (ActionsWebServiceSpecification toInstallOn: Teapot on workingWith: rootSystem) install
 ]
 
 { #category : #running }
-ActionsAPITest >> setUpRequirements [
+ActionsWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -44,7 +44,48 @@ ActionsAPITest >> setUpRequirements [
 ]
 
 { #category : #tests }
-ActionsAPITest >> testDeregistration [
+ActionsWebServiceTest >> testCreatingAction [
+
+	| response |
+
+	self assert: self actionManagementSystem actions isEmpty.
+
+	response := interface
+		registerHandling:
+			'{
+		"name" : "List DNS records",
+		"request" : { 
+			"request_line" : { 
+				"method" : "GET",
+				"url" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
+				"version" : "HTTP/1.1"
+			},
+		"headers" : [
+			{
+				"key" : "X-Auth-Email",
+				"value" : "patchinko@gmail.com"
+			},
+			{
+				"key" : "X-Auth-Key",
+				"value" : "93b0b7a99ad1fc123d0d2b6508849db7e6414"
+			}
+		]
+	}
+}'.
+
+	self
+		assert: response code equals: 201;
+		assert: (response headers includesKey: 'Location').
+
+	self
+		withTheOnlyOneIn: self actionManagementSystem actions
+		do: [ :action | 
+			self
+				assert: action name equals: 'List DNS records' ]
+]
+
+{ #category : #tests }
+ActionsWebServiceTest >> testDeregistration [
 
 	self assert: self actionManagementSystem actions isEmpty.
 
@@ -81,7 +122,7 @@ ActionsAPITest >> testDeregistration [
 ]
 
 { #category : #tests }
-ActionsAPITest >> testQueringActions [
+ActionsWebServiceTest >> testQueringActions [
 
 	| response |
 
@@ -134,46 +175,4 @@ ActionsAPITest >> testQueringActions [
 		}
 	}
 ]' expandMacrosWith: self dateTimeFormattedAsISO8601)
-]
-
-{ #category : #tests }
-ActionsAPITest >> testRegistration [
-
-	| response |
-
-	self assert: self actionManagementSystem actions isEmpty.
-
-	response := interface
-		registerHandling:
-			'{
-		"name" : "List DNS records",
-		"request" : { 
-			"request_line" : { 
-				"method" : "GET",
-				"url" : "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
-				"version" : "HTTP/1.1"
-			},
-		"headers" : [
-			{
-				"key" : "X-Auth-Email",
-				"value" : "patchinko@gmail.com"
-			},
-			{
-				"key" : "X-Auth-Key",
-				"value" : "93b0b7a99ad1fc123d0d2b6508849db7e6414"
-			}
-		]
-	}
-}'.
-
-	self
-		assert: response code equals: 201;
-		assert: (response headers includesKey: 'Location').
-
-	self
-		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | 
-			self
-				assert: action name equals: 'List DNS records';
-				assert: action creationDateTime equals: self timeSystem dateTime ]
 ]

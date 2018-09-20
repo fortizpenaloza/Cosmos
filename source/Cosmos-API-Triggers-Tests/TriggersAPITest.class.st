@@ -113,7 +113,7 @@ TriggersAPITest >> setUp [
 
 	self actionManagementSystem
 		registerNamed: 'Set triggered to true'
-		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
+		toEvaluate: (EvaluateBlockPolicy for: [ "Do nothing" ])
 ]
 
 { #category : #running }

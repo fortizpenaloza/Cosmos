@@ -1,5 +1,5 @@
 Class {
-	#name : #ActionsAPIInstaller,
+	#name : #ActionsWebServiceSpecification,
 	#superclass : #Object,
 	#instVars : [
 		'server',
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionsAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+ActionsWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
 
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
 { #category : #'private-encoding' }
-ActionsAPIInstaller >> actionJsonEncoderVersion1dot0dot0 [
+ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 
 	^ [ :action | 
 	String
@@ -56,13 +56,13 @@ ActionsAPIInstaller >> actionJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'private-encoding' }
-ActionsAPIInstaller >> actionJsonVersion1dot0dot0MimeType [
+ActionsWebServiceSpecification >> actionJsonVersion1dot0dot0MimeType [
 
 	^ ZnMimeType fromString: 'application/vnd.cosmos.action+json; version=1.0.0'
 ]
 
 { #category : #'private-installing' }
-ActionsAPIInstaller >> addCrossOriginResourceSharingRouteXX [
+ActionsWebServiceSpecification >> addCrossOriginResourceSharingRouteXX [
 
 	server
 		OPTIONS:
@@ -82,7 +82,7 @@ ActionsAPIInstaller >> addCrossOriginResourceSharingRouteXX [
 ]
 
 { #category : #'private-installing' }
-ActionsAPIInstaller >> addDeregisterActionRoute [
+ActionsWebServiceSpecification >> addDeregisterActionRoute [
 
 	server
 		DELETE:
@@ -92,30 +92,30 @@ ActionsAPIInstaller >> addDeregisterActionRoute [
 ]
 
 { #category : #'private-installing' }
-ActionsAPIInstaller >> addGetActionsRoute [
+ActionsWebServiceSpecification >> addGetActionsRoute [
 
 	server GET: '/actions' -> [ :request | interface actionsFor: request ]
 ]
 
 { #category : #'private-installing' }
-ActionsAPIInstaller >> addRegisterActionRoute [
+ActionsWebServiceSpecification >> addRegisterActionRoute [
 
 	server POST: '/actions' -> [ :request | interface registerHandling: request contents ]
 ]
 
 { #category : #initialization }
-ActionsAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
+ActionsWebServiceSpecification >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
 		
 	self registerActionJsonEncoderVersion1dot0dot0.
 	
-	interface := ActionsAPI workingWithin: (ActionsAPIContext workingWith: aCosmosSystem  queryingMappingsTo: mappingRuleSetBuilder build).
+	interface := ActionsWebService workingWithin: (ActionsAPIContext workingWith: aCosmosSystem  queryingMappingsTo: mappingRuleSetBuilder build).
 	server := aServer
 ]
 
 { #category : #installing }
-ActionsAPIInstaller >> install [
+ActionsWebServiceSpecification >> install [
 
 	self
 		addGetActionsRoute;
@@ -127,7 +127,7 @@ ActionsAPIInstaller >> install [
 ]
 
 { #category : #'private-encoding' }
-ActionsAPIInstaller >> registerActionJsonEncoderVersion1dot0dot0 [
+ActionsWebServiceSpecification >> registerActionJsonEncoderVersion1dot0dot0 [
 
 	mappingRuleSetBuilder
 		addDefaultRuleToEncode: #actions

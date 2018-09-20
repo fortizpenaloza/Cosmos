@@ -10,15 +10,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-Action class >> named: aName createdOn: aDateTime toEvaluate: anEvaluationPolicy [ 
+Action class >> named: aName evaluating: anEvaluationPolicy [
 
-	^ self new initializeNamed: aName created: aDateTime toEvaluate: anEvaluationPolicy
-]
-
-{ #category : #accessing }
-Action >> creationDateTime [
-
-	^ creationDateTime
+	^ self new initializeNamed: aName evaluating: anEvaluationPolicy
 ]
 
 { #category : #evaluation }
@@ -28,10 +22,9 @@ Action >> evaluateWith: aConfiguration [
 ]
 
 { #category : #initialization }
-Action >> initializeNamed: aName created: aDateTime toEvaluate: anEvaluationPolicy [ 
+Action >> initializeNamed: aName evaluating: anEvaluationPolicy [ 
 
 	name := aName.
-	creationDateTime := aDateTime.
 	evaluationPolicy := anEvaluationPolicy
 ]
 

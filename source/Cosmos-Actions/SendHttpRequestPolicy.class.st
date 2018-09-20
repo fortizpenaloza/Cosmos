@@ -1,5 +1,5 @@
 Class {
-	#name : #HTTPRequestEvaluationPolicy,
+	#name : #SendHttpRequestPolicy,
 	#superclass : #ActionEvaluationPolicy,
 	#instVars : [
 		'requestToSend'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-HTTPRequestEvaluationPolicy class >> for: aRequest [
+SendHttpRequestPolicy class >> sending: aRequest [
 
-	^ self new initializeFor: aRequest
+	^ self new initializeSending: aRequest
 ]
 
 { #category : #evaluating }
-HTTPRequestEvaluationPolicy >> evaluateWith: aConfiguration [
+SendHttpRequestPolicy >> evaluateWith: aConfiguration [
 
 	aConfiguration httpClient
 		request: requestToSend;
@@ -22,7 +22,7 @@ HTTPRequestEvaluationPolicy >> evaluateWith: aConfiguration [
 ]
 
 { #category : #'initialize-release' }
-HTTPRequestEvaluationPolicy >> initializeFor: aRequest [
+SendHttpRequestPolicy >> initializeSending: aRequest [
 	
 	requestToSend := aRequest
 ]

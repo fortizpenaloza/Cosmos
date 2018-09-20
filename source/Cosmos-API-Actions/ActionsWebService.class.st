@@ -1,5 +1,5 @@
 Class {
-	#name : #ActionsAPI,
+	#name : #ActionsWebService,
 	#superclass : #Object,
 	#instVars : [
 		'context'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionsAPI class >> workingWithin: aContext [
+ActionsWebService class >> workingWithin: aContext [
 	
 	^ self new initializeWorkingWithin: aContext 
 ]
 
 { #category : #systems }
-ActionsAPI >> actionManagementSystem [
+ActionsWebService >> actionManagementSystem [
 
 	^ context actionManagementSystem
 ]
 
 { #category : #API }
-ActionsAPI >> actionsFor: anHttpRequest [
+ActionsWebService >> actionsFor: anHttpRequest [
 
 	| mimeType |
 
@@ -42,7 +42,7 @@ ActionsAPI >> actionsFor: anHttpRequest [
 ]
 
 { #category : #API }
-ActionsAPI >> deregisterNamed: aName [
+ActionsWebService >> deregisterNamed: aName [
 
 	|name | 
 	
@@ -54,23 +54,25 @@ ActionsAPI >> deregisterNamed: aName [
 ]
 
 { #category : #initialization }
-ActionsAPI >> initializeWorkingWithin: aContext [
+ActionsWebService >> initializeWorkingWithin: aContext [
 
 	context := aContext
 ]
 
 { #category : #API }
-ActionsAPI >> registerHandling: aJSON [
+ActionsWebService >> registerHandling: aJSON [
 
+	| action |
 	^ [ [ | rawAction |
 
 	rawAction := (NeoJSONReader on: aJSON readStream)
 		propertyNamesAsSymbols: true;
 		next.
 
-	self actionManagementSystem
-		registerNamed: (context parseNameFrom: rawAction)
-		toEvaluate: (context parseRequestFrom: rawAction).
+	action := Action named: (context parseNameFrom: rawAction)
+		evaluating: (SendHttpRequestPolicy sending: (context parseRequestFrom: rawAction)).
+	
+	self actionManagementSystem register: action.
 
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
 		on: ConflictingObjectFound

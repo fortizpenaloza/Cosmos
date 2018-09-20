@@ -13,6 +13,6 @@ ActionsAPIInstallerTest >> testInstallation [
 	| teapot |
 
 	teapot := Teapot on.
-	(ActionsAPIInstaller toInstallOn: teapot workingWith: self) install.
+	(ActionsWebServiceSpecification toInstallOn: teapot workingWith: self) install.
 	self assert: teapot routes size equals: 4
 ]
