@@ -24,10 +24,10 @@ ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 			(NeoJSONWriter on: stream)
 				for: Action
 					do: [ :mapping | 
-					mapping
-						mapAccessor: #name;
-						mapAccessor: #creationDateTime to: #created_on;
-						mapInstVar: #evaluationPolicy to: #http_request ];
+					mapping mapInstVar: #name.
+					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy ];
+				for: #Policy
+				customDo: [ :mapping | mapping encoder: [ :a | a instVarAt: 1 ]   ];
 				for: ZnRequest
 					do: [ :mapping | 
 					mapping
@@ -49,9 +49,8 @@ ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 						mapAccessor: #key;
 						mapAccessor: #value ];
 				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				nextPut: action ] ]
 ]
 

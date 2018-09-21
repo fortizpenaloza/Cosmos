@@ -2,10 +2,18 @@ Class {
 	#name : #ActionsWebService,
 	#superclass : #Object,
 	#instVars : [
-		'context'
+		'context',
+		'cosmos',
+		'mappingRuleSet'
 	],
 	#category : #'Cosmos-API-Actions'
 }
+
+{ #category : #'instance creation' }
+ActionsWebService class >> workingWith: aCosmosSystem [
+	
+	^ self new initializeWorkingWith: aCosmosSystem
+]
 
 { #category : #'instance creation' }
 ActionsWebService class >> workingWithin: aContext [
@@ -42,28 +50,12 @@ ActionsWebService >> actionsFor: anHttpRequest [
 ]
 
 { #category : #API }
-ActionsWebService >> deregisterNamed: aName [
-
-	|name | 
-	
-	name := aName replaceAll: $_ with: Character space.
-	
-	self actionManagementSystem deregisterNamed: name.
-
-	^ ZnResponse noContent
-]
-
-{ #category : #initialization }
-ActionsWebService >> initializeWorkingWithin: aContext [
-
-	context := aContext
-]
-
-{ #category : #API }
-ActionsWebService >> registerHandling: aJSON [
+ActionsWebService >> createActionBasedOn: aJSON [
 
 	| action |
 	^ [ [ | rawAction |
+	
+	action := self decode: aJSON contents encodedAs: aJSON contentType to: #actions within: nil.
 
 	rawAction := (NeoJSONReader on: aJSON readStream)
 		propertyNamesAsSymbols: true;
@@ -81,4 +73,47 @@ ActionsWebService >> registerHandling: aJSON [
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
+]
+
+{ #category : #'private - encoding and deconding' }
+ActionsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
+
+	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
+		applyOn: aJSON
+		within: aContext
+]
+
+{ #category : #API }
+ActionsWebService >> deregisterNamed: aName [
+
+	| name |
+
+	name := aName replaceAll: $_ with: Character space.
+
+	self actionManagementSystem
+		actionNamed: name
+		ifFound: [ :action | self actionManagementSystem deregister: action ]
+		ifNone: [ ObjectNotFound signal ].
+
+	^ ZnResponse noContent
+]
+
+{ #category : #initialization }
+ActionsWebService >> initializeWorkingWith: aCosmosSystem [
+
+	cosmos := aCosmosSystem.
+	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
+		for: self specification) build
+]
+
+{ #category : #initialization }
+ActionsWebService >> initializeWorkingWithin: aContext [
+
+	context := aContext
+]
+
+{ #category : #accessing }
+ActionsWebService >> specification [
+	
+	^ ActionsWebServiceSpecification new
 ]
