@@ -1,19 +1,8 @@
 Class {
 	#name : #ActionsWebServiceSpecification,
 	#superclass : #Object,
-	#instVars : [
-		'server',
-		'interface',
-		'mappingRuleSetBuilder'
-	],
 	#category : #'Cosmos-API-Actions'
 }
-
-{ #category : #'instance creation' }
-ActionsWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
-
-	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
-]
 
 { #category : #'encoders and decoders' }
 ActionsWebServiceSpecification >> actionJsonDecoderVersion1dot0dot0 [
@@ -89,77 +78,26 @@ ActionsWebServiceSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn:
 		using: self actionJsonEncoderVersion1dot0dot0
 ]
 
-{ #category : #'private-installing' }
-ActionsWebServiceSpecification >> addCrossOriginResourceSharingRouteXX [
-
-	server
-		OPTIONS:
-			'/actions'
-				-> [ :request | 
-					| response |
-
-					response := ZnResponse noContent.
-
-					response headers
-						at: 'Access-Control-Allow-Headers'
-							put: 'Access-Control-Allow-Origin, Content-Type, Accept';
-						at: 'Access-Control-Allow-Methods' put: 'POST, GET, DELETE, PUT';
-						at: 'Access-Control-Max-Age' put: '86400'.
-
-					response ]
-]
-
-{ #category : #'private-installing' }
-ActionsWebServiceSpecification >> addDeregisterActionRoute [
-
-	server
-		DELETE:
-			'/actions/<name>'
-				-> [ :request | interface deregisterNamed: (request at: #name) ];
-		output: #text
-]
-
-{ #category : #'private-installing' }
-ActionsWebServiceSpecification >> addGetActionsRoute [
-
-	server GET: '/actions' -> [ :request | interface getActionsBasedOn: request within: HttpRequestContext new ]
-]
-
-{ #category : #'private-installing' }
-ActionsWebServiceSpecification >> addRegisterActionRoute [
-
-	server POST: '/actions' -> [ :request | interface registerHandling: request contents ]
-]
-
 { #category : #'media types' }
 ActionsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
-{ #category : #initialization }
-ActionsWebServiceSpecification >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
+{ #category : #'specification - routes' }
+ActionsWebServiceSpecification >> createActionRoute [
 
-	mappingRuleSetBuilder := MappingRuleSetBuilder new.
-
-	self addActionJsonEncoderVersion1dot0dot0MappingIn: nil.
-
-	interface := ActionsWebService
-		workingWithin:
-			(ActionsAPIContext
-				workingWith: aCosmosSystem
-				queryingMappingsTo: mappingRuleSetBuilder build).
-	server := aServer
+	^ RouteSpecification handling: #POST at: '/actions' sending: #registerHandling:
 ]
 
-{ #category : #installing }
-ActionsWebServiceSpecification >> install [
+{ #category : #'specification - routes' }
+ActionsWebServiceSpecification >> deleteActionRoute [
 
-	self
-		addGetActionsRoute;
-		addRegisterActionRoute;
-		addDeregisterActionRoute;
-		addCrossOriginResourceSharingRouteXX.
+	^ RouteSpecification handling: #DELETE at: '/actions/<name>' sending: #deregisterNamed:
+]
 
-	^ interface
+{ #category : #'specification - routes' }
+ActionsWebServiceSpecification >> getActionsRoute [
+
+	^ RouteSpecification handling: #GET at: '/actions' sending: #getActionsBasedOn:within:
 ]

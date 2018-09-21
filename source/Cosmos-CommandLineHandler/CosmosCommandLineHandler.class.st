@@ -111,11 +111,11 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	configurator
 		addRoutesOf: (DataWebService workingWith: cosmos);
-		addRoutesOf: (CommandsWebService workingWith: cosmos).
+		addRoutesOf: (CommandsWebService workingWith: cosmos);
+		addRoutesOf: (ActionsWebService workingWith: cosmos).
 
 	(TriggersAPIInstaller toInstallOn: teapot workingWith: cosmos) install.
-	(ActionsWebServiceSpecification toInstallOn: teapot workingWith: cosmos) install.
-	
+
 	self configureAllowOriginAfterFilterOn: teapot.
 	self configureExceptionHandlerOn: teapot.
 

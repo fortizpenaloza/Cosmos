@@ -2,7 +2,6 @@ Class {
 	#name : #ActionsWebService,
 	#superclass : #Object,
 	#instVars : [
-		'context',
 		'cosmos',
 		'mappingRuleSet'
 	],
@@ -15,12 +14,6 @@ ActionsWebService class >> workingWith: aCosmosSystem [
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
-{ #category : #'instance creation' }
-ActionsWebService class >> workingWithin: aContext [
-	
-	^ self new initializeWorkingWithin: aContext 
-]
-
 { #category : #systems }
 ActionsWebService >> actionManagementSystem [
 
@@ -28,7 +21,7 @@ ActionsWebService >> actionManagementSystem [
 ]
 
 { #category : #API }
-ActionsWebService >> createActionBasedOn: anHttpRequest [
+ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
 
 	^ [ [ | action |
 
@@ -36,7 +29,7 @@ ActionsWebService >> createActionBasedOn: anHttpRequest [
 		decode: anHttpRequest contents
 		encodedAs: anHttpRequest contentType
 		to: #actions
-		within: nil.
+		within: aContext.
 
 	self actionManagementSystem register: action.
 
@@ -72,7 +65,7 @@ ActionsWebService >> deregisterNamed: aName [
 	^ ZnResponse noContent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - encoding and deconding' }
 ActionsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
 
 	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
@@ -108,12 +101,6 @@ ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 	cosmos := aCosmosSystem.
 	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
 		for: self specification) build
-]
-
-{ #category : #initialization }
-ActionsWebService >> initializeWorkingWithin: aContext [
-
-	context := aContext
 ]
 
 { #category : #accessing }

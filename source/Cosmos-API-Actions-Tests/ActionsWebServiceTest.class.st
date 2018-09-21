@@ -58,10 +58,12 @@ ActionsWebServiceTest >> testCreatingAction [
 	self assert: self actionManagementSystem actions isEmpty.
 
 	response := interface
-		createActionBasedOn: ((ZnRequest post: 'http://COSMOS_URL/actions')
+		createActionBasedOn:
+			((ZnRequest post: 'http://COSMOS_URL/actions')
 				entity:
 					(ZnEntity
-						with: '{
+						with:
+							'{
   "name": "List DNS records",
   "http_request": {
     "request_line": {
@@ -81,17 +83,17 @@ ActionsWebServiceTest >> testCreatingAction [
     ]
   }
 }'
-						type: self applicationJsonVersion1dot0dot0)).
-						
+						type: self applicationJsonVersion1dot0dot0))
+		within: self httpRequestContext.
+
 	self
 		assert: response code equals: 201;
 		assert: (response headers includesKey: 'Location').
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | 
-			self
-				assert: action name equals: 'List DNS records' ]
+		do:
+			[ :action | self assert: action name equals: 'List DNS records' ]
 ]
 
 { #category : #tests }
@@ -192,4 +194,16 @@ ActionsWebServiceTest >> testQueringActions [
 			equals:
 			('[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}}]'
 				expandMacrosWith: self dateTimeFormattedAsISO8601)
+]
+
+{ #category : #tests }
+ActionsWebServiceTest >> testRoutesConfiguration [
+
+	| teapot |
+
+	teapot := Teapot on.
+
+	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
+
+	self assert: teapot routes size equals: 3
 ]
