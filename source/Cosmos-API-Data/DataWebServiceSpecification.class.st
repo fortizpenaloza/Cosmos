@@ -18,9 +18,7 @@ DataWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBu
 
 	aBuilder
 		addDefaultRuleToEncode: #data_points
-		to:
-			(ZnMimeType
-				fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0')
+		to: self applicationJsonVersion1dot0dot0 
 		using: self dataPointJsonEncoderVersion1dot0dot0
 ]
 

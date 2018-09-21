@@ -88,7 +88,7 @@ DataWebServiceTest >> getTemperatureStreamDataPointsHttpRequest [
 						, self temperatureStreamIdentifier asString36 , '/data-points')
 				setAccept:
 					(ZnMimeType
-						fromString: 'application/vnd.cosmos.data-points+json; version=1.0.0'))
+						fromString: 'application/json;version=1.0.0'))
 		pathParams: {(#identifier -> self temperatureStreamIdentifier)} asDictionary
 ]
 
@@ -334,20 +334,7 @@ DataWebServiceTest >> testGettingDataPoints [
 		assert: response code equals: 200;
 		assert: response contents
 			equals:
-			('[
-	{
-		"timestamp" : "<1s>",
-		"value" : 16.5
-	},
-	{
-		"timestamp" : "<1s>",
-		"value" : 16
-	},
-	{
-		"timestamp" : "<1s>",
-		"value" : 15.5
-	}
-]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"timestamp":"<1s>","value":16.5},{"timestamp":"<1s>","value":16},{"timestamp":"<1s>","value":15.5}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }

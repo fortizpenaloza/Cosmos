@@ -24,46 +24,20 @@ ActionsWebService class >> workingWithin: aContext [
 { #category : #systems }
 ActionsWebService >> actionManagementSystem [
 
-	^ context actionManagementSystem
+	^ cosmos systemImplementing: #ActionManagementSystemInterface
 ]
 
 { #category : #API }
-ActionsWebService >> actionsFor: anHttpRequest [
+ActionsWebService >> createActionBasedOn: anHttpRequest [
 
-	| mimeType |
+	^ [ [ | action |
 
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
+	action := self
+		decode: anHttpRequest contents
+		encodedAs: anHttpRequest contentType
+		to: #actions
+		within: nil.
 
-	^ [ [ ZnResponse
-		ok:
-			(ZnEntity
-				json:
-					(context
-						encode: self actionManagementSystem actions
-						of: #actions
-						to: mimeType
-						within: aContext)) ]
-		on: ConflictingObjectFound
-		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
-]
-
-{ #category : #API }
-ActionsWebService >> createActionBasedOn: aJSON [
-
-	| action |
-	^ [ [ | rawAction |
-	
-	action := self decode: aJSON contents encodedAs: aJSON contentType to: #actions within: nil.
-
-	rawAction := (NeoJSONReader on: aJSON readStream)
-		propertyNamesAsSymbols: true;
-		next.
-
-	action := Action named: (context parseNameFrom: rawAction)
-		evaluating: (SendHttpRequestPolicy sending: (context parseRequestFrom: rawAction)).
-	
 	self actionManagementSystem register: action.
 
 	ZnResponse created: (ZnUrl fromString: 'localhost') ]
@@ -96,6 +70,36 @@ ActionsWebService >> deregisterNamed: aName [
 		ifNone: [ ObjectNotFound signal ].
 
 	^ ZnResponse noContent
+]
+
+{ #category : #'as yet unclassified' }
+ActionsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
+
+	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
+		applyOn: anObject
+		within: aContext
+]
+
+{ #category : #API }
+ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
+
+	^ [ [ | mimeType actions encodedActions |
+
+	mimeType := ZnMimeType fromString: anHttpRequest accept.
+
+	actions := self actionManagementSystem actions.
+
+	encodedActions := self
+		encode: actions
+		of: #actions
+		to: mimeType
+		within: aContext .
+
+	ZnResponse ok: (ZnEntity json: encodedActions) ]
+		on: ConflictingObjectFound
+		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
+		on: ObjectNotFound
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
 { #category : #initialization }

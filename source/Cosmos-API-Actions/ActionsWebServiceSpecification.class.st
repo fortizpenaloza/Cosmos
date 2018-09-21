@@ -15,7 +15,24 @@ ActionsWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmo
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
-{ #category : #'private-encoding' }
+{ #category : #'encoders and decoders' }
+ActionsWebServiceSpecification >> actionJsonDecoderVersion1dot0dot0 [
+
+	^ [ :aJSON | 
+	(NeoJSONReader on: aJSON readStream)
+		for: Action
+			customDo: [ :mapping | 
+			mapping
+				decoder: [ :rawAction | 
+					Action
+						named: (rawAction at: #name)
+						evaluating:
+							(SendHttpRequestPolicy
+								sending: (HTTPRequestParser new parse: (rawAction at: #http_request))) ] ];
+		nextAs: Action ]
+]
+
+{ #category : #'encoders and decoders' }
 ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 
 	^ [ :action | 
@@ -54,10 +71,22 @@ ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 				nextPut: action ] ]
 ]
 
-{ #category : #'private-encoding' }
-ActionsWebServiceSpecification >> actionJsonVersion1dot0dot0MimeType [
+{ #category : #'specification - encoders and decoders' }
+ActionsWebServiceSpecification >> addActionJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
-	^ ZnMimeType fromString: 'application/vnd.cosmos.action+json; version=1.0.0'
+	aBuilder
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		to: #actions
+		using: self actionJsonDecoderVersion1dot0dot0
+]
+
+{ #category : #'specification - encoders and decoders' }
+ActionsWebServiceSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
+
+	aBuilder
+		addDefaultRuleToEncode: #actions
+		to: self applicationJsonVersion1dot0dot0 
+		using: self actionJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'private-installing' }
@@ -93,7 +122,7 @@ ActionsWebServiceSpecification >> addDeregisterActionRoute [
 { #category : #'private-installing' }
 ActionsWebServiceSpecification >> addGetActionsRoute [
 
-	server GET: '/actions' -> [ :request | interface actionsFor: request ]
+	server GET: '/actions' -> [ :request | interface getActionsBasedOn: request within: HttpRequestContext new ]
 ]
 
 { #category : #'private-installing' }
@@ -102,14 +131,24 @@ ActionsWebServiceSpecification >> addRegisterActionRoute [
 	server POST: '/actions' -> [ :request | interface registerHandling: request contents ]
 ]
 
+{ #category : #'media types' }
+ActionsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+
+	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+]
+
 { #category : #initialization }
 ActionsWebServiceSpecification >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
 
 	mappingRuleSetBuilder := MappingRuleSetBuilder new.
-		
-	self registerActionJsonEncoderVersion1dot0dot0.
-	
-	interface := ActionsWebService workingWithin: (ActionsAPIContext workingWith: aCosmosSystem  queryingMappingsTo: mappingRuleSetBuilder build).
+
+	self addActionJsonEncoderVersion1dot0dot0MappingIn: nil.
+
+	interface := ActionsWebService
+		workingWithin:
+			(ActionsAPIContext
+				workingWith: aCosmosSystem
+				queryingMappingsTo: mappingRuleSetBuilder build).
 	server := aServer
 ]
 
@@ -123,13 +162,4 @@ ActionsWebServiceSpecification >> install [
 		addCrossOriginResourceSharingRouteXX.
 
 	^ interface
-]
-
-{ #category : #'private-encoding' }
-ActionsWebServiceSpecification >> registerActionJsonEncoderVersion1dot0dot0 [
-
-	mappingRuleSetBuilder
-		addDefaultRuleToEncode: #actions
-		to: self actionJsonVersion1dot0dot0MimeType
-		using: self actionJsonEncoderVersion1dot0dot0
 ]

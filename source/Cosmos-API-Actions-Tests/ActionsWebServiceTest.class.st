@@ -8,12 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-ActionsWebServiceTest >> actionJsonVersion1dot0dot0MimeType [
-
-	^ ZnMimeType fromString: 'application/vnd.cosmos.action+json; version=1.0.0'
-]
-
-{ #category : #accessing }
 ActionsWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
@@ -29,7 +23,14 @@ ActionsWebServiceTest >> dateTimeFormattedAsISO8601 [
 { #category : #accessing }
 ActionsWebServiceTest >> getActionsHttpRequest [
 
-	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions') setAccept: self actionJsonVersion1dot0dot0MimeType
+	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions')
+		setAccept: self applicationJsonVersion1dot0dot0
+]
+
+{ #category : #accessing }
+ActionsWebServiceTest >> httpRequestContext [
+
+	^ HttpRequestContext new
 ]
 
 { #category : #running }
@@ -153,7 +154,8 @@ ActionsWebServiceTest >> testQueringActions [
 							(ZnHeaders
 								withAll:
 									{('X-Auth-Email' -> 'patchinko@gmail.com').
-									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')} asDictionary);
+									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
+										asDictionary);
 						yourself)).
 
 	self actionManagementSystem register: action.
@@ -176,14 +178,18 @@ ActionsWebServiceTest >> testQueringActions [
 							(ZnHeaders
 								withAll:
 									{('X-Auth-Email' -> 'patchinko@gmail.com').
-									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')} asDictionary);
+									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
+										asDictionary);
 						yourself)).
 
-	response := interface actionsFor: self getActionsHttpRequest.
+	response := interface
+		getActionsBasedOn: self getActionsHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response code equals: 200;
 		assert: response contents
 			equals:
-			('[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}}]'
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
