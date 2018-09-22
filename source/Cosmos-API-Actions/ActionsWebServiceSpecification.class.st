@@ -93,7 +93,7 @@ ActionsWebServiceSpecification >> createActionRoute [
 { #category : #'specification - routes' }
 ActionsWebServiceSpecification >> deleteActionRoute [
 
-	^ RouteSpecification handling: #DELETE at: '/actions/<name>' sending: #deregisterNamed:
+	^ RouteSpecification handling: #DELETE at: '/actions/<name>' sending: #deleteActionBasedOn:within:
 ]
 
 { #category : #'specification - routes' }

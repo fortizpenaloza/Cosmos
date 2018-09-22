@@ -14,7 +14,7 @@ ActionsWebService class >> workingWith: aCosmosSystem [
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 ActionsWebService >> actionManagementSystem [
 
 	^ cosmos systemImplementing: #ActionManagementSystemInterface
@@ -51,11 +51,11 @@ ActionsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObj
 ]
 
 { #category : #API }
-ActionsWebService >> deregisterNamed: aName [
+ActionsWebService >> deleteActionBasedOn: anHttpRequest within: aContext [
 
 	| name |
 
-	name := aName replaceAll: $_ with: Character space.
+	name := (anHttpRequest at: #name) replaceAll: $_ with: Character space.
 
 	self actionManagementSystem
 		actionNamed: name
@@ -103,7 +103,7 @@ ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 		for: self specification) build
 ]
 
-{ #category : #accessing }
+{ #category : #specification }
 ActionsWebService >> specification [
 	
 	^ ActionsWebServiceSpecification new
