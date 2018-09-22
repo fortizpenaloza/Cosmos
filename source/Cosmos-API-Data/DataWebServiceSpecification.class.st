@@ -1,6 +1,6 @@
 Class {
 	#name : #DataWebServiceSpecification,
-	#superclass : #Object,
+	#superclass : #WebServiceSpecification,
 	#category : #'Cosmos-API-Data'
 }
 

@@ -1,18 +1,8 @@
 Class {
 	#name : #ActionManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'evaluateAction'
-	],
-	#category : 'Cosmos-Actions-Tests-SystemModel'
+	#category : #'Cosmos-Actions-Tests-SystemModel'
 }
-
-{ #category : #initialization }
-ActionManagementSystemUserStoryTest >> setUp [
-
-	super setUp.
-	evaluateAction := false
-]
 
 { #category : #initialization }
 ActionManagementSystemUserStoryTest >> setUpRequirements [

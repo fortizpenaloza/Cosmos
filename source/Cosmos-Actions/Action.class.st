@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'creationDateTime',
 		'evaluationPolicy'
 	],
 	#category : #'Cosmos-Actions-Model'

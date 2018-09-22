@@ -5,20 +5,18 @@ Class {
 }
 
 { #category : #'tests support' }
-CodeQualityTest >> assertThereIsNoProblemsRunning: aRule [
+CodeQualityTest >> assertThereWasNoIssuesRunning: aRule onDeclaredPackagesExcluding: aClassSet [
 
 	| ruleCheckingResult |
 
-	ruleCheckingResult := self checkingResultFor: aRule.
-	self assert: ruleCheckingResult problemCount = 0 description: (self descriptionFrom: ruleCheckingResult)
-]
-
-{ #category : #'tests support' }
-CodeQualityTest >> checkingResultFor: aRule [
-
-	^ (RBSmalllintChecker
-		runRule: aRule
-		onEnvironment: (RBPackageEnvironment packages: self packagesToBeChecked)) result
+	ruleCheckingResult := self
+		resultAfterRunning: aRule
+		on: self packagesToBeChecked 
+		excluding: aClassSet.
+		
+	self
+		assert: ruleCheckingResult isEmpty
+		description: (self descriptionFrom: ruleCheckingResult)
 ]
 
 { #category : #accessing }
@@ -44,41 +42,69 @@ CodeQualityTest >> descriptionFrom: ruleCheckingResult [
 { #category : #accessing }
 CodeQualityTest >> packagesToBeChecked [
 
-	^ RPackage organizer packages select: [ :package | #('Cosmos-' 'Kepler-') anySatisfy: [ :prefix | package name beginsWith: prefix ] ]
+	^ RPackage organizer packages
+		select: [ :package | #('Cosmos-') anySatisfy: [ :prefix | package name beginsWith: prefix ] ]
+]
+
+{ #category : #'tests support' }
+CodeQualityTest >> resultAfterRunning: aRule on: aPackageSet excluding: aClassSet [
+
+	| allClassesWithoutExcluded |
+
+	allClassesWithoutExcluded := (aPackageSet flatCollect: #classes)
+		difference: aClassSet.
+
+	^ (RBSmalllintChecker
+		runRule: aRule
+		onEnvironment:
+			(RBPackageEnvironment packages: aPackageSet)
+				& (RBClassEnvironment classes: allClassesWithoutExcluded)) result
 ]
 
 { #category : #tests }
 CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 
-	self assertThereIsNoProblemsRunning: RBOnlyReadOrWrittenVariableRule new
+	self
+		assertThereWasNoIssuesRunning: RBOnlyReadOrWrittenVariableRule new
+		onDeclaredPackagesExcluding: #()
 ]
 
 { #category : #tests }
 CodeQualityTest >> testMessageImplementedButNotSent [
 
-	self assertThereIsNoProblemsRunning: RBImplementedNotSentRule new
+	self
+		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new
+		onDeclaredPackagesExcluding: WebServiceSpecification subclasses
 ]
 
 { #category : #tests }
 CodeQualityTest >> testMessageSentButNotImplemented [
 
-	self assertThereIsNoProblemsRunning: RBSentNotImplementedRule new
+	self
+		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new
+		onDeclaredPackagesExcluding: #()
 ]
 
 { #category : #tests }
 CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 
-	self assertThereIsNoProblemsRunning: RBSelfSentNotImplementedRule new
+	self
+		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new
+		onDeclaredPackagesExcluding: {PetsWebService} 
 ]
 
 { #category : #tests }
 CodeQualityTest >> testMessagesMustBeCategorized [
 
-	self assertThereIsNoProblemsRunning: RBUnclassifiedMethodsRule new
+	self
+		assertThereWasNoIssuesRunning: RBUnclassifiedMethodsRule new
+		onDeclaredPackagesExcluding: #()
 ]
 
 { #category : #tests }
 CodeQualityTest >> testSubclassReponsibilityImplementedInLeafClases [
 
-	self assertThereIsNoProblemsRunning: RBSubclassResponsibilityNotDefinedRule new
+	self
+		assertThereWasNoIssuesRunning: RBSubclassResponsibilityNotDefinedRule new
+		onDeclaredPackagesExcluding: #()
 ]

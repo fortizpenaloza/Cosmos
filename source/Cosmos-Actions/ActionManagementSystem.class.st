@@ -2,7 +2,6 @@ Class {
 	#name : #ActionManagementSystem,
 	#superclass : #System,
 	#instVars : [
-		'timeSystem',
 		'actions'
 	],
 	#category : #'Cosmos-Actions-SystemModel'

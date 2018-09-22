@@ -1,6 +1,6 @@
 Class {
 	#name : #PetsWebServiceSpecification,
-	#superclass : #Object,
+	#superclass : #WebServiceSpecification,
 	#category : #'Cosmos-API-Common-Tests-Example'
 }
 
