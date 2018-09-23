@@ -16,7 +16,7 @@ CrossOriginResourceSharingHandler class >> allowing: anHttpMethodsCollection [
 { #category : #'private - accessing' }
 CrossOriginResourceSharingHandler >> commaSeparatedHttpMethods [
 
-	^ (CollectionFormatter separatingWith: $,) format: httpMethods
+	^ (CollectionFormatter separatingWith: ', ') format: httpMethods
 ]
 
 { #category : #initialization }
