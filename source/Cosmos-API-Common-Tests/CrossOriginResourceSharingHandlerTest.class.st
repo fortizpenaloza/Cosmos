@@ -14,9 +14,8 @@ CrossOriginResourceSharingHandlerTest >> testValue [
 
 	self
 		assert: response code equals: 204;
-		assert: (response headers includesKey: 'Access-Control-Max-Age');
-		assert: (response headers includesKey: 'Access-Control-Allow-Headers');
-		assert: (response headers includesKey: 'Access-Control-Allow-Methods');
-		assert: (response headers at: 'Access-Control-Allow-Methods')
-			equals: (Array with: 'GET' with: 'POST')
+		assert: (response headers at: 'Access-Control-Max-Age') equals: '86400';
+		assert: (response headers at: 'Access-Control-Allow-Headers')
+			equals: 'Access-Control-Allow-Origin, Content-Type, Accept';
+		assert: (response headers at: 'Access-Control-Allow-Methods') equals: 'GET, POST'
 ]

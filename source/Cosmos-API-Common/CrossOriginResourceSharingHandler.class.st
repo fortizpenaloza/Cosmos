@@ -13,13 +13,19 @@ CrossOriginResourceSharingHandler class >> allowing: anHttpMethodsCollection [
 	^ self new initializeAllowing: anHttpMethodsCollection
 ]
 
-{ #category : #initializaiton }
+{ #category : #'private - accessing' }
+CrossOriginResourceSharingHandler >> commaSeparatedHttpMethods [
+
+	^ (CollectionFormatter separatingWith: $,) format: httpMethods
+]
+
+{ #category : #initialization }
 CrossOriginResourceSharingHandler >> initializeAllowing: anHttpMethodsCollection [
 
 	httpMethods := anHttpMethodsCollection
 ]
 
-{ #category : #initializaiton }
+{ #category : #evaluating }
 CrossOriginResourceSharingHandler >> value: aRequest [
 
 	| response |
@@ -29,8 +35,9 @@ CrossOriginResourceSharingHandler >> value: aRequest [
 	response headers
 		at: 'Access-Control-Allow-Headers'
 			put: 'Access-Control-Allow-Origin, Content-Type, Accept';
-		at: 'Access-Control-Allow-Methods' put: httpMethods;
-		at: 'Access-Control-Max-Age' put: '86400'.	
-			
+		at: 'Access-Control-Allow-Methods'
+			put: self commaSeparatedHttpMethods;
+		at: 'Access-Control-Max-Age' put: '86400'.
+
 	^ response
 ]
