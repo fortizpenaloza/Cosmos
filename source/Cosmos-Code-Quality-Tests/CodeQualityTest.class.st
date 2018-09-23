@@ -66,7 +66,7 @@ CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 
 	self
 		assertThereWasNoIssuesRunning: RBOnlyReadOrWrittenVariableRule new
-		onDeclaredPackagesExcluding: #()
+		onDeclaredPackagesExcluding: { PetsWebService }
 ]
 
 { #category : #tests }
