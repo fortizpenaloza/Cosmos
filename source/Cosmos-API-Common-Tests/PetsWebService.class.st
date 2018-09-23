@@ -2,34 +2,16 @@ Class {
 	#name : #PetsWebService,
 	#superclass : #Object,
 	#instVars : [
-		'rootSystem',
-		'mappingRuleSet'
+		'mappingRuleSet',
+		'pets'
 	],
 	#category : #'Cosmos-API-Common-Tests-Example'
 }
 
 { #category : #'instance creation' }
-PetsWebService class >> workingWith: aCompositeSystem [ 
+PetsWebService class >> managing: aPetSet [ 
 	
-	^ self new initializeWorkingWith: aCompositeSystem 
-]
-
-{ #category : #API }
-PetsWebService >> createPetBasedOn: anHttpRequest within: aContext [
-
-	| mediaType pet |
-
-	mediaType := ZnMimeType fromString: anHttpRequest accept.
-
-	pet := self
-		decode: anHttpRequest contents
-		encodedAs: mediaType
-		to: #pets
-		within: aContext.
-
-	self petManagementSystem register: pet.
-
-	^ ZnResponse created: (self locationOf: pet)
+	^ self new initializeManaging: aPetSet 
 ]
 
 { #category : #'encoding and decoding' }
@@ -49,16 +31,10 @@ PetsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType
 ]
 
 { #category : #initialization }
-PetsWebService >> initializeWorkingWith: aCompositeSystem [
+PetsWebService >> initializeManaging: aPetSet [
 
-	rootSystem := aCompositeSystem.
+	pets := aPetSet.
 	mappingRuleSet := (ReflectiveMappingRuleSetBuilder for: self specification) build
-]
-
-{ #category : #systems }
-PetsWebService >> petManagementSystem [
-
-	^ rootSystem systemImplementing: #PetManagementSystemInterface
 ]
 
 { #category : #accessing }

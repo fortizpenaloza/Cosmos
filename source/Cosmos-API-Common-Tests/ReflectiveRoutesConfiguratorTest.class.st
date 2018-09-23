@@ -1,6 +1,6 @@
 Class {
 	#name : #ReflectiveRoutesConfiguratorTest,
-	#superclass : #SystemBasedUserStoryTest,
+	#superclass : #TestCase,
 	#category : #'Cosmos-API-Common-Tests-Model'
 }
 
@@ -11,7 +11,7 @@ ReflectiveRoutesConfiguratorTest >> testAddingRoutes [
 
 	teapot := Teapot on.
 
-	webService := PetsWebService workingWith: rootSystem.
+	webService := PetsWebService managing: OrderedCollection new.
 
 	(ReflectiveRoutesConfigurator appliedTo: teapot) 
 		addRoutesOf: webService.

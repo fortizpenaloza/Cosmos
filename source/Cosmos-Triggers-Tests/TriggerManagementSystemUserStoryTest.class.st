@@ -32,12 +32,6 @@ TriggerManagementSystemUserStoryTest >> ninePM [
 ]
 
 { #category : #accessing }
-TriggerManagementSystemUserStoryTest >> septemberSixth2015AtTwelveOFivePM [
-
-	^ (September sixth , 2015) atNoon next: self fiveMinutes
-]
-
-{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
