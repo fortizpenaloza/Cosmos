@@ -34,7 +34,7 @@ ActionManagementSystem >> deregister: action [
 	^ actions remove: action
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ActionManagementSystem >> initialize [
 
 	super initialize.

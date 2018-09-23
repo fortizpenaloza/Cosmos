@@ -96,7 +96,7 @@ DataManagementSystem >> registerWithMetadata: aDataStream [
 	self registerRegistrationTimestampFor: aDataStream
 ]
 
-{ #category : #'dependency resolution' }
+{ #category : #'private - dependency resolution' }
 DataManagementSystem >> resolveDependecies [
 
 	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
@@ -108,7 +108,7 @@ DataManagementSystem >> resolveDependecies [
 		resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
-{ #category : #querying }
+{ #category : #'private - querying' }
 DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
 	^ dataStreams 	

@@ -1,7 +1,7 @@
 Class {
 	#name : #BaselineOfCosmos,
 	#superclass : #BaselineOf,
-	#category : 'BaselineOfCosmos'
+	#category : #BaselineOfCosmos
 }
 
 { #category : #baselines }
@@ -134,7 +134,7 @@ BaselineOfCosmos >> registerActionManagementSystemInterface [
 	self
 		registerInterfaceAs: #ActionManagementSystemInterface
 		named: 'Action Management System Interface'
-		declaring: #(#registerNamed:toEvaluate: #deregisterNamed: actions)
+		declaring: #(#register: #deregister: actions)
 ]
 
 { #category : #'registering interfaces' }
@@ -152,7 +152,7 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 	self
 		registerInterfaceAs: #DataManagementSystemInterface
 		named: 'Data Management System Interface'
-		declaring: #(#register: #deregister: #register:toStreamNamed: #streamNamed:ifFound:ifNone: #streams)
+		declaring: #(#register: #deregister: #register:toStreamNamed:  #withStreamIdentifiedBy:do: #streams)
 ]
 
 { #category : #'registering interfaces' }
