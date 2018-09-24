@@ -67,10 +67,11 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 					(context
 						encode: self triggerManagementSystem triggers
 						of: #triggers
-						to: mimeType)) ]
+						to: mimeType
+						within: aContext)) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: MappingNotFound 
+		on: MappingNotFound
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
 		on: DecodingFailed
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]

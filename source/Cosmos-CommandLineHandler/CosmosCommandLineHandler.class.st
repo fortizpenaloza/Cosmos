@@ -104,47 +104,50 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	<ignoreForCoverage>
-	| server |
+	| teapot configurator |
 
-	server := self teapot.
+	teapot := self teapot.
+	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
 
-	(DataAPIInstaller toInstallOn: server workingWith: cosmos) install.
-	(TriggersAPIInstaller toInstallOn: server workingWith: cosmos)
-		install.
-	(ActionsAPIInstaller toInstallOn: server workingWith: cosmos) install.
-	self configureAllowOriginAfterFilterOn: server.
-	self configureExceptionHandlerOn: server.
+	configurator
+		addRoutesOf: (DataWebService workingWith: cosmos);
+		addRoutesOf: (CommandsWebService workingWith: cosmos);
+		addRoutesOf: (ActionsWebService workingWith: cosmos).
 
-	server start
+	(TriggersAPIInstaller toInstallOn: teapot workingWith: cosmos) install.
+
+	self configureAllowOriginAfterFilterOn: teapot.
+	self configureExceptionHandlerOn: teapot.
+
+	teapot start
 ]
 
 { #category : #'private-activation' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
 	<ignoreForCoverage>
-	| scheduler tenSecondsNotification oneMinuteNotification tenMinutesNotification |
+	| scheduler tenSeconds oneMinute tenMinutes oneHour |
 
-	tenSecondsNotification := Task
-		named: 'Notify every 10 seconds'
-		do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
-				notifySubscribersTo: (TickEvent of: (TimeUnits second with: 10)) ].
-
-	oneMinuteNotification := Task
-		named: 'Notify every 1 minute'
-		do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
-				notifySubscribersTo: (TickEvent of: (TimeUnits minute with: 1)) ].
-
-	tenMinutesNotification := Task
-		named: 'Notify every 10 minutes'
-		do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
-				notifySubscribersTo: (TickEvent of: (TimeUnits minute with: 10)) ].
+	tenSeconds := TimeUnits second with: 10.
+	oneMinute := TimeUnits minute with: 1.
+	tenMinutes := TimeUnits minute with: 10.
+	oneHour := TimeUnits hour with: 1.
 
 	scheduler := self periodicalScheduler.
-	scheduler schedule: oneMinuteNotification toBeExecutedEvery: (TimeUnits minute with: 1).
 
-	scheduler
-		schedule: tenMinutesNotification
-		toBeExecutedEvery: (TimeUnits minute with: 10).
+	{tenSeconds.
+	oneMinute.
+	tenMinutes.
+	oneHour}
+		do: [ :timeInterval | 
+			| task |
+
+			task := Task
+				named: ('Notify every <1p>' expandMacrosWith: timeInterval)
+				do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
+						notifySubscribersTo: (TickEvent of: timeInterval) ].
+
+			scheduler schedule: task toBeExecutedEvery: timeInterval ].
 
 	scheduler start
 ]

@@ -19,7 +19,7 @@ TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
 	self
 		assert: aResponse code equals: 200;
-		assert: aResponse contents equals: (aString expandMacrosWith: self dateTimeFormattedAsISO8601)
+		assert: aResponse contents equals: aString
 ]
 
 { #category : #accessing }
@@ -111,9 +111,12 @@ TriggersAPITest >> setUp [
 
 	(SensorsSampleAddOn on: rootSystem) install.
 
+
 	self actionManagementSystem
-		registerNamed: 'Set triggered to true'
-		toEvaluate: (BlockEvaluationPolicy for: [ "Do nothing" ])
+		register:
+			(Action
+				named: 'Set triggered to true'
+				evaluating: (EvaluateBlockPolicy for: [ "Do nothing" ]))
 ]
 
 { #category : #running }
@@ -156,28 +159,8 @@ TriggersAPITest >> testGettingTriggers [
 	self
 		assert: response
 		wasSuccessfulWithContentEqualsTo:
-			'[
-	{
-		"name" : "Set triggered to true after a data point was registered on Temperature",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "on_data_point_registration",
-			"data_stream" : "Temperature"
-		},
-		"conditions" : [ ]
-	},
-	{
-		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "periodical",
-			"time_interval" : "5 minutes"
-		},
-		"conditions" : [ ]
-	}
-]'
+			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]},{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]'
+		expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -208,18 +191,7 @@ TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWa
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[
-	{
-		"name" : "Set triggered to true after a data point was registered on Temperature",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "on_data_point_registration",
-			"data_stream" : "Temperature"
-		},
-		"conditions" : [ ]
-	}
-]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -235,27 +207,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[
-	{
-		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "on_data_point_registration",
-			"data_stream" : "Temperature"
-		},
-		"conditions" : [
-			{
-				"type" : "data_stream_current_value",
-				"data_stream" : "Temperature",
-				"condition" : {
-					"operator" : ">",
-					"value" : 11
-				}
-			}
-		]
-	}
-]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}}]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -279,32 +231,7 @@ TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointW
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[
-	{
-		"name" : "Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "on_data_point_registration",
-			"data_stream" : "Temperature"
-		},
-		"conditions" : [
-			{
-				"type" : "data_stream_current_value",
-				"data_stream" : "Temperature",
-				"condition" : {
-					"operator" : ">",
-					"value" : 11
-				}
-			},
-			{
-				"type" : "time_interval",
-				"from" : "20:00:00",
-				"to" : "21:00:00"
-			}
-		]
-	}
-]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}},{"type":"time_interval","from":"20:00:00","to":"21:00:00"}]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
@@ -320,18 +247,7 @@ TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryF
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[
-	{
-		"name" : "Set triggered to true periodically every 5 minutes",
-		"created_on" : "<1s>",
-		"action" : "Set triggered to true",
-		"policy" : {
-			"type" : "periodical",
-			"time_interval" : "5 minutes"
-		},
-		"conditions" : [ ]
-	}
-]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }

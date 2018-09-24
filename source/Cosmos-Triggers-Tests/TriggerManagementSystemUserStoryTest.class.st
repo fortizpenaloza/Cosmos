@@ -32,18 +32,11 @@ TriggerManagementSystemUserStoryTest >> ninePM [
 ]
 
 { #category : #accessing }
-TriggerManagementSystemUserStoryTest >> septemberSixth2015AtTwelveOFivePM [
-
-	^ (September sixth , 2015) atNoon next: self fiveMinutes
-]
-
-{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		createdOn: self septemberSixth2015AtTwelveOFivePM
-		toEvaluate: (BlockEvaluationPolicy for: [ triggered := true ])
+		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
 ]
 
 { #category : #running }

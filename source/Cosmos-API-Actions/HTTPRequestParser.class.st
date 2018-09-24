@@ -48,9 +48,3 @@ HTTPRequestParser >> requestLineParser [
 	
 	^ HTTPRequestLineParser new
 ]
-
-{ #category : #parsing }
-HTTPRequestParser >> value: aRawRequest [
-
-	^ self parse: aRawRequest 
-]

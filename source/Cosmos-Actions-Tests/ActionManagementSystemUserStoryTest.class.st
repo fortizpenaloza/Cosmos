@@ -1,18 +1,8 @@
 Class {
 	#name : #ActionManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'evaluateAction'
-	],
-	#category : 'Cosmos-Actions-Tests-SystemModel'
+	#category : #'Cosmos-Actions-Tests-SystemModel'
 }
-
-{ #category : #initialization }
-ActionManagementSystemUserStoryTest >> setUp [
-
-	super setUp.
-	evaluateAction := false
-]
 
 { #category : #initialization }
 ActionManagementSystemUserStoryTest >> setUpRequirements [
@@ -24,45 +14,37 @@ ActionManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
-ActionManagementSystemUserStoryTest >> testActionEvaluation [
-
-	| actionEvaluator action |
-
-	actionEvaluator := ActionEvaluator new.
-
-	self eventNotificationSystem
-		subscribe: actionEvaluator
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateOn:.
-
-	action := self actionManagementSystem
-		registerNamed: 'Send YO to Fran'
-		toEvaluate: (BlockEvaluationPolicy for: [ evaluateAction := true ]).
-
-	self deny: evaluateAction.
-	
-	self eventNotificationSystem
-				notifySubscribersTo: (EvaluateActionEvent of: action).
-
-	self assert: evaluateAction
-]
-
-{ #category : #tests }
 ActionManagementSystemUserStoryTest >> testDeregistration [
 
 	| action |
 
-	action := self actionManagementSystem
-		registerNamed: 'Send YO to Fran'
-		toEvaluate: [ "empty" ].
+	action := Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
+
+	self actionManagementSystem register: action.
 
 	self
 		assert: self actionManagementSystem actions
 		hasTheSameElementsInTheSameOrderThat: {action}.
 
-	self actionManagementSystem deregisterNamed: 'Send YO to Fran'.
+	self actionManagementSystem deregister: action.
 
 	self assert: self actionManagementSystem actions isEmpty
+]
+
+{ #category : #tests }
+ActionManagementSystemUserStoryTest >> testDeregistrationFailsIfNotExists [
+
+	| action |
+
+	action := Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
+
+	self
+		should: [ self actionManagementSystem deregister: action ]
+		raise: NotFound.
 ]
 
 { #category : #tests }
@@ -70,18 +52,23 @@ ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 
 	| action anotherAction |
 
-	action := self actionManagementSystem
-		registerNamed: 'Send YO to Fran'
-		toEvaluate: [ "empty" ].
+	action := Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "empty" ]).
 
-	anotherAction := self actionManagementSystem
-		registerNamed: 'Send text message to Fran'
-		toEvaluate: [ "empty" ].
+	self actionManagementSystem register: action.
+
+	anotherAction := Action
+		named: 'Send text message to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "empty" ]).
+
+	self actionManagementSystem register: anotherAction.
 
 	self
 		assert: self actionManagementSystem actions
-		hasTheSameElementsInTheSameOrderThat: {action. anotherAction }.
-
+		hasTheSameElementsInTheSameOrderThat:
+			{action.
+			anotherAction}
 ]
 
 { #category : #tests }
@@ -89,13 +76,17 @@ ActionManagementSystemUserStoryTest >> testRegistration [
 
 	| action |
 
-	action := self actionManagementSystem
-		registerNamed: 'Send YO to Fran'
-		toEvaluate: [ "empty" ].
+	self assert: self actionManagementSystem actions isEmpty.
+
+	action := Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
+
+	action := self actionManagementSystem register: action.
 
 	self
-		assert: action name equals: 'Send YO to Fran';
-		assert: action creationDateTime equals: self systemDateTime
+		withTheOnlyOneIn: self actionManagementSystem actions
+		do: [ :onlyAction | self assert: onlyAction name equals: 'Send YO to Fran' ]
 ]
 
 { #category : #tests }
@@ -103,14 +94,10 @@ ActionManagementSystemUserStoryTest >> testRegistrationFailsWhenActionAlreadyExi
 
 	| action |
 
-	action := self actionManagementSystem
-		registerNamed: 'Send YO to Fran'
-		toEvaluate: [ "empty" ].
-
+	action := Action named: 'Send YO to Fran' evaluating: [ "empty" ].
+	self actionManagementSystem register: action.
 	self
-		should: [ action := self actionManagementSystem
-				registerNamed: 'Send YO to Fran'
-				toEvaluate: [ "empty" ] ]
+		should: [ self actionManagementSystem register: action ]
 		raise: ConflictingObjectFound
 		withDescription: 'An action with that name already exists in system'
 ]

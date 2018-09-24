@@ -16,7 +16,7 @@ TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
 ]
 
 { #category : #'installing - routes' }
-TriggersAPIInstaller >> addCrossOriginResourceSharingRoute [
+TriggersAPIInstaller >> addCrossOriginResourceSharingRouteXX [
 
 	server
 		OPTIONS:
@@ -93,7 +93,7 @@ TriggersAPIInstaller >> install [
 		addGetTriggersRoute;
 		addRegisterTriggerRoute;
 		addUnregisterTriggerRoute;
-		addCrossOriginResourceSharingRoute.
+		addCrossOriginResourceSharingRouteXX.
 		
 	^ interface
 ]
@@ -224,6 +224,5 @@ TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				prettyPrint: true;
 				nextPut: trigger ] ]
 ]
