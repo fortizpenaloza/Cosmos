@@ -167,8 +167,9 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 		within: aContext.
 
 	ZnResponse ok: (ZnEntity json: encodedStreams) ]
-		on: TeaNoSuchParam
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
+		on: MappingNotFound
+		do:
+			[ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ] ]
 		on: ObjectNotFound
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ] ]
 		on: DataStreamIsEmpty
