@@ -55,7 +55,11 @@ CosmosCommandLineHandler >> activate [
 	self
 		buildAndStartCosmos;
 		buildAndStartCosmosAPI;
-		buildAndStartScheduler
+		buildAndStartScheduler.
+
+	self stdout
+		nextPutAll: 'Cosmos was installed';
+		lf
 ]
 
 { #category : #'private-activation' }
