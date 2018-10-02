@@ -1,7 +1,7 @@
 Class {
 	#name : #ActionTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-Actions-Tests-Model'
+	#category : #'Cosmos-Actions-Tests'
 }
 
 { #category : #tests }

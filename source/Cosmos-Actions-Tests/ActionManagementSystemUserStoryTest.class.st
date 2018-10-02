@@ -1,8 +1,24 @@
 Class {
 	#name : #ActionManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : #'Cosmos-Actions-Tests-SystemModel'
+	#category : #'Cosmos-Actions-Tests'
 }
+
+{ #category : #accessing }
+ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
+
+	^ Action
+		named: 'Send text message to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "empty" ])
+]
+
+{ #category : #accessing }
+ActionManagementSystemUserStoryTest >> sendYOToFran [
+
+	^ Action
+		named: 'Send YO to Fran'
+		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
+]
 
 { #category : #initialization }
 ActionManagementSystemUserStoryTest >> setUpRequirements [
@@ -18,33 +34,23 @@ ActionManagementSystemUserStoryTest >> testDeregistration [
 
 	| action |
 
-	action := Action
-		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
-
+	action := self sendYOToFran.	
+		
 	self actionManagementSystem register: action.
-
 	self
 		assert: self actionManagementSystem actions
 		hasTheSameElementsInTheSameOrderThat: {action}.
-
+		
 	self actionManagementSystem deregister: action.
-
 	self assert: self actionManagementSystem actions isEmpty
 ]
 
 { #category : #tests }
 ActionManagementSystemUserStoryTest >> testDeregistrationFailsIfNotExists [
 
-	| action |
-
-	action := Action
-		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
-
 	self
-		should: [ self actionManagementSystem deregister: action ]
-		raise: NotFound.
+		should: [ self actionManagementSystem deregister: self sendYOToFran ]
+		raise: NotFound
 ]
 
 { #category : #tests }
@@ -52,16 +58,10 @@ ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 
 	| action anotherAction |
 
-	action := Action
-		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "empty" ]).
-
+	action := self sendYOToFran.
 	self actionManagementSystem register: action.
 
-	anotherAction := Action
-		named: 'Send text message to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "empty" ]).
-
+	anotherAction := self sendTextMessageToFran.
 	self actionManagementSystem register: anotherAction.
 
 	self
@@ -74,19 +74,12 @@ ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 { #category : #tests }
 ActionManagementSystemUserStoryTest >> testRegistration [
 
-	| action |
-
 	self assert: self actionManagementSystem actions isEmpty.
-
-	action := Action
-		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ]).
-
-	action := self actionManagementSystem register: action.
-
+	
+	self actionManagementSystem register: self sendYOToFran.
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :onlyAction | self assert: onlyAction name equals: 'Send YO to Fran' ]
+		do: [ :action | self assert: action name equals: 'Send YO to Fran' ]
 ]
 
 { #category : #tests }
@@ -94,7 +87,7 @@ ActionManagementSystemUserStoryTest >> testRegistrationFailsWhenActionAlreadyExi
 
 	| action |
 
-	action := Action named: 'Send YO to Fran' evaluating: [ "empty" ].
+	action := self sendYOToFran.
 	self actionManagementSystem register: action.
 	self
 		should: [ self actionManagementSystem register: action ]

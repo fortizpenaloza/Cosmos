@@ -389,7 +389,7 @@ DataWebServiceTest >> testRoutesConfiguration [
 
 	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
 
-	self assert: teapot routes size equals: 5
+	self assert: teapot routes size equals: 6
 ]
 
 { #category : #accessing }

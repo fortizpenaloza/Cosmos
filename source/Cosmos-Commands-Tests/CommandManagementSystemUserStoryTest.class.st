@@ -14,7 +14,7 @@ CommandManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
-CommandManagementSystemUserStoryTest >> testDeregistering [
+CommandManagementSystemUserStoryTest >> testDeregistration [
 
 	| turnOnLedWithMediumPriority turnOnLedWithHighPriority |
 
@@ -58,7 +58,7 @@ CommandManagementSystemUserStoryTest >> testNexCommandFollowsPriorities [
 ]
 
 { #category : #tests }
-CommandManagementSystemUserStoryTest >> testNextCommandsFailsOnEmptyCommands [
+CommandManagementSystemUserStoryTest >> testNextCommandFailsOnEmptyCommands [
 
 	self assert: self commandManagementSystem commands isEmpty.
 
@@ -115,7 +115,7 @@ CommandManagementSystemUserStoryTest >> testRegisteredMetadataOnCommandRegistrat
 ]
 
 { #category : #tests }
-CommandManagementSystemUserStoryTest >> testRegisteringCommands [
+CommandManagementSystemUserStoryTest >> testRegistration [
 
 	| turnOnLedWithHighPriority |
 

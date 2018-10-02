@@ -167,10 +167,19 @@ DataWebServiceSpecification >> getDataPointsRoute [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> getDataStreamsRoute [
+DataWebServiceSpecification >> getDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #GET
 		at: '/data-streams/<identifier:IsUUID>'
+		sending: #getStreamsBasedOn:within:
+]
+
+{ #category : #'specification - routes' }
+DataWebServiceSpecification >> getDataStreamsRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: '/data-streams'
 		sending: #getStreamsBasedOn:within:
 ]

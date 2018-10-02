@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'block'
 	],
-	#category : #'Cosmos-Actions-Model'
+	#category : #'Cosmos-Actions'
 }
 
 { #category : #'instance creation' }
