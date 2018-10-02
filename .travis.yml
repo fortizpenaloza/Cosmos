@@ -1,26 +1,9 @@
 language: smalltalk
-sudo: required
-services:
-  - docker
-
-env:
-  global:
-    - IMAGE_NAME=fortizpenaloza/cosmos:latest
-    - secure: oeFsat94Hq/wIMDLAFrZIFV9sMbp3jLibBUXS7+UBSDPgmVqZV12GHGkMvnrlZKeSyLg1/S/rUHDtNSjVue6SD10VdzLDe1h+VJP03FqbDOcUHGiRRXpCuKHsdGLNWS3OkHlhN20lwX27Iwtar5eZ38VmpnslEMxd6q57MMiP5Q8fR9E9/QB4clNwq+LLvekVC6V9L5SaxSAUHjzgPU9Rj55qj6PF3NORSj/i05fdOt9Nb/TgYMNLHqF1eS7jEREp08ho+bKu6VSt77u37rTiRr7jI0QX1eWrSFmB378YwEaw5qn2+cQxQClR6z74/0QM3cQWJxMyorO/Ie4FrCW2DUlNMb0CrHqOLAfU1FN04tkMOoXsevKSjaEQshLg2/gQSMsqO3jSdRXMWLMbTD3cipN4w7+TMoWBJ5VB/WF+ceXy6Q7ojv+6lUuahq/2gGBkBMrg0Rxc7yquFVfeByBOIZ0ovZ6Q+sQuPyB5u/4Si1WHMiWT32OhL0NU/RNz2pE3jr4B23kbMpAPo68TCsGfo4yrZF3ZDKu/iot8rekYowYD+1juyMULnTfaYDfgoAgzIRBIhZoO9XiyWzFDgq93g0bab3YBuFWjMiya7etGvdQ6fof42xWW1/QvXtf3Om1u9ZUZ0acFY04bRN3s04/+9kS1rMgTAOAcA0l2mBWg10=
-    - secure: B+cF3I1GEftaBMgUJknXRrJgC8juk3lEVdyNXUPMMkUI8k2QtFRnx8zMVgZL9WQW7x5sOo0DCVS1t1hNegf472Y2aV3rYQTxPE4cVxOyNHVdhjzCfkJUn1kVkLh9PMR5wkAIlrt7DsRVbNeRNbhgKiloKE2Rrif199IerLwHsStO8BqHRqQQ1gNbTEjFtORWcPahi4jiXRMRZdzfFM4WozU6/z2nVLYQYqD6vUQIz4AwKJJAApifZmnxHkIjgTntMTT9YRcBwo1aq39mpXYQF5LyLXjbNLP2J6tEZytkD22sOEuseODWRcDyER4ffqimVYMeos+HmV3zzODqm0s+1rHD31QsmP1aFlp2Nw1NQHFBAz+aGcmXzog4hON4ai4wOLLyHz4taMw9equleuFByFNx3EhpXn6O/4XqKqGtLLNHBq6NLh4XHDa4B+M2V4B/LawDt04Ygw6HmfrAC/4DGHd12fxlmqve+rj1OM0rWxcECBltmT+KIjK5nRixfcTnnAt3flJyKQbEEY2G4KnDhGlsT8nvXRtN9r0r2IixbSXuAd/BPsVFZSRf0lqQk6IVE43fuq4t5RZlmWOW2LEeaayIt/Tq7DIZj0B9yGml+vnTg6lPTbSBXtA3+o7ATHKIRlEk9C9B9/59kn0FtMys4K8KUfV+P8Sf9pCTWP0nzE0=
+sudo: false
 
 os:
   - linux
 
 smalltalk:
   - Pharo-6.1
-
-before_deploy:
-    - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USER}" --password-stdin
-    - cp "${SMALLTALK_CI_IMAGE}" Cosmos.image
-    - docker build --pull --tag "${IMAGE_NAME}" .
-deploy:
-  provider: script
-  script: docker push "${IMAGE_NAME}"
-  on:
-    branch: master
+  
