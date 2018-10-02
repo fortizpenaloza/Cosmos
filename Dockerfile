@@ -1,10 +1,17 @@
 FROM basmalltalk/pharo:6.1
 
-WORKDIR /opt/pharo
+USER root
+
+WORKDIR /opt/cosmos
 
 RUN apt-get update \
   && apt-get --assume-yes --no-install-recommends install curl unzip \
   && curl get.pharo.org/61 | bash \
-  && ./pharo Pharo.image eval "Metacello new baseline: 'Cosmos'; repository: 'github://iot-uca/back-end:master/source'; load: ('Deployment'). SmalltalkImage current closeSourceFiles; openSourceFiles; snapshot: true andQuit: true."
+  && chown -R pharo:pharo /opt/cosmos
 
-CMD ["./pharo", "Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
+USER pharo
+
+RUN /opt/pharo/pharo Pharo.image eval "Iceberg remoteTypeSelector: #httpsUrl. Metacello new baseline: 'Cosmos'; repository: 'github://iot-uca/back-end:master/source'; load: ('Deployment'). SmalltalkImage current closeSourceFiles; openSourceFiles; snapshot: true andQuit: true." 
+
+CMD ["/opt/pharo/pharo", "/opt/cosmos/Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
+
