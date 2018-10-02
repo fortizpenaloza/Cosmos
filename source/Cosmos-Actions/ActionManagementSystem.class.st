@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'actions'
 	],
-	#category : #'Cosmos-Actions-SystemModel'
+	#category : #'Cosmos-Actions'
 }
 
 { #category : #'system specification' }

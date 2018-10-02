@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'requestToSend'
 	],
-	#category : #'Cosmos-Actions-Model'
+	#category : #'Cosmos-Actions'
 }
 
 { #category : #'instance creation' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #ActionEvaluationPolicy,
 	#superclass : #Object,
-	#category : #'Cosmos-Actions-Model'
+	#category : #'Cosmos-Actions'
 }
 
 { #category : #evaluating }
