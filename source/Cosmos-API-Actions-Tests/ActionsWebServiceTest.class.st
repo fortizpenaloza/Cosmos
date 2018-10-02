@@ -193,5 +193,5 @@ ActionsWebServiceTest >> testRoutesConfiguration [
 
 	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
 
-	self assert: teapot routes size equals: 3
+	self assert: teapot routes size equals: 5
 ]
