@@ -88,17 +88,26 @@ ActionsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'specification - routes' }
 ActionsWebServiceSpecification >> createActionRoute [
 
-	^ RouteSpecification handling: #POST at: '/actions' sending: #registerHandling:
+	^ (RouteSpecification
+		handling: #POST
+		at: '/actions'
+		sending: #createActionBasedOn:within:) asCorsAware
 ]
 
 { #category : #'specification - routes' }
 ActionsWebServiceSpecification >> deleteActionRoute [
 
-	^ RouteSpecification handling: #DELETE at: '/actions/<name>' sending: #deleteActionBasedOn:within:
+	^ (RouteSpecification
+		handling: #DELETE
+		at: '/actions/<name>'
+		sending: #deleteActionBasedOn:within:) asCorsAware
 ]
 
 { #category : #'specification - routes' }
 ActionsWebServiceSpecification >> getActionsRoute [
 
-	^ RouteSpecification handling: #GET at: '/actions' sending: #getActionsBasedOn:within:
+	^ (RouteSpecification
+		handling: #GET
+		at: '/actions'
+		sending: #getActionsBasedOn:within:) asCorsAware
 ]
