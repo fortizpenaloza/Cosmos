@@ -48,31 +48,33 @@ CosmosCommandLineHandler class >> description [
 { #category : #activation }
 CosmosCommandLineHandler >> activate [
 
-	<ignoreForCoverage>
 	self activateHelp
 		ifTrue: [ ^ self ].
 
-	self
-		buildAndStartCosmos;
-		buildAndStartCosmosAPI;
-		buildAndStartScheduler.
+	Smalltalk logFileName: self logFileName.
 
-	self stdout
-		nextPutAll: 'Cosmos was installed';
-		lf
+	[ self
+		logToStdout: '[INFO] Installing cosmos'
+		during: [ self
+				buildAndStartCosmos;
+				buildAndStartCosmosAPI;
+				buildAndStartScheduler ] ]
+		on: Error
+		do: [ :signal | 
+			self dumpStackAndReport: signal.
+			self exitFailure ]
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aRequest matchesAny: allowedOrigins [
 
-	<ignoreForCoverage>
 	allowedOrigins
 		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
 		ifFound: [ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
 		ifNone: [ "do nothing" ]
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> allowedOrigins [
 
 	<ignoreForCoverage>
@@ -82,7 +84,7 @@ CosmosCommandLineHandler >> allowedOrigins [
 		ifAbsent: [ OrderedCollection new ]
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
 	<ignoreForCoverage>
@@ -104,7 +106,7 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 	cosmos startUp
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	<ignoreForCoverage>
@@ -126,7 +128,7 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	teapot start
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
 	<ignoreForCoverage>
@@ -156,7 +158,7 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 	scheduler start
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 
 	<ignoreForCoverage>
@@ -173,7 +175,7 @@ CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 		when: [ :request | request headers includesKey: 'Origin' ]
 ]
 
-{ #category : #'private-activation' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 
 	<ignoreForCoverage>
@@ -194,41 +196,125 @@ CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 								at: 'Access-Control-Allow-Origin' put: '*';
 								yourself);
 						entity: (ZnEntity json: (STONJSON toStringPretty: errorMessage));
-						yourself ]
+						yourself ];
+		exception: Error -> [ :signal :request | self dumpStackAndReport: signal ]
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> defaultPortNumber [
 
-	<ignoreForCoverage>
 	^ 8080
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> dumpStackAndReport: aSignal [
+
+	^ self
+		logToStderr:
+			('[ERROR] Dumping stack due to unexpected error: <1s>'
+				expandMacrosWith: aSignal messageText)
+		during: [ | serializer |
+
+			serializer := FLSerializer newDefault.
+			serializer analyzer
+				when: [ :object | object class isObsolete ]
+				substituteBy: [ :object | nil ].
+
+			serializer serialize: thisContext toFileNamed: self stackDumpFileName ]
+]
+
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> isDebugModeEnabled [
 
 	<ignoreForCoverage>
 	^ self hasOption: 'debug-mode'
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> logFileName [
+
+	^ './logs/cosmos-<1s>.log'
+		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '.')
+]
+
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> logToStderr: aString [
+
+	self stderr
+		nextPutAll: ('[<1p>] <2s>' expandMacrosWith: DateAndTime current with: aString);
+		lf;
+		flush
+]
+
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> logToStderr: aString during: aBlock [
+
+	self logToStderr: aString.
+	[ aBlock value.
+	self logToStderr: ('<1s>... [OK]' expandMacrosWith: aString) ]
+		ifCurtailed: [ self logToStderr: ('<1s>... [FAILED]' expandMacrosWith: aString) ]
+]
+
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> logToStdout: aString [
+
+	self stdout
+		nextPutAll: ('[<1p>] <2s>' expandMacrosWith: DateAndTime current with: aString);
+		lf;
+		flush
+]
+
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> logToStdout: aString during: aBlock [
+
+	self logToStdout: aString.
+	[ aBlock value.
+	self logToStdout: ('<1s>... [OK]' expandMacrosWith: aString) ]
+		ifCurtailed: [ self logToStdout: ('<1s>... [FAILED]' expandMacrosWith: aString) ]
+]
+
+{ #category : #'private - options' }
+CosmosCommandLineHandler >> mandatoryOptionNamed: aName [
+
+	^ self
+		optionAt: aName
+		ifAbsent: [ self
+				logToStderr: ('[ERROR] <1s> not provided. You must provide one.' expandMacrosWith: aName).
+			self exitFailure: ('<1s> option not present' expandMacrosWith: aName) ]
+]
+
+{ #category : #'private - options' }
+CosmosCommandLineHandler >> optionNamed: aName defaultingTo: anObject [
+
+	^ self optionAt: aName ifAbsent: [ anObject ]
+]
+
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> periodicalScheduler [
 
-	<ignoreForCoverage>
 	^ PeriodicalScheduler workingWith: DelayExperimentalSemaphoreScheduler new
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> portNumber [
 
-	<ignoreForCoverage>
-	^ self
-		optionAt: 'port'
-		ifPresent: [ :string | string asNumber ]
-		ifAbsent: [ self defaultPortNumber ]
+	| portNumber |
+
+	portNumber := self
+		optionNamed: 'port'
+		defaultingTo: self defaultPortNumber.
+
+	^ portNumber asNumber
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #'private - logging' }
+CosmosCommandLineHandler >> stackDumpFileName [
+
+	^ './logs/cosmos-stack-<1s>.fuel'
+		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '.')
+]
+
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> teapot [
 
 	<ignoreForCoverage>

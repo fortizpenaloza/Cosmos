@@ -7,6 +7,12 @@ Class {
 	#category : #'Cosmos-CommandLineHandler-Tests'
 }
 
+{ #category : #accessing }
+CosmosCommandLineHandlerTest class >> classNamesNotUnderTest [
+
+	^ #('CosmosCommandLineHandler')
+]
+
 { #category : #tests }
 CosmosCommandLineHandlerTest >> argumentsWith: aCollection [
 
