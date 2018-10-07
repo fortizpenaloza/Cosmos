@@ -274,16 +274,6 @@ CosmosCommandLineHandler >> logToStdout: aString during: aBlock [
 ]
 
 { #category : #'private - options' }
-CosmosCommandLineHandler >> mandatoryOptionNamed: aName [
-
-	^ self
-		optionAt: aName
-		ifAbsent: [ self
-				logToStderr: ('[ERROR] <1s> not provided. You must provide one.' expandMacrosWith: aName).
-			self exitFailure: ('<1s> option not present' expandMacrosWith: aName) ]
-]
-
-{ #category : #'private - options' }
 CosmosCommandLineHandler >> optionNamed: aName defaultingTo: anObject [
 
 	^ self optionAt: aName ifAbsent: [ anObject ]
