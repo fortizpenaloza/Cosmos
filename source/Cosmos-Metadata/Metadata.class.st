@@ -17,9 +17,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-Metadata class >> attaching: data as: anAspect of: anObject [
+Metadata class >> attaching: data as: anAspect of: aDescribedObject [
 
-	^ self new initializeAttaching: data as: anAspect of: anObject
+	^ self new initializeAttaching: data as: anAspect of: aDescribedObject
 ]
 
 { #category : #comparing }
@@ -56,11 +56,11 @@ Metadata >> hash [
 ]
 
 { #category : #initialization }
-Metadata >> initializeAttaching: aValue as: anAspect of: anObject [
+Metadata >> initializeAttaching: aValue as: anAspect of: aDescribedObject [
 
+	data := aValue.
 	aspect := anAspect.
-	describedObject := anObject.
-	data := aValue
+	describedObject := aDescribedObject
 ]
 
 { #category : #printing }

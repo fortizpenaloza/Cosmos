@@ -30,12 +30,6 @@ TriggersAPITest >> dateTimeFormattedAsISO8601 [
 ]
 
 { #category : #accessing }
-TriggersAPITest >> decemberTenthOf2016AtNoon [
-
-	^ (December tenth , 2016) atNoon
-]
-
-{ #category : #accessing }
 TriggersAPITest >> eightPM [
 	
 	^ TimeOfDay hours: 20
@@ -137,12 +131,6 @@ TriggersAPITest >> temperature [
 		streamNamed: 'Temperature'
 		ifFound: [ :stream | stream ]
 		ifNone: [ ObjectNotFound signal: 'Data stream not found' ]
-]
-
-{ #category : #accessing }
-TriggersAPITest >> tenMinutes [
-
-	^ TimeUnits minute with: 10
 ]
 
 { #category : #tests }
