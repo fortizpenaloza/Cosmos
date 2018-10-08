@@ -11,6 +11,31 @@ MetadataTest >> temperatureStream [
 ]
 
 { #category : #tests }
+MetadataTest >> testHash [
+
+	| metadata equivalentMetadata differentMetadata |
+
+	metadata := Metadata 
+		attaching: 'celsius'
+		as: #unit_name 
+		of: self temperatureStream.
+
+	equivalentMetadata := Metadata
+		attaching: 'celsius'
+		as: #unit_name
+		of: self temperatureStream.
+
+	differentMetadata := Metadata
+		attaching: 'Fahrenheit'
+		as: #unit_name
+		of: self temperatureStream.
+
+	self
+		assert: metadata hash equals: equivalentMetadata hash;
+		deny: metadata hash = differentMetadata hash
+]
+
+{ #category : #tests }
 MetadataTest >> testInstanceCreationAndAccessing [
 
 	| metadata |
