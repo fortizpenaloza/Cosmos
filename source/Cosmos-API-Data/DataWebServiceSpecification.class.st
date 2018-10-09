@@ -49,7 +49,8 @@ DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON :context | | timestamp |
+	^ [ :aJSON :context | 
+	| timestamp |
 
 	timestamp := context objectUnder: #request_timestamp ifNone: [ self halt ].
 

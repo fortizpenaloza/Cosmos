@@ -41,25 +41,16 @@ CosmosCommandLineHandler class >> commandName [
 { #category : #accessing }
 CosmosCommandLineHandler class >> description [
 
-	<ignoreForCoverage>
-	^ 'Install Cosmos and its API'
+	^ 'Install cosmos'
 ]
 
 { #category : #activation }
 CosmosCommandLineHandler >> activate [
 
-	self activateHelp
-		ifTrue: [ ^ self ].
-
-	Smalltalk logFileName: self logFileName.
-
 	[ self
-		logToStdout: '[INFO] Installing cosmos'
-		during: [ self
-				buildAndStartCosmos;
-				buildAndStartCosmosAPI;
-				buildAndStartScheduler ] ]
-		on: Error
+		setLogFileName;
+		settingUpCosmos ]
+		on: self expectedExceptions
 		do: [ :signal | 
 			self dumpStackAndReport: signal.
 			self exitFailure ]
@@ -77,7 +68,6 @@ CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aReque
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> allowedOrigins [
 
-	<ignoreForCoverage>
 	^ self
 		optionAt: 'allowed-origins'
 		ifPresent: [ :string | string substrings: ',' ]
@@ -87,7 +77,6 @@ CosmosCommandLineHandler >> allowedOrigins [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
-	<ignoreForCoverage>
 	| builder |
 
 	builder := CompositeSystemBuilder new.
@@ -109,7 +98,6 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
-	<ignoreForCoverage>
 	| teapot configurator |
 
 	teapot := self teapot.
@@ -131,7 +119,6 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
-	<ignoreForCoverage>
 	| scheduler tenSeconds oneMinute tenMinutes oneHour |
 
 	tenSeconds := TimeUnits second with: 10.
@@ -161,7 +148,6 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 
-	<ignoreForCoverage>
 	aServer
 		after:
 			'/*'
@@ -178,7 +164,6 @@ CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 
-	<ignoreForCoverage>
 	aServer
 		exception:
 			HTTPClientError
@@ -196,8 +181,10 @@ CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 								at: 'Access-Control-Allow-Origin' put: '*';
 								yourself);
 						entity: (ZnEntity json: (STONJSON toStringPretty: errorMessage));
-						yourself ];
-		exception: Error -> [ :signal :request | self dumpStackAndReport: signal ]
+						yourself ].
+
+	aServer
+		exception: self expectedExceptions -> [ :signal :request | self dumpStackAndReport: signal ]
 ]
 
 { #category : #'private - accessing' }
@@ -224,9 +211,16 @@ CosmosCommandLineHandler >> dumpStackAndReport: aSignal [
 ]
 
 { #category : #'private - accessing' }
+CosmosCommandLineHandler >> expectedExceptions [
+
+	self isDebugModeEnabled
+		ifTrue: [ ExceptionSet new ]
+		ifFalse: [ Error ]
+]
+
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> isDebugModeEnabled [
 
-	<ignoreForCoverage>
 	^ self hasOption: 'debug-mode'
 ]
 
@@ -234,7 +228,7 @@ CosmosCommandLineHandler >> isDebugModeEnabled [
 CosmosCommandLineHandler >> logFileName [
 
 	^ './logs/cosmos-<1s>.log'
-		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '.')
+		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '')
 ]
 
 { #category : #'private - logging' }
@@ -282,32 +276,49 @@ CosmosCommandLineHandler >> optionNamed: aName defaultingTo: anObject [
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> periodicalScheduler [
 
-	^ PeriodicalScheduler workingWith: DelayExperimentalSemaphoreScheduler new
+	^ PeriodicalScheduler workingWith: DelaySpinScheduler new
 ]
 
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> portNumber [
 
-	| portNumber |
+	| port |
 
-	portNumber := self
+	port := self
 		optionNamed: 'port'
 		defaultingTo: self defaultPortNumber.
 
-	^ portNumber asNumber
+	^ port asNumber
+]
+
+{ #category : #activation }
+CosmosCommandLineHandler >> setLogFileName [
+
+	Smalltalk logFileName: self logFileName
+]
+
+{ #category : #activation }
+CosmosCommandLineHandler >> settingUpCosmos [
+
+	self
+		logToStdout: '[INFO] Building and starting cosmos'
+			during: [ self buildAndStartCosmos ];
+		logToStdout: '[INFO] Building and starting RESTful API'
+			during: [ self buildAndStartCosmosAPI ];
+		logToStdout: '[INFO] Building and starting the periodical scheduler'
+			during: [ self buildAndStartScheduler ]
 ]
 
 { #category : #'private - logging' }
 CosmosCommandLineHandler >> stackDumpFileName [
 
 	^ './logs/cosmos-stack-<1s>.fuel'
-		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '.')
+		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '')
 ]
 
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> teapot [
 
-	<ignoreForCoverage>
 	^ Teapot
 		configure:
 			{(#port -> self portNumber).
