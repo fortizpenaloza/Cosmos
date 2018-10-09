@@ -46,7 +46,7 @@ BaselineOfCosmos >> baseline: spec [
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Common' with: [ spec requires: 'Teapot' ];
+		package: 'Cosmos-API-Common' with: [ spec requires: #('Teapot' 'Stargate') ];
 		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
 		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
 		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
@@ -210,6 +210,12 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		with: [ spec
 				repository: 'github://ba-st/Kepler:master/source';
 				loads: #('Development') ].
+
+	spec
+		baseline: 'Stargate'
+		with: [ spec
+				repository: 'github://ba-st/stargate:master/source';
+				loads: #('Deployment') ].
 
 	spec
 		configuration: 'Teapot'
