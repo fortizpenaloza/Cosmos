@@ -46,7 +46,7 @@ BaselineOfCosmos >> baseline: spec [
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Common' with: [ spec requires: 'Teapot' ];
+		package: 'Cosmos-API-Common' with: [ spec requires: #('Teapot' 'Stargate') ];
 		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
 		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
 		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
@@ -98,7 +98,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		package: 'Cosmos-Tests';
 		package: 'Cosmos-UserStoryTests'
-			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers') ];
+			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers' 'Stargate-Tests') ];
 		package: 'Cosmos-Identifier-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Identifier') ];
 		package: 'Cosmos-Metadata-Tests'
@@ -209,7 +209,14 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		baseline: 'Kepler'
 		with: [ spec
 				repository: 'github://ba-st/Kepler:master/source';
-				loads: #('Development') ].
+				loads: 'Development' ].
+
+	spec
+		baseline: 'Stargate'
+		with: [ spec
+				repository: 'github://ba-st/stargate:v0.1.0/source';
+				loads: 'Deployment' ];
+		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [spec loads: 'Development'].
 
 	spec
 		configuration: 'Teapot'

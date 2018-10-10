@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'separator'
 	],
-	#category : #'Cosmos-API-Common-Encoding'
+	#category : #'Cosmos-API-Common'
 }
 
 { #category : #'instance creation' }
