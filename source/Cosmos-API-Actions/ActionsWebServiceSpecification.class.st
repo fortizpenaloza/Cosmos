@@ -1,6 +1,6 @@
 Class {
 	#name : #ActionsWebServiceSpecification,
-	#superclass : #WebServiceSpecification,
+	#superclass : #RESTFulWebServiceSpecification,
 	#category : #'Cosmos-API-Actions'
 }
 

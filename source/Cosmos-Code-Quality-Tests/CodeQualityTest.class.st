@@ -66,7 +66,7 @@ CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 
 	self
 		assertThereWasNoIssuesRunning: RBOnlyReadOrWrittenVariableRule new
-		onDeclaredPackagesExcluding: { PetsWebService }
+		onDeclaredPackagesExcluding: { PetsRESTfulWebService }
 ]
 
 { #category : #tests }
@@ -74,7 +74,7 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
 		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new
-		onDeclaredPackagesExcluding: WebServiceSpecification subclasses
+		onDeclaredPackagesExcluding: RESTFulWebServiceSpecification subclasses
 ]
 
 { #category : #tests }
@@ -90,7 +90,7 @@ CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 
 	self
 		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new
-		onDeclaredPackagesExcluding: {PetsWebService} 
+		onDeclaredPackagesExcluding: {PetsRESTfulWebService} 
 ]
 
 { #category : #tests }
