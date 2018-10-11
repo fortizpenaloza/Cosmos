@@ -82,7 +82,7 @@ ActionsWebServiceSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn:
 { #category : #'media types' }
 ActionsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
-	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'specification - routes' }
