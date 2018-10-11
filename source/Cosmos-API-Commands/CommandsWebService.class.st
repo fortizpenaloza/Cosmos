@@ -22,19 +22,11 @@ CommandsWebService >> commandManagementSystem [
 { #category : #API }
 CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 
-	| mediaType commandWithPriority |
-
-	mediaType := self mediaTypeOf: anHttpRequest.
-
-	commandWithPriority := self
-		decode: anHttpRequest contents
-		at: #commands
-		from: mediaType
-		within: aContext.
-
-	self commandManagementSystem register: commandWithPriority.
-
-	^ ZnResponse created: (self locationOf: commandWithPriority)
+	^ self
+		withCreatedResourceDo: [ :commandWithPriority | self commandManagementSystem register: commandWithPriority ]
+		decodedUsing: #commands
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
@@ -82,12 +74,6 @@ CommandsWebService >> locationOf: commandWithPriority [
 		fromString:
 			('localhost/<1s>'
 				expandMacrosWith: (self identifierSystem identifierOf: commandWithPriority) asString36)
-]
-
-{ #category : #'private - API' }
-CommandsWebService >> mediaTypeOf: aHttpRequest [
-
-	^ self targetMediaTypeFrom: aHttpRequest
 ]
 
 { #category : #API }

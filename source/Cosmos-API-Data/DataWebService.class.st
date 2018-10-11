@@ -41,26 +41,13 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 { #category : #API }
 DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
-	^ [ [ [ | dataStream dataStreamLocation |
-
-	dataStream := self
-		decode: anHttpRequest contents
-		at: self dataStreamsKey
-		from: anHttpRequest contentType
-		within: aContext.
-
-	self dataManagementSystem register: dataStream.
-
-	dataStreamLocation := self locationOf: dataStream.
-
-	ZnResponse created: dataStreamLocation ]
-		on: ConflictingObjectFound
-		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound , InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
-		on: MappingNotFound
-		do:
-			[ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ]
+	^ [ self
+		withCreatedResourceDo: [ :dataStream | self dataManagementSystem register: dataStream ]
+		decodedUsing: self dataStreamsKey
+		basedOn: anHttpRequest
+		within: aContext ]
+		on: InstanceCreationFailed
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
 { #category : #'private - accessing' }

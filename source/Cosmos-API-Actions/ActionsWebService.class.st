@@ -22,23 +22,11 @@ ActionsWebService >> actionManagementSystem [
 { #category : #API }
 ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
 
-	^ [ [ | action |
-
-	action := self
-		decode: anHttpRequest contents
-		at: #actions
-		from: anHttpRequest contentType
-		within: aContext.
-
-	self actionManagementSystem register: action.
-
-	ZnResponse created: (ZnUrl fromString: 'localhost') ]
-		on: ConflictingObjectFound
-		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound , DecodingFailed
-		do: [ :signal | 
-			HTTPClientError
-				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
+	^ self
+		withCreatedResourceDo: [ :action | self actionManagementSystem register: action ]
+		decodedUsing: #actions
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
@@ -70,6 +58,14 @@ ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
 ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
+]
+
+{ #category : #'private - systems' }
+ActionsWebService >> locationOf: resource [
+
+	"Fran, you have to improve it"
+
+	^ ZnUrl fromString: 'localhost'
 ]
 
 { #category : #specification }
