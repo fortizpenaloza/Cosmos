@@ -62,13 +62,11 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 
 	^ [ [ [ ZnResponse
 		ok:
-			(ZnEntity
-				json:
-					(context
-						encode: self triggerManagementSystem triggers
-						at: #triggers
-						to: mimeType
-						within: aContext)) ]
+			(context
+				encode: self triggerManagementSystem triggers
+				at: #triggers
+				to: mimeType
+				within: context) ]
 		on: ConflictingObjectFound
 		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
 		on: MappingNotFound
