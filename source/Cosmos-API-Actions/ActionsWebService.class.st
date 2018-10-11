@@ -1,9 +1,8 @@
 Class {
 	#name : #ActionsWebService,
-	#superclass : #Object,
+	#superclass : #RESTfulWebService,
 	#instVars : [
-		'cosmos',
-		'mappingRuleSet'
+		'cosmos'
 	],
 	#category : #'Cosmos-API-Actions'
 }
@@ -27,8 +26,8 @@ ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
 
 	action := self
 		decode: anHttpRequest contents
-		encodedAs: anHttpRequest contentType
-		to: #actions
+		at: #actions
+		from: anHttpRequest contentType
 		within: aContext.
 
 	self actionManagementSystem register: action.
@@ -40,14 +39,6 @@ ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | 
 			HTTPClientError
 				signalBadRequest: ('Expected key <1s> was not found' expandMacrosWith: signal key) ]
-]
-
-{ #category : #'private - encoding and deconding' }
-ActionsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
-
-	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
-		applyOn: aJSON
-		within: aContext
 ]
 
 { #category : #API }
@@ -65,42 +56,20 @@ ActionsWebService >> deleteActionBasedOn: anHttpRequest within: aContext [
 	^ ZnResponse noContent
 ]
 
-{ #category : #'private - encoding and deconding' }
-ActionsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
-
-	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
-		applyOn: anObject
-		within: aContext
-]
-
 { #category : #API }
 ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
 
-	^ [ [ | mimeType actions encodedActions |
-
-	mimeType := ZnMimeType fromString: anHttpRequest accept.
-
-	actions := self actionManagementSystem actions.
-
-	encodedActions := self
-		encode: actions
-		of: #actions
-		to: mimeType
-		within: aContext .
-
-	ZnResponse ok: (ZnEntity json: encodedActions) ]
-		on: ConflictingObjectFound
-		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+	^ self
+		get: [ self actionManagementSystem actions ]
+		encodedUsing: #actions
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #initialization }
 ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 
-	cosmos := aCosmosSystem.
-	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
-		for: self specification) build
+	cosmos := aCosmosSystem
 ]
 
 { #category : #specification }

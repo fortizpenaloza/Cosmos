@@ -1,9 +1,8 @@
 Class {
 	#name : #DataWebService,
-	#superclass : #Object,
+	#superclass : #RESTfulWebService,
 	#instVars : [
-		'cosmos',
-		'mappingRuleSet'
+		'cosmos'
 	],
 	#category : #'Cosmos-API-Data'
 }
@@ -23,10 +22,10 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
 	rawData := self
 		decode: anHttpRequest contents
-		encodedAs: anHttpRequest contentType
-		to: self dataPointsKey
+		at: self dataPointsKey
+		from: anHttpRequest contentType
 		within: aContext.
-		
+
 	rawData
 		do: [ :rawDataPoint | 
 			self dataManagementSystem
@@ -34,10 +33,9 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 				toStreamNamed: rawDataPoint key ].
 
 	ZnResponse created: 'multiple' ]
-		on: ObjectNotFound 
-		do: [ :signal | 
-			HTTPClientError
-				signalBadRequest: signal messageText ]
+		on: ObjectNotFound
+		do:
+			[ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
 { #category : #API }
@@ -47,8 +45,8 @@ DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
 	dataStream := self
 		decode: anHttpRequest contents
-		encodedAs: anHttpRequest contentType
-		to: self dataStreamsKey
+		at: self dataStreamsKey
+		from: anHttpRequest contentType
 		within: aContext.
 
 	self dataManagementSystem register: dataStream.
@@ -89,14 +87,6 @@ DataWebService >> dataStreamsKey [
 	^ #data_streams
 ]
 
-{ #category : #'private - deconding and encoding' }
-DataWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
-
-	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
-		applyOn: aJSON
-		within: aContext
-]
-
 { #category : #API }
 DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
@@ -110,68 +100,32 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
-{ #category : #'private - deconding and encoding' }
-DataWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
-
-	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
-		applyOn: anObject
-		within: aContext
-]
-
 { #category : #API }
 DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
-	^ [ [ | mediaType encodedPoints |
-
-	mediaType := self mediaTypeOf: anHttpRequest.
-
-	self dataManagementSystem
-		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
-		do: [ :dataStream | 
-			encodedPoints := self
-				encode: dataStream dataPoints
-				of: #data_points
-				to: mediaType
-				within: aContext ].
-
-	ZnResponse ok: (ZnEntity json: encodedPoints) ]
-		on: TeaNoSuchParam
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ] ]
-		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+	^ self
+		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
+		encodedUsing: #data_points
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
 DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
-	^ [ [ [ | mediaType streamsToEncode encodedStreams |
+	^ [ self
+		get: [ | streamsToEncode |
 
-	mediaType := self mediaTypeOf: anHttpRequest.
+			self
+				withIdentifierProvidedIn: anHttpRequest
+				do: [ :identifier | self dataManagementSystem withStreamIdentifiedBy: identifier do: [ :dataStream | streamsToEncode := dataStream ] ]
+				ifNone: [ streamsToEncode := self dataManagementSystem streams ].
 
-	self
-		withIdentifierProvidedIn: anHttpRequest
-		do: [ :identifier | 
-			self dataManagementSystem
-				withStreamIdentifiedBy: identifier
-				do: [ :dataStream | streamsToEncode := dataStream ] ]
-		ifNone: [ streamsToEncode := self dataManagementSystem streams ].
-
-	aContext
-		hold: (cosmos systemImplementing: #MetadataSystemInterface)
-		under: #metadata_system.
-
-	encodedStreams := self
-		encode: streamsToEncode
-		of: #data_streams
-		to: mediaType
-		within: aContext.
-
-	ZnResponse ok: (ZnEntity json: encodedStreams) ]
-		on: MappingNotFound
-		do:
-			[ :signal | HTTPClientError signalUnsupportedMediaType: signal messageText ] ]
-		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ] ]
+			aContext hold: (cosmos systemImplementing: #MetadataSystemInterface) under: #metadata_system.
+			streamsToEncode ]
+		encodedUsing: #data_streams
+		basedOn: anHttpRequest
+		within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -185,9 +139,7 @@ DataWebService >> identifierSystem [
 { #category : #initialization }
 DataWebService >> initializeWorkingWith: aCosmosSystem [
 
-	cosmos := aCosmosSystem.
-	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
-		for: self specification) build
+	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
@@ -197,12 +149,6 @@ DataWebService >> locationOf: aDataStream [
 		fromString:
 			('localhost/<1s>'
 				expandMacrosWith: (self identifierSystem identifierOf: aDataStream) asString36)
-]
-
-{ #category : #'private - API' }
-DataWebService >> mediaTypeOf: anHttpRequest [
-
-	^ ZnMimeType fromString: anHttpRequest accept
 ]
 
 { #category : #specification }

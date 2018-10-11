@@ -108,6 +108,15 @@ DataManagementSystem >> resolveDependecies [
 		resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
+{ #category : #querying }
+DataManagementSystem >> streamIdentifiedBy: anIdentifier [
+
+	^ identifierSystem
+		objectIdentifiedBy: anIdentifier
+		ifNone:
+			[ ObjectNotFound signal: 'Data stream with that identifier not found' ]
+]
+
 { #category : #'private - querying' }
 DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
@@ -126,9 +135,5 @@ DataManagementSystem >> streams [
 { #category : #querying }
 DataManagementSystem >> withStreamIdentifiedBy: anIdentifier do: aBlock [
 
-	aBlock
-		value:
-			(identifierSystem
-				objectIdentifiedBy: anIdentifier
-				ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ])
+	aBlock value: (self streamIdentifiedBy: anIdentifier)
 ]

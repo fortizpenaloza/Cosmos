@@ -66,7 +66,7 @@ TriggersAPI >> triggersHandling: anHttpRequest [
 				json:
 					(context
 						encode: self triggerManagementSystem triggers
-						of: #triggers
+						at: #triggers
 						to: mimeType
 						within: aContext)) ]
 		on: ConflictingObjectFound

@@ -1,9 +1,8 @@
 Class {
 	#name : #CommandsWebService,
-	#superclass : #Object,
+	#superclass : #RESTfulWebService,
 	#instVars : [
-		'cosmos',
-		'mappingRuleSet'
+		'cosmos'
 	],
 	#category : #'Cosmos-API-Commands'
 }
@@ -29,21 +28,13 @@ CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 
 	commandWithPriority := self
 		decode: anHttpRequest contents
-		encodedAs: mediaType
-		to: #commands
+		at: #commands
+		from: mediaType
 		within: aContext.
 
 	self commandManagementSystem register: commandWithPriority.
 
 	^ ZnResponse created: (self locationOf: commandWithPriority)
-]
-
-{ #category : #'encoding and decoding' }
-CommandsWebService >> decode: aJSON encodedAs: aMediaType to: aKeyRepresentingObjectType within: aContext [
-
-	^ (mappingRuleSet ruleToDecode: aMediaType to: aKeyRepresentingObjectType)
-		applyOn: aJSON
-		within: aContext
 ]
 
 { #category : #API }
@@ -62,28 +53,14 @@ CommandsWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
-{ #category : #'encoding and decoding' }
-CommandsWebService >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
-
-	^ (mappingRuleSet ruleToEncode: aKeyRepresentingObjectType to: aMediaType)
-		applyOn: anObject
-		within: aContext
-]
-
 { #category : #API }
 CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
-	| mimeType encodedCommands |
-
-	mimeType := self mediaTypeOf: anHttpRequest.
-
-	encodedCommands := self
-		encode: self commandManagementSystem commands
-		of: #commands
-		to: mimeType
-		within: aContext.
-
-	^ ZnResponse ok: (ZnEntity json: encodedCommands)
+	^ self
+		get: [ self commandManagementSystem commands ]
+		encodedUsing: #commands
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #'private - systems' }
@@ -95,9 +72,7 @@ CommandsWebService >> identifierSystem [
 { #category : #initialization }
 CommandsWebService >> initializeWorkingWith: aCosmosSystem [
 
-	cosmos := aCosmosSystem.
-	mappingRuleSet := (ReflectiveMappingRuleSetBuilder
-		for: self specification) build
+	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
@@ -112,23 +87,17 @@ CommandsWebService >> locationOf: commandWithPriority [
 { #category : #'private - API' }
 CommandsWebService >> mediaTypeOf: aHttpRequest [
 
-	^ ZnMimeType fromString: aHttpRequest accept
+	^ self targetMediaTypeFrom: aHttpRequest
 ]
 
 { #category : #API }
 CommandsWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
 
-	| mimeType encodedCommand |
-
-	mimeType := self mediaTypeOf: anHttpRequest.
-
-	encodedCommand := self
-		encode: self commandManagementSystem nextCommand
-		of: #commands
-		to: mimeType
-		within: aContext.
-
-	^ ZnResponse ok: (ZnEntity with: encodedCommand type: mimeType)
+	^ self
+		get: [ self commandManagementSystem nextCommand ]
+		encodedUsing: #commands
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #specification }
