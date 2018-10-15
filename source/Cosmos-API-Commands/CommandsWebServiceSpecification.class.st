@@ -1,6 +1,6 @@
 Class {
 	#name : #CommandsWebServiceSpecification,
-	#superclass : #WebServiceSpecification,
+	#superclass : #RESTFulWebServiceSpecification,
 	#category : #'Cosmos-API-Commands'
 }
 

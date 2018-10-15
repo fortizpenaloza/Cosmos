@@ -96,7 +96,7 @@ TriggersAPIContext >> decodeTriggeringPolicyFrom: aJSON [
 ]
 
 { #category : #encoding }
-TriggersAPIContext >> encode: anObject of: aKeyRepresentingObjectType to: aMediaType within: aContext [
+TriggersAPIContext >> encode: anObject at: aKeyRepresentingObjectType to: aMediaType within: aContext [
 
 	^ (mappingRegistry
 		ruleToEncode: aKeyRepresentingObjectType
