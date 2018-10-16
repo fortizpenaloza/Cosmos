@@ -1,21 +1,21 @@
 Class {
-	#name : #DataRESTfulWebServiceTest,
+	#name : #DataStreamsRESTfulWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'interface',
-		'identifierSequence'
+		'identifierSequence',
+		'webService'
 	],
 	#category : #'Cosmos-API-Data-Tests'
 }
 
-{ #category : #'accessing - media types' }
-DataRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0 [
+{ #category : #'private - media types' }
+DataStreamsRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
-	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
-{ #category : #'expected results' }
-DataRESTfulWebServiceTest >> dataStreamsSnapshotAsJSON [
+{ #category : #'private - expected results' }
+DataStreamsRESTfulWebServiceTest >> dataStreamsAsJSON [
 
 	^ '[{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2p>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current_value":1016,"last_update":"<1s>","metadata":[{"identifier":"<3p>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current_value":"N/A","last_update":"N/A","metadata":[{"identifier":"<4p>"},{"registration_timestamp":"<1s>"}]}]'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
@@ -24,27 +24,27 @@ DataRESTfulWebServiceTest >> dataStreamsSnapshotAsJSON [
 		with: identifierSequence third
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> dateTimeFormattedAsISO8601 [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> httpRequestContext [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> identifierProvider [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> pressureStream [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> pressureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Pressure'
@@ -52,51 +52,31 @@ DataRESTfulWebServiceTest >> pressureStream [
 		ifNone: [ "do nothing" ]
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aReprensentation [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aReprensentation [
 
 	^ self
 		requestToCreateDataStreamFrom: aReprensentation
 		encodedAs: self applicationJsonVersion1dot0dot0
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aRepresentation encodedAs: aMediaType [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aRepresentation encodedAs: aMediaType [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/data-streams')
 		entity: (ZnEntity with: aRepresentation type: aMediaType)
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToCreateTemperatureAndPressureDataPoints [
-
-	^ (ZnRequest post: 'http://COSMOS_URL/data-points')
-		entity:
-			(ZnEntity
-				with:
-					'[
-			{
-				"data_stream" : "Temperature",
-				"value" : 24
-			},
-			{
-				"data_stream" : "Pressure",
-				"value" : 89
-			}
-		]'
-				type: self applicationJsonVersion1dot0dot0)
-]
-
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToDeleteTemperatureStreamIdentifiedBy: anIdentifier [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToDeleteTemperatureStreamIdentifiedBy: anIdentifier [
 
 	^ TeaRequest
 		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/data-streams')
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anIdentifier [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anIdentifier [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -105,8 +85,8 @@ DataRESTfulWebServiceTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anI
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToGetDataStreamIdentifiedBy: anIdentifier [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToGetDataStreamIdentifiedBy: anIdentifier [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -115,8 +95,8 @@ DataRESTfulWebServiceTest >> requestToGetDataStreamIdentifiedBy: anIdentifier [
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> requestToGetDataStreams [
+{ #category : #'private - requests' }
+DataStreamsRESTfulWebServiceTest >> requestToGetDataStreams [
 
 	^ TeaRequest
 		fromZnRequest:
@@ -125,7 +105,7 @@ DataRESTfulWebServiceTest >> requestToGetDataStreams [
 ]
 
 { #category : #running }
-DataRESTfulWebServiceTest >> setUp [
+DataStreamsRESTfulWebServiceTest >> setUp [
 
 	identifierSequence := {UUID new.
 	UUID new.
@@ -134,13 +114,13 @@ DataRESTfulWebServiceTest >> setUp [
 
 	super setUp.
 
-	interface := DataRESTfulWebService workingWith: rootSystem.
+	webService := DataStreamsRESTfulWebService workingWith: rootSystem.
 	 		
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
 { #category : #running }
-DataRESTfulWebServiceTest >> setUpRequirements [
+DataStreamsRESTfulWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -148,16 +128,16 @@ DataRESTfulWebServiceTest >> setUpRequirements [
  
 ]
 
-{ #category : #'expected results' }
-DataRESTfulWebServiceTest >> temperatureDataStreamAsJSON [
+{ #category : #'private - expected results' }
+DataStreamsRESTfulWebServiceTest >> temperatureDataStreamAsJSON [
 
 	^ '{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2p>"},{"registration_timestamp":"<1s>"}]}'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
 		with: self temperatureStreamIdentifier
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> temperatureStream [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> temperatureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Temperature'
@@ -165,38 +145,14 @@ DataRESTfulWebServiceTest >> temperatureStream [
 		ifNone: [ "do nothing" ]
 ]
 
-{ #category : #accessing }
-DataRESTfulWebServiceTest >> temperatureStreamIdentifier [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulWebServiceTest >> temperatureStreamIdentifier [
 
 	^ identifierSequence first
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testCreateDataPoints [
-
-	| response temperature pressure |
-
-	temperature := self temperatureStream.
-	pressure := self pressureStream.
-
-	self deny: temperature currentValue = 24.
-	self deny: pressure currentValue = 89.
-
-	response := interface
-		createBulkPointsBasedOn: self requestToCreateTemperatureAndPressureDataPoints
-		within: self httpRequestContext.
-
-	self
-		assert: response isSuccess;
-		assert: response code equals: 201;
-		assert: response location equals: 'multiple';
-		assert: response hasEntity;
-		assert: temperature currentValue = 24;
-		assert: pressure currentValue = 89
-]
-
-{ #category : #tests }
-DataRESTfulWebServiceTest >> testCreateDataStream [
+DataStreamsRESTfulWebServiceTest >> testCreateDataStream [
 
 	| response |
 
@@ -205,7 +161,7 @@ DataRESTfulWebServiceTest >> testCreateDataStream [
 		ifFound: [ :dataStream | self fail ]
 		ifNone: [ "do nothing" ].
 
-	response := interface
+	response := webService
 		createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"pH"}')
 		within: self httpRequestContext.
 
@@ -226,21 +182,10 @@ DataRESTfulWebServiceTest >> testCreateDataStream [
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testCreatingDataPointsFailsFromMalformattedRequest [
+DataStreamsRESTfulWebServiceTest >> testCreatingDataStreamFailsFromMalformattedRequest [
 
 	self
-		should: [ interface
-				createBulkPointsBasedOn: self updateTemperatureAndPressureDataStreamsMalformattedRequest
-				within: self httpRequestContext ]
-		raise: HTTPClientError
-		withDescription: 'Data stream not found in the system'
-]
-
-{ #category : #tests }
-DataRESTfulWebServiceTest >> testCreatingDataStreamFailsFromMalformattedRequest [
-
-	self
-		should: [ interface
+		should: [ webService
 				createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"XXX":"Temperature"}')
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -251,10 +196,10 @@ DataRESTfulWebServiceTest >> testCreatingDataStreamFailsFromMalformattedRequest 
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testCreatingDataStreamFailsFromUnsuportedMediaType [
+DataStreamsRESTfulWebServiceTest >> testCreatingDataStreamFailsFromUnsuportedMediaType [
 
 	self
-		should: [ interface
+		should: [ webService
 				createStreamBasedOn:
 					(self requestToCreateDataStreamFrom: '{"name":"Temperature"}' encodedAs: self textPlain)
 				within: self httpRequestContext ]
@@ -266,10 +211,10 @@ DataRESTfulWebServiceTest >> testCreatingDataStreamFailsFromUnsuportedMediaType 
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testCreatingDataStreamFailsIfAlreadyExists [
+DataStreamsRESTfulWebServiceTest >> testCreatingDataStreamFailsIfAlreadyExists [
 
 	self
-		should: [ interface
+		should: [ webService
 				createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"Temperature"}')
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -280,7 +225,7 @@ DataRESTfulWebServiceTest >> testCreatingDataStreamFailsIfAlreadyExists [
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testDeleteDataStream [
+DataStreamsRESTfulWebServiceTest >> testDeleteDataStream [
 
 	| response |
 
@@ -289,7 +234,7 @@ DataRESTfulWebServiceTest >> testDeleteDataStream [
 		ifFound: [ :dataStream | "do nothing" ]
 		ifNone: [ self fail ].
 
-	response := interface
+	response := webService
 		deleteStreamBasedOn:
 			(self
 				requestToDeleteTemperatureStreamIdentifiedBy: self temperatureStreamIdentifier)
@@ -307,10 +252,10 @@ DataRESTfulWebServiceTest >> testDeleteDataStream [
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
+DataStreamsRESTfulWebServiceTest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
-		should: [ interface
+		should: [ webService
 				deleteStreamBasedOn: (self requestToDeleteTemperatureStreamIdentifiedBy: 1)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -321,11 +266,11 @@ DataRESTfulWebServiceTest >> testDeletingDataStreamWithWrongIdentifierGivesNotFo
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testGetDataStream [
+DataStreamsRESTfulWebServiceTest >> testGetDataStream [
 
 	| response |
 
-	response := interface
+	response := webService
 		getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
@@ -337,11 +282,11 @@ DataRESTfulWebServiceTest >> testGetDataStream [
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testGetDataStreamDataPoints [
+DataStreamsRESTfulWebServiceTest >> testGetDataStreamDataPoints [
 
 	| response |
 
-	response := interface
+	response := webService
 		getPointsBasedOn:
 			(self
 				requestToGetDataPointsOfDataStreamIdentifiedBy: self temperatureStreamIdentifier)
@@ -356,11 +301,11 @@ DataRESTfulWebServiceTest >> testGetDataStreamDataPoints [
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testGetDataStreams [
+DataStreamsRESTfulWebServiceTest >> testGetDataStreams [
 
 	| response |
 
-	response := interface
+	response := webService
 		getStreamsBasedOn: self requestToGetDataStreams
 		within: self httpRequestContext.
 
@@ -368,14 +313,14 @@ DataRESTfulWebServiceTest >> testGetDataStreams [
 		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0;
-		assert: response contents equals: self dataStreamsSnapshotAsJSON
+		assert: response contents equals: self dataStreamsAsJSON
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
+DataStreamsRESTfulWebServiceTest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
-		should: [ interface
+		should: [ webService
 				getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -387,39 +332,19 @@ DataRESTfulWebServiceTest >> testGettingDataStreamWithWrongIdentifierGivesNotFou
 ]
 
 { #category : #tests }
-DataRESTfulWebServiceTest >> testRoutesConfiguration [
+DataStreamsRESTfulWebServiceTest >> testRoutesConfiguration [
 
 	| teapot |
 
 	teapot := Teapot on.
 
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
+	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
 
-	self assert: teapot routes size equals: 6
+	self assert: teapot routes size equals: 5
 ]
 
-{ #category : #'accessing - media types' }
-DataRESTfulWebServiceTest >> textPlain [
+{ #category : #'private - media types' }
+DataStreamsRESTfulWebServiceTest >> textPlain [
 
 	^ 'text/plain;charset=utf-8' asZnMimeType
-]
-
-{ #category : #'accessing - requests' }
-DataRESTfulWebServiceTest >> updateTemperatureAndPressureDataStreamsMalformattedRequest [
-
-	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
-		entity:
-			(ZnEntity
-				with:
-					'[
-			{
-				"xxx" : "Temperature",
-				"value" : 24
-			},
-			{
-				"data_stream" : "Pressure",
-				"value" : 89
-			}
-		]'
-				type: self applicationJsonVersion1dot0dot0)
 ]
