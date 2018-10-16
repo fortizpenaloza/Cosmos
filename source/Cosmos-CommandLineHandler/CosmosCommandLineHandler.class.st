@@ -214,7 +214,7 @@ CosmosCommandLineHandler >> dumpStackAndReport: aSignal [
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> expectedExceptions [
 
-	self isDebugModeEnabled
+	^ self isDebugModeEnabled
 		ifTrue: [ ExceptionSet new ]
 		ifFalse: [ Error ]
 ]
