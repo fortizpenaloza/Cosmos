@@ -104,8 +104,8 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
 
 	configurator
-		addRoutesOf: (DataWebService workingWith: cosmos);
-		addRoutesOf: (CommandsWebService workingWith: cosmos);
+		addRoutesOf: (DataRESTfulWebService workingWith: cosmos);
+		addRoutesOf: (CommandsRESTfulWebService workingWith: cosmos);
 		addRoutesOf: (ActionsWebService workingWith: cosmos).
 
 	(TriggersAPIInstaller toInstallOn: teapot workingWith: cosmos) install.

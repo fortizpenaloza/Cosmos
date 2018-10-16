@@ -1,5 +1,5 @@
 Class {
-	#name : #DataWebService,
+	#name : #DataRESTfulWebService,
 	#superclass : #RESTfulWebService,
 	#instVars : [
 		'cosmos'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataWebService class >> workingWith: aCosmosSystem [
+DataRESTfulWebService class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #API }
-DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
+DataRESTfulWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ | rawData |
 
@@ -39,7 +39,7 @@ DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
+DataRESTfulWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		withCreatedResourceDo: [ :dataStream | self dataManagementSystem register: dataStream ]
@@ -51,31 +51,31 @@ DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - accessing' }
-DataWebService >> currentDateTime [
+DataRESTfulWebService >> currentDateTime [
 
 	^ self timeSystem dateTime
 ]
 
 { #category : #'private - systems' }
-DataWebService >> dataManagementSystem [
+DataRESTfulWebService >> dataManagementSystem [
 
 	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
-DataWebService >> dataPointsKey [
+DataRESTfulWebService >> dataPointsKey [
 
 	^ #data_points
 ]
 
 { #category : #'private - object types' }
-DataWebService >> dataStreamsKey [
+DataRESTfulWebService >> dataStreamsKey [
 
 	^ #data_streams
 ]
 
 { #category : #API }
-DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
+DataRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ 
 	self dataManagementSystem
@@ -88,7 +88,7 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
+DataRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
@@ -98,7 +98,7 @@ DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
+DataRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		get: [ | streamsToEncode |
@@ -118,40 +118,45 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - systems' }
-DataWebService >> identifierSystem [
+DataRESTfulWebService >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-DataWebService >> initializeWorkingWith: aCosmosSystem [
+DataRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
-DataWebService >> locationOf: aDataStream [
+DataRESTfulWebService >> locationOf: aDataStream [
 
-	^ ZnUrl
-		fromString:
-			('localhost/<1s>'
-				expandMacrosWith: (self identifierSystem identifierOf: aDataStream) asString36)
+	| baseUrl |
+
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'data-stream' asZnUrl
+		with: (self identifierSystem identifierOf: aDataStream)
 ]
 
 { #category : #specification }
-DataWebService >> specification [
+DataRESTfulWebService >> specification [
 
-	^ DataWebServiceSpecification new
+	^ DataRESTfulWebServiceSpecification new
 ]
 
 { #category : #'private - systems' }
-DataWebService >> timeSystem [
+DataRESTfulWebService >> timeSystem [
 	
 	^ cosmos systemImplementing: #TimeSystemInterface
 ]
 
 { #category : #'private - API' }
-DataWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+DataRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
 
 	| identifierProvided |
 

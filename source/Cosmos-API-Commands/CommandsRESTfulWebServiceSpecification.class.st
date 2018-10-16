@@ -1,11 +1,11 @@
 Class {
-	#name : #CommandsWebServiceSpecification,
+	#name : #CommandsRESTfulWebServiceSpecification,
 	#superclass : #RESTFulWebServiceSpecification,
 	#category : #'Cosmos-API-Commands'
 }
 
 { #category : #'specification - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
+CommandsRESTfulWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
@@ -14,7 +14,7 @@ CommandsWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingI
 ]
 
 { #category : #'specification - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
+CommandsRESTfulWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #commands
@@ -23,7 +23,7 @@ CommandsWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingI
 ]
 
 { #category : #'specification - encoders and decoders' }
-CommandsWebServiceSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
+CommandsRESTfulWebServiceSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
 
 	aBuilder
 		addRuleToEncode: #commands
@@ -32,13 +32,13 @@ CommandsWebServiceSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder
 ]
 
 { #category : #'media types' }
-CommandsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+CommandsRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'encoders and decoders' }
-CommandsWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
+CommandsRESTfulWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -51,7 +51,7 @@ CommandsWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-CommandsWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
+CommandsRESTfulWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
 
 	^ [ :commandWithPriority | 
 	String
@@ -66,13 +66,13 @@ CommandsWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-CommandsWebServiceSpecification >> commandPlainTextEncoder [
+CommandsRESTfulWebServiceSpecification >> commandPlainTextEncoder [
 
 	^ [ :commandWithPriority | commandWithPriority command ]
 ]
 
 { #category : #'specification - routes' }
-CommandsWebServiceSpecification >> createCommandsRoute [
+CommandsRESTfulWebServiceSpecification >> createCommandsRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -81,7 +81,7 @@ CommandsWebServiceSpecification >> createCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsWebServiceSpecification >> deleteCommandsRoute [
+CommandsRESTfulWebServiceSpecification >> deleteCommandsRoute [
 
 	^ RouteSpecification
 		handling: #DELETE
@@ -90,7 +90,7 @@ CommandsWebServiceSpecification >> deleteCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsWebServiceSpecification >> getCommandsRoute [
+CommandsRESTfulWebServiceSpecification >> getCommandsRoute [
 
 	^ RouteSpecification 
 		handling: #GET 
@@ -99,7 +99,7 @@ CommandsWebServiceSpecification >> getCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsWebServiceSpecification >> getNextCommandRoute [
+CommandsRESTfulWebServiceSpecification >> getNextCommandRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -109,7 +109,7 @@ CommandsWebServiceSpecification >> getNextCommandRoute [
 ]
 
 { #category : #'media types' }
-CommandsWebServiceSpecification >> textPlain [
+CommandsRESTfulWebServiceSpecification >> textPlain [
 
 	^ ZnMimeType fromString: 'text/plain;charset=utf-8'
 ]

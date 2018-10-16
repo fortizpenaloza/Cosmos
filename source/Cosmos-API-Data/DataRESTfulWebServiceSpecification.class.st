@@ -1,11 +1,11 @@
 Class {
-	#name : #DataWebServiceSpecification,
+	#name : #DataRESTfulWebServiceSpecification,
 	#superclass : #RESTFulWebServiceSpecification,
 	#category : #'Cosmos-API-Data'
 }
 
 { #category : #'specification - encoders and decoders' }
-DataWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0MappingIn: aBuilder [
+DataRESTfulWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0 
@@ -14,7 +14,7 @@ DataWebServiceSpecification >> addBulkDataPointDecoderVersion1dot0dot0MappingIn:
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBuilder [
+DataRESTfulWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #data_points
@@ -23,7 +23,7 @@ DataWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBu
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataWebServiceSpecification >> addDataStreamDecoderVersion1dot0dot0MappingIn: aBuilder [
+DataRESTfulWebServiceSpecification >> addDataStreamDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
@@ -32,7 +32,7 @@ DataWebServiceSpecification >> addDataStreamDecoderVersion1dot0dot0MappingIn: aB
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataWebServiceSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
+DataRESTfulWebServiceSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #data_streams
@@ -41,13 +41,13 @@ DataWebServiceSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aB
 ]
 
 { #category : #'media types' }
-DataWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+DataRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'encoders and decoders' }
-DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
+DataRESTfulWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
 	| timestamp |
@@ -66,7 +66,7 @@ DataWebServiceSpecification >> bulkDataPointDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> createBulkDataPointsRoute [
+DataRESTfulWebServiceSpecification >> createBulkDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -75,7 +75,7 @@ DataWebServiceSpecification >> createBulkDataPointsRoute [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> createDataStreamRoute [
+DataRESTfulWebServiceSpecification >> createDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -84,7 +84,7 @@ DataWebServiceSpecification >> createDataStreamRoute [
 ]
 
 { #category : #'encoders and decoders' }
-DataWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
+DataRESTfulWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataPoint | 
 	String
@@ -104,7 +104,7 @@ DataWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
+DataRESTfulWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -116,7 +116,7 @@ DataWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
+DataRESTfulWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataStreams :context | | metadataSystem |
 	
@@ -150,7 +150,7 @@ DataWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> deleteDataStreamRoute [
+DataRESTfulWebServiceSpecification >> deleteDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #DELETE
@@ -159,7 +159,7 @@ DataWebServiceSpecification >> deleteDataStreamRoute [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> getDataPointsRoute [
+DataRESTfulWebServiceSpecification >> getDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -168,7 +168,7 @@ DataWebServiceSpecification >> getDataPointsRoute [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> getDataStreamRoute [
+DataRESTfulWebServiceSpecification >> getDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -177,7 +177,7 @@ DataWebServiceSpecification >> getDataStreamRoute [
 ]
 
 { #category : #'specification - routes' }
-DataWebServiceSpecification >> getDataStreamsRoute [
+DataRESTfulWebServiceSpecification >> getDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET
