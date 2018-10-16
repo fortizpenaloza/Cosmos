@@ -6,11 +6,13 @@ RUN apt-get update && apt-get --assume-yes --no-install-recommends install curl 
 WORKDIR /opt/pharo
 
 # Load the project
-USER pharo
 RUN curl get.pharo.org/61 | bash
 COPY load-project.st .
 COPY load-project.sh .
 RUN chmod a+x load-project.sh
+RUN chown -R pharo:pharo /opt/pharo
+
+USER pharo
 RUN ./load-project.sh
 
 # Stage 2, start from a clean image
