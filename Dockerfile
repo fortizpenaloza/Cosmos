@@ -9,21 +9,22 @@ WORKDIR /opt/pharo
 USER pharo
 RUN curl get.pharo.org/61 | bash
 COPY load-project.st .
-RUN sed -ri /master/${SOURCE_BRANCH}/ load-project.st
-RUN ./pharo Pharo.image st load-project.st
+COPY load-project.sh .
+RUN chmod a+x load-project.sh
+RUN ./load-project.sh
 
 # Stage 2, start from a clean image
 FROM basmalltalk/pharo:6.1
 
 USER root
 WORKDIR /opt/cosmos
-RUN chown -R pharo:pharo /opt/cosmos
-
-USER pharo
-
-RUN mkdir logs
 
 COPY --from=imagebuilder /opt/pharo/Pharo.image .
 COPY --from=imagebuilder /opt/pharo/Pharo.changes .
+
+RUN mkdir logs
+RUN chown -R pharo:pharo /opt/cosmos
+
+USER pharo
 
 CMD ["/opt/pharo/pharo", "Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
