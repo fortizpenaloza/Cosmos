@@ -20,6 +20,8 @@ RUN chown -R pharo:pharo /opt/cosmos
 
 USER pharo
 
+RUN mkdir logs
+
 COPY --from=imagebuilder /opt/pharo/Pharo.image .
 COPY --from=imagebuilder /opt/pharo/Pharo.changes .
 
