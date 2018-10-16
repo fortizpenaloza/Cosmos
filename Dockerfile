@@ -9,6 +9,7 @@ WORKDIR /opt/pharo
 USER pharo
 RUN curl get.pharo.org/61 | bash
 COPY load-project.st .
+RUN sed -ri /master/${SOURCE_BRANCH}/ load-project.st
 RUN ./pharo Pharo.image st load-project.st
 
 # Stage 2, start from a clean image
