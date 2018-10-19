@@ -6,8 +6,8 @@ Cosmos is a Internet of Things (IoT) platform completly written in Smalltalk.
 
 **[Explore the docs](/docs)**
 
-[Report a defect]("https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Bug) |
-[Request feature]("https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Development) |
+[Report a defect](https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Bug) |
+[Request feature](https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Development) |
 
 [![Build Status](https://travis-ci.org/iot-uca/back-end.svg?branch=master)](https://travis-ci.org/iot-uca/back-end)
 [![Coverage Status](https://coveralls.io/repos/github/iot-uca/back-end/badge.svg?branch=master)](https://coveralls.io/github/iot-uca/back-end?branch=master)
