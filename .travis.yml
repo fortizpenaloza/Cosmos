@@ -6,4 +6,11 @@ os:
 
 smalltalk:
   - Pharo-6.1
-  
+  - Pharo-7.0
+  - Pharo64-7.0
+ 
+matrix:
+  allow_failures:
+    - smalltalk: Pharo-7.0
+    - smalltalk: Pharo64-7.0
+  fash_finish: true
