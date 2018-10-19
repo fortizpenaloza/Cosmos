@@ -46,7 +46,7 @@ BaselineOfCosmos >> baseline: spec [
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Common' with: [ spec requires: #('Teapot' 'Stargate') ];
+		package: 'Cosmos-API-Common' with: [ spec requires: #('Stargate') ];
 		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
 		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
 		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
@@ -214,15 +214,9 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate'
 		with: [ spec
-				repository: 'github://ba-st/stargate:v0.1.0/source';
+				repository: 'github://ba-st/stargate:cosmos/source';
 				loads: 'Deployment' ];
 		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [spec loads: 'Development'].
-
-	spec
-		configuration: 'Teapot'
-		with: [ spec
-				versionString: #stable;
-				repository: 'http://smalltalkhub.com/mc/zeroflag/Teapot/main/' ].
 
 	spec
 		configuration: 'Roassal2'

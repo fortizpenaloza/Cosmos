@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -ri "s/back-end:master/back-end:$SOURCE_BRANCH/" load-project.st

@@ -1,5 +1,5 @@
 Class {
-	#name : #CommandsWebService,
+	#name : #CommandsRESTfulWebService,
 	#superclass : #RESTfulWebService,
 	#instVars : [
 		'cosmos'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-CommandsWebService class >> workingWith: aCosmosSystem [
+CommandsRESTfulWebService class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #'private - systems' }
-CommandsWebService >> commandManagementSystem [
+CommandsRESTfulWebService >> commandManagementSystem [
 
 	^ cosmos systemImplementing: #CommandManagementSystemInterface
 ]
 
 { #category : #API }
-CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
+CommandsRESTfulWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		withCreatedResourceDo: [ :commandWithPriority | self commandManagementSystem register: commandWithPriority ]
@@ -30,7 +30,7 @@ CommandsWebService >> createCommandBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-CommandsWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
+CommandsRESTfulWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
 
 	^ [ | identifier |
 
@@ -46,7 +46,7 @@ CommandsWebService >> deleteCommandBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
+CommandsRESTfulWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self commandManagementSystem commands ]
@@ -56,28 +56,33 @@ CommandsWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - systems' }
-CommandsWebService >> identifierSystem [
+CommandsRESTfulWebService >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-CommandsWebService >> initializeWorkingWith: aCosmosSystem [
+CommandsRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
-CommandsWebService >> locationOf: commandWithPriority [
+CommandsRESTfulWebService >> locationOf: aCommandWithPriority [
 
-	^ ZnUrl
-		fromString:
-			('localhost/<1s>'
-				expandMacrosWith: (self identifierSystem identifierOf: commandWithPriority) asString36)
+	| baseUrl |
+
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'commands' asZnUrl
+		with: (self identifierSystem identifierOf: aCommandWithPriority)
 ]
 
 { #category : #API }
-CommandsWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
+CommandsRESTfulWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self commandManagementSystem nextCommand ]
@@ -87,7 +92,7 @@ CommandsWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #specification }
-CommandsWebService >> specification [
+CommandsRESTfulWebService >> specification [
 
-	^ CommandsWebServiceSpecification new
+	^ CommandsRESTfulWebServiceSpecification new
 ]

@@ -104,8 +104,9 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
 
 	configurator
-		addRoutesOf: (DataWebService workingWith: cosmos);
-		addRoutesOf: (CommandsWebService workingWith: cosmos);
+		addRoutesOf: (DataStreamsRESTfulWebService workingWith: cosmos);
+		addRoutesOf: (DataPointsRESTfulWebService workingWith: cosmos);
+		addRoutesOf: (CommandsRESTfulWebService workingWith: cosmos);
 		addRoutesOf: (ActionsWebService workingWith: cosmos).
 
 	(TriggersAPIInstaller toInstallOn: teapot workingWith: cosmos) install.
@@ -213,7 +214,7 @@ CosmosCommandLineHandler >> dumpStackAndReport: aSignal [
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> expectedExceptions [
 
-	self isDebugModeEnabled
+	^ self isDebugModeEnabled
 		ifTrue: [ ExceptionSet new ]
 		ifFalse: [ Error ]
 ]

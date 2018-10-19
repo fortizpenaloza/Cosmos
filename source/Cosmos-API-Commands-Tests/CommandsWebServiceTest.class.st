@@ -8,7 +8,7 @@ Class {
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - media types' }
 CommandsWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
 	^ ZnMimeType applicationJson
@@ -40,6 +40,35 @@ CommandsWebServiceTest >> installLedCommandsAddOn [
 	^ (LEDCommandsAddOn on: rootSystem) install
 ]
 
+{ #category : #'accessing - requests' }
+CommandsWebServiceTest >> requestToCreateCommandFrom: aJson [
+
+	^ (ZnRequest post: 'http://COSMOS_URL/commands')
+		entity: (ZnEntity json: aJson)
+]
+
+{ #category : #'accessing - requests' }
+CommandsWebServiceTest >> requestToDeleteCommandIdentifiedBy: anIdentifier [
+
+	^ TeaRequest
+		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/commands/' , anIdentifier asString)
+		pathParams: {(#identifier -> anIdentifier)} asDictionary
+]
+
+{ #category : #'accessing - requests' }
+CommandsWebServiceTest >> requestToGetCommands [
+
+	^ (ZnRequest get: 'http://COSMOS_URL/commands')
+		setAccept: self applicationJsonVersion1dot0dot0
+]
+
+{ #category : #'accessing - requests' }
+CommandsWebServiceTest >> requestToNextCommandAccepting: mediaType [
+
+	^ (ZnRequest post: 'http://COSMOS_URL/commands/next')
+		setAccept: mediaType
+]
+
 { #category : #running }
 CommandsWebServiceTest >> setUp [
 
@@ -48,7 +77,7 @@ CommandsWebServiceTest >> setUp [
 
 	super setUp.
 
-	interface := CommandsWebService workingWith: rootSystem
+	interface := CommandsRESTfulWebService workingWith: rootSystem
 ]
 
 { #category : #running }
@@ -61,23 +90,20 @@ CommandsWebServiceTest >> setUpRequirements [
 ]
 
 { #category : #tests }
-CommandsWebServiceTest >> testCreatingCommand [
+CommandsWebServiceTest >> testCreateCommand [
 
 	| response |
 
 	self assert: self commandManagementSystem commands isEmpty.
 
 	response := interface
-		createCommandBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/commands')
-				entity:
-					(ZnEntity json: '{"command":"TURN_ON_LED","priority":100}'))
+		createCommandBasedOn: (self requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
 		within: self httpRequestContext.
 
 	self
+		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location
-			equals: '/localhost/' , identifierSequence first asString36;
+		assert: response location equals: '/commands/' , identifierSequence first asString;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self
@@ -89,7 +115,7 @@ CommandsWebServiceTest >> testCreatingCommand [
 ]
 
 { #category : #tests }
-CommandsWebServiceTest >> testDeletingCommand [
+CommandsWebServiceTest >> testDeleteCommand [
 
 	| response |
 
@@ -98,21 +124,13 @@ CommandsWebServiceTest >> testDeletingCommand [
 	self assert: self commandManagementSystem commands size equals: 3.
 
 	response := interface
-		deleteCommandBasedOn:
-			(TeaRequest
-				fromZnRequest:
-					(ZnRequest
-						delete:
-							'http://COSMOS_URL/commands/'
-								, self commandWithMediumPriorityIdentifier asString36)
-				pathParams:
-					{(#identifier -> self commandWithMediumPriorityIdentifier)}
-						asDictionary)
+		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self commandWithMediumPriorityIdentifier)
 		within: self httpRequestContext.
 
-
 	self
-		assert: response code equals: 204;
+		assert: response isSuccess;
+		assert: response status equals: 204;
+		deny: response hasEntity;
 		assert: self commandManagementSystem commands size equals: 2
 ]
 
@@ -124,13 +142,13 @@ CommandsWebServiceTest >> testGettingCommands [
 	self installLedCommandsAddOn.
 
 	response := interface
-		getCommandsBasedOn:
-			((ZnRequest get: 'http://COSMOS_URL/commands')
-				setAccept: self applicationJsonVersion1dot0dot0)
+		getCommandsBasedOn: self requestToGetCommands
 		within: self httpRequestContext.
 
 	self
+		assert: response isSuccess;
 		assert: response code equals: 200;
+		assert: response contentType equals: self applicationJsonVersion1dot0dot0;
 		assert: response contents
 			equals:
 			'[{"command":"TURN_ON_LED","priority":100},{"command":"TURN_OFF_LED","priority":50},{"command":"TURN_ON_LED","priority":1}]'
@@ -145,11 +163,12 @@ CommandsWebServiceTest >> testNextCommandFormattedAsJson [
 
 	response := interface
 		nextCommandBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/commands/next')
-				setAccept: self applicationJsonVersion1dot0dot0)
+			(self
+				requestToNextCommandAccepting: self applicationJsonVersion1dot0dot0)
 		within: self httpRequestContext.
 
 	self
+		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType
 			equals: self applicationJsonVersion1dot0dot0.
@@ -167,12 +186,11 @@ CommandsWebServiceTest >> testNextCommandFormattedAsPlainText [
 	self installLedCommandsAddOn.
 
 	response := interface
-		nextCommandBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/commands/next')
-				setAccept: ZnMimeType textPlain)
+		nextCommandBasedOn: (self requestToNextCommandAccepting: self textPlain)
 		within: self httpRequestContext.
 
 	self
+		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType equals: ZnMimeType textPlain.
 
@@ -189,4 +207,10 @@ CommandsWebServiceTest >> testRoutesConfiguration [
 	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
 
 	self assert: teapot routes size equals: 4
+]
+
+{ #category : #'accessing - media types' }
+CommandsWebServiceTest >> textPlain [
+
+	^ ZnMimeType textPlain
 ]

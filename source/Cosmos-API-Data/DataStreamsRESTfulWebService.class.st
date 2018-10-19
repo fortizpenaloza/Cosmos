@@ -1,5 +1,5 @@
 Class {
-	#name : #DataWebService,
+	#name : #DataStreamsRESTfulWebService,
 	#superclass : #RESTfulWebService,
 	#instVars : [
 		'cosmos'
@@ -8,38 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataWebService class >> workingWith: aCosmosSystem [
+DataStreamsRESTfulWebService class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #API }
-DataWebService >> createBulkPointsBasedOn: anHttpRequest within: aContext [
-
-	^ [ | rawData |
-
-	aContext hold: self currentDateTime under: #request_timestamp.
-
-	rawData := self
-		decode: anHttpRequest contents
-		at: self dataPointsKey
-		from: anHttpRequest contentType
-		within: aContext.
-
-	rawData
-		do: [ :rawDataPoint | 
-			self dataManagementSystem
-				register: rawDataPoint value
-				toStreamNamed: rawDataPoint key ].
-
-	ZnResponse created: 'multiple' ]
-		on: ObjectNotFound
-		do:
-			[ :signal | HTTPClientError signalBadRequest: signal messageText ]
-]
-
-{ #category : #API }
-DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		withCreatedResourceDo: [ :dataStream | self dataManagementSystem register: dataStream ]
@@ -50,32 +25,20 @@ DataWebService >> createStreamBasedOn: anHttpRequest within: aContext [
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
-{ #category : #'private - accessing' }
-DataWebService >> currentDateTime [
-
-	^ self timeSystem dateTime
-]
-
 { #category : #'private - systems' }
-DataWebService >> dataManagementSystem [
+DataStreamsRESTfulWebService >> dataManagementSystem [
 
 	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
-DataWebService >> dataPointsKey [
-
-	^ #data_points
-]
-
-{ #category : #'private - object types' }
-DataWebService >> dataStreamsKey [
+DataStreamsRESTfulWebService >> dataStreamsKey [
 
 	^ #data_streams
 ]
 
 { #category : #API }
-DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ 
 	self dataManagementSystem
@@ -88,7 +51,7 @@ DataWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
@@ -98,7 +61,7 @@ DataWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		get: [ | streamsToEncode |
@@ -118,40 +81,39 @@ DataWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - systems' }
-DataWebService >> identifierSystem [
+DataStreamsRESTfulWebService >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-DataWebService >> initializeWorkingWith: aCosmosSystem [
+DataStreamsRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
-DataWebService >> locationOf: aDataStream [
+DataStreamsRESTfulWebService >> locationOf: aDataStream [
 
-	^ ZnUrl
-		fromString:
-			('localhost/<1s>'
-				expandMacrosWith: (self identifierSystem identifierOf: aDataStream) asString36)
+	| baseUrl |
+
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'data-stream' asZnUrl
+		with: (self identifierSystem identifierOf: aDataStream)
 ]
 
 { #category : #specification }
-DataWebService >> specification [
+DataStreamsRESTfulWebService >> specification [
 
-	^ DataWebServiceSpecification new
-]
-
-{ #category : #'private - systems' }
-DataWebService >> timeSystem [
-	
-	^ cosmos systemImplementing: #TimeSystemInterface
+	^ DataStreamsRESTfulWebServiceSpecification new
 ]
 
 { #category : #'private - API' }
-DataWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+DataStreamsRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
 
 	| identifierProvided |
 
