@@ -43,15 +43,6 @@ DataStreamsRESTfulWebServiceTest >> identifierProvider [
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
-{ #category : #'private - accessing' }
-DataStreamsRESTfulWebServiceTest >> pressureStream [
-
-	^ self dataManagementSystem
-		streamNamed: 'Pressure'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
-]
-
 { #category : #'private - requests' }
 DataStreamsRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aReprensentation [
 
@@ -134,15 +125,6 @@ DataStreamsRESTfulWebServiceTest >> temperatureDataStreamAsJSON [
 	^ '{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2p>"},{"registration_timestamp":"<1s>"}]}'
 		expandMacrosWith: self dateTimeFormattedAsISO8601
 		with: self temperatureStreamIdentifier
-]
-
-{ #category : #'private - accessing' }
-DataStreamsRESTfulWebServiceTest >> temperatureStream [
-
-	^ self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
 ]
 
 { #category : #'private - accessing' }
