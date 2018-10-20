@@ -208,7 +208,7 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Kepler'
 		with: [ spec
-				repository: 'github://ba-st/Kepler:master/source';
+				repository: 'github://ba-st/Kepler:v2.0.1/source';
 				loads: #('Deployment' 'SystemBasedTests') ].
 
 	spec
