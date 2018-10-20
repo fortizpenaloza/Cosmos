@@ -50,7 +50,7 @@ CommandsRESTfulWebService >> getCommandsBasedOn: anHttpRequest within: aContext 
 
 	^ self
 		get: [ self commandManagementSystem commands ]
-		encodedUsing: #commands
+		asCollectionEncodedUsing: #commands
 		basedOn: anHttpRequest
 		within: aContext
 ]

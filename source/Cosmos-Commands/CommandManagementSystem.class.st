@@ -71,7 +71,9 @@ CommandManagementSystem >> register: aCommandWithPriority [
 		with: aCommandWithPriority priority.
 		
 	self registerIdentifierFor: aCommandWithPriority.
-	self registerRegistrationTimestampFor: aCommandWithPriority
+	self registerRegistrationTimestampFor: aCommandWithPriority.
+	
+	^ aCommandWithPriority 
 ]
 
 { #category : #'private - managing' }

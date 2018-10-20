@@ -55,7 +55,7 @@ DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext
 
 	^ self
 		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
-		encodedUsing: #data_points
+		asCollectionEncodedUsing: #data_points
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -73,7 +73,7 @@ DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContex
 
 			aContext hold: (cosmos systemImplementing: #MetadataSystemInterface) under: #metadata_system.
 			streamsToEncode ]
-		encodedUsing: #data_streams
+		asCollectionEncodedUsing: #data_streams
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: DataStreamIsEmpty

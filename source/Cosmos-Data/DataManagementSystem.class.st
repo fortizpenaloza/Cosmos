@@ -49,7 +49,9 @@ DataManagementSystem >> register: aDataStream [
 		ifFound: [ :dataStream | 
 			ConflictingObjectFound
 				signal: 'A data stream with that name already exists in system' ]
-		ifNone: [ self registerWithMetadata: aDataStream ]
+		ifNone: [ self registerWithMetadata: aDataStream ].
+		
+	^ aDataStream 
 ]
 
 { #category : #'private - managing' }
