@@ -209,12 +209,12 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		baseline: 'Kepler'
 		with: [ spec
 				repository: 'github://ba-st/Kepler:master/source';
-				loads: 'Development' ].
+				loads: #('Deployment' 'SystemBasedTests') ].
 
 	spec
 		baseline: 'Stargate'
 		with: [ spec
-				repository: 'github://ba-st/stargate:cosmos/source';
+				repository: 'github://ba-st/stargate:master/source';
 				loads: 'Deployment' ];
 		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [spec loads: 'Development'].
 
