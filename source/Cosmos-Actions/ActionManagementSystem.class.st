@@ -2,7 +2,10 @@ Class {
 	#name : #ActionManagementSystem,
 	#superclass : #System,
 	#instVars : [
-		'actions'
+		'actions',
+		'timeSystem',
+		'metadataSystem',
+		'identifierSystem'
 	],
 	#category : #'Cosmos-Actions'
 }
@@ -40,6 +43,9 @@ ActionManagementSystem >> initialize [
 	super initialize.
 
 	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
+	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
+
 	actions := OrderedCollection new
 ]
 
@@ -48,13 +54,40 @@ ActionManagementSystem >> register: anAction [
 
 	self
 		actionNamed: anAction name
-		ifFound:
-			[ :action | ConflictingObjectFound signal: 'An action with that name already exists in system' ]
-		ifNone: [ actions add: anAction ]
+		ifFound: [ :action | 
+			ConflictingObjectFound
+				signal: 'An action with that name already exists in system' ]
+		ifNone: [ self registerWithMetadata: anAction ].
+
+	^ anAction
+]
+
+{ #category : #'private - managing' }
+ActionManagementSystem >> registerIdentifierFor: anAction [
+
+	identifierSystem registerIdentifierFor: anAction
+]
+
+{ #category : #'private - managing' }
+ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
+
+	metadataSystem
+		register: (Metadata attaching: timeSystem dateTime as: #registration_timestamp of: anAction)
+]
+
+{ #category : #'private - managing' }
+ActionManagementSystem >> registerWithMetadata: anAction [
+
+	actions add: anAction.
+
+	self registerIdentifierFor: anAction .
+	self registerRegistrationTimestampFor: anAction 
 ]
 
 { #category : #'dependency resolution' }
 ActionManagementSystem >> resolveDependecies [
 
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface
+	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]

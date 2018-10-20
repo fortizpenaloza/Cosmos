@@ -11,6 +11,7 @@ SystemBasedUserStoryTest >> requireActionManagementSystem [
 
 	self
 		requireTimeSystem;
-		requireEventNotificationSystem.
+		requireMetadataSystem;
+		requireIdentifierSystem.
 	systemBuilder add: ActionManagementSystem new
 ]

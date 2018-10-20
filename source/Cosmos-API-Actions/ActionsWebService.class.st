@@ -49,9 +49,15 @@ ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self actionManagementSystem actions ]
-		encodedUsing: #actions
+		asCollectionEncodedUsing: #actions
 		basedOn: anHttpRequest
 		within: aContext
+]
+
+{ #category : #'private - systems' }
+ActionsWebService >> identifierSystem [
+
+	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
@@ -60,12 +66,18 @@ ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 	cosmos := aCosmosSystem
 ]
 
-{ #category : #'private - systems' }
-ActionsWebService >> locationOf: resource [
+{ #category : #'private - API' }
+ActionsWebService >> locationOf: anAction [
 
-	"Fran, you have to improve it"
+	| baseUrl |
 
-	^ ZnUrl fromString: 'localhost'
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'actions' asZnUrl
+		with: (self identifierSystem identifierOf: anAction)
 ]
 
 { #category : #specification }

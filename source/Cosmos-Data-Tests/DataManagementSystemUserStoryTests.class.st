@@ -99,10 +99,10 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
-
-	self dataManagementSystem
-		withStreamIdentifiedBy: self currentIdentifier
-		do: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
+	
+	self
+		assert: (self dataManagementSystem streamIdentifiedBy: self currentIdentifier)
+		equals: dataStream
 ]
 
 { #category : #tests }
@@ -117,6 +117,21 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 		streamNamed: 'Temperature'
 		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
 		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+DataManagementSystemUserStoryTests >> testQueryingDataStreamUsingWrongIdentifierGivesObjectNotFound [
+
+	| dataStream |
+
+	dataStream := self temperatureStream.
+	self dataManagementSystem register: dataStream.
+
+	self
+		should: [ self dataManagementSystem streamIdentifiedBy: 2 ]
+		raise: ObjectNotFound
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Data stream with that identifier not found' ]
 ]
 
 { #category : #tests }

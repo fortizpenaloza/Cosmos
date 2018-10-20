@@ -43,15 +43,6 @@ DataStreamsRESTfulWebServiceTest >> identifierProvider [
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
-{ #category : #'private - accessing' }
-DataStreamsRESTfulWebServiceTest >> pressureStream [
-
-	^ self dataManagementSystem
-		streamNamed: 'Pressure'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
-]
-
 { #category : #'private - requests' }
 DataStreamsRESTfulWebServiceTest >> requestToCreateDataStreamFrom: aReprensentation [
 
@@ -137,15 +128,6 @@ DataStreamsRESTfulWebServiceTest >> temperatureDataStreamAsJSON [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulWebServiceTest >> temperatureStream [
-
-	^ self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
-]
-
-{ #category : #'private - accessing' }
 DataStreamsRESTfulWebServiceTest >> temperatureStreamIdentifier [
 
 	^ identifierSequence first
@@ -169,7 +151,7 @@ DataStreamsRESTfulWebServiceTest >> testCreateDataStream [
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: '/data-stream/' , identifierSequence last asString;
+			equals: '/data-streams/' , identifierSequence last asString;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self dataManagementSystem
@@ -271,7 +253,7 @@ DataStreamsRESTfulWebServiceTest >> testGetDataStream [
 	| response |
 
 	response := webService
-		getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
+		getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
 	self
@@ -321,7 +303,7 @@ DataStreamsRESTfulWebServiceTest >> testGettingDataStreamWithWrongIdentifierGive
 
 	self
 		should: [ webService
-				getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
+				getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 

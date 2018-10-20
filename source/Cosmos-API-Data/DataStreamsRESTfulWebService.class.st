@@ -40,9 +40,8 @@ DataStreamsRESTfulWebService >> dataStreamsKey [
 { #category : #API }
 DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
-	^ [ 
-	self dataManagementSystem
-		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
+	^ [ self
+		withStreamRequestedIn: anHttpRequest
 		do: [ :dataStream | self dataManagementSystem deregister: dataStream ].
 
 	ZnResponse noContent ]
@@ -53,29 +52,46 @@ DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aCont
 { #category : #API }
 DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
-	^ self
-		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
-		encodedUsing: #data_points
-		basedOn: anHttpRequest
-		within: aContext
+	| mediaType resourceCollection encodedResourceCollection |
+
+	mediaType := self targetMediaTypeFrom: anHttpRequest.
+		resourceCollection := self
+		evaluateQuery: [ (self dataManagementSystem
+				streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ].
+
+	encodedResourceCollection := self
+		encode: resourceCollection
+		at: #data_points
+		to: mediaType
+		within: aContext.
+		
+	^ ZnResponse ok: encodedResourceCollection 
+]
+
+{ #category : #API }
+DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext [
+
+	^ [ self
+			get: [ 
+				aContext hold: self metadataSystem under: #metadata_system.
+				self streamRequestedIn: anHttpRequest ]
+			encodedUsing: #data_streams
+			basedOn: anHttpRequest
+			within: aContext ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #API }
 DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-		get: [ | streamsToEncode |
-
-			self
-				withIdentifierProvidedIn: anHttpRequest
-				do: [ :identifier | self dataManagementSystem withStreamIdentifiedBy: identifier do: [ :dataStream | streamsToEncode := dataStream ] ]
-				ifNone: [ streamsToEncode := self dataManagementSystem streams ].
-
-			aContext hold: (cosmos systemImplementing: #MetadataSystemInterface) under: #metadata_system.
-			streamsToEncode ]
-		encodedUsing: #data_streams
-		basedOn: anHttpRequest
-		within: aContext ]
+			get: [ 
+				aContext hold: self metadataSystem under: #metadata_system.
+				self dataManagementSystem streams ]
+			asCollectionEncodedUsing: #data_streams
+			basedOn: anHttpRequest
+			within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -102,8 +118,14 @@ DataStreamsRESTfulWebService >> locationOf: aDataStream [
 		ifUnused: [ '' asZnUrl ].
 
 	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'data-stream' asZnUrl
+		expandMacrosWith: baseUrl / 'data-streams' asZnUrl
 		with: (self identifierSystem identifierOf: aDataStream)
+]
+
+{ #category : #'private - systems' }
+DataStreamsRESTfulWebService >> metadataSystem [
+
+	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #specification }
@@ -113,14 +135,14 @@ DataStreamsRESTfulWebService >> specification [
 ]
 
 { #category : #'private - API' }
-DataStreamsRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+DataStreamsRESTfulWebService >> streamRequestedIn: anHttpRequest [
 
-	| identifierProvided |
+	^ self dataManagementSystem
+		streamIdentifiedBy: (anHttpRequest at: #identifier)
+]
 
-	identifierProvided := true.
-	anHttpRequest at: #identifier ifAbsent: [ identifierProvided := false ].
+{ #category : #'private - API' }
+DataStreamsRESTfulWebService >> withStreamRequestedIn: anHttpRequest do: aBlock [
 
-	identifierProvided
-		ifTrue: [ aBlock value: (anHttpRequest at: #identifier) ]
-		ifFalse: ifNoneBlock
+	aBlock value: (self streamRequestedIn: anHttpRequest)
 ]

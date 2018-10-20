@@ -49,7 +49,9 @@ DataManagementSystem >> register: aDataStream [
 		ifFound: [ :dataStream | 
 			ConflictingObjectFound
 				signal: 'A data stream with that name already exists in system' ]
-		ifNone: [ self registerWithMetadata: aDataStream ]
+		ifNone: [ self registerWithMetadata: aDataStream ].
+		
+	^ aDataStream 
 ]
 
 { #category : #'private - managing' }
@@ -102,10 +104,8 @@ DataManagementSystem >> resolveDependecies [
 	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self
 		resolveSystemDependencyTo: #EventNotificationSystemInterface.
-	metadataSystem := self
-		resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self
-		resolveSystemDependencyTo: #IdentifierSystemInterface
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
 { #category : #querying }
@@ -130,10 +130,4 @@ DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlo
 DataManagementSystem >> streams [
 
 	^ dataStreams copy 
-]
-
-{ #category : #querying }
-DataManagementSystem >> withStreamIdentifiedBy: anIdentifier do: aBlock [
-
-	aBlock value: (self streamIdentifiedBy: anIdentifier)
 ]

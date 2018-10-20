@@ -9,9 +9,10 @@ SystemBasedUserStoryTest >> dataManagementSystem [
 { #category : #'*Cosmos-Data-Tests' }
 SystemBasedUserStoryTest >> requireDataManagementSystem [
 
-	self requireTimeSystem.
-	self requireEventNotificationSystem.
-	self requireMetadataSystem.
-	self requireIdentifierSystem.
-	systemBuilder add: (DataManagementSystem new)
+	self
+		requireTimeSystem;
+		requireEventNotificationSystem;
+		requireMetadataSystem;
+		requireIdentifierSystem.
+	systemBuilder add: DataManagementSystem new
 ]

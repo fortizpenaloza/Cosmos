@@ -136,7 +136,7 @@ DataStreamsRESTfulWebServiceSpecification >> getDataStreamRoute [
 	^ RouteSpecification
 		handling: #GET
 		at: '/data-streams/<identifier:IsUUID>'
-		sending: #getStreamsBasedOn:within:
+		sending: #getStreamBasedOn:within:
 ]
 
 { #category : #'specification - routes' }
