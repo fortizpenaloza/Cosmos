@@ -104,10 +104,8 @@ DataManagementSystem >> resolveDependecies [
 	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self
 		resolveSystemDependencyTo: #EventNotificationSystemInterface.
-	metadataSystem := self
-		resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self
-		resolveSystemDependencyTo: #IdentifierSystemInterface
+	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
+	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
 { #category : #querying }

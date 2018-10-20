@@ -49,9 +49,15 @@ ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self actionManagementSystem actions ]
-		encodedUsing: #actions
+		asCollectionEncodedUsing: #actions
 		basedOn: anHttpRequest
 		within: aContext
+]
+
+{ #category : #'private - systems' }
+ActionsWebService >> identifierSystem [
+
+	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
@@ -60,7 +66,7 @@ ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 	cosmos := aCosmosSystem
 ]
 
-{ #category : #'private - systems' }
+{ #category : #'private - API' }
 ActionsWebService >> locationOf: anAction [
 
 	| baseUrl |
