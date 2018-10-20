@@ -61,11 +61,17 @@ ActionsWebService >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - systems' }
-ActionsWebService >> locationOf: resource [
+ActionsWebService >> locationOf: anAction [
 
-	"Fran, you have to improve it"
+	| baseUrl |
 
-	^ ZnUrl fromString: 'localhost'
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'actions' asZnUrl
+		with: (self identifierSystem identifierOf: anAction)
 ]
 
 { #category : #specification }

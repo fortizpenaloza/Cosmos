@@ -90,22 +90,22 @@ CommandsRESTfulWebServiceSpecification >> deleteCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
+CommandsRESTfulWebServiceSpecification >> dequeueCommandRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: '/commands/dequeue'
+		sending: #dequeueCommandBasedOn:within:
+
+]
+
+{ #category : #'specification - routes' }
 CommandsRESTfulWebServiceSpecification >> getCommandsRoute [
 
 	^ RouteSpecification 
 		handling: #GET 
 		at: '/commands'
 	 	sending: #getCommandsBasedOn:within:
-]
-
-{ #category : #'specification - routes' }
-CommandsRESTfulWebServiceSpecification >> getNextCommandRoute [
-
-	^ RouteSpecification
-		handling: #POST
-		at: '/commands/getNext'
-		sending: #nextCommandBasedOn:within:
-
 ]
 
 { #category : #'media types' }

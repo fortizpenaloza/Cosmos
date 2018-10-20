@@ -11,9 +11,7 @@ Class {
 { #category : #'accessing - media types' }
 CommandsWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
-	^ ZnMimeType applicationJson
-		parameters: {('version' -> '1.0.0')} asDictionary;
-		yourself
+	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #accessing }
@@ -56,17 +54,17 @@ CommandsWebServiceTest >> requestToDeleteCommandIdentifiedBy: anIdentifier [
 ]
 
 { #category : #'accessing - requests' }
+CommandsWebServiceTest >> requestToDequeueCommandAccepting: aMediaType [
+
+	^ (ZnRequest post: 'http://COSMOS_URL/commands/dequeue')
+		setAccept: aMediaType
+]
+
+{ #category : #'accessing - requests' }
 CommandsWebServiceTest >> requestToGetCommands [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/commands')
 		setAccept: self applicationJsonVersion1dot0dot0
-]
-
-{ #category : #'accessing - requests' }
-CommandsWebServiceTest >> requestToNextCommandAccepting: mediaType [
-
-	^ (ZnRequest post: 'http://COSMOS_URL/commands/next')
-		setAccept: mediaType
 ]
 
 { #category : #running }
@@ -135,6 +133,49 @@ CommandsWebServiceTest >> testDeleteCommand [
 ]
 
 { #category : #tests }
+CommandsWebServiceTest >> testDequeueCommandEncodedAsJson [
+
+	| response |
+
+	self installLedCommandsAddOn.
+
+	response := interface
+		dequeueCommandBasedOn:
+			(self
+				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 200;
+		assert: response contentType
+			equals: self applicationJsonVersion1dot0dot0.
+
+	self
+		assert: response contents
+		equals: '{"command":"TURN_ON_LED","priority":100}'
+]
+
+{ #category : #tests }
+CommandsWebServiceTest >> testDequeueCommandEncodedAsPlainText [
+
+	| response |
+
+	self installLedCommandsAddOn.
+
+	response := interface
+		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 200;
+		assert: response contentType equals: ZnMimeType textPlain.
+
+	self assert: response contents equals: 'TURN_ON_LED'
+]
+
+{ #category : #tests }
 CommandsWebServiceTest >> testGettingCommands [
 
 	| response |
@@ -152,49 +193,6 @@ CommandsWebServiceTest >> testGettingCommands [
 		assert: response contents
 			equals:
 			'[{"command":"TURN_ON_LED","priority":100},{"command":"TURN_OFF_LED","priority":50},{"command":"TURN_ON_LED","priority":1}]'
-]
-
-{ #category : #tests }
-CommandsWebServiceTest >> testNextCommandFormattedAsJson [
-
-	| response |
-
-	self installLedCommandsAddOn.
-
-	response := interface
-		nextCommandBasedOn:
-			(self
-				requestToNextCommandAccepting: self applicationJsonVersion1dot0dot0)
-		within: self httpRequestContext.
-
-	self
-		assert: response isSuccess;
-		assert: response code equals: 200;
-		assert: response contentType
-			equals: self applicationJsonVersion1dot0dot0.
-
-	self
-		assert: response contents
-		equals: '{"command":"TURN_ON_LED","priority":100}'
-]
-
-{ #category : #tests }
-CommandsWebServiceTest >> testNextCommandFormattedAsPlainText [
-
-	| response |
-
-	self installLedCommandsAddOn.
-
-	response := interface
-		nextCommandBasedOn: (self requestToNextCommandAccepting: self textPlain)
-		within: self httpRequestContext.
-
-	self
-		assert: response isSuccess;
-		assert: response code equals: 200;
-		assert: response contentType equals: ZnMimeType textPlain.
-
-	self assert: response contents equals: 'TURN_ON_LED'
 ]
 
 { #category : #tests }

@@ -133,9 +133,3 @@ DataManagementSystem >> streams [
 
 	^ dataStreams copy 
 ]
-
-{ #category : #querying }
-DataManagementSystem >> withStreamIdentifiedBy: anIdentifier do: aBlock [
-
-	aBlock value: (self streamIdentifiedBy: anIdentifier)
-]

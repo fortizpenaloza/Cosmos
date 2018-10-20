@@ -151,7 +151,7 @@ DataStreamsRESTfulWebServiceTest >> testCreateDataStream [
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: '/data-stream/' , identifierSequence last asString;
+			equals: '/data-streams/' , identifierSequence last asString;
 		assert: response contentType equals: ZnMimeType textPlain.
 
 	self dataManagementSystem

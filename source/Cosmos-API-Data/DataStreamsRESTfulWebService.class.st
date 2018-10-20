@@ -40,9 +40,8 @@ DataStreamsRESTfulWebService >> dataStreamsKey [
 { #category : #API }
 DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
-	^ [ 
-	self dataManagementSystem
-		withStreamIdentifiedBy: (anHttpRequest at: #identifier)
+	^ [ self
+		withStreamRequestedIn: anHttpRequest
 		do: [ :dataStream | self dataManagementSystem deregister: dataStream ].
 
 	ZnResponse noContent ]
@@ -73,21 +72,12 @@ DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext
 DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-		get: [ | streamToEncode |
-
-			self
-				withIdentifierProvidedIn: anHttpRequest
-				do: [ :identifier | 
-					self dataManagementSystem
-						withStreamIdentifiedBy: identifier
-						do: [ :dataStream | streamToEncode := dataStream ] ].
-
-			aContext hold: self metadataSystem under: #metadata_system.
-
-			streamToEncode ]
-		encodedUsing: #data_streams
-		basedOn: anHttpRequest
-		within: aContext ]
+			get: [ 
+				aContext hold: self metadataSystem under: #metadata_system.
+				self streamRequestedIn: anHttpRequest ]
+			encodedUsing: #data_streams
+			basedOn: anHttpRequest
+			within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -96,18 +86,12 @@ DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext
 DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-		get: [ | streamsToEncode |
-
-			streamsToEncode := self dataManagementSystem streams.
-
-			aContext
-				hold: (cosmos systemImplementing: #MetadataSystemInterface)
-				under: #metadata_system.
-
-			streamsToEncode ]
-		asCollectionEncodedUsing: #data_streams
-		basedOn: anHttpRequest
-		within: aContext ]
+			get: [ 
+				aContext hold: self metadataSystem under: #metadata_system.
+				self dataManagementSystem streams ]
+			asCollectionEncodedUsing: #data_streams
+			basedOn: anHttpRequest
+			within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -134,7 +118,7 @@ DataStreamsRESTfulWebService >> locationOf: aDataStream [
 		ifUnused: [ '' asZnUrl ].
 
 	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'data-stream' asZnUrl
+		expandMacrosWith: baseUrl / 'data-streams' asZnUrl
 		with: (self identifierSystem identifierOf: aDataStream)
 ]
 
@@ -151,7 +135,14 @@ DataStreamsRESTfulWebService >> specification [
 ]
 
 { #category : #'private - API' }
-DataStreamsRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock [
+DataStreamsRESTfulWebService >> streamRequestedIn: anHttpRequest [
 
-	aBlock value: (anHttpRequest at: #identifier)
+	^ self dataManagementSystem
+		streamIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
+{ #category : #'private - API' }
+DataStreamsRESTfulWebService >> withStreamRequestedIn: anHttpRequest do: aBlock [
+
+	aBlock value: (self streamRequestedIn: anHttpRequest)
 ]

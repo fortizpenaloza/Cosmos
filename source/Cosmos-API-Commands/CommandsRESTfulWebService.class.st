@@ -46,6 +46,16 @@ CommandsRESTfulWebService >> deleteCommandBasedOn: anHttpRequest within: aContex
 ]
 
 { #category : #API }
+CommandsRESTfulWebService >> dequeueCommandBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ self commandManagementSystem nextCommand ]
+		encodedUsing: #commands
+		basedOn: anHttpRequest
+		within: aContext
+]
+
+{ #category : #API }
 CommandsRESTfulWebService >> getCommandsBasedOn: anHttpRequest within: aContext [
 
 	^ self
@@ -79,16 +89,6 @@ CommandsRESTfulWebService >> locationOf: aCommandWithPriority [
 	^ '<1p>/<2p>'
 		expandMacrosWith: baseUrl / 'commands' asZnUrl
 		with: (self identifierSystem identifierOf: aCommandWithPriority)
-]
-
-{ #category : #API }
-CommandsRESTfulWebService >> nextCommandBasedOn: anHttpRequest within: aContext [
-
-	^ self
-		get: [ self commandManagementSystem nextCommand ]
-		encodedUsing: #commands
-		basedOn: anHttpRequest
-		within: aContext
 ]
 
 { #category : #specification }

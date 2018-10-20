@@ -152,7 +152,7 @@ BaselineOfCosmos >> registerDataManagementSystemInterface [
 	self
 		registerInterfaceAs: #DataManagementSystemInterface
 		named: 'Data Management System Interface'
-		declaring: #(#register: #deregister: #register:toStreamNamed:  #withStreamIdentifiedBy:do: #streams)
+		declaring: #(#register: #deregister: #register:toStreamNamed:  #streamIdentifiedBy: #streams)
 ]
 
 { #category : #'registering interfaces' }
