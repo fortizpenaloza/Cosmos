@@ -53,11 +53,43 @@ DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aCont
 { #category : #API }
 DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext [
 
-	^ self
-		get: [ (self dataManagementSystem streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ]
-		asCollectionEncodedUsing: #data_points
+	| mediaType resourceCollection encodedResourceCollection |
+
+	mediaType := self targetMediaTypeFrom: anHttpRequest.
+		resourceCollection := self
+		evaluateQuery: [ (self dataManagementSystem
+				streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ].
+
+	encodedResourceCollection := self
+		encode: resourceCollection
+		at: #data_points
+		to: mediaType
+		within: aContext.
+		
+	^ ZnResponse ok: encodedResourceCollection 
+]
+
+{ #category : #API }
+DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext [
+
+	^ [ self
+		get: [ | streamToEncode |
+
+			self
+				withIdentifierProvidedIn: anHttpRequest
+				do: [ :identifier | 
+					self dataManagementSystem
+						withStreamIdentifiedBy: identifier
+						do: [ :dataStream | streamToEncode := dataStream ] ].
+
+			aContext hold: self metadataSystem under: #metadata_system.
+
+			streamToEncode ]
+		encodedUsing: #data_streams
 		basedOn: anHttpRequest
-		within: aContext
+		within: aContext ]
+		on: DataStreamIsEmpty
+		do: [ :signal | signal resume: 'N/A' ]
 ]
 
 { #category : #API }
@@ -66,12 +98,12 @@ DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContex
 	^ [ self
 		get: [ | streamsToEncode |
 
-			self
-				withIdentifierProvidedIn: anHttpRequest
-				do: [ :identifier | self dataManagementSystem withStreamIdentifiedBy: identifier do: [ :dataStream | streamsToEncode := dataStream ] ]
-				ifNone: [ streamsToEncode := self dataManagementSystem streams ].
+			streamsToEncode := self dataManagementSystem streams.
 
-			aContext hold: (cosmos systemImplementing: #MetadataSystemInterface) under: #metadata_system.
+			aContext
+				hold: (cosmos systemImplementing: #MetadataSystemInterface)
+				under: #metadata_system.
+
 			streamsToEncode ]
 		asCollectionEncodedUsing: #data_streams
 		basedOn: anHttpRequest
@@ -106,6 +138,12 @@ DataStreamsRESTfulWebService >> locationOf: aDataStream [
 		with: (self identifierSystem identifierOf: aDataStream)
 ]
 
+{ #category : #'private - systems' }
+DataStreamsRESTfulWebService >> metadataSystem [
+
+	^ cosmos systemImplementing: #MetadataSystemInterface
+]
+
 { #category : #specification }
 DataStreamsRESTfulWebService >> specification [
 
@@ -113,14 +151,7 @@ DataStreamsRESTfulWebService >> specification [
 ]
 
 { #category : #'private - API' }
-DataStreamsRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock ifNone: ifNoneBlock [
+DataStreamsRESTfulWebService >> withIdentifierProvidedIn: anHttpRequest do: aBlock [
 
-	| identifierProvided |
-
-	identifierProvided := true.
-	anHttpRequest at: #identifier ifAbsent: [ identifierProvided := false ].
-
-	identifierProvided
-		ifTrue: [ aBlock value: (anHttpRequest at: #identifier) ]
-		ifFalse: ifNoneBlock
+	aBlock value: (anHttpRequest at: #identifier)
 ]

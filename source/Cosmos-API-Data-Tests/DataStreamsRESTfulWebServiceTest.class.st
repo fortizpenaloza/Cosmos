@@ -271,7 +271,7 @@ DataStreamsRESTfulWebServiceTest >> testGetDataStream [
 	| response |
 
 	response := webService
-		getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
+		getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
 	self
@@ -321,7 +321,7 @@ DataStreamsRESTfulWebServiceTest >> testGettingDataStreamWithWrongIdentifierGive
 
 	self
 		should: [ webService
-				getStreamsBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
+				getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
