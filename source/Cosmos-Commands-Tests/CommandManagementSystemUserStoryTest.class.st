@@ -14,6 +14,40 @@ CommandManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
+CommandManagementSystemUserStoryTest >> testDequeueCommandFollowsPriorities [
+
+	| turnLedOnWithMediumPriority turnLedOnWithLowestPriority turnLedOnWithHighestPriority |
+
+	turnLedOnWithMediumPriority := self turnOnLedWithMediumPriority.
+	self commandManagementSystem register: turnLedOnWithMediumPriority.
+
+	turnLedOnWithLowestPriority := self turnOnLedWithLowPriority.
+	self commandManagementSystem register: turnLedOnWithLowestPriority.
+
+	turnLedOnWithHighestPriority := self turnOnLedWithHighPriority.
+	self commandManagementSystem register: turnLedOnWithHighestPriority.
+
+	self
+		assert: self commandManagementSystem dequeueCommand
+			equals: turnLedOnWithHighestPriority;
+		assert: self commandManagementSystem dequeueCommand
+			equals: turnLedOnWithMediumPriority;
+		assert: self commandManagementSystem dequeueCommand
+			equals: turnLedOnWithLowestPriority
+]
+
+{ #category : #tests }
+CommandManagementSystemUserStoryTest >> testDequeueingCommandOnEmptySystemGivesObjectNotFound [
+
+	self assert: self commandManagementSystem commands isEmpty.
+
+	self
+		should: [ self commandManagementSystem dequeueCommand ]
+		raise: ObjectNotFound 
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Command not found' ]
+]
+
+{ #category : #tests }
 CommandManagementSystemUserStoryTest >> testDeregistration [
 
 	| turnOnLedWithMediumPriority turnOnLedWithHighPriority |
@@ -35,38 +69,28 @@ CommandManagementSystemUserStoryTest >> testDeregistration [
 ]
 
 { #category : #tests }
-CommandManagementSystemUserStoryTest >> testNexCommandFollowsPriorities [
+CommandManagementSystemUserStoryTest >> testMetadataRegistrationOnCommandRegistration [
 
-	| turnLedOnWithMediumPriority turnLedOnWithLowestPriority turnLedOnWithHighestPriority |
+	| turnOnLedWithHighPriority metadata |
 
-	turnLedOnWithMediumPriority := self turnOnLedWithMediumPriority.
-	self commandManagementSystem register: turnLedOnWithMediumPriority.
+	turnOnLedWithHighPriority := self turnOnLedWithHighPriority.
 
-	turnLedOnWithLowestPriority := self turnOnLedWithLowPriority.
-	self commandManagementSystem register: turnLedOnWithLowestPriority.
+	self assert: (self metadataSystem metadataFor: turnOnLedWithHighPriority) isEmpty.
+	self commandManagementSystem register: turnOnLedWithHighPriority.
 
-	turnLedOnWithHighestPriority := self turnOnLedWithHighPriority.
-	self commandManagementSystem register: turnLedOnWithHighestPriority.
-
+	metadata := self metadataSystem metadataFor: turnOnLedWithHighPriority.
 	self
-		assert: self commandManagementSystem nextCommand
-			equals: turnLedOnWithHighestPriority;
-		assert: self commandManagementSystem nextCommand
-			equals: turnLedOnWithMediumPriority;
-		assert: self commandManagementSystem nextCommand
-			equals: turnLedOnWithLowestPriority
-]
-
-{ #category : #tests }
-CommandManagementSystemUserStoryTest >> testNextCommandFailsOnEmptyCommands [
-
-	self assert: self commandManagementSystem commands isEmpty.
-
-	self
-		should:
-			[ self commandManagementSystem nextCommand ]
-		raise: CollectionIsEmpty 
-		withDescription: 'Command priority queue is empty'
+		assert: metadata size equals: 2;
+		assert: metadata
+			equals:
+			{(Metadata
+				attaching: self currentIdentifier
+				as: #identifier
+				of: turnOnLedWithHighPriority).
+			(Metadata
+				attaching: self systemDateTime
+				as: #registration_timestamp
+				of: turnOnLedWithHighPriority)} asOrderedCollection
 ]
 
 { #category : #tests }
@@ -90,28 +114,6 @@ CommandManagementSystemUserStoryTest >> testQueryingCommands [
 				with: turnOnLedWithMediumPriority
 				with: turnOnLedWithLowPriority
 				with: turnOnLedWithHighPriority)
-]
-
-{ #category : #tests }
-CommandManagementSystemUserStoryTest >> testRegisteredMetadataOnCommandRegistration [
-
-	| commandWithPriority metadata |
-
-	commandWithPriority := self turnOnLedWithHighPriority.
-
-	self assert: (self metadataSystem metadataFor: commandWithPriority) isEmpty.
-	self commandManagementSystem register: commandWithPriority.
-
-	metadata := self metadataSystem metadataFor: commandWithPriority.
-	self
-		assert: metadata size equals: 2;
-		assert: metadata
-			equals:
-			{(Metadata attaching: self currentIdentifier as: #identifier of: commandWithPriority).
-			(Metadata
-				attaching: self systemDateTime
-				as: #registration_timestamp
-				of: commandWithPriority)} asOrderedCollection
 ]
 
 { #category : #tests }

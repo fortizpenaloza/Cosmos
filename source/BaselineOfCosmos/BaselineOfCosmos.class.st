@@ -21,13 +21,13 @@ BaselineOfCosmos >> baseline: spec [
 
 			spec
 				package: 'Cosmos-CommandLineHandler'
-				with: [ spec requires: #('Cosmos-Model' 'Cosmos-API-Model') ].
-				
+				with: [ spec requires: #('ApplicationStarter' 'Cosmos-Model' 'Cosmos-API-Model') ].
+
 			spec
 				package: 'Cosmos-CommandLineHandler-Tests'
 				with: [ spec requires: #('Cosmos-CommandLineHandler') ].
 
-		spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
+			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
 
 			spec
 				group: 'Deployment'
@@ -42,7 +42,7 @@ BaselineOfCosmos >> baseline: spec [
 			spec postLoadDoIt: #postload:package: ]
 ]
 
-{ #category : #'private - baselines' }
+{ #category : #baselines }
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
@@ -57,7 +57,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 		with: #('Cosmos-API-Common' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
 ]
 
-{ #category : #'private - baselines' }
+{ #category : #baselines }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
@@ -72,7 +72,7 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 		with: #('Cosmos-API-Common-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
 ]
 
-{ #category : #'private - baselines' }
+{ #category : #baselines }
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
@@ -92,7 +92,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
-{ #category : #'private - baselines' }
+{ #category : #baselines }
 BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 
 	spec
@@ -143,7 +143,7 @@ BaselineOfCosmos >> registerCommandManagementSystemInterface [
 	self
 		registerInterfaceAs: #CommandManagementSystemInterface
 		named: 'Command Management System Interface'
-		declaring: #(#register: #deregister: #nextCommand #commands)
+		declaring: #(#register: #deregister: #dequeueCommand #commands)
 ]
 
 { #category : #'registering interfaces' }
@@ -213,10 +213,17 @@ BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Stargate'
-		with: [ spec
-				repository: 'github://ba-st/stargate:master/source';
+			with: [ spec
+				repository: 'github://ba-st/stargate:v0.1.1/source';
 				loads: 'Deployment' ];
-		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [spec loads: 'Development'].
+		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [ spec loads: 'Development' ].
+
+	spec
+		baseline: 'ApplicationStarter'
+			with: [ spec
+				repository: 'github://ba-st/ApplicationStarter:v1.0.0/source';
+				loads: 'Deployment' ];
+		import: 'ApplicationStarter'.
 
 	spec
 		configuration: 'Roassal2'

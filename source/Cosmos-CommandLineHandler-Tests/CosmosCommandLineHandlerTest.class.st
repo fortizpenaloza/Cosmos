@@ -7,12 +7,6 @@ Class {
 	#category : #'Cosmos-CommandLineHandler-Tests'
 }
 
-{ #category : #accessing }
-CosmosCommandLineHandlerTest class >> classNamesNotUnderTest [
-
-	^ #('CosmosCommandLineHandler')
-]
-
 { #category : #tests }
 CosmosCommandLineHandlerTest >> argumentsWith: aCollection [
 
@@ -35,5 +29,5 @@ CosmosCommandLineHandlerTest >> testSelectHandlers [
 
 	arguments := self argumentsWith: #('cosmos').
 	handlers := CommandLineHandler selectHandlersFor: arguments.
-	self assert: handlers first = CosmosCommandLineHandler
+	self assert: (handlers includes: CosmosCommandLineHandler)
 ]
