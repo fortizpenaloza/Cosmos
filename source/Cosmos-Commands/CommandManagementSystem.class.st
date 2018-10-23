@@ -23,6 +23,14 @@ CommandManagementSystem >> commands [
 	^ commands copy
 ]
 
+{ #category : #managing }
+CommandManagementSystem >> dequeueCommand [
+
+	^ [ commands remove: self dequeuedCommand ]
+		on: CollectionIsEmpty
+		do: [ :signal | ObjectNotFound signal: 'Command not found' ]
+]
+
 { #category : #'private - managing' }
 CommandManagementSystem >> dequeuedCommand [
 
@@ -52,14 +60,6 @@ CommandManagementSystem >> initialize [
 	
 	commands := OrderedCollection new.
 	priorityQueue := PriorityQueue empty
-]
-
-{ #category : #managing }
-CommandManagementSystem >> nextCommand [
-
-	^ [ commands remove: self dequeuedCommand ]
-		on: CollectionIsEmpty
-		do: [ :signal | signal signal: 'Command priority queue is empty' ]
 ]
 
 { #category : #managing }

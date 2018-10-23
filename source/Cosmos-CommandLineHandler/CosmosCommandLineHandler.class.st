@@ -25,7 +25,7 @@ Examples:
 "
 Class {
 	#name : #CosmosCommandLineHandler,
-	#superclass : #CommandLineHandler,
+	#superclass : #ApplicationStarterCommandLineHandler,
 	#instVars : [
 		'cosmos'
 	],
@@ -41,19 +41,7 @@ CosmosCommandLineHandler class >> commandName [
 { #category : #accessing }
 CosmosCommandLineHandler class >> description [
 
-	^ 'Install cosmos'
-]
-
-{ #category : #activation }
-CosmosCommandLineHandler >> activate [
-
-	[ self
-		setLogFileName;
-		settingUpCosmos ]
-		on: self expectedExceptions
-		do: [ :signal | 
-			self dumpStackAndReport: signal.
-			self exitFailure ]
+	^ 'Cosmos command line handler'
 ]
 
 { #category : #'private - activation' }
@@ -62,16 +50,24 @@ CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aReque
 	allowedOrigins
 		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
 		ifFound: [ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
-		ifNone: [ "do nothing" ]
 ]
 
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> allowedOrigins [
 
-	^ self
-		optionAt: 'allowed-origins'
-		ifPresent: [ :string | string substrings: ',' ]
-		ifAbsent: [ OrderedCollection new ]
+	^ self configuration at: 'allowed-origins'
+]
+
+{ #category : #activation }
+CosmosCommandLineHandler >> basicActivate [
+
+	self
+		logInfo: 'Building and starting cosmos' 
+			during: [ self buildAndStartCosmos ];
+		logInfo: 'Building and starting RESTful API' 
+			during: [ self buildAndStartCosmosAPI ];
+		logInfo: 'Building and starting the periodical scheduler'
+			during: [ self buildAndStartScheduler ]
 ]
 
 { #category : #'private - activation' }
@@ -120,30 +116,37 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
-	| scheduler tenSeconds oneMinute tenMinutes oneHour |
-
-	tenSeconds := TimeUnits second with: 10.
-	oneMinute := TimeUnits minute with: 1.
-	tenMinutes := TimeUnits minute with: 10.
-	oneHour := TimeUnits hour with: 1.
+	| scheduler  |
 
 	scheduler := self periodicalScheduler.
-
-	{tenSeconds.
-	oneMinute.
-	tenMinutes.
-	oneHour}
-		do: [ :timeInterval | 
-			| task |
+	
+	self timePeriodsToSchedule
+		do: [ :timePeriod | | task |
 
 			task := Task
-				named: ('Notify every <1p>' expandMacrosWith: timeInterval)
+				named: ('Notify every <1p>' expandMacrosWith: timePeriod)
 				do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
-						notifySubscribersTo: (TickEvent of: timeInterval) ].
+						notifySubscribersTo: (TickEvent of: timePeriod) ].
 
-			scheduler schedule: task toBeExecutedEvery: timeInterval ].
-
+			scheduler schedule: task toBeExecutedEvery: timePeriod ].
+		
 	scheduler start
+]
+
+{ #category : #'private - accessing' }
+CosmosCommandLineHandler >> configurationDefinition [
+
+	^ OrderedCollection new
+		add:
+			(OptionalArgument
+				named: 'port'
+				defaultingTo: 9000
+				convertingWith: #asNumber);
+		add:
+			(MandatoryArgument
+				named: 'allowed-origins'
+				convertingWith: [ :string | string substrings: ',' ]);
+		asArray
 ]
 
 { #category : #'private - activation' }
@@ -185,93 +188,13 @@ CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
 						yourself ].
 
 	aServer
-		exception: self expectedExceptions -> [ :signal :request | self dumpStackAndReport: signal ]
+		exception: self exceptionsToHandle -> [ :signal :request | self dumpStackAndReport: signal ]
 ]
 
 { #category : #'private - accessing' }
-CosmosCommandLineHandler >> defaultPortNumber [
+CosmosCommandLineHandler >> logPrefix [
 
-	^ 8080
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> dumpStackAndReport: aSignal [
-
-	^ self
-		logToStderr:
-			('[ERROR] Dumping stack due to unexpected error: <1s>'
-				expandMacrosWith: aSignal messageText)
-		during: [ | serializer |
-
-			serializer := FLSerializer newDefault.
-			serializer analyzer
-				when: [ :object | object class isObsolete ]
-				substituteBy: [ :object | nil ].
-
-			serializer serialize: thisContext toFileNamed: self stackDumpFileName ]
-]
-
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> expectedExceptions [
-
-	^ self isDebugModeEnabled
-		ifTrue: [ ExceptionSet new ]
-		ifFalse: [ Error ]
-]
-
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> isDebugModeEnabled [
-
-	^ self hasOption: 'debug-mode'
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> logFileName [
-
-	^ './logs/cosmos-<1s>.log'
-		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '')
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> logToStderr: aString [
-
-	self stderr
-		nextPutAll: ('[<1p>] <2s>' expandMacrosWith: DateAndTime current with: aString);
-		lf;
-		flush
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> logToStderr: aString during: aBlock [
-
-	self logToStderr: aString.
-	[ aBlock value.
-	self logToStderr: ('<1s>... [OK]' expandMacrosWith: aString) ]
-		ifCurtailed: [ self logToStderr: ('<1s>... [FAILED]' expandMacrosWith: aString) ]
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> logToStdout: aString [
-
-	self stdout
-		nextPutAll: ('[<1p>] <2s>' expandMacrosWith: DateAndTime current with: aString);
-		lf;
-		flush
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> logToStdout: aString during: aBlock [
-
-	self logToStdout: aString.
-	[ aBlock value.
-	self logToStdout: ('<1s>... [OK]' expandMacrosWith: aString) ]
-		ifCurtailed: [ self logToStdout: ('<1s>... [FAILED]' expandMacrosWith: aString) ]
-]
-
-{ #category : #'private - options' }
-CosmosCommandLineHandler >> optionNamed: aName defaultingTo: anObject [
-
-	^ self optionAt: aName ifAbsent: [ anObject ]
+	^ 'cosmos'
 ]
 
 { #category : #'private - accessing' }
@@ -283,38 +206,7 @@ CosmosCommandLineHandler >> periodicalScheduler [
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> portNumber [
 
-	| port |
-
-	port := self
-		optionNamed: 'port'
-		defaultingTo: self defaultPortNumber.
-
-	^ port asNumber
-]
-
-{ #category : #activation }
-CosmosCommandLineHandler >> setLogFileName [
-
-	Smalltalk logFileName: self logFileName
-]
-
-{ #category : #activation }
-CosmosCommandLineHandler >> settingUpCosmos [
-
-	self
-		logToStdout: '[INFO] Building and starting cosmos'
-			during: [ self buildAndStartCosmos ];
-		logToStdout: '[INFO] Building and starting RESTful API'
-			during: [ self buildAndStartCosmosAPI ];
-		logToStdout: '[INFO] Building and starting the periodical scheduler'
-			during: [ self buildAndStartScheduler ]
-]
-
-{ #category : #'private - logging' }
-CosmosCommandLineHandler >> stackDumpFileName [
-
-	^ './logs/cosmos-stack-<1s>.fuel'
-		expandMacrosWith: (DateAndTime current printString copyReplaceAll: ':' with: '')
+	^ self configuration at: 'port'
 ]
 
 { #category : #'private - accessing' }
@@ -324,4 +216,13 @@ CosmosCommandLineHandler >> teapot [
 		configure:
 			{(#port -> self portNumber).
 			(#debugMode -> self isDebugModeEnabled)}
+]
+
+{ #category : #'private - accessing' }
+CosmosCommandLineHandler >> timePeriodsToSchedule [
+
+	^ {(TimeUnits second with: 10).
+	(TimeUnits minute with: 1).
+	(TimeUnits minute with: 10).
+	(TimeUnits hour with: 1)}
 ]

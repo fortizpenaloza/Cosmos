@@ -49,7 +49,7 @@ CommandsRESTfulWebService >> deleteCommandBasedOn: anHttpRequest within: aContex
 CommandsRESTfulWebService >> dequeueCommandBasedOn: anHttpRequest within: aContext [
 
 	^ self
-		get: [ self commandManagementSystem nextCommand ]
+		get: [ self commandManagementSystem dequeueCommand ]
 		encodedUsing: #commands
 		basedOn: anHttpRequest
 		within: aContext
