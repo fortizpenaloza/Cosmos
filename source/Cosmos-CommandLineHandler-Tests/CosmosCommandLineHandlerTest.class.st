@@ -7,6 +7,12 @@ Class {
 	#category : #'Cosmos-CommandLineHandler-Tests'
 }
 
+{ #category : #'as yet unclassified' }
+CosmosCommandLineHandlerTest class >> classNamesNotUnderTest [
+		
+ 	^ #('CosmosCommandLineHandler')
+]
+
 { #category : #tests }
 CosmosCommandLineHandlerTest >> argumentsWith: aCollection [
 
