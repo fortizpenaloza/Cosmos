@@ -65,39 +65,60 @@ TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointGreater
 	self triggerManagementSystem
 		registerNamed:
 			'Set triggered to true after a data point greater than 11 was registered on Temperature'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
+		triggering: self setTriggeredToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperatureStream)
 		whenMeets:
-			(DataStreamCurrentValueTriggeringCondition of: self temperature isGreaterThan: 11)
+			(DataStreamCurrentValueTriggeringCondition of: self temperatureStream isGreaterThan: 11)
 ]
 
 { #category : #accessing }
 TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after a data point was registered on Temperature'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
-		whenMeets: AlwaysTriggeringCondition new
+		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream)
 ]
 
 { #category : #accessing }
 TriggersRESTfulWebServiceTest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true periodically every 5 minutes'
-		triggering: self setTriggedToTrue
-		accordingTo: (PeriodicalTriggeringPolicy every: self fiveMinutes)
-		whenMeets: AlwaysTriggeringCondition new
+	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self fiveMinutes)
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> setTriggedToTrue [
+TriggersRESTfulWebServiceTest >> setTriggeredToTrue [
 
 	^ self actionManagementSystem
 		actionNamed: 'Set triggered to true'
 		ifFound: [ :action | action ]
 		ifNone: [ ObjectNotFound signal: 'Action not found' ]
+]
+
+{ #category : #'as yet unclassified' }
+TriggersRESTfulWebServiceTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
+
+	^ ActionTrigger
+		named: 'Set triggered to true after data point registration'
+		createdOn: self systemDateTime
+		triggering: self setTriggeredToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: aDataStream)
+		ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #'as yet unclassified' }
+TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod [
+
+	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #'as yet unclassified' }
+TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
+
+	^ ActionTrigger
+		named: ('Set triggered to true every <1p>' expandMacrosWith: aTimePeriod)
+		createdOn: self systemDateTime
+		triggering: self setTriggeredToTrue
+		accordingTo: (PeriodicalTriggeringPolicy every: aTimePeriod)
+		ifSatisfies: aCondition
 ]
 
 { #category : #running }
@@ -128,7 +149,7 @@ TriggersRESTfulWebServiceTest >> setUpRequirements [
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> temperature [
+TriggersRESTfulWebServiceTest >> temperatureStream [
 
 	^ self dataManagementSystem 
 		streamNamed: 'Temperature'
@@ -152,7 +173,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggers [
 	self
 		assert: response
 		wasSuccessfulWithContentEqualsTo:
-			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]},{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]'
+			('[{"name":"Set triggered to true after data point registration","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]},{"name":"Set triggered to true every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]'
 				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
@@ -193,7 +214,7 @@ TriggersRESTfulWebServiceTest >> testGettingTriggersIncludesSetTriggeredToTrueAf
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]}]'
+			('[{"name":"Set triggered to true after data point registration","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]}]'
 				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
@@ -202,8 +223,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 
 	| response |
 
-	self
-		registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
+	self registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
 	response := webService
 		getTriggersBasedOn: self getTriggersHttpRequest
@@ -224,13 +244,13 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 	self triggerManagementSystem
 		registerNamed:
 			'Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM'
-		triggering: self setTriggedToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
+		triggering: self setTriggeredToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperatureStream)
 		whenMeets:
 			(AndCompositeTriggeringCondition
 				with:
 					(DataStreamCurrentValueTriggeringCondition
-						of: self temperature
+						of: self temperatureStream
 						isGreaterThan: 11)
 				with:
 					(TimeIntervalTriggeringCondition

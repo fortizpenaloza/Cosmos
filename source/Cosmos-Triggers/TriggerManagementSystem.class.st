@@ -34,20 +34,20 @@ TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
 				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> deregister: aTrigger accordingTo: aTriggeringPolicy [ 
 
 	aTriggeringPolicy deregister: aTrigger from: self.
 	triggers remove: aTrigger
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> deregister: aTrigger fromTriggeredPeriodicallyEvery: aTimePeriod [ 
 
 	(self triggersToTriggerPeriodicallyEvery: aTimePeriod) remove: aTrigger 
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> deregister: aTrigger toStopTriggeringAfterDataPointRegistrationOn: aDataStream [ 
 	
 	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: aTrigger 	
@@ -72,7 +72,7 @@ TriggerManagementSystem >> havePassed: aTickEvent [
 				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 TriggerManagementSystem >> initialize [
 
 	super initialize.
@@ -90,7 +90,17 @@ TriggerManagementSystem >> notifyEvaluationOf: action [
 	^ eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: action)
 ]
 
-{ #category : #'private-managing' }
+{ #category : #managing }
+TriggerManagementSystem >> register: anActionTrigger [
+
+	self
+		triggerNamed: anActionTrigger name
+		ifFound:
+			[ :trigger | ConflictingObjectFound signal: 'Trigger with that name already exists in system' ]
+		ifNone: [ self register: anActionTrigger accordingTo: anActionTrigger triggeringPolicy ]
+]
+
+{ #category : #'private - managing' }
 TriggerManagementSystem >> register: aTrigger accordingTo: aTriggeringPolicy [
 
 	triggers add: aTrigger.	
@@ -98,7 +108,7 @@ TriggerManagementSystem >> register: aTrigger accordingTo: aTriggeringPolicy [
 	
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> register: aTrigger toTriggerAfterDataPointRegistrationOn: aDataStream [
 
 	triggersToTriggerAfterDataPointRegistration 
@@ -107,55 +117,13 @@ TriggerManagementSystem >> register: aTrigger toTriggerAfterDataPointRegistratio
 		ifAbsentPut: (OrderedCollection with: aTrigger)
 ]
 
-{ #category : #'private-managing' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> register: aTrigger toTriggerPeriodicallyEvery: aTimePeriod [
 
 	triggersToTriggerPeriodically
 		at: aTimePeriod
 		ifPresent: [ :registeredTriggers | registeredTriggers add: aTrigger ]
 		ifAbsentPut: (OrderedCollection with: aTrigger)
-]
-
-{ #category : #'private-managing' }
-TriggerManagementSystem >> registerNamed: aName triggering: anAction accordingTo: aTriggeringPolicy whenMeets: aTriggeringCondition [
-
-	^ self
-		triggerNamed: aName
-		ifFound: [ :trigger | 
-			ConflictingObjectFound
-				signal: 'Trigger with that name already exists in system' ]
-		ifNone: [ | trigger |
-
-			trigger := ActionTrigger
-				named: aName
-				createdOn: timeSystem dateTime
-				triggering: anAction
-				accordingTo: aTriggeringPolicy
-				ifSatisfies: aTriggeringCondition.
-
-			self register: trigger accordingTo: aTriggeringPolicy.
-
-			trigger ]
-]
-
-{ #category : #managing }
-TriggerManagementSystem >> registerNamed: aName triggering: anAction afterDataPointWasRegisteredOn: aDataStream ifSatisfies: aTriggeringCondition [
-
-	^ self
-		registerNamed: aName
-		triggering: anAction
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: aDataStream)
-		whenMeets: aTriggeringCondition
-]
-
-{ #category : #managing }
-TriggerManagementSystem >> registerNamed: aName triggering: anAction periodicallyEvery: aTimePeriod ifSatisfies: aTriggeringCondition [
-
-	^ self
-		registerNamed: aName
-		triggering: anAction
-		accordingTo: (PeriodicalTriggeringPolicy every: aTimePeriod)
-		whenMeets: aTriggeringCondition
 ]
 
 { #category : #'dependency resolution' }

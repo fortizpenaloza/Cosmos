@@ -32,11 +32,51 @@ TriggerManagementSystemUserStoryTest >> ninePM [
 ]
 
 { #category : #accessing }
+TriggerManagementSystemUserStoryTest >> oneMinute [
+
+	^ TimeUnits minute with: 1
+]
+
+{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
 		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
+]
+
+{ #category : #accessing }
+TriggerManagementSystemUserStoryTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
+
+	^ ActionTrigger
+		named: 'Set triggered to true after data point registration'
+		createdOn: self systemDateTime
+		triggering: self setTriggeredToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: aDataStream)
+		ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
+TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod [
+
+	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
+TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
+
+	^ ActionTrigger
+		named: ('Set triggered to true every <1p>' expandMacrosWith: aTimePeriod)
+		createdOn: self systemDateTime
+		triggering: self setTriggeredToTrue
+		accordingTo: (PeriodicalTriggeringPolicy every: aTimePeriod)
+		ifSatisfies: aCondition
+]
+
+{ #category : #accessing }
+TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
+
+	^ self setTriggeredToTrueEvery: self fiveMinutes
 ]
 
 { #category : #running }
@@ -57,6 +97,15 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 
 ]
 
+{ #category : #'tests - support' }
+TriggerManagementSystemUserStoryTest >> suscribeToEvaluateActionEvent [
+
+	self eventNotificationSystem
+		subscribe: self
+		to: EvaluateActionEvent
+		toBeNotifiedSending: #evaluateActionOn:
+]
+
 { #category : #accessing }
 TriggerManagementSystemUserStoryTest >> temperatureStream [
 
@@ -74,12 +123,9 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 
 	| trigger |
 
-	trigger := self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 5 minutes'
-		triggering: self setTriggeredToTrue
-		periodicallyEvery: self fiveMinutes
-		ifSatisfies: AlwaysTriggeringCondition new.
-
+	trigger := self setTriggeredToTrueEvery: self fiveMinutes.
+	self triggerManagementSystem register: trigger.
+	
 	self
 		assert: self triggerManagementSystem triggers
 		hasTheSameElementsInTheSameOrderThat: {trigger}.
@@ -96,12 +142,8 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 
 	dataStream := self temperatureStream.
 
-	trigger := self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point registration'
-		triggering: self setTriggeredToTrue
-		afterDataPointWasRegisteredOn: dataStream
-		ifSatisfies: AlwaysTriggeringCondition new.
-
+	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream .
+	self triggerManagementSystem register: trigger.
 	self
 		assert: self triggerManagementSystem triggers
 		hasTheSameElementsInTheSameOrderThat: {trigger}.
@@ -115,18 +157,10 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testRegistrationFailsIfTriggerWithSameNameAlreadyRegistered [
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 5 minutes'
-		triggering: self setTriggeredToTrue
-		periodicallyEvery: self fiveMinutes
-		ifSatisfies: AlwaysTriggeringCondition new.
+	self triggerManagementSystem register: self setTriggeredToTrueEveryFiveMinutes.
 
 	self
-		should: [ self triggerManagementSystem
-				registerNamed: 'Set triggered to true every 5 minutes'
-				triggering: self setTriggeredToTrue
-				periodicallyEvery: self tenMinutes
-				ifSatisfies: AlwaysTriggeringCondition new ]
+		should: [ self triggerManagementSystem register: self setTriggeredToTrueEveryFiveMinutes ]
 		raise: ConflictingObjectFound
 		whoseDescriptionIncludes: 'Trigger with that name already exists in system'
 		description: 'Expected: Trigger with that name already exists in system'
@@ -135,56 +169,57 @@ TriggerManagementSystemUserStoryTest >> testRegistrationFailsIfTriggerWithSameNa
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testRegistrationToBePeriodicallyTriggered [
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 5 minutes'
-		triggering: self setTriggeredToTrue
-		periodicallyEvery: self fiveMinutes
-		ifSatisfies: AlwaysTriggeringCondition new.
+	| trigger |
 
-	self withTheOnlyOneIn: self triggerManagementSystem triggers do: [:trigger | 
-		self assert: trigger name equals: 'Set triggered to true every 5 minutes' ]
+	trigger := self setTriggeredToTrueEveryFiveMinutes.
+	self triggerManagementSystem register: trigger.
+
+	self
+		withTheOnlyOneIn: self triggerManagementSystem triggers
+		do: [ :foundTrigger | self assert: foundTrigger name equals: 'Set triggered to true every 5 minutes' ]
 ]
 
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testRegistrationToBeTriggeredOnDataPointRegistration [
 
-	| dataStream |
+	| trigger |
 
-	dataStream := self temperatureStream.
+	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream.
+	self triggerManagementSystem register: trigger.
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point registration'
-		triggering: self setTriggeredToTrue
-		afterDataPointWasRegisteredOn: dataStream
-		ifSatisfies: AlwaysTriggeringCondition new.
-
-	self withTheOnlyOneIn: self triggerManagementSystem triggers do: [:trigger | 
-		self assert: trigger name equals: 'Set triggered to true after data point registration' ]
+	self
+		withTheOnlyOneIn: self triggerManagementSystem triggers
+		do: [ :foundTrigger | 
+			self
+				assert: foundTrigger name
+				equals: 'Set triggered to true after data point registration' ]
 ]
 
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition [
 
-	| dataStream |
+	| dataStream trigger |
 
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
+	self suscribeToEvaluateActionEvent.
 
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point registration'
+	trigger := ActionTrigger
+		named: 'Set triggered to true after data point registration'
+		createdOn: self systemDateTime
 		triggering: self setTriggeredToTrue
-		afterDataPointWasRegisteredOn: dataStream
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream)
 		ifSatisfies: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11).
+	self triggerManagementSystem register: trigger.
 
 	self deny: triggered.
-	self dataManagementSystem register: (DataPoint on: self systemDateTime holding: 12) toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 12)
+		toStreamNamed: dataStream name.
 	self deny: triggered.
-	self dataManagementSystem register: (DataPoint on: self systemDateTime holding: 10) toStreamNamed: dataStream name.
+	self dataManagementSystem
+		register: (DataPoint on: self systemDateTime holding: 10)
+		toStreamNamed: dataStream name.
 	self assert: triggered
 ]
 
@@ -196,19 +231,14 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutes [
 		to: EvaluateActionEvent
 		toBeNotifiedSending: #evaluateActionOn:.
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 5 minutes'
-		triggering:  self setTriggeredToTrue
-		periodicallyEvery: self tenMinutes 
-		ifSatisfies: AlwaysTriggeringCondition new.
-	
+	self triggerManagementSystem register: self setTriggeredToTrueEveryFiveMinutes.
 	self deny: triggered.
 	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self fiveMinutes).
+		notifySubscribersTo: (TickEvent of: self oneMinute).
 
 	self deny: triggered.
 	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
+		notifySubscribersTo: (TickEvent of: self fiveMinutes).
 		
 	self assert: triggered
 ]
@@ -230,12 +260,7 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIf
 		checkingIf: dataStream
 		hasNotBeenUpdatedForMoreThan: self fiveMinutes.
 
-	self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 10 minutes'
-		triggering: self setTriggeredToTrue
-		periodicallyEvery: self tenMinutes
-		ifSatisfies: condition.
-
+ 	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition).
 	self deny: triggered.
 
 	self dataManagementSystem
@@ -247,7 +272,7 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIf
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self fiveMinutes).
 	self deny: triggered.
 
-	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self tenMinutes).
+	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self assert: triggered
 ]
@@ -257,48 +282,48 @@ TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWh
 
 	| dataStream condition |
 
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
+	self suscribeToEvaluateActionEvent.
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
 
 	condition := AndCompositeTriggeringCondition
-		with: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11)
+		with:
+			(DataStreamCurrentValueTriggeringCondition
+				of: dataStream
+				isLessThan: 11)
 		with:
 			(TimeIntervalTriggeringCondition
 				checkingCurrentTimeIsBetween: (self eightPM to: self ninePM)).
 
 	self triggerManagementSystem
-		registerNamed: 'Set triggered to true every 5 minutes'
-		triggering: self setTriggeredToTrue
-		periodicallyEvery: self tenMinutes
-		ifSatisfies: condition.
+		register: (self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition).
 
 	self deny: triggered.
 
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 10)
 		toStreamNamed: dataStream name.
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
+	self eventNotificationSystem
+		notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 12)
 		toStreamNamed: dataStream name.
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
+	self eventNotificationSystem
+		notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
 	timeSource setTimeTo: self eightPM.
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
+	self eventNotificationSystem
+		notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self deny: triggered.
 
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 10)
 		toStreamNamed: dataStream name.
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
+	self eventNotificationSystem
+		notifySubscribersTo: (TickEvent of: self tenMinutes).
 	self assert: triggered
 ]
 
@@ -307,19 +332,12 @@ TriggerManagementSystemUserStoryTest >> testTriggeringOnDataPointRegistration [
 
 	| dataStream |
 
+	self suscribeToEvaluateActionEvent.
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
 
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
 	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after data point registration'
-		triggering: self setTriggeredToTrue
-		afterDataPointWasRegisteredOn: dataStream
-		ifSatisfies: AlwaysTriggeringCondition new.
+		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream).
 
 	self deny: triggered.
 	self dataManagementSystem
