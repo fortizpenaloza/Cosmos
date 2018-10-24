@@ -1,21 +1,20 @@
 Class {
-	#name : #TriggersAPITest,
+	#name : #TriggersRESTfulWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'interface'
+		'webService'
 	],
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
 { #category : #accessing }
-TriggersAPITest >> applicationJsonVersion1dot0dot0 [
+TriggersRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0 [
 
-	^ ZnMimeType
-		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
+	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'tests support' }
-TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
+TriggersRESTfulWebServiceTest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
 	self
 		assert: aResponse code equals: 200;
@@ -23,39 +22,45 @@ TriggersAPITest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 ]
 
 { #category : #accessing }
-TriggersAPITest >> dateTimeFormattedAsISO8601 [
+TriggersRESTfulWebServiceTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
 { #category : #accessing }
-TriggersAPITest >> eightPM [
+TriggersRESTfulWebServiceTest >> eightPM [
 	
 	^ TimeOfDay hours: 20
 ]
 
 { #category : #accessing }
-TriggersAPITest >> fiveMinutes [
+TriggersRESTfulWebServiceTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
 ]
 
 { #category : #accessing }
-TriggersAPITest >> getTriggersHttpRequest [
+TriggersRESTfulWebServiceTest >> getTriggersHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
 		setAccept: self applicationJsonVersion1dot0dot0
 ]
 
 { #category : #accessing }
-TriggersAPITest >> ninePM [
+TriggersRESTfulWebServiceTest >> httpRequestContext [
+
+	^ HttpRequestContext new
+]
+
+{ #category : #accessing }
+TriggersRESTfulWebServiceTest >> ninePM [
 	
 	^ TimeOfDay hours: 21
 ]
 
 { #category : #accessing }
-TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
+TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
 		registerNamed:
@@ -67,7 +72,7 @@ TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasR
 ]
 
 { #category : #accessing }
-TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
+TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
 		registerNamed: 'Set triggered to true after a data point was registered on Temperature'
@@ -77,7 +82,7 @@ TriggersAPITest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemper
 ]
 
 { #category : #accessing }
-TriggersAPITest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
+TriggersRESTfulWebServiceTest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
 
 	self triggerManagementSystem
 		registerNamed: 'Set triggered to true periodically every 5 minutes'
@@ -87,7 +92,7 @@ TriggersAPITest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
 ]
 
 { #category : #accessing }
-TriggersAPITest >> setTriggedToTrue [
+TriggersRESTfulWebServiceTest >> setTriggedToTrue [
 
 	^ self actionManagementSystem
 		actionNamed: 'Set triggered to true'
@@ -96,15 +101,13 @@ TriggersAPITest >> setTriggedToTrue [
 ]
 
 { #category : #running }
-TriggersAPITest >> setUp [
+TriggersRESTfulWebServiceTest >> setUp [
 
 	super setUp.
 
-	interface := (TriggersAPIInstaller toInstallOn: Teapot on workingWith: rootSystem)
-		install.
+	webService := TriggersRESTfulWebService workingWith: rootSystem.
 
 	(SensorsSampleAddOn on: rootSystem) install.
-
 
 	self actionManagementSystem
 		register:
@@ -114,7 +117,7 @@ TriggersAPITest >> setUp [
 ]
 
 { #category : #running }
-TriggersAPITest >> setUpRequirements [
+TriggersRESTfulWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -125,7 +128,7 @@ TriggersAPITest >> setUpRequirements [
 ]
 
 { #category : #accessing }
-TriggersAPITest >> temperature [
+TriggersRESTfulWebServiceTest >> temperature [
 
 	^ self dataManagementSystem 
 		streamNamed: 'Temperature'
@@ -134,7 +137,7 @@ TriggersAPITest >> temperature [
 ]
 
 { #category : #tests }
-TriggersAPITest >> testGettingTriggers [
+TriggersRESTfulWebServiceTest >> testGetTriggers [
 
 	| response |
 
@@ -142,104 +145,129 @@ TriggersAPITest >> testGettingTriggers [
 		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature;
 		registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := interface triggersHandling: self getTriggersHttpRequest.
+	response := webService
+		getTriggersBasedOn: self getTriggersHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response
 		wasSuccessfulWithContentEqualsTo:
 			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]},{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]'
-		expandMacrosWith: self dateTimeFormattedAsISO8601)
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-TriggersAPITest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion [
-
-	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+TriggersRESTfulWebServiceTest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion [
 
 	self
-		should: [ interface
-				triggersHandling:
+		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+
+	self
+		should: [ webService
+				getTriggersBasedOn:
 					((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-						setAccept: (ZnMimeType fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0')) ]
+						setAccept:
+							(ZnMimeType
+								fromString: 'application/vnd.cosmos.trigger+json; version=1.2.0'))
+				within: self httpRequestContext ]
 		raise: HTTPClientError
-		withExceptionDo:
-			[ :signal | self assert: signal messageText equals: 'Encoder not found for given media type' ]
+		withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+				equals: 'Encoder not found for given media type' ]
 ]
 
 { #category : #tests }
-TriggersAPITest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
+TriggersRESTfulWebServiceTest >> testGettingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	| response |
 
-	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+	self
+		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
-	response := interface triggersHandling: self getTriggersHttpRequest.
+	response := webService
+		getTriggersBasedOn: self getTriggersHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[]}]'
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven [
+TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven [
 
 	| response |
 
 	self
 		registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
-	response := interface triggersHandling: self getTriggersHttpRequest.
+	response := webService
+		getTriggersBasedOn: self getTriggersHttpRequest
+		within: self httpRequestContext.
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}}]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}}]}]'
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-TriggersAPITest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM [
+TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM [
 
 	| response |
 
 	self triggerManagementSystem
-		registerNamed: 'Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM'
+		registerNamed:
+			'Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM'
 		triggering: self setTriggedToTrue
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperature)
 		whenMeets:
 			(AndCompositeTriggeringCondition
-				with: (DataStreamCurrentValueTriggeringCondition of: self temperature isGreaterThan: 11)
+				with:
+					(DataStreamCurrentValueTriggeringCondition
+						of: self temperature
+						isGreaterThan: 11)
 				with:
 					(TimeIntervalTriggeringCondition
 						checkingCurrentTimeIsBetween: (self eightPM to: self ninePM))).
 
-	response := interface triggersHandling: self getTriggersHttpRequest.
+	response := webService
+		getTriggersBasedOn: self getTriggersHttpRequest
+		within: self httpRequestContext.
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}},{"type":"time_interval","from":"20:00:00","to":"21:00:00"}]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}},{"type":"time_interval","from":"20:00:00","to":"21:00:00"}]}]'
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-TriggersAPITest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes [
+TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes [
 
 	| response |
 
 	self registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := interface triggersHandling: self getTriggersHttpRequest.
+	response := webService
+		getTriggersBasedOn: self getTriggersHttpRequest
+		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			('[{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]' expandMacrosWith: self dateTimeFormattedAsISO8601)
+			('[{"name":"Set triggered to true periodically every 5 minutes","created_on":"<1s>","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}]'
+				expandMacrosWith: self dateTimeFormattedAsISO8601)
 ]
 
 { #category : #tests }
-TriggersAPITest >> testRegistrationOfDataPointRegistered [
+TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
 
 	| response |
 
@@ -248,7 +276,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
-	response := interface
+	response := webService
 		registerHandling:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
@@ -280,7 +308,7 @@ TriggersAPITest >> testRegistrationOfDataPointRegistered [
 ]
 
 { #category : #tests }
-TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
+TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
 
 	| response |
 	self triggerManagementSystem
@@ -288,7 +316,7 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
-	response := interface
+	response := webService
 		registerHandling:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
@@ -317,4 +345,15 @@ TriggersAPITest >> testRegistrationOfPeriodicalTrigger [
 					equals: 'Set triggered to true periodically every 5 minutes';
 				assert: trigger creationDateTime equals: self timeSystem dateTime ]
 		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+TriggersRESTfulWebServiceTest >> testRoutesConfiguration [
+
+	| teapot |
+
+	teapot := Teapot on.
+	(TriggersRESTfulWebServiceSpecification toInstallOn: teapot workingWith: self) install.
+
+	self assert: teapot routes size equals: 3
 ]

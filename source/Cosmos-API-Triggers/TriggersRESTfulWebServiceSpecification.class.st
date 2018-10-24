@@ -1,123 +1,68 @@
 Class {
-	#name : #TriggersAPIInstaller,
-	#superclass : #Object,
-	#instVars : [
-		'server',
-		'interface',
-		'mappingRuleSetBuilder'
-	],
+	#name : #TriggersRESTfulWebServiceSpecification,
+	#superclass : #RESTFulWebServiceSpecification,
 	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'instance creation' }
-TriggersAPIInstaller class >> toInstallOn: aServer workingWith: aCosmosSystem [
+TriggersRESTfulWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
 
 	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
 ]
 
-{ #category : #'installing - routes' }
-TriggersAPIInstaller >> addCrossOriginResourceSharingRouteXX [
+{ #category : #'specification - encoders and decoders' }
+TriggersRESTfulWebServiceSpecification >> addTriggerJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
-	server
-		OPTIONS:
-			'/triggers'
-				-> [ :request | 
-					| response |
-
-					response := ZnResponse noContent.
-
-					response headers
-						at: 'Access-Control-Allow-Headers' put: 'Access-Control-Allow-Origin, Content-Type, Accept';
-						at: 'Access-Control-Allow-Methods' put: 'POST, GET, DELETE, PUT';
-						at: 'Access-Control-Max-Age' put: '86400'.
-
-					response ]
-]
-
-{ #category : #'installing - routes' }
-TriggersAPIInstaller >> addGetTriggersRoute [
-
-	server
-		GET: '/triggers' -> [ :request | interface triggersHandling: request ]
-]
-
-{ #category : #'installing - routes' }
-TriggersAPIInstaller >> addRegisterTriggerRoute [
-
-	server
-		POST: '/triggers' -> [ :request | interface registerHandling: request ];
-		output: #text
-]
-
-{ #category : #'installing - routes' }
-TriggersAPIInstaller >> addUnregisterTriggerRoute [
-
-	server
-		DELETE:
-			'/triggers/<name>'
-				-> [ :request | 
-					interface
-						deregisterNamed: ((request at: #name) replaceAll: $_ with: Character space) ];
-		output: #text
-]
-
-{ #category : #'media types' }
-TriggersAPIInstaller >> applicationJsonVersion1dot0dot0 [
-
-	^ ZnMimeType
-		fromString: 'application/vnd.cosmos.trigger+json; version=1.0.0'
-]
-
-{ #category : #initialization }
-TriggersAPIInstaller >> initializeToInstallOn: aServer workingWith: aCosmosSystem [
-
-	mappingRuleSetBuilder := MappingRuleSetBuilder new.
-
-	self 
-		registerTriggerJsonEncoderVersion1dot0dot0;
-		registerTriggerJsonDecoderVersion1dot0dot0.
-
-	interface := TriggersAPI
-		workingWithin:
-			(TriggersAPIContext
-				workingWith: aCosmosSystem
-				queryingMappingsTo: mappingRuleSetBuilder build).
-
-	server := aServer
-]
-
-{ #category : #installing }
-TriggersAPIInstaller >> install [
-
-	self
-		addGetTriggersRoute;
-		addRegisterTriggerRoute;
-		addUnregisterTriggerRoute;
-		addCrossOriginResourceSharingRouteXX.
-		
-	^ interface
-]
-
-{ #category : #'installing - encoders and decoders' }
-TriggersAPIInstaller >> registerTriggerJsonDecoderVersion1dot0dot0 [
-
-	mappingRuleSetBuilder
+	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
 		to: #triggers
 		using: self triggerJsonDecoderVersion1dot0dot0
 ]
 
-{ #category : #'installing - encoders and decoders' }
-TriggersAPIInstaller >> registerTriggerJsonEncoderVersion1dot0dot0 [
+{ #category : #'specification - encoders and decoders' }
+TriggersRESTfulWebServiceSpecification >> addTriggerJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
-	mappingRuleSetBuilder
+	aBuilder
 		addDefaultRuleToEncode: #triggers
 		to: self applicationJsonVersion1dot0dot0
 		using: self triggerJsonEnconderVersion1dot0dot0
 ]
 
+{ #category : #'media types' }
+TriggersRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+
+	^ 'application/json;version=1.0.0' asZnMimeType
+]
+
+{ #category : #'specification - routes' }
+TriggersRESTfulWebServiceSpecification >> createTriggerRoute [
+
+	^ RouteSpecification 
+		handling: #POST
+		at: '/triggers'
+		sending: #registerHandling:
+]
+
+{ #category : #'specification - routes' }
+TriggersRESTfulWebServiceSpecification >> deleteTriggerRoute [
+
+	^ RouteSpecification 
+		handling: #DELETE
+		at: '/triggers/<name>'
+		sending: #deregisterNamed:
+]
+
+{ #category : #'specification - routes' }
+TriggersRESTfulWebServiceSpecification >> getTriggersRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: '/triggers'
+		sending: #getTriggersBasedOn:within:
+]
+
 { #category : #'encoders and decoders' }
-TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
+TriggersRESTfulWebServiceSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
 	(NeoJSONReader on: aJSON readStream)
@@ -135,7 +80,7 @@ TriggersAPIInstaller >> triggerJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-TriggersAPIInstaller >> triggerJsonEnconderVersion1dot0dot0 [
+TriggersRESTfulWebServiceSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 
 	^ [ :trigger | 
 	String
