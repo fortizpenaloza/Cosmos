@@ -133,13 +133,13 @@ TriggerManagementSystem >> register: aTrigger toTriggerPeriodicallyEvery: aTimeP
 		ifAbsentPut: (OrderedCollection with: aTrigger)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> registerIdentifierFor: anActionTrigger [ 
 
 	identifierSystem registerIdentifierFor: anActionTrigger
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - managing' }
 TriggerManagementSystem >> registerRegistrationTimestampFor: anActionTrigger [ 
 	
 	metadataSystem

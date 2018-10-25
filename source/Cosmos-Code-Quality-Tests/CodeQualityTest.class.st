@@ -82,7 +82,7 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 
 	self
 		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new
-		onDeclaredPackagesExcluding: #()
+		onDeclaredPackagesExcluding: { TriggersRESTfulWebServiceTest } 
 ]
 
 { #category : #tests }
@@ -90,7 +90,7 @@ CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 
 	self
 		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new
-		onDeclaredPackagesExcluding: {PetsRESTfulWebService} 
+		onDeclaredPackagesExcluding: #()
 ]
 
 { #category : #tests }

@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'creationDateTime',
 		'action',
 		'policy',
 		'condition'

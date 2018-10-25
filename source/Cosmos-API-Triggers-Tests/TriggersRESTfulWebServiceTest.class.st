@@ -97,7 +97,7 @@ TriggersRESTfulWebServiceTest >> setTriggeredToTrue [
 		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TriggersRESTfulWebServiceTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
 
 	^ ActionTrigger
@@ -107,13 +107,13 @@ TriggersRESTfulWebServiceTest >> setTriggeredToTrueAfterDataPointRegistrationOn:
 		ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod [
 
 	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
 
 	^ ActionTrigger
@@ -391,10 +391,4 @@ TriggersRESTfulWebServiceTest >> testRoutesConfiguration [
 	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
 
 	self assert: teapot routes size equals: 3
-]
-
-{ #category : #'as yet unclassified' }
-TriggersRESTfulWebServiceTest >> withJsonFromContentsIn: httpResponse do: aBlock [
-
-	aBlock value: (NeoJSONObject fromString: httpResponse contents)
 ]
