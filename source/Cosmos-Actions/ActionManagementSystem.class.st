@@ -72,7 +72,11 @@ ActionManagementSystem >> registerIdentifierFor: anAction [
 ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
 
 	metadataSystem
-		register: (Metadata attaching: timeSystem dateTime as: #registration_timestamp of: anAction)
+		register:
+			(Metadata
+				attaching: timeSystem dateTime
+				as: #registration_timestamp
+				of: anAction)
 ]
 
 { #category : #'private - managing' }

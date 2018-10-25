@@ -41,6 +41,13 @@ DataManagementSystem >> initialize [
 	dataStreams := OrderedCollection new
 ]
 
+{ #category : #'events handling' }
+DataManagementSystem >> notifyDataPointWasRegisteredOn: aDataStream [
+
+	eventNotificationSystem
+		notifySubscribersTo: (DataPointRegistrationEvent on: aDataStream)
+]
+
 { #category : #managing }
 DataManagementSystem >> register: aDataStream [
 
@@ -58,9 +65,7 @@ DataManagementSystem >> register: aDataStream [
 DataManagementSystem >> register: aDataPoint to: aDataStream [
 
 	aDataStream add: aDataPoint.
-
-	eventNotificationSystem
-		notifySubscribersTo: (DataPointRegistrationEvent on: aDataStream)
+	self notifyDataPointWasRegisteredOn: aDataStream
 ]
 
 { #category : #managing }

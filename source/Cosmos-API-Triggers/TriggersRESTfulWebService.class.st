@@ -17,7 +17,9 @@ TriggersRESTfulWebService class >> workingWith: aCosmosSystem [
 TriggersRESTfulWebService >> createTriggerBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-		withCreatedResourceDo: [ :trigger | self triggerManagementSystem register: trigger ]
+		withCreatedResourceDo: [ :trigger | 
+			self triggerManagementSystem register: trigger.
+			trigger ]
 		decodedUsing: #triggers
 		basedOn: anHttpRequest
 		within: (TriggerDecodingContext workingWith: cosmos) ]
@@ -47,6 +49,12 @@ TriggersRESTfulWebService >> getTriggersBasedOn: anHttpRequest within: aContext 
 		within: aContext
 ]
 
+{ #category : #'private - systems' }
+TriggersRESTfulWebService >> identifierSystem [
+
+	^ cosmos systemImplementing: #IdentifierSystemInterface
+]
+
 { #category : #initialization }
 TriggersRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 
@@ -54,9 +62,17 @@ TriggersRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulWebService >> locationOf: anActionTrigger [ 
-	
-	^ 1
+TriggersRESTfulWebService >> locationOf: anActionTrigger [
+
+	| baseUrl |
+
+	baseUrl := baseUrlOptional
+		withContentDo: [ :theBaseUrl | theBaseUrl ]
+		ifUnused: [ '' asZnUrl ].
+
+	^ '<1p>/<2p>'
+		expandMacrosWith: baseUrl / 'triggers' asZnUrl
+		with: (self identifierSystem identifierOf: anActionTrigger)
 ]
 
 { #category : #specification }

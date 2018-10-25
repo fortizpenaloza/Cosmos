@@ -50,7 +50,6 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrueAfterDataPointRegistra
 
 	^ ActionTrigger
 		named: 'Set triggered to true after data point registration'
-		createdOn: self systemDateTime
 		triggering: self setTriggeredToTrue
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: aDataStream)
 		ifSatisfies: AlwaysTriggeringCondition new
@@ -67,7 +66,6 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod ifS
 
 	^ ActionTrigger
 		named: ('Set triggered to true every <1p>' expandMacrosWith: aTimePeriod)
-		createdOn: self systemDateTime
 		triggering: self setTriggeredToTrue
 		accordingTo: (PeriodicalTriggeringPolicy every: aTimePeriod)
 		ifSatisfies: aCondition
@@ -138,11 +136,10 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 { #category : #tests }
 TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterDataPointRegistration [
 
-	| dataStream trigger |
-
+	| trigger dataStream |
+	
 	dataStream := self temperatureStream.
-
-	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream .
+	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream.
 	self triggerManagementSystem register: trigger.
 	self
 		assert: self triggerManagementSystem triggers
@@ -152,6 +149,32 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 		deregisterNamed: 'Set triggered to true after data point registration'.
 
 	self assert: self triggerManagementSystem triggers isEmpty
+]
+
+{ #category : #tests }
+TriggerManagementSystemUserStoryTest >> testMedataRegistrationOnTriggerRegistration [
+
+	| dataStream metadata trigger |
+
+	dataStream := self temperatureStream.
+	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream .
+
+	self assert: (self metadataSystem metadataFor: trigger) isEmpty.
+	self triggerManagementSystem register: trigger.
+
+	metadata := self metadataSystem metadataFor: trigger.
+	self
+		assert: metadata size equals: 2;
+		assert: metadata
+			equals:
+			{(Metadata
+				attaching: self currentIdentifier
+				as: #identifier
+				of: trigger).
+			(Metadata
+				attaching: self systemDateTime
+				as: #registration_timestamp
+				of: trigger)} asOrderedCollection 
 ]
 
 { #category : #tests }
@@ -206,10 +229,12 @@ TriggerManagementSystemUserStoryTest >> testTriggerOnDataPointRegistrationWhenSa
 
 	trigger := ActionTrigger
 		named: 'Set triggered to true after data point registration'
-		createdOn: self systemDateTime
 		triggering: self setTriggeredToTrue
 		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream)
-		ifSatisfies: (DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11).
+		ifSatisfies:
+			(DataStreamCurrentValueTriggeringCondition
+				of: dataStream
+				isLessThan: 11).
 	self triggerManagementSystem register: trigger.
 
 	self deny: triggered.
