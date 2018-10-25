@@ -106,8 +106,5 @@ ActionsWebServiceSpecification >> deleteActionRoute [
 { #category : #'specification - routes' }
 ActionsWebServiceSpecification >> getActionsRoute [
 
-	^ (RouteSpecification
-		handling: #GET
-		at: '/actions'
-		sending: #getActionsBasedOn:within:) asCorsAware
+	^ RouteSpecification handling: #GET at: '/actions' sending: #getActionsBasedOn:within:
 ]

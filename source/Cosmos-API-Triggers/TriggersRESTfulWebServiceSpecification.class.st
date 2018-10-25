@@ -40,7 +40,7 @@ TriggersRESTfulWebServiceSpecification >> createTriggerRoute [
 	^ RouteSpecification 
 		handling: #POST
 		at: '/triggers'
-		sending: #registerHandling:
+		sending: #createTriggerBasedOn:within:
 ]
 
 { #category : #'specification - routes' }
@@ -70,11 +70,12 @@ TriggersRESTfulWebServiceSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 			customDo: [ :mapping | 
 			mapping
 				decoder: [ :rawTrigger | 
-					context triggerManagementSystem
-						registerNamed: (rawTrigger at: #name)
+					ActionTrigger
+						named: (rawTrigger at: #name)
+						createdOn: nil
 						triggering: (context decodeActionFrom: rawTrigger)
 						accordingTo: (context decodeTriggeringPolicyFrom: rawTrigger)
-						whenMeets: (context decodeTriggeringConditionFrom: rawTrigger) ] ];
+						ifSatisfies: (context decodeTriggeringConditionFrom: rawTrigger) ] ];
 		propertyNamesAsSymbols: true;
 		nextAs: #TriggerRegistration ]
 ]

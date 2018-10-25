@@ -40,10 +40,10 @@ DataStreamsRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
 { #category : #'specification - routes' }
 DataStreamsRESTfulWebServiceSpecification >> createDataStreamRoute [
 
-	^ RouteSpecification
+	^ (RouteSpecification
 		handling: #POST
 		at: '/data-streams'
-		sending: #createStreamBasedOn:within:
+		sending: #createStreamBasedOn:within:) asCorsAware
 ]
 
 { #category : #'encoders and decoders' }
@@ -115,10 +115,10 @@ DataStreamsRESTfulWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0do
 { #category : #'specification - routes' }
 DataStreamsRESTfulWebServiceSpecification >> deleteDataStreamRoute [
 
-	^ RouteSpecification
+	^ (RouteSpecification
 		handling: #DELETE
 		at: '/data-streams/<identifier:IsUUID>'
-		sending: #deleteStreamBasedOn:within:
+		sending: #deleteStreamBasedOn:within:) asCorsAware 
 ]
 
 { #category : #'specification - routes' }

@@ -14,6 +14,18 @@ TriggersRESTfulWebService class >> workingWith: aCosmosSystem [
 ]
 
 { #category : #API }
+TriggersRESTfulWebService >> createTriggerBasedOn: anHttpRequest within: aContext [
+
+	^ [ self
+		withCreatedResourceDo: [ :trigger | self triggerManagementSystem register: trigger ]
+		decodedUsing: #triggers
+		basedOn: anHttpRequest
+		within: (TriggerDecodingContext workingWith: cosmos) ]
+		on: InstanceCreationFailed
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+]
+
+{ #category : #API }
 TriggersRESTfulWebService >> deregisterNamed: aName [
 
 	| name |
@@ -45,22 +57,6 @@ TriggersRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
 TriggersRESTfulWebService >> locationOf: anActionTrigger [ 
 	
 	^ 1
-]
-
-{ #category : #API }
-TriggersRESTfulWebService >> registerHandling: anHttpRequest [
-
-	^ [ [ cosmos
-		register: anHttpRequest contents
-		encodedAs: anHttpRequest contentType.
-
-	ZnResponse created: anHttpRequest requestLine uri ]
-		on: ConflictingObjectFound
-		do: [ :signal | HTTPClientError signalConflict: signal messageText ] ]
-		on: KeyNotFound , DecodingFailed
-		do: [ :signal | 
-			HTTPClientError
-				signalBadRequest: signal messageText ]
 ]
 
 { #category : #specification }

@@ -2,8 +2,8 @@ Class {
 	#name : #CommandsWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'interface',
-		'identifierSequence'
+		'identifierSequence',
+		'webService'
 	],
 	#category : #'Cosmos-API-Commands-Tests'
 }
@@ -75,7 +75,7 @@ CommandsWebServiceTest >> setUp [
 
 	super setUp.
 
-	interface := CommandsRESTfulWebService workingWith: rootSystem
+	webService := CommandsRESTfulWebService workingWith: rootSystem
 ]
 
 { #category : #running }
@@ -94,7 +94,7 @@ CommandsWebServiceTest >> testCreateCommand [
 
 	self assert: self commandManagementSystem commands isEmpty.
 
-	response := interface
+	response := webService
 		createCommandBasedOn: (self requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
 		within: self httpRequestContext.
 
@@ -121,7 +121,7 @@ CommandsWebServiceTest >> testDeleteCommand [
 
 	self assert: self commandManagementSystem commands size equals: 3.
 
-	response := interface
+	response := webService
 		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self commandWithMediumPriorityIdentifier)
 		within: self httpRequestContext.
 
@@ -139,7 +139,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsJson [
 
 	self installLedCommandsAddOn.
 
-	response := interface
+	response := webService
 		dequeueCommandBasedOn:
 			(self
 				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0)
@@ -163,7 +163,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsPlainText [
 
 	self installLedCommandsAddOn.
 
-	response := interface
+	response := webService
 		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
 		within: self httpRequestContext.
 
@@ -182,7 +182,7 @@ CommandsWebServiceTest >> testGettingCommands [
 
 	self installLedCommandsAddOn.
 
-	response := interface
+	response := webService
 		getCommandsBasedOn: self requestToGetCommands
 		within: self httpRequestContext.
 
@@ -202,7 +202,7 @@ CommandsWebServiceTest >> testRoutesConfiguration [
 
 	teapot := Teapot on.
 
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
+	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
 
 	self assert: teapot routes size equals: 4
 ]
