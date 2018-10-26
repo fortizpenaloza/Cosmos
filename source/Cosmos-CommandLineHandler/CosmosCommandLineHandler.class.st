@@ -103,10 +103,9 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 		addRoutesOf: (DataStreamsRESTfulWebService workingWith: cosmos);
 		addRoutesOf: (DataPointsRESTfulWebService workingWith: cosmos);
 		addRoutesOf: (CommandsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (ActionsWebService workingWith: cosmos).
-
-	(TriggersRESTfulWebServiceSpecification toInstallOn: teapot workingWith: cosmos) install.
-
+		addRoutesOf: (ActionsWebService workingWith: cosmos);
+		addRoutesOf: (TriggersRESTfulWebService workingWith: cosmos).
+		
 	self configureAllowOriginAfterFilterOn: teapot.
 	self configureExceptionHandlerOn: teapot.
 
