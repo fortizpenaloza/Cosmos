@@ -4,12 +4,6 @@ Class {
 	#category : #'Cosmos-API-Triggers'
 }
 
-{ #category : #'instance creation' }
-TriggersRESTfulWebServiceSpecification class >> toInstallOn: aServer workingWith: aCosmosSystem [
-
-	^ self new initializeToInstallOn: aServer workingWith: aCosmosSystem
-]
-
 { #category : #'specification - encoders and decoders' }
 TriggersRESTfulWebServiceSpecification >> addTriggerJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 

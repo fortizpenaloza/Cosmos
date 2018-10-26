@@ -149,9 +149,3 @@ DataPointsRESTfulWebServiceTest >> testRoutesConfiguration [
 
 	self assert: teapot routes size equals: 1
 ]
-
-{ #category : #'private - media types' }
-DataPointsRESTfulWebServiceTest >> textPlain [
-
-	^ 'text/plain;charset=utf-8' asZnMimeType
-]
