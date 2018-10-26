@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'creationDateTime',
 		'action',
 		'policy',
 		'condition'
@@ -12,20 +11,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionTrigger class >> named: aName createdOn: aDateTime triggering: anAction accordingTo: aTriggeringPolicy ifSatisfies: aTriggeringCondition [
+ActionTrigger class >> named: aName triggering: anAction accordingTo: aTriggeringPolicy ifSatisfies: aTriggeringCondition [
 
 	^ self new
 		initializeNamed: aName
-		createdOn: aDateTime
 		triggering: anAction
 		accordingTo: aTriggeringPolicy
-		ifSatisfies: aTriggeringCondition 
-]
-
-{ #category : #accessing }
-ActionTrigger >> creationDateTime [
-
-	^ creationDateTime
+		ifSatisfies: aTriggeringCondition
 ]
 
 { #category : #testing }
@@ -35,21 +27,25 @@ ActionTrigger >> ifSatisfiedOn: aContext withActionDo: aBlock [
 		ifTrue: [ aBlock value: action ]
 ]
 
-{ #category : #'initialize-release' }
-ActionTrigger >> initializeNamed: aName createdOn: aDateTime triggering: anAction accordingTo:  aTriggeringPolicy ifSatisfies: aTriggeringCondition [ 
+{ #category : #initialization }
+ActionTrigger >> initializeNamed: aName triggering: anAction accordingTo: aTriggeringPolicy ifSatisfies: aTriggeringCondition [
 
 	name := aName.
-	creationDateTime := aDateTime.
-	action := anAction .
+	action := anAction.
 	policy := aTriggeringPolicy.
-	condition := aTriggeringCondition 
-
+	condition := aTriggeringCondition
 ]
 
 { #category : #accessing }
 ActionTrigger >> name [
 	
 	^ name 
+]
+
+{ #category : #printing }
+ActionTrigger >> printOn: aStream [
+
+	aStream nextPutAll: name
 ]
 
 { #category : #accessing }

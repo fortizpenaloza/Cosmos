@@ -19,7 +19,7 @@ MetadataSystemUserStoryTests >> setUpRequirements [
 ]
 
 { #category : #accessing }
-MetadataSystemUserStoryTests >> temperature [
+MetadataSystemUserStoryTests >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
 ]
@@ -32,13 +32,13 @@ MetadataSystemUserStoryTests >> testMetadataRegistration [
 	metadata := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperature.
+		of: self temperatureStream.
 
 	self
-		assert: (self metadataSystem metadataFor: self temperature) isEmpty.
+		assert: (self metadataSystem metadataFor: self temperatureStream) isEmpty.
 	self metadataSystem register: metadata.
 	self
-		withTheOnlyOneIn: (self metadataSystem metadataFor: self temperature)
+		withTheOnlyOneIn: (self metadataSystem metadataFor: self temperatureStream)
 		do: [ :foundMetadata | self assert: foundMetadata equals: metadata ]
 ]
 
@@ -50,7 +50,7 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 	metadata := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperature.
+		of: self temperatureStream.
 
 	self metadataSystem register: metadata.
 	self
@@ -63,22 +63,22 @@ MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
 	
-	self assert: (self metadataSystem metadataFor: self temperature) isEmpty.
+	self assert: (self metadataSystem metadataFor: self temperatureStream) isEmpty.
 
 	identifier := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperature.
+		of: self temperatureStream.
 
 	registrationTimestamp := Metadata
 		attaching: (December tenth , 2016) atMidnight
 		as: #registration_timestamp
-		of: self temperature.
+		of: self temperatureStream.
 
 	self metadataSystem register: identifier.
 	self metadataSystem register: registrationTimestamp.
 	self
-		assert: (self metadataSystem metadataFor: self temperature)
+		assert: (self metadataSystem metadataFor: self temperatureStream)
 		equals:
 			{identifier.
 			registrationTimestamp} asOrderedCollection
@@ -94,7 +94,7 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 	metadata := Metadata
 		attaching: identifier
 		as: #identifier
-		of: self temperature.
+		of: self temperatureStream.
 
 	self metadataSystem register: metadata.
 	self
@@ -103,7 +103,7 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 				describedObjectBy: identifier
 				as: #identifier
 				ifNone: [ self fail ])
-		equals: self temperature
+		equals: self temperatureStream
 ]
 
 { #category : #tests }
@@ -111,7 +111,7 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObjectFails [
 
 	| metadata |
 
-	metadata := Metadata attaching: 'celsius' as: #unit_singular of: self temperature.
+	metadata := Metadata attaching: 'celsius' as: #unit_singular of: self temperatureStream.
 
 	self metadataSystem register: metadata.
 

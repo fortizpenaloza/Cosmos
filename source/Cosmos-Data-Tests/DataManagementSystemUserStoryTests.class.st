@@ -4,7 +4,7 @@ Class {
 	#category : #'Cosmos-Data-Tests'
 }
 
-{ #category : #tests }
+{ #category : #accessing }
 DataManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 
 	^ (October first , 2014) atNoon
@@ -18,7 +18,7 @@ DataManagementSystemUserStoryTests >> setUpRequirements [
 		requireDataManagementSystem
 ]
 
-{ #category : #tests }
+{ #category : #accessing }
 DataManagementSystemUserStoryTests >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
