@@ -15,7 +15,7 @@ Class {
 { #category : #'instance creation' }
 PriorityQueue class >> empty [
 	
-	^ super new initialize 
+	^ super new 
 ]
 
 { #category : #'enqueuing - dequeiung' }

@@ -7,13 +7,13 @@ Class {
 	#category : #'Cosmos-Triggers-SystemModel'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 TickEvent class >> of: aTimePeriod [
 	
 	^ self new initializeOf: aTimePeriod 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 TickEvent >> initializeOf: aTimePeriod [
 	
 	timePeriod := aTimePeriod 
