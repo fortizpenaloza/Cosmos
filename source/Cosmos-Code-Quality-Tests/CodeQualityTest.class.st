@@ -73,7 +73,7 @@ CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
-		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new
+		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new asRBRule
 		onDeclaredPackagesExcluding: RESTFulWebServiceSpecification subclasses
 ]
 
@@ -81,7 +81,7 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 CodeQualityTest >> testMessageSentButNotImplemented [
 
 	self
-		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new
+		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new asRBRule
 		onDeclaredPackagesExcluding: { TriggersRESTfulWebServiceTest } 
 ]
 
@@ -89,7 +89,7 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 
 	self
-		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new
+		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new asRBRule
 		onDeclaredPackagesExcluding: #()
 ]
 
@@ -97,7 +97,7 @@ CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 CodeQualityTest >> testMessagesMustBeCategorized [
 
 	self
-		assertThereWasNoIssuesRunning: RBUnclassifiedMethodsRule new
+		assertThereWasNoIssuesRunning: RBUnclassifiedMethodsRule new asRBRule
 		onDeclaredPackagesExcluding: #()
 ]
 
@@ -105,6 +105,6 @@ CodeQualityTest >> testMessagesMustBeCategorized [
 CodeQualityTest >> testSubclassReponsibilityImplementedInLeafClases [
 
 	self
-		assertThereWasNoIssuesRunning: RBSubclassResponsibilityNotDefinedRule new
+		assertThereWasNoIssuesRunning: RBSubclassResponsibilityNotDefinedRule new asRBRule
 		onDeclaredPackagesExcluding: #()
 ]
