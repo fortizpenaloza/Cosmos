@@ -113,12 +113,6 @@ DataManagementSystem >> resolveDependecies [
 	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
-{ #category : #'starting - stopping' }
-DataManagementSystem >> shutDown [ 
-	
-	"do nothing"
-]
-
 { #category : #querying }
 DataManagementSystem >> streamIdentifiedBy: anIdentifier [
 
