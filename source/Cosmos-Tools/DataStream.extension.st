@@ -8,13 +8,14 @@ DataStream >> gtInspectorDataPointsIn: composite [
 		title: 'Graph';
 		initializeView: [ RTGrapher new ];
 		painting: [ :grapher | 
-			| oldest dataSet deviation average |
+			| oldest dataSet average |
 
 			oldest := dataPoints minFor: #timestamp.
 
 			dataSet := RTData new.
 			dataSet interaction popupText: [ :dataPoint | dataPoint value ].
 			dataSet points: self dataPoints.
+			dataSet connectColor: Color red.
 
 			dataSet
 				x: [ :dataPoint | 
@@ -24,24 +25,15 @@ DataStream >> gtInspectorDataPointsIn: composite [
 					(distance convertTo: TimeUnits second) amount ].
 			dataSet y: #value.
 
-			deviation := RTDevVarDecorator new.
-			deviation
-				moveBehind;
-				deviation: 0.5;
-				color: (Color blue alpha: 0.3);
-				points: (self dataPoints collect: #value).
-
 			average := RTAverageDecorator new.
-			average
-				withLabel: [ :aValue | 'average = ' , aValue asFloat asString ].
+			average withLabel: [ :aValue | 'average = ' , aValue asFloat asString ].
 
 			grapher add: dataSet.
-			grapher addDecorator: deviation.
 			grapher addDecorator: average.
-
+			grapher extent: 400 @ 200.
 			grapher axisY noDecimal.
 			grapher axisX
-				numberOfTicks: 2;
+				numberOfTicks: 4;
 				labelConversion: [ :distance | 
 					| label |
 

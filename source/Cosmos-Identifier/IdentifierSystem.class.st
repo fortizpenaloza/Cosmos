@@ -35,7 +35,6 @@ IdentifierSystem >> identifierOf: anObject [
 { #category : #initialization }
 IdentifierSystem >> initializeUsing: anIdentifierProvider [
 
-	super initialize.
 	identifierProvider := anIdentifierProvider.
 
 	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface
