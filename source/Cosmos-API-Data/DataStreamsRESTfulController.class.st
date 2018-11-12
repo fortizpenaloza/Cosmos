@@ -49,6 +49,19 @@ DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aCont
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType [
+
+	^ ZnETag
+		with:
+			(SHA1 new
+				hashMessage:
+					('<1s>-<2s>-<3s>'
+						expandMacrosWith: (self identifierOf: aDataStream) asString
+						with: (self lastModificationOf: aDataStream) asString
+						with: aMediaType asString)) hex
+]
+
 { #category : #API }
 DataStreamsRESTfulController >> getPointsBasedOn: anHttpRequest within: aContext [
 
@@ -96,7 +109,7 @@ DataStreamsRESTfulController >> getStreamsBasedOn: anHttpRequest within: aContex
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
-{ #category : #'private - API' }
+{ #category : #'private - accessing' }
 DataStreamsRESTfulController >> identifierOf: aDataStream [
 
 	^ self identifierSystem identifierOf: aDataStream
@@ -122,7 +135,7 @@ DataStreamsRESTfulController >> lastModificationOf: aDataStream [
 		of: aDataStream
 ]
 
-{ #category : #'private - API' }
+{ #category : #'private - accessing' }
 DataStreamsRESTfulController >> locationOf: aDataStream [
 
 	| baseUrl |
