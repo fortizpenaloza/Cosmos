@@ -1,6 +1,6 @@
 Class {
-	#name : #TriggersRESTfulWebService,
-	#superclass : #RESTfulWebService,
+	#name : #TriggersRESTfulController,
+	#superclass : #ResourceRESTfulController,
 	#instVars : [
 		'cosmos'
 	],
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-TriggersRESTfulWebService class >> workingWith: aCosmosSystem [
+TriggersRESTfulController class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #API }
-TriggersRESTfulWebService >> createTriggerBasedOn: anHttpRequest within: aContext [
+TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		withCreatedResourceDo: [ :trigger | 
@@ -28,7 +28,7 @@ TriggersRESTfulWebService >> createTriggerBasedOn: anHttpRequest within: aContex
 ]
 
 { #category : #API }
-TriggersRESTfulWebService >> deregisterNamed: aName [
+TriggersRESTfulController >> deregisterNamed: aName [
 
 	| name |
 
@@ -40,7 +40,7 @@ TriggersRESTfulWebService >> deregisterNamed: aName [
 ]
 
 { #category : #API }
-TriggersRESTfulWebService >> getTriggersBasedOn: anHttpRequest within: aContext [
+TriggersRESTfulController >> getTriggersBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self triggerManagementSystem triggers ]
@@ -50,19 +50,19 @@ TriggersRESTfulWebService >> getTriggersBasedOn: anHttpRequest within: aContext 
 ]
 
 { #category : #'private - systems' }
-TriggersRESTfulWebService >> identifierSystem [
+TriggersRESTfulController >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-TriggersRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
+TriggersRESTfulController >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulWebService >> locationOf: anActionTrigger [
+TriggersRESTfulController >> locationOf: anActionTrigger [
 
 	| baseUrl |
 
@@ -75,14 +75,26 @@ TriggersRESTfulWebService >> locationOf: anActionTrigger [
 		with: (self identifierSystem identifierOf: anActionTrigger)
 ]
 
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> provideHypermediaPolicy [
+
+	^ NonHypermediaDrivenRESTfulControllerPolicy new
+]
+
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> providePaginationPolicy [
+
+	^ RESTFullControllerDoNotPaginateCollectionsPolicy for: self
+]
+
 { #category : #specification }
-TriggersRESTfulWebService >> specification [
+TriggersRESTfulController >> specification [
 	
-	^ TriggersRESTfulWebServiceSpecification new
+	^ TriggersRESTfulControllerSpecification new
 ]
 
 { #category : #systems }
-TriggersRESTfulWebService >> triggerManagementSystem [
+TriggersRESTfulController >> triggerManagementSystem [
 	
 	^ cosmos systemImplementing: #TriggerManagementSystemInterface
 ]

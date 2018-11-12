@@ -1,6 +1,6 @@
 Class {
-	#name : #ActionsWebService,
-	#superclass : #RESTfulWebService,
+	#name : #ActionsRESTfulController,
+	#superclass : #ResourceRESTfulController,
 	#instVars : [
 		'cosmos'
 	],
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionsWebService class >> workingWith: aCosmosSystem [
+ActionsRESTfulController class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #'private - systems' }
-ActionsWebService >> actionManagementSystem [
+ActionsRESTfulController >> actionManagementSystem [
 
 	^ cosmos systemImplementing: #ActionManagementSystemInterface
 ]
 
 { #category : #API }
-ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
+ActionsRESTfulController >> createActionBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		withCreatedResourceDo: [ :action | self actionManagementSystem register: action ]
@@ -30,7 +30,7 @@ ActionsWebService >> createActionBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-ActionsWebService >> deleteActionBasedOn: anHttpRequest within: aContext [
+ActionsRESTfulController >> deleteActionBasedOn: anHttpRequest within: aContext [
 
 	| name |
 
@@ -45,7 +45,7 @@ ActionsWebService >> deleteActionBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #API }
-ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
+ActionsRESTfulController >> getActionsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self actionManagementSystem actions ]
@@ -55,19 +55,19 @@ ActionsWebService >> getActionsBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - systems' }
-ActionsWebService >> identifierSystem [
+ActionsRESTfulController >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-ActionsWebService >> initializeWorkingWith: aCosmosSystem [
+ActionsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - API' }
-ActionsWebService >> locationOf: anAction [
+ActionsRESTfulController >> locationOf: anAction [
 
 	| baseUrl |
 
@@ -80,8 +80,20 @@ ActionsWebService >> locationOf: anAction [
 		with: (self identifierSystem identifierOf: anAction)
 ]
 
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> provideHypermediaPolicy [
+
+	^ NonHypermediaDrivenRESTfulControllerPolicy new
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> providePaginationPolicy [
+
+	^ RESTFullControllerDoNotPaginateCollectionsPolicy for: self
+]
+
 { #category : #specification }
-ActionsWebService >> specification [
+ActionsRESTfulController >> specification [
 	
-	^ ActionsWebServiceSpecification new
+	^ ActionsRESTfulControllerSpecification new
 ]

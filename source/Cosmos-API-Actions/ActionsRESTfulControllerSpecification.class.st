@@ -1,11 +1,11 @@
 Class {
-	#name : #ActionsWebServiceSpecification,
-	#superclass : #RESTFulWebServiceSpecification,
+	#name : #ActionsRESTfulControllerSpecification,
+	#superclass : #ResourceRESTFulControllerSpecification,
 	#category : #'Cosmos-API-Actions'
 }
 
 { #category : #'encoders and decoders' }
-ActionsWebServiceSpecification >> actionJsonDecoderVersion1dot0dot0 [
+ActionsRESTfulControllerSpecification >> actionJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -22,7 +22,7 @@ ActionsWebServiceSpecification >> actionJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
+ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 
 	^ [ :action | 
 	String
@@ -62,31 +62,31 @@ ActionsWebServiceSpecification >> actionJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'specification - encoders and decoders' }
-ActionsWebServiceSpecification >> addActionJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
+ActionsRESTfulControllerSpecification >> addActionJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
 		to: #actions
 		using: self actionJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-ActionsWebServiceSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
+ActionsRESTfulControllerSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #actions
-		to: self applicationJsonVersion1dot0dot0 
+		to: self applicationJsonVersion1dot0dot0MediaType 
 		using: self actionJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'media types' }
-ActionsWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+ActionsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'specification - routes' }
-ActionsWebServiceSpecification >> createActionRoute [
+ActionsRESTfulControllerSpecification >> createActionRoute [
 
 	^ (RouteSpecification
 		handling: #POST
@@ -95,7 +95,7 @@ ActionsWebServiceSpecification >> createActionRoute [
 ]
 
 { #category : #'specification - routes' }
-ActionsWebServiceSpecification >> deleteActionRoute [
+ActionsRESTfulControllerSpecification >> deleteActionRoute [
 
 	^ (RouteSpecification
 		handling: #DELETE
@@ -104,7 +104,7 @@ ActionsWebServiceSpecification >> deleteActionRoute [
 ]
 
 { #category : #'specification - routes' }
-ActionsWebServiceSpecification >> getActionsRoute [
+ActionsRESTfulControllerSpecification >> getActionsRoute [
 
 	^ RouteSpecification handling: #GET at: '/actions' sending: #getActionsBasedOn:within:
 ]

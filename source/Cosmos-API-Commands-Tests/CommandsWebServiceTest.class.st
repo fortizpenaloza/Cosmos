@@ -3,13 +3,13 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'identifierSequence',
-		'webService'
+		'controller'
 	],
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
 { #category : #'accessing - media types' }
-CommandsWebServiceTest >> applicationJsonVersion1dot0dot0 [
+CommandsWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
@@ -64,7 +64,7 @@ CommandsWebServiceTest >> requestToDequeueCommandAccepting: aMediaType [
 CommandsWebServiceTest >> requestToGetCommands [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/commands')
-		setAccept: self applicationJsonVersion1dot0dot0
+		setAccept: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #running }
@@ -75,7 +75,7 @@ CommandsWebServiceTest >> setUp [
 
 	super setUp.
 
-	webService := CommandsRESTfulWebService workingWith: rootSystem
+	controller := CommandsRESTfulController workingWith: rootSystem
 ]
 
 { #category : #running }
@@ -94,7 +94,7 @@ CommandsWebServiceTest >> testCreateCommand [
 
 	self assert: self commandManagementSystem commands isEmpty.
 
-	response := webService
+	response := controller
 		createCommandBasedOn: (self requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
 		within: self httpRequestContext.
 
@@ -102,7 +102,7 @@ CommandsWebServiceTest >> testCreateCommand [
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location equals: '/commands/' , identifierSequence first asString;
-		assert: response contentType equals: ZnMimeType textPlain.
+		assert: response contentType equals: self textPlain.
 
 	self
 		withTheOnlyOneIn: self commandManagementSystem commands
@@ -121,7 +121,7 @@ CommandsWebServiceTest >> testDeleteCommand [
 
 	self assert: self commandManagementSystem commands size equals: 3.
 
-	response := webService
+	response := controller
 		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self commandWithMediumPriorityIdentifier)
 		within: self httpRequestContext.
 
@@ -139,17 +139,17 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsJson [
 
 	self installLedCommandsAddOn.
 
-	response := webService
+	response := controller
 		dequeueCommandBasedOn:
 			(self
-				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0)
+				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType
-			equals: self applicationJsonVersion1dot0dot0.
+			equals: self applicationJsonVersion1dot0dot0MediaType.
 
 	self
 		assert: response contents
@@ -163,7 +163,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsPlainText [
 
 	self installLedCommandsAddOn.
 
-	response := webService
+	response := controller
 		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
 		within: self httpRequestContext.
 
@@ -182,29 +182,17 @@ CommandsWebServiceTest >> testGettingCommands [
 
 	self installLedCommandsAddOn.
 
-	response := webService
+	response := controller
 		getCommandsBasedOn: self requestToGetCommands
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0;
+		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response contents
 			equals:
 			'[{"command":"TURN_ON_LED","priority":100},{"command":"TURN_OFF_LED","priority":50},{"command":"TURN_ON_LED","priority":1}]'
-]
-
-{ #category : #tests }
-CommandsWebServiceTest >> testRoutesConfiguration [
-
-	| teapot |
-
-	teapot := Teapot on.
-
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
-
-	self assert: teapot routes size equals: 4
 ]
 
 { #category : #'accessing - media types' }

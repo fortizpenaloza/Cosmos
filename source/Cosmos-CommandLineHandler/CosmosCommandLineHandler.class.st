@@ -100,11 +100,11 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
 
 	configurator
-		addRoutesOf: (DataStreamsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (DataPointsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (CommandsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (ActionsWebService workingWith: cosmos);
-		addRoutesOf: (TriggersRESTfulWebService workingWith: cosmos).
+		addRoutesOf: (DataStreamsRESTfulController workingWith: cosmos);
+		addRoutesOf: (DataPointsRESTfulController workingWith: cosmos);
+		addRoutesOf: (CommandsRESTfulController workingWith: cosmos);
+		addRoutesOf: (ActionsRESTfulController workingWith: cosmos);
+		addRoutesOf: (TriggersRESTfulController workingWith: cosmos).
 		
 	self configureAllowOriginAfterFilterOn: teapot.
 	self configureExceptionHandlerOn: teapot.
