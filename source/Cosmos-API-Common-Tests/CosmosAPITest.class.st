@@ -13,7 +13,7 @@ CosmosAPITest >> baseUrl [
 	^ 'http://localhost' asUrl port: self port
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - accessing' }
 CosmosAPITest >> newClient [
 
 	^ ZnClient new

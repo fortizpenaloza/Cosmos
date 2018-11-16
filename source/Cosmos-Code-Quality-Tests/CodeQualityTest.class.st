@@ -74,7 +74,7 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
 		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new asRBRule
-		onDeclaredPackagesExcluding: RESTFulWebServiceSpecification subclasses
+		onDeclaredPackagesExcluding: ResourceRESTFulControllerSpecification subclasses
 ]
 
 { #category : #tests }
@@ -82,7 +82,8 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 
 	self
 		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new asRBRule
-		onDeclaredPackagesExcluding: { TriggersRESTfulWebServiceTest } 
+		onDeclaredPackagesExcluding:
+			{TriggersRESTfulWebServiceTest}
 ]
 
 { #category : #tests }
