@@ -1,6 +1,6 @@
 Class {
 	#name : #CommandsRESTfulControllerSpecification,
-	#superclass : #ResourceRESTFulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Commands'
 }
 

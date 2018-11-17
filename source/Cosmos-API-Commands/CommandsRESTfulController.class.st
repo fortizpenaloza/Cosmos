@@ -133,7 +133,7 @@ CommandsRESTfulController >> provideHypermediaPolicy [
 { #category : #'private - accessing' }
 CommandsRESTfulController >> providePaginationPolicy [
 
-	^ RESTFullControllerDoNotPaginateCollectionsPolicy for: self
+	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
 { #category : #specification }

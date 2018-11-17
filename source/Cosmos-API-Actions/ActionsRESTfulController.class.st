@@ -89,7 +89,7 @@ ActionsRESTfulController >> provideHypermediaPolicy [
 { #category : #'private - accessing' }
 ActionsRESTfulController >> providePaginationPolicy [
 
-	^ RESTFullControllerDoNotPaginateCollectionsPolicy for: self
+	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
 { #category : #specification }

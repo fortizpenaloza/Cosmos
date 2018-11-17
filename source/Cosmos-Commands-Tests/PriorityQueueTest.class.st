@@ -31,7 +31,7 @@ PriorityQueueTest >> testDequeuingFailsWhenQueueIsEmpty [
 	self
 		should: [ priorityQueue dequeue ]
 		raise: CollectionIsEmpty 
-		withDescription: 'a SortedCollection() is empty'
+		withMessageText: 'a SortedCollection() is empty'
 ]
 
 { #category : #tests }

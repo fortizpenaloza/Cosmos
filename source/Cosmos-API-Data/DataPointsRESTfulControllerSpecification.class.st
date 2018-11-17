@@ -1,6 +1,6 @@
 Class {
 	#name : #DataPointsRESTfulControllerSpecification,
-	#superclass : #ResourceRESTFulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Data'
 }
 

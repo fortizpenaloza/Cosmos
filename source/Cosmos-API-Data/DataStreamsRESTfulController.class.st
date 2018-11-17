@@ -164,7 +164,7 @@ DataStreamsRESTfulController >> provideHypermediaPolicy [
 { #category : #'private - accessing' }
 DataStreamsRESTfulController >> providePaginationPolicy [
 
-	^ RESTFullControllerDoNotPaginateCollectionsPolicy for: self
+	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
 { #category : #specification }

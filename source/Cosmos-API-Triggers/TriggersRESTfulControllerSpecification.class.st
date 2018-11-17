@@ -1,6 +1,6 @@
 Class {
 	#name : #TriggersRESTfulControllerSpecification,
-	#superclass : #ResourceRESTFulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Triggers'
 }
 

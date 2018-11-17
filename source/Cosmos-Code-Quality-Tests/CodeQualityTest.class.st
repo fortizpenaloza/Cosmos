@@ -74,7 +74,7 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
 		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new asRBRule
-		onDeclaredPackagesExcluding: ResourceRESTFulControllerSpecification subclasses
+		onDeclaredPackagesExcluding: ResourceRESTfulControllerSpecification subclasses
 ]
 
 { #category : #tests }
