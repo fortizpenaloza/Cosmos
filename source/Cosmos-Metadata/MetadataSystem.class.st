@@ -32,6 +32,15 @@ MetadataSystem >> assertIsNotAlreadyRegistered: metadata [
 ]
 
 { #category : #querying }
+MetadataSystem >> dataDescribing: anAspect of: anObject [
+
+	^ self
+		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata describedObject = anObject ] ]
+		ifFound: [ :metadata | metadata data ]
+		ifNone: [ ObjectNotFound signal: 'lala' ]
+]
+
+{ #category : #querying }
 MetadataSystem >> describedObjectBy: data as: anAspect ifNone: ifNoneBlock [
 
 	^ self

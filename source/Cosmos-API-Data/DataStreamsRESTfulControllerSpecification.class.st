@@ -1,44 +1,44 @@
 Class {
-	#name : #DataStreamsRESTfulWebServiceSpecification,
-	#superclass : #RESTFulWebServiceSpecification,
+	#name : #DataStreamsRESTfulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Data'
 }
 
 { #category : #'specification - encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBuilder [
+DataStreamsRESTfulControllerSpecification >> addDataPointEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #data_points
-		to: self applicationJsonVersion1dot0dot0 
+		to: self applicationJsonVersion1dot0dot0MediaType 
 		using: self dataPointJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> addDataStreamDecoderVersion1dot0dot0MappingIn: aBuilder [
+DataStreamsRESTfulControllerSpecification >> addDataStreamDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
 		to: #data_streams
 		using: self dataStreamJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
+DataStreamsRESTfulControllerSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #data_streams
-		to: self applicationJsonVersion1dot0dot0 
+		to: self applicationJsonVersion1dot0dot0MediaType 
 		using: self dataStreamJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'media types' }
-DataStreamsRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+DataStreamsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'specification - routes' }
-DataStreamsRESTfulWebServiceSpecification >> createDataStreamRoute [
+DataStreamsRESTfulControllerSpecification >> createDataStreamRoute [
 
 	^ (RouteSpecification
 		handling: #POST
@@ -47,7 +47,7 @@ DataStreamsRESTfulWebServiceSpecification >> createDataStreamRoute [
 ]
 
 { #category : #'encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
+DataStreamsRESTfulControllerSpecification >> dataPointJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataPoint | 
 	String
@@ -67,7 +67,7 @@ DataStreamsRESTfulWebServiceSpecification >> dataPointJsonEncoderVersion1dot0dot
 ]
 
 { #category : #'encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
+DataStreamsRESTfulControllerSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -79,7 +79,7 @@ DataStreamsRESTfulWebServiceSpecification >> dataStreamJsonDecoderVersion1dot0do
 ]
 
 { #category : #'encoders and decoders' }
-DataStreamsRESTfulWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
+DataStreamsRESTfulControllerSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 
 	^ [ :dataStreams :context | | metadataSystem |
 	
@@ -113,7 +113,7 @@ DataStreamsRESTfulWebServiceSpecification >> dataStreamJsonEncoderVersion1dot0do
 ]
 
 { #category : #'specification - routes' }
-DataStreamsRESTfulWebServiceSpecification >> deleteDataStreamRoute [
+DataStreamsRESTfulControllerSpecification >> deleteDataStreamRoute [
 
 	^ (RouteSpecification
 		handling: #DELETE
@@ -122,7 +122,7 @@ DataStreamsRESTfulWebServiceSpecification >> deleteDataStreamRoute [
 ]
 
 { #category : #'specification - routes' }
-DataStreamsRESTfulWebServiceSpecification >> getDataPointsRoute [
+DataStreamsRESTfulControllerSpecification >> getDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -131,7 +131,7 @@ DataStreamsRESTfulWebServiceSpecification >> getDataPointsRoute [
 ]
 
 { #category : #'specification - routes' }
-DataStreamsRESTfulWebServiceSpecification >> getDataStreamRoute [
+DataStreamsRESTfulControllerSpecification >> getDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -140,7 +140,7 @@ DataStreamsRESTfulWebServiceSpecification >> getDataStreamRoute [
 ]
 
 { #category : #'specification - routes' }
-DataStreamsRESTfulWebServiceSpecification >> getDataStreamsRoute [
+DataStreamsRESTfulControllerSpecification >> getDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET

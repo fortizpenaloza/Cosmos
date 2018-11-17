@@ -1,48 +1,48 @@
 Class {
-	#name : #ActionsWebServiceTest,
+	#name : #ActionsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'interface'
+		'controller'
 	],
 	#category : #'Cosmos-API-Actions-Tests'
 }
 
 { #category : #accessing }
-ActionsWebServiceTest >> applicationJsonVersion1dot0dot0 [
+ActionsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #accessing }
-ActionsWebServiceTest >> dateTimeFormattedAsISO8601 [
+ActionsRESTfulControllerTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
 { #category : #accessing }
-ActionsWebServiceTest >> getActionsHttpRequest [
+ActionsRESTfulControllerTest >> getActionsHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/actions')
-		setAccept: self applicationJsonVersion1dot0dot0
+		setAccept: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #accessing }
-ActionsWebServiceTest >> httpRequestContext [
+ActionsRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
 { #category : #running }
-ActionsWebServiceTest >> setUp [
+ActionsRESTfulControllerTest >> setUp [
 
 	super setUp.
 
-	interface := ActionsWebService workingWith: rootSystem
+	controller := ActionsRESTfulController workingWith: rootSystem
 ]
 
 { #category : #running }
-ActionsWebServiceTest >> setUpRequirements [
+ActionsRESTfulControllerTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -51,13 +51,13 @@ ActionsWebServiceTest >> setUpRequirements [
 ]
 
 { #category : #tests }
-ActionsWebServiceTest >> testCreatingAction [
+ActionsRESTfulControllerTest >> testCreateAction [
 
 	| response |
 
 	self assert: self actionManagementSystem actions isEmpty.
 
-	response := interface
+	response := controller
 		createActionBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/actions')
 				entity:
@@ -83,7 +83,7 @@ ActionsWebServiceTest >> testCreatingAction [
     ]
   }
 }'
-						type: self applicationJsonVersion1dot0dot0))
+						type: self applicationJsonVersion1dot0dot0MediaType))
 		within: self httpRequestContext.
 
 	self
@@ -97,7 +97,7 @@ ActionsWebServiceTest >> testCreatingAction [
 ]
 
 { #category : #tests }
-ActionsWebServiceTest >> testDeregistration [
+ActionsRESTfulControllerTest >> testDeleteAction [
 
 	| action |
 
@@ -111,7 +111,7 @@ ActionsWebServiceTest >> testDeregistration [
 
 	self deny: self actionManagementSystem actions isEmpty.
 
-	interface
+	controller
 		deleteActionBasedOn:
 			(TeaRequest
 				fromZnRequest: (ZnRequest delete: 'List_DNS_Records')
@@ -122,7 +122,7 @@ ActionsWebServiceTest >> testDeregistration [
 ]
 
 { #category : #tests }
-ActionsWebServiceTest >> testQueringActions [
+ActionsRESTfulControllerTest >> testGetActions [
 
 	| response action |
 
@@ -172,7 +172,7 @@ ActionsWebServiceTest >> testQueringActions [
 										asDictionary);
 						yourself)).
 
-	response := interface
+	response := controller
 		getActionsBasedOn: self getActionsHttpRequest
 		within: self httpRequestContext.
 
@@ -182,16 +182,4 @@ ActionsWebServiceTest >> testQueringActions [
 			equals:
 			('[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}}]'
 				expandMacrosWith: self dateTimeFormattedAsISO8601)
-]
-
-{ #category : #tests }
-ActionsWebServiceTest >> testRoutesConfiguration [
-
-	| teapot |
-
-	teapot := Teapot on.
-
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: interface.
-
-	self assert: teapot routes size equals: 5
 ]

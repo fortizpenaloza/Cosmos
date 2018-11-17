@@ -44,18 +44,16 @@ CosmosCommandLineHandler class >> description [
 	^ 'Cosmos command line handler'
 ]
 
-{ #category : #'private - activation' }
-CosmosCommandLineHandler >> addAllowOriginHeaderTo: aResponse ifOriginAt: aRequest matchesAny: allowedOrigins [
-
-	allowedOrigins
-		detect: [ :origin | origin = (aRequest headers at: 'Origin') ]
-		ifFound: [ :allowedOrigin | aResponse headers at: 'Access-Control-Allow-Origin' put: allowedOrigin ]
-]
-
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> allowedOrigins [
 
 	^ self configuration at: 'allowed-origins'
+]
+
+{ #category : #'private - accessing' }
+CosmosCommandLineHandler >> baseUrl [
+
+	^ ('http://' , self hostname) asUrl port: self port
 ]
 
 { #category : #activation }
@@ -94,22 +92,23 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 { #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
-	| teapot configurator |
+	| api |
 
-	teapot := self teapot.
-	configurator := ReflectiveRoutesConfigurator appliedTo: teapot.
+	api := HTTPBasedRESTfulAPI
+		configuredBy:
+			{(#port -> self port).
+			(#debugMode -> self isDebugModeEnabled).
+			(#serverUrl -> self baseUrl)}
+		installing:
+			{(DataStreamsRESTfulController workingWith: cosmos).
+			(DataPointsRESTfulController workingWith: cosmos).
+			(CommandsRESTfulController workingWith: cosmos).
+			(ActionsRESTfulController workingWith: cosmos).
+			(TriggersRESTfulController workingWith: cosmos)}.
 
-	configurator
-		addRoutesOf: (DataStreamsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (DataPointsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (CommandsRESTfulWebService workingWith: cosmos);
-		addRoutesOf: (ActionsWebService workingWith: cosmos);
-		addRoutesOf: (TriggersRESTfulWebService workingWith: cosmos).
-		
-	self configureAllowOriginAfterFilterOn: teapot.
-	self configureExceptionHandlerOn: teapot.
-
-	teapot start
+	api install.
+	api beCORSAwareAllowing: self allowedOrigins.
+	api start
 ]
 
 { #category : #'private - activation' }
@@ -138,6 +137,10 @@ CosmosCommandLineHandler >> configurationDefinition [
 	^ OrderedCollection new
 		add:
 			(OptionalArgument
+				named: 'hostname'
+				defaultingTo: 'localhost');
+		add:
+			(OptionalArgument
 				named: 'port'
 				defaultingTo: 9000
 				convertingWith: #asNumber);
@@ -148,46 +151,10 @@ CosmosCommandLineHandler >> configurationDefinition [
 		asArray
 ]
 
-{ #category : #'private - activation' }
-CosmosCommandLineHandler >> configureAllowOriginAfterFilterOn: aServer [
+{ #category : #'private - accessing' }
+CosmosCommandLineHandler >> hostname [
 
-	aServer
-		after:
-			'/*'
-				-> [ :request :response | 
-					self
-						addAllowOriginHeaderTo: response
-						ifOriginAt: request
-						matchesAny: self allowedOrigins.
-
-					response ];
-		when: [ :request | request headers includesKey: 'Origin' ]
-]
-
-{ #category : #'private - activation' }
-CosmosCommandLineHandler >> configureExceptionHandlerOn: aServer [
-
-	aServer
-		exception:
-			HTTPClientError
-				-> [ :signal :request | 
-					| errorMessage |
-
-					errorMessage := Dictionary new
-						at: #code put: signal tag;
-						at: #message put: signal messageText;
-						yourself.
-
-					(ZnResponse statusCode: signal tag)
-						headers:
-							(ZnHeaders defaultResponseHeaders
-								at: 'Access-Control-Allow-Origin' put: '*';
-								yourself);
-						entity: (ZnEntity json: (STONJSON toStringPretty: errorMessage));
-						yourself ].
-
-	aServer
-		exception: self exceptionsToHandle -> [ :signal :request | self dumpStackAndReport: signal ]
+	^ self configuration at: 'hostname'
 ]
 
 { #category : #'private - accessing' }
@@ -203,18 +170,9 @@ CosmosCommandLineHandler >> periodicalScheduler [
 ]
 
 { #category : #'private - accessing' }
-CosmosCommandLineHandler >> portNumber [
+CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'
-]
-
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> teapot [
-
-	^ Teapot
-		configure:
-			{(#port -> self portNumber).
-			(#debugMode -> self isDebugModeEnabled)}
 ]
 
 { #category : #'private - accessing' }

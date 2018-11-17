@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0 [
+TriggersRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
@@ -44,7 +44,7 @@ TriggersRESTfulWebServiceTest >> fiveMinutes [
 TriggersRESTfulWebServiceTest >> getTriggersHttpRequest [
 
 	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
-		setAccept: self applicationJsonVersion1dot0dot0
+		setAccept: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #accessing }
@@ -128,7 +128,7 @@ TriggersRESTfulWebServiceTest >> setUp [
 
 	super setUp.
 
-	webService := TriggersRESTfulWebService workingWith: rootSystem.
+	webService := TriggersRESTfulController workingWith: rootSystem.
 
 	(SensorsSampleAddOn on: rootSystem) install.
 
@@ -173,7 +173,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDa
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType asZnMimeType equals: self applicationJsonVersion1dot0dot0.
+		assert: response contentType asZnMimeType equals: self applicationJsonVersion1dot0dot0MediaType.
 	self
 		withJsonFromContentsIn: response
 		do: [ :json | 
@@ -227,7 +227,7 @@ TriggersRESTfulWebServiceTest >> testGettingTriggersFailsWhenRequestingInvalidRe
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText
-				equals: 'Encoder not found for given media type' ]
+				equals: 'Cannot generate a response entity with acceptable characteristics.' ]
 ]
 
 { #category : #tests }
@@ -325,7 +325,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
 	},
 	"conditions" : [ ]
 }'
-						type: self applicationJsonVersion1dot0dot0))
+						type: self applicationJsonVersion1dot0dot0MediaType))
 		within: self httpRequestContext.
 
 	self
@@ -366,7 +366,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
 	},
 	"conditions" : [ ]
 }'
-						type: self applicationJsonVersion1dot0dot0))
+						type: self applicationJsonVersion1dot0dot0MediaType))
 		within: self httpRequestContext.
 
 	self
@@ -380,15 +380,4 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
 				assert: trigger name
 					equals: 'Set triggered to true periodically every 5 minutes' ]
 		ifNone: [ self fail ]
-]
-
-{ #category : #tests }
-TriggersRESTfulWebServiceTest >> testRoutesConfiguration [
-
-	| teapot |
-
-	teapot := Teapot on.
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
-
-	self assert: teapot routes size equals: 3
 ]

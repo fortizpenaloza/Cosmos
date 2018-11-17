@@ -1,6 +1,6 @@
 Class {
-	#name : #DataStreamsRESTfulWebService,
-	#superclass : #RESTfulWebService,
+	#name : #DataStreamsRESTfulController,
+	#superclass : #ResourceRESTfulController,
 	#instVars : [
 		'cosmos'
 	],
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataStreamsRESTfulWebService class >> workingWith: aCosmosSystem [
+DataStreamsRESTfulController class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #API }
-DataStreamsRESTfulWebService >> createStreamBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		withCreatedResourceDo: [ :dataStream | self dataManagementSystem register: dataStream ]
@@ -26,19 +26,19 @@ DataStreamsRESTfulWebService >> createStreamBasedOn: anHttpRequest within: aCont
 ]
 
 { #category : #'private - systems' }
-DataStreamsRESTfulWebService >> dataManagementSystem [
+DataStreamsRESTfulController >> dataManagementSystem [
 
 	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
-DataStreamsRESTfulWebService >> dataStreamsKey [
+DataStreamsRESTfulController >> dataStreamsKey [
 
 	^ #data_streams
 ]
 
 { #category : #API }
-DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 		withStreamRequestedIn: anHttpRequest
@@ -49,8 +49,21 @@ DataStreamsRESTfulWebService >> deleteStreamBasedOn: anHttpRequest within: aCont
 		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType [
+
+	^ ZnETag
+		with:
+			(SHA1 new
+				hashMessage:
+					('<1s>-<2s>-<3s>'
+						expandMacrosWith: (self identifierOf: aDataStream) asString
+						with: (self lastModificationOf: aDataStream) asString
+						with: aMediaType asString)) hex
+]
+
 { #category : #API }
-DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulController >> getPointsBasedOn: anHttpRequest within: aContext [
 
 	| mediaType resourceCollection encodedResourceCollection |
 
@@ -69,7 +82,7 @@ DataStreamsRESTfulWebService >> getPointsBasedOn: anHttpRequest within: aContext
 ]
 
 { #category : #API }
-DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulController >> getStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 			get: [ 
@@ -83,7 +96,7 @@ DataStreamsRESTfulWebService >> getStreamBasedOn: anHttpRequest within: aContext
 ]
 
 { #category : #API }
-DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContext [
+DataStreamsRESTfulController >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
 			get: [ 
@@ -96,20 +109,34 @@ DataStreamsRESTfulWebService >> getStreamsBasedOn: anHttpRequest within: aContex
 		do: [ :signal | signal resume: 'N/A' ]
 ]
 
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> identifierOf: aDataStream [
+
+	^ self identifierSystem identifierOf: aDataStream
+]
+
 { #category : #'private - systems' }
-DataStreamsRESTfulWebService >> identifierSystem [
+DataStreamsRESTfulController >> identifierSystem [
 
 	^ cosmos systemImplementing: #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
-DataStreamsRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
+DataStreamsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
-{ #category : #'private - API' }
-DataStreamsRESTfulWebService >> locationOf: aDataStream [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> lastModificationOf: aDataStream [ 
+
+	^ self metadataSystem 
+		dataDescribing: #registration_timestamp
+		of: aDataStream
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> locationOf: aDataStream [
 
 	| baseUrl |
 
@@ -119,30 +146,42 @@ DataStreamsRESTfulWebService >> locationOf: aDataStream [
 
 	^ '<1p>/<2p>'
 		expandMacrosWith: baseUrl / 'data-streams' asZnUrl
-		with: (self identifierSystem identifierOf: aDataStream)
+		with: (self identifierOf: aDataStream)
 ]
 
 { #category : #'private - systems' }
-DataStreamsRESTfulWebService >> metadataSystem [
+DataStreamsRESTfulController >> metadataSystem [
 
 	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
-{ #category : #specification }
-DataStreamsRESTfulWebService >> specification [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> provideHypermediaPolicy [
 
-	^ DataStreamsRESTfulWebServiceSpecification new
+	^ NonHypermediaDrivenRESTfulControllerPolicy new
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> providePaginationPolicy [
+
+	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #specification }
+DataStreamsRESTfulController >> specification [
+
+	^ DataStreamsRESTfulControllerSpecification new
 ]
 
 { #category : #'private - API' }
-DataStreamsRESTfulWebService >> streamRequestedIn: anHttpRequest [
+DataStreamsRESTfulController >> streamRequestedIn: anHttpRequest [
 
 	^ self dataManagementSystem
 		streamIdentifiedBy: (anHttpRequest at: #identifier)
 ]
 
 { #category : #'private - API' }
-DataStreamsRESTfulWebService >> withStreamRequestedIn: anHttpRequest do: aBlock [
+DataStreamsRESTfulController >> withStreamRequestedIn: anHttpRequest do: aBlock [
 
 	aBlock value: (self streamRequestedIn: anHttpRequest)
 ]

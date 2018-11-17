@@ -1,26 +1,26 @@
 Class {
-	#name : #DataPointsRESTFulWebServiceSpecification,
-	#superclass : #RESTFulWebServiceSpecification,
+	#name : #DataPointsRESTfulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Data'
 }
 
 { #category : #'specification - encoders and decoders' }
-DataPointsRESTFulWebServiceSpecification >> addDataPointsDecoderVersion1dot0dot0MappingIn: aBuilder [
+DataPointsRESTfulControllerSpecification >> addDataPointsDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0 
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType 
 		to: #data_points
 		using: self dataPointsDecoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-DataPointsRESTFulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+DataPointsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'specification - routes' }
-DataPointsRESTFulWebServiceSpecification >> createDataPointsRoute [
+DataPointsRESTfulControllerSpecification >> createDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -29,7 +29,7 @@ DataPointsRESTFulWebServiceSpecification >> createDataPointsRoute [
 ]
 
 { #category : #'encoders and decoders' }
-DataPointsRESTFulWebServiceSpecification >> dataPointsDecoderVersion1dot0dot0 [
+DataPointsRESTfulControllerSpecification >> dataPointsDecoderVersion1dot0dot0 [
 
 	^ [ :aJson :context | 
 	| timestamp |
@@ -49,7 +49,7 @@ DataPointsRESTFulWebServiceSpecification >> dataPointsDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-DataPointsRESTFulWebServiceSpecification >> timestampFrom: aRequestContext [
+DataPointsRESTfulControllerSpecification >> timestampFrom: aRequestContext [
 
 	^ aRequestContext
 		objectUnder: #request_timestamp

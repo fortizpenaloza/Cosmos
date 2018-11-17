@@ -1,5 +1,5 @@
 Class {
-	#name : #DataPointsRESTfulWebServiceTest,
+	#name : #DataPointsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'identifierSequence',
@@ -9,25 +9,25 @@ Class {
 }
 
 { #category : #'private - media types' }
-DataPointsRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0 [
+DataPointsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulWebServiceTest >> httpRequestContext [
+DataPointsRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulWebServiceTest >> identifierProvider [
+DataPointsRESTfulControllerTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulWebServiceTest >> pressureStream [
+DataPointsRESTfulControllerTest >> pressureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Pressure'
@@ -36,14 +36,14 @@ DataPointsRESTfulWebServiceTest >> pressureStream [
 ]
 
 { #category : #'private - requests' }
-DataPointsRESTfulWebServiceTest >> requestToCreateDataPointsFrom: aJson [
+DataPointsRESTfulControllerTest >> requestToCreateDataPointsFrom: aJson [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
-		entity: (ZnEntity with: aJson type: self applicationJsonVersion1dot0dot0)
+		entity: (ZnEntity with: aJson type: self applicationJsonVersion1dot0dot0MediaType)
 ]
 
 { #category : #running }
-DataPointsRESTfulWebServiceTest >> setUp [
+DataPointsRESTfulControllerTest >> setUp [
 
 	identifierSequence := {UUID new.
 	UUID new.
@@ -52,13 +52,13 @@ DataPointsRESTfulWebServiceTest >> setUp [
 
 	super setUp.
 
-	webService := DataPointsRESTfulWebService workingWith: rootSystem.
+	webService := DataPointsRESTfulController workingWith: rootSystem.
 	 		
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
 { #category : #running }
-DataPointsRESTfulWebServiceTest >> setUpRequirements [
+DataPointsRESTfulControllerTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -67,7 +67,7 @@ DataPointsRESTfulWebServiceTest >> setUpRequirements [
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulWebServiceTest >> temperatureStream [
+DataPointsRESTfulControllerTest >> temperatureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Temperature'
@@ -76,7 +76,7 @@ DataPointsRESTfulWebServiceTest >> temperatureStream [
 ]
 
 { #category : #tests }
-DataPointsRESTfulWebServiceTest >> testCreateDataPoints [
+DataPointsRESTfulControllerTest >> testCreateDataPoints [
 
 	| response temperature pressure |
 
@@ -112,7 +112,7 @@ DataPointsRESTfulWebServiceTest >> testCreateDataPoints [
 ]
 
 { #category : #tests }
-DataPointsRESTfulWebServiceTest >> testCreatingDataPointsFailsFromMalformattedRequest [
+DataPointsRESTfulControllerTest >> testCreatingDataPointsFailsFromMalformattedRequest [
 
 	self
 		should: [ webService
@@ -136,16 +136,4 @@ DataPointsRESTfulWebServiceTest >> testCreatingDataPointsFailsFromMalformattedRe
 				assert: signal messageText
 					equals: 'Data stream not found in the system';
 				assert: signal code equals: 400 ]
-]
-
-{ #category : #tests }
-DataPointsRESTfulWebServiceTest >> testRoutesConfiguration [
-
-	| teapot |
-
-	teapot := Teapot on.
-
-	(ReflectiveRoutesConfigurator appliedTo: teapot) addRoutesOf: webService.
-
-	self assert: teapot routes size equals: 1
 ]

@@ -1,44 +1,44 @@
 Class {
-	#name : #CommandsRESTfulWebServiceSpecification,
-	#superclass : #RESTFulWebServiceSpecification,
+	#name : #CommandsRESTfulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Commands'
 }
 
 { #category : #'specification - encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
+CommandsRESTfulControllerSpecification >> addCommandJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
 		to: #commands
 		using: self commandJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
+CommandsRESTfulControllerSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #commands
-		to: self applicationJsonVersion1dot0dot0
+		to: self applicationJsonVersion1dot0dot0MediaType
 		using: self commandJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
+CommandsRESTfulControllerSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
 
 	aBuilder
 		addRuleToEncode: #commands
-		to: self textPlain
+		to: self textPlainMediaType 
 		using: self commandPlainTextEncoder
 ]
 
 { #category : #'media types' }
-CommandsRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+CommandsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ ZnMimeType fromString: 'application/json;version=1.0.0'
 ]
 
 { #category : #'encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
+CommandsRESTfulControllerSpecification >> commandJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON | 
 	(NeoJSONReader on: aJSON readStream)
@@ -51,7 +51,7 @@ CommandsRESTfulWebServiceSpecification >> commandJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
+CommandsRESTfulControllerSpecification >> commandJsonEncoderVersion1dot0dot0 [
 
 	^ [ :commandWithPriority | 
 	String
@@ -66,13 +66,13 @@ CommandsRESTfulWebServiceSpecification >> commandJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-CommandsRESTfulWebServiceSpecification >> commandPlainTextEncoder [
+CommandsRESTfulControllerSpecification >> commandPlainTextEncoder [
 
 	^ [ :commandWithPriority | commandWithPriority command ]
 ]
 
 { #category : #'specification - routes' }
-CommandsRESTfulWebServiceSpecification >> createCommandsRoute [
+CommandsRESTfulControllerSpecification >> createCommandsRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -81,7 +81,7 @@ CommandsRESTfulWebServiceSpecification >> createCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsRESTfulWebServiceSpecification >> deleteCommandsRoute [
+CommandsRESTfulControllerSpecification >> deleteCommandsRoute [
 
 	^ RouteSpecification
 		handling: #DELETE
@@ -90,7 +90,7 @@ CommandsRESTfulWebServiceSpecification >> deleteCommandsRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsRESTfulWebServiceSpecification >> dequeueCommandRoute [
+CommandsRESTfulControllerSpecification >> dequeueCommandRoute [
 
 	^ RouteSpecification
 		handling: #POST
@@ -100,7 +100,7 @@ CommandsRESTfulWebServiceSpecification >> dequeueCommandRoute [
 ]
 
 { #category : #'specification - routes' }
-CommandsRESTfulWebServiceSpecification >> getCommandsRoute [
+CommandsRESTfulControllerSpecification >> getCommandsRoute [
 
 	^ RouteSpecification 
 		handling: #GET 
@@ -109,7 +109,7 @@ CommandsRESTfulWebServiceSpecification >> getCommandsRoute [
 ]
 
 { #category : #'media types' }
-CommandsRESTfulWebServiceSpecification >> textPlain [
+CommandsRESTfulControllerSpecification >> textPlainMediaType [
 
 	^ ZnMimeType fromString: 'text/plain;charset=utf-8'
 ]

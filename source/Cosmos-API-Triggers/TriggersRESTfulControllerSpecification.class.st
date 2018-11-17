@@ -1,35 +1,35 @@
 Class {
-	#name : #TriggersRESTfulWebServiceSpecification,
-	#superclass : #RESTFulWebServiceSpecification,
+	#name : #TriggersRESTfulControllerSpecification,
+	#superclass : #ResourceRESTfulControllerSpecification,
 	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #'specification - encoders and decoders' }
-TriggersRESTfulWebServiceSpecification >> addTriggerJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
+TriggersRESTfulControllerSpecification >> addTriggerJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0
+		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
 		to: #triggers
 		using: self triggerJsonDecoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
-TriggersRESTfulWebServiceSpecification >> addTriggerJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
+TriggersRESTfulControllerSpecification >> addTriggerJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: #triggers
-		to: self applicationJsonVersion1dot0dot0
+		to: self applicationJsonVersion1dot0dot0MediaType
 		using: self triggerJsonEnconderVersion1dot0dot0
 ]
 
 { #category : #'media types' }
-TriggersRESTfulWebServiceSpecification >> applicationJsonVersion1dot0dot0 [
+TriggersRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asZnMimeType
 ]
 
 { #category : #'specification - routes' }
-TriggersRESTfulWebServiceSpecification >> createTriggerRoute [
+TriggersRESTfulControllerSpecification >> createTriggerRoute [
 
 	^ RouteSpecification 
 		handling: #POST
@@ -38,7 +38,7 @@ TriggersRESTfulWebServiceSpecification >> createTriggerRoute [
 ]
 
 { #category : #'specification - routes' }
-TriggersRESTfulWebServiceSpecification >> deleteTriggerRoute [
+TriggersRESTfulControllerSpecification >> deleteTriggerRoute [
 
 	^ RouteSpecification 
 		handling: #DELETE
@@ -47,7 +47,7 @@ TriggersRESTfulWebServiceSpecification >> deleteTriggerRoute [
 ]
 
 { #category : #'specification - routes' }
-TriggersRESTfulWebServiceSpecification >> getTriggersRoute [
+TriggersRESTfulControllerSpecification >> getTriggersRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -56,7 +56,7 @@ TriggersRESTfulWebServiceSpecification >> getTriggersRoute [
 ]
 
 { #category : #'encoders and decoders' }
-TriggersRESTfulWebServiceSpecification >> triggerJsonDecoderVersion1dot0dot0 [
+TriggersRESTfulControllerSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 
 	^ [ :aJSON :context | 
 	(NeoJSONReader on: aJSON readStream)
@@ -74,7 +74,7 @@ TriggersRESTfulWebServiceSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 ]
 
 { #category : #'encoders and decoders' }
-TriggersRESTfulWebServiceSpecification >> triggerJsonEnconderVersion1dot0dot0 [
+TriggersRESTfulControllerSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 
 	^ [ :trigger | 
 	String

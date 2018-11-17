@@ -32,7 +32,7 @@ DataStreamHasNotBeenUpdatedTriggeringConditionTest >> testIsSafisfiedWhenDataStr
 	self
 		should: [ condition isSatisfiedOn: self ]
 		raise: DataStreamIsEmpty
-		withDescription: 'Last update date and time has not been initialized'
+		withMessageText: 'Last update date and time has not been initialized'
 ]
 
 { #category : #tests }

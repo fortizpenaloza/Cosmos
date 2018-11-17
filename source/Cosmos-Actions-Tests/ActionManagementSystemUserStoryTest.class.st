@@ -92,5 +92,5 @@ ActionManagementSystemUserStoryTest >> testRegistrationFailsWhenActionAlreadyExi
 	self
 		should: [ self actionManagementSystem register: action ]
 		raise: ConflictingObjectFound
-		withDescription: 'An action with that name already exists in system'
+		withMessageText: 'An action with that name already exists in system'
 ]

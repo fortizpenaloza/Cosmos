@@ -1,6 +1,6 @@
 Class {
-	#name : #DataPointsRESTfulWebService,
-	#superclass : #RESTfulWebService,
+	#name : #DataPointsRESTfulController,
+	#superclass : #ResourceRESTfulController,
 	#instVars : [
 		'cosmos'
 	],
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-DataPointsRESTfulWebService class >> workingWith: aCosmosSystem [
+DataPointsRESTfulController class >> workingWith: aCosmosSystem [
 	
 	^ self new initializeWorkingWith: aCosmosSystem
 ]
 
 { #category : #API }
-DataPointsRESTfulWebService >> createPointsBasedOn: anHttpRequest within: aContext [
+DataPointsRESTfulController >> createPointsBasedOn: anHttpRequest within: aContext [
 
 	^ [ | rawData |
 
@@ -39,37 +39,37 @@ DataPointsRESTfulWebService >> createPointsBasedOn: anHttpRequest within: aConte
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulWebService >> currentDateTime [
+DataPointsRESTfulController >> currentDateTime [
 
 	^ self timeSystem dateTime
 ]
 
 { #category : #'private - systems' }
-DataPointsRESTfulWebService >> dataManagementSystem [
+DataPointsRESTfulController >> dataManagementSystem [
 
 	^ cosmos systemImplementing: #DataManagementSystemInterface
 ]
 
 { #category : #'private - object types' }
-DataPointsRESTfulWebService >> dataPointsKey [
+DataPointsRESTfulController >> dataPointsKey [
 
 	^ #data_points
 ]
 
 { #category : #initialization }
-DataPointsRESTfulWebService >> initializeWorkingWith: aCosmosSystem [
+DataPointsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
 ]
 
 { #category : #specification }
-DataPointsRESTfulWebService >> specification [
+DataPointsRESTfulController >> specification [
 
-	^ DataPointsRESTFulWebServiceSpecification new
+	^ DataPointsRESTfulControllerSpecification new
 ]
 
 { #category : #'private - systems' }
-DataPointsRESTfulWebService >> timeSystem [
+DataPointsRESTfulController >> timeSystem [
 	
 	^ cosmos systemImplementing: #TimeSystemInterface
 ]

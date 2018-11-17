@@ -45,5 +45,5 @@ DataStreamCurrentValueTriggeringConditionTest >> testIsSafisfiedWhenDataStreamCu
 	self
 		should: [ condition isSatisfiedOn: self ]
 		raise: DataStreamIsEmpty
-		withDescription: 'Current value has not been initialized'
+		withMessageText: 'Current value has not been initialized'
 ]
