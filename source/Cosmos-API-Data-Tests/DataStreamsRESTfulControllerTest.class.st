@@ -129,16 +129,17 @@ DataStreamsRESTfulControllerTest >> resourceUrl [
 { #category : #running }
 DataStreamsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
+	identifierSequence := {
+	(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
 	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
 	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
 	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc')}.
 
 	super setUp.
-
+	
 	resourceController := DataStreamsRESTfulController workingWith: rootSystem.
 	resourceController serverUrl: self baseUrl asZnUrl.
-
+	
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 

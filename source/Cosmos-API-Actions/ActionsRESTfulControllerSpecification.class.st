@@ -7,8 +7,8 @@ Class {
 { #category : #'encoders and decoders' }
 ActionsRESTfulControllerSpecification >> actionJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
-	(NeoJSONReader on: aJSON readStream)
+	^ [ :json | 
+	(NeoJSONReader on: json readStream)
 		for: Action
 			customDo: [ :mapping | 
 			mapping

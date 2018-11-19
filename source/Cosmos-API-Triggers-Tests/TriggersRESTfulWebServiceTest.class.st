@@ -2,7 +2,7 @@ Class {
 	#name : #TriggersRESTfulWebServiceTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'webService'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Triggers-Tests'
 }
@@ -19,6 +19,12 @@ TriggersRESTfulWebServiceTest >> assert: aResponse wasSuccessfulWithContentEqual
 	self
 		assert: aResponse code equals: 200;
 		assert: aResponse contents equals: aString
+]
+
+{ #category : #'private - accessing' }
+TriggersRESTfulWebServiceTest >> baseUrl [
+
+	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
 { #category : #accessing }
@@ -43,7 +49,7 @@ TriggersRESTfulWebServiceTest >> fiveMinutes [
 { #category : #accessing }
 TriggersRESTfulWebServiceTest >> getTriggersHttpRequest [
 
-	^ (ZnRequest get: 'http://COSMOS_URL/v1/triggers')
+	^ (ZnRequest get: resourceController specification endpoint)
 		setAccept: self applicationJsonVersion1dot0dot0MediaType
 ]
 
@@ -88,6 +94,12 @@ TriggersRESTfulWebServiceTest >> registerSetTriggeredToTruePeriodicallyEveryFive
 	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self fiveMinutes)
 ]
 
+{ #category : #'private - accessing' }
+TriggersRESTfulWebServiceTest >> resourceUrl [
+
+	^ self baseUrl / resourceController specification endpoint
+]
+
 { #category : #accessing }
 TriggersRESTfulWebServiceTest >> setTriggeredToTrue [
 
@@ -128,7 +140,8 @@ TriggersRESTfulWebServiceTest >> setUp [
 
 	super setUp.
 
-	webService := TriggersRESTfulController workingWith: rootSystem.
+	resourceController := TriggersRESTfulController workingWith: rootSystem.
+	resourceController serverUrl: self baseUrl asZnUrl.
 
 	(SensorsSampleAddOn on: rootSystem) install.
 
@@ -166,7 +179,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDa
 
 	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
-	response := webService
+	response := resourceController
 		getTriggersBasedOn: self getTriggersHttpRequest
 		within: self httpRequestContext.
 
@@ -198,7 +211,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggers [
 		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature;
 		registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := webService
+	response := resourceController
 		getTriggersBasedOn: self getTriggersHttpRequest
 		within: self httpRequestContext.
 
@@ -216,7 +229,7 @@ TriggersRESTfulWebServiceTest >> testGettingTriggersFailsWhenRequestingInvalidRe
 		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
 	self
-		should: [ webService
+		should: [ resourceController
 				getTriggersBasedOn:
 					((ZnRequest get: 'http://COSMOS_URL/v1/triggers')
 						setAccept:
@@ -237,7 +250,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 
 	self registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
-	response := webService
+	response := resourceController
 		getTriggersBasedOn: self getTriggersHttpRequest
 		within: self httpRequestContext.
 	self
@@ -270,7 +283,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 							(TimeIntervalTriggeringCondition
 								checkingCurrentTimeIsBetween: (self eightPM to: self ninePM)))).
 
-	response := webService
+	response := resourceController
 		getTriggersBasedOn: self getTriggersHttpRequest
 		within: self httpRequestContext.
 	self
@@ -288,7 +301,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 
 	self registerSetTriggeredToTruePeriodicallyEveryFiveMinutes.
 
-	response := webService
+	response := resourceController
 		getTriggersBasedOn: self getTriggersHttpRequest
 		within: self httpRequestContext.
 
@@ -310,7 +323,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
-	response := webService
+	response := resourceController
 		createTriggerBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
@@ -330,7 +343,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
 
 	self
 		assert: response code equals: 201;
-		assert: response location equals: '/triggers/1'.
+		assert: response location equals: 'https://tests.cosmos.com/triggers/1'.
 
 	self triggerManagementSystem
 		triggerNamed: 'Set triggered to true on data point registration'
@@ -351,7 +364,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
 		ifFound: [ :trigger | self fail ]
 		ifNone: [ "do nothing" ].
 
-	response := webService
+	response := resourceController
 		createTriggerBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
 				entity:
@@ -371,7 +384,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
 
 	self
 		assert: response code equals: 201;
-		assert: response location equals: '/triggers/1'.
+		assert: response location equals: 'https://tests.cosmos.com/triggers/1'.
 
 	self triggerManagementSystem
 		triggerNamed: 'Set triggered to true periodically every 5 minutes'

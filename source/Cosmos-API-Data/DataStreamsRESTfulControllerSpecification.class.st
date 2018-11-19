@@ -69,8 +69,8 @@ DataStreamsRESTfulControllerSpecification >> dataPointJsonEncoderVersion1dot0dot
 { #category : #'encoders and decoders' }
 DataStreamsRESTfulControllerSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
-	(NeoJSONReader on: aJSON readStream)
+	^ [ :json | 
+	(NeoJSONReader on: json readStream)
 		for: DataStream
 			customDo: [ :mapping | 
 			mapping

@@ -113,7 +113,6 @@ TriggerDecodingContext >> triggeringPolicyDecoder [
 		decoding: #periodical
 			applying: [ :json | PeriodicalTriggeringPolicy every: (self decodeTimeIntervalFrom: json) ];
 		decoding: #data_point_registration
-			applying:
-				[ :json | DataPointRegistrationTriggeringPolicy on: (self decodeDataStreamFrom: json) ];
+			applying: [ :json | DataPointRegistrationTriggeringPolicy on: (self decodeDataStreamFrom: json) ];
 		yourself
 ]

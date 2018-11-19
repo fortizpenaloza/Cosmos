@@ -108,6 +108,10 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	api install.
 	api beCORSAwareAllowing: self allowedOrigins.
+	api
+		on: self exceptionsToHandle
+		addErrorHandler: [ :signal :request | self dumpStackAndReport: signal ].
+
 	api start
 ]
 

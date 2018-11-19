@@ -40,8 +40,8 @@ CommandsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaTy
 { #category : #'encoders and decoders' }
 CommandsRESTfulControllerSpecification >> commandJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
-	(NeoJSONReader on: aJSON readStream)
+	^ [ :json | 
+	(NeoJSONReader on: json readStream)
 		for: CommandWithPriority
 			customDo: [ :mapping | 
 			mapping
