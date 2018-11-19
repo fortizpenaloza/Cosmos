@@ -34,7 +34,7 @@ CommandsRESTfulControllerSpecification >> addCommandPlainTextEncoderMappingIn: a
 { #category : #'media types' }
 CommandsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+	^ 'application/json;version=1.0.0' asMediaType 
 ]
 
 { #category : #'encoders and decoders' }
@@ -111,5 +111,5 @@ CommandsRESTfulControllerSpecification >> getCommandsRoute [
 { #category : #'media types' }
 CommandsRESTfulControllerSpecification >> textPlainMediaType [
 
-	^ ZnMimeType fromString: 'text/plain;charset=utf-8'
+	^ 'text/plain;charset=utf-8' asMediaType
 ]

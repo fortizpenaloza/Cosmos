@@ -3,7 +3,7 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'identifierSequence',
-		'webService'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Data-Tests'
 }
@@ -11,7 +11,13 @@ Class {
 { #category : #'private - media types' }
 DataStreamsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> baseUrl [
+
+	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
 { #category : #'private - expected results' }
@@ -44,45 +50,53 @@ DataStreamsRESTfulControllerTest >> identifierProvider [
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aReprensentation [
+DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aRepresentation [
 
 	^ self
-		requestToCreateDataStreamFrom: aReprensentation
-		encodedAs: self applicationJsonVersion1dot0dot0MediaType
+		requestToPOST: aRepresentation
+		as: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aRepresentation encodedAs: aMediaType [
-
-	^ (ZnRequest post: 'http://COSMOS_URL/data-streams')
-		entity: (ZnEntity with: aRepresentation type: aMediaType)
-]
-
-{ #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToDeleteTemperatureStreamIdentifiedBy: anIdentifier [
+DataStreamsRESTfulControllerTest >> requestToDeleteStreamIdentifiedBy: anIdentifier [
 
 	^ TeaRequest
-		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/data-streams')
+		fromZnRequest: (
+			ZnRequest delete: (self urlForResourceIdentifiedBy: anIdentifier))
+			pathParams: {(#identifier -> anIdentifier)} asDictionary
+]
+
+{ #category : #'private - requests' }
+DataStreamsRESTfulControllerTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anIdentifier accepting: aMediaType [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier) / 'data-points')
+				setAccept: aMediaType;
+				yourself)
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anIdentifier [
+DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdentifier accepting: aMediaType [
 
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest get: 'http://COSMOS_URL/data-streams/' , anIdentifier asString , '/data-points')
-				setAccept: self applicationJsonVersion1dot0dot0MediaType)
+			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
+				setAccept: aMediaType;
+				yourself)
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdentifier [
+DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdentifier accepting: aMediaType conditionalTo: anETag [
 
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest get: 'http://COSMOS_URL/data-streams/')
-				setAccept: self applicationJsonVersion1dot0dot0MediaType)
+			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
+				setAccept: aMediaType;
+				setIfNoneMatchTo: anETag;
+				yourself)
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
@@ -92,21 +106,39 @@ DataStreamsRESTfulControllerTest >> requestToGetDataStreams [
 	^ TeaRequest
 		fromZnRequest:
 			((ZnRequest get: 'http://COSMOS_URL/data-streams')
-				setAccept: self applicationJsonVersion1dot0dot0MediaType)
+				setAccept: self applicationJsonVersion1dot0dot0MediaType;
+				yourself)
+]
+
+{ #category : #'private - requests' }
+DataStreamsRESTfulControllerTest >> requestToPOST: aRepresentation as: aMediaType [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest post: self resourceUrl)
+				entity: (ZnEntity with: aRepresentation type: aMediaType);
+				yourself)
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> resourceUrl [
+
+	^ self baseUrl / resourceController specification endpoint
 ]
 
 { #category : #running }
 DataStreamsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {UUID new.
-	UUID new.
-	UUID new.
-	UUID new}.
+	identifierSequence := {(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
+	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
+	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
+	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc')}.
 
 	super setUp.
 
-	webService := DataStreamsRESTfulController workingWith: rootSystem.
-	 		
+	resourceController := DataStreamsRESTfulController workingWith: rootSystem.
+	resourceController serverUrl: self baseUrl asZnUrl.
+
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
@@ -119,12 +151,13 @@ DataStreamsRESTfulControllerTest >> setUpRequirements [
  
 ]
 
-{ #category : #'private - expected results' }
-DataStreamsRESTfulControllerTest >> temperatureDataStreamAsJSON [
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> systemDateTime [
 
-	^ '{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2p>"},{"registration_timestamp":"<1s>"}]}'
-		expandMacrosWith: self dateTimeFormattedAsISO8601
-		with: self temperatureStreamIdentifier
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
 ]
 
 { #category : #'private - accessing' }
@@ -138,21 +171,15 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 
 	| response |
 
-	self dataManagementSystem
-		streamNamed: 'pH'
-		ifFound: [ :dataStream | self fail ]
-		ifNone: [ "do nothing" ].
-
-	response := webService
+	response := resourceController
 		createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"pH"}')
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location
-			equals: '/data-streams/' , identifierSequence last asString;
-		assert: response contentType equals: ZnMimeType textPlain.
+		assert: response location equals: (self resourceUrl / identifierSequence last asString) asString;
+		assert: response contentType equals: self textPlainMediaType.
 
 	self dataManagementSystem
 		streamNamed: 'pH'
@@ -167,7 +194,7 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromMalformattedRequest [
 
 	self
-		should: [ webService
+		should: [ resourceController
 				createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"XXX":"Temperature"}')
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -178,12 +205,11 @@ DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromMalformattedR
 ]
 
 { #category : #tests }
-DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromUnsuportedMediaType [
+DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromUnsupportedMediaType [
 
 	self
-		should: [ webService
-				createStreamBasedOn:
-					(self requestToCreateDataStreamFrom: '{"name":"Temperature"}' encodedAs: self textPlain)
+		should: [ resourceController
+				createStreamBasedOn: (self requestToPOST: '{"name":"Temperature"}' as: self unsupportedMediaType)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
@@ -196,7 +222,7 @@ DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromUnsuportedMed
 DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsIfAlreadyExists [
 
 	self
-		should: [ webService
+		should: [ resourceController
 				createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"Temperature"}')
 				within: self httpRequestContext ]
 		raise: HTTPClientError
@@ -211,21 +237,21 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	| response |
 
-	self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | "do nothing" ]
-		ifNone: [ self fail ].
-
-	response := webService
-		deleteStreamBasedOn:
-			(self
-				requestToDeleteTemperatureStreamIdentifiedBy: self temperatureStreamIdentifier)
+	self
+		assert:
+			(self dataManagementSystem
+				streamNamed: 'Temperature'
+				ifFound: [ :dataStream | true ]
+				ifNone: [ self fail ]).
+				
+	response := resourceController
+		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
-	self dataManagementSystem
+	self assert: (self dataManagementSystem
 		streamNamed: 'Temperature'
 		ifFound: [ :dataStream | self fail ]
-		ifNone: [ "do nothing" ].
+		ifNone: [ true ]).
 
 	self
 		assert: response isSuccess;
@@ -237,8 +263,8 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 DataStreamsRESTfulControllerTest >> testDeletingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
-		should: [ webService
-				deleteStreamBasedOn: (self requestToDeleteTemperatureStreamIdentifiedBy: 1)
+		should: [ resourceController
+				deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: 1)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
@@ -252,15 +278,26 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 
 	| response |
 
-	response := webService
-		getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier)
+	response := resourceController
+		getStreamBasedOn:
+			(self
+				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				accepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
-		assert: response code equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response contents equals: self temperatureDataStreamAsJSON
+		assert: response status equals: 200;
+		assert: response contentType
+			equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
+		withJsonFromContentsIn: response contents
+ 		do: [ :json | 
+			self
+				assert: json name equals: 'Temperature';
+				assert: json current_value equals: 16.5;
+				assert: json last_update equals: self dateTimeFormattedAsISO8601;
+				assert: json metadata size equals: 2 ]
 ]
 
 { #category : #tests }
@@ -268,18 +305,23 @@ DataStreamsRESTfulControllerTest >> testGetDataStreamDataPoints [
 
 	| response |
 
-	response := webService
+	response := resourceController
 		getPointsBasedOn:
 			(self
-				requestToGetDataPointsOfDataStreamIdentifiedBy: self temperatureStreamIdentifier)
+				requestToGetDataPointsOfDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				accepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
-		assert: response code equals: 200;
-		assert: response contents
-			equals:
-			('[{"timestamp":"<1s>","value":16.5},{"timestamp":"<1s>","value":16},{"timestamp":"<1s>","value":15.5}]'
-				expandMacrosWith: self dateTimeFormattedAsISO8601)
+		assert: response isSuccess;
+		assert: response status equals: 200;
+		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
+		withJsonFromContentsIn: response
+			do: [ :json | 
+			self assert: json size equals: 3.
+			self
+				assert: json first timestamp equals: self dateTimeFormattedAsISO8601;
+				assert: json first value equals: 16.5 ]
 ]
 
 { #category : #tests }
@@ -287,34 +329,78 @@ DataStreamsRESTfulControllerTest >> testGetDataStreams [
 
 	| response |
 
-	response := webService
+	response := resourceController
 		getStreamsBasedOn: self requestToGetDataStreams
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
-		assert: response code equals: 200;
+		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response contents equals: self dataStreamsAsJSON
+]
+
+{ #category : #tests }
+DataStreamsRESTfulControllerTest >> testGetNotModifiedWhenValidETag [
+
+	| response |
+
+	response := resourceController
+		getStreamBasedOn:
+			(self
+				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				accepting: self applicationJsonVersion1dot0dot0MediaType)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response status equals: 200;
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag.
+		
+		response := resourceController
+		getStreamBasedOn:
+			(self
+				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				accepting: self applicationJsonVersion1dot0dot0MediaType
+				conditionalTo: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag)
+		within: self httpRequestContext.
+		
+	self
+		assert: response status equals: 304;
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag
 ]
 
 { #category : #tests }
 DataStreamsRESTfulControllerTest >> testGettingDataStreamWithWrongIdentifierGivesNotFound [
 
 	self
-		should: [ webService
-				getStreamBasedOn: (self requestToGetDataStreamIdentifiedBy: 1)
+		should: [ resourceController
+				getStreamBasedOn:
+					(self
+						requestToGetDataStreamIdentifiedBy: 1
+						accepting: self applicationJsonVersion1dot0dot0MediaType)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
-				assert: signal messageText
-					equals: 'Data stream with that identifier not found';
+				assert: signal messageText equals: 'Data stream with that identifier not found';
 				assert: signal code equals: 404 ]
 ]
 
 { #category : #'private - media types' }
-DataStreamsRESTfulControllerTest >> textPlain [
+DataStreamsRESTfulControllerTest >> textPlainMediaType [
 
-	^ 'text/plain;charset=utf-8' asZnMimeType
+	^ 'text/plain;charset=utf-8' asMediaType
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> unsupportedMediaType [
+	
+	^ self textPlainMediaType 
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> urlForResourceIdentifiedBy: anIdentifier [
+
+	^ self resourceUrl / anIdentifier printString asZnUrl
 ]

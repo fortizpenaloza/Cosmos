@@ -144,9 +144,7 @@ DataStreamsRESTfulController >> locationOf: aDataStream [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'data-streams' asZnUrl
-		with: (self identifierOf: aDataStream)
+	^ baseUrl / self specification endpoint / (self identifierOf: aDataStream) asString 
 ]
 
 { #category : #'private - systems' }

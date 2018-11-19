@@ -3,7 +3,7 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'identifierSequence',
-		'webService'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Data-Tests'
 }
@@ -11,7 +11,7 @@ Class {
 { #category : #'private - media types' }
 DataPointsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'private - accessing' }
@@ -52,7 +52,7 @@ DataPointsRESTfulControllerTest >> setUp [
 
 	super setUp.
 
-	webService := DataPointsRESTfulController workingWith: rootSystem.
+	resourceController := DataPointsRESTfulController workingWith: rootSystem.
 	 		
 	(SensorsSampleAddOn on: rootSystem) install
 ]
@@ -86,7 +86,7 @@ DataPointsRESTfulControllerTest >> testCreateDataPoints [
 	self deny: temperature currentValue = 24.
 	self deny: pressure currentValue = 89.
 
-	response := webService
+	response := resourceController
 		createPointsBasedOn:
 			(self
 				requestToCreateDataPointsFrom:
@@ -104,24 +104,51 @@ DataPointsRESTfulControllerTest >> testCreateDataPoints [
 
 	self
 		assert: response isSuccess;
-		assert: response code equals: 201;
+		assert: response status equals: 201;
 		assert: response location equals: 'multiple';
 		assert: response hasEntity;
-		assert: temperature currentValue = 24;
-		assert: pressure currentValue = 89
+		assert: temperature currentValue equals: 24;
+		assert: pressure currentValue equals: 89
 ]
 
 { #category : #tests }
-DataPointsRESTfulControllerTest >> testCreatingDataPointsFailsFromMalformattedRequest [
+DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithMalformattedRequest [
 
 	self
-		should: [ webService
+		should: [ resourceController
 				createPointsBasedOn:
 					(self
 						requestToCreateDataPointsFrom:
 							'[
 			{
 				"xxx" : "Temperature",
+				"value" : 24
+			},
+			{
+				"data_stream" : "Pressure",
+				"value" : 89
+			}
+		]')
+				within: self httpRequestContext ]
+		raise: HTTPClientError
+		withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+					equals: 'key #data_stream not found in Dictionary';
+				assert: signal code equals: 400 ]
+]
+
+{ #category : #tests }
+DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotValidDataStream [
+
+	self
+		should: [ resourceController
+				createPointsBasedOn:
+					(self
+						requestToCreateDataPointsFrom:
+							'[
+			{
+				"data_stream" : "xxx",
 				"value" : 24
 			},
 			{

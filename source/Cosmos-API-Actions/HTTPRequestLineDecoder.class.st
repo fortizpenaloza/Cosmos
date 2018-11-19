@@ -1,11 +1,11 @@
 Class {
-	#name : #HTTPRequestLineParser,
+	#name : #HTTPRequestLineDecoder,
 	#superclass : #Object,
-	#category : 'Cosmos-API-Actions'
+	#category : #'Cosmos-API-Actions'
 }
 
-{ #category : #parsing }
-HTTPRequestLineParser >> parse: rawRequestLine [
+{ #category : #decoding }
+HTTPRequestLineDecoder >> decode: rawRequestLine [
 
 	^ ZnRequestLine empty
 		method: (rawRequestLine at: #method);

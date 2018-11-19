@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 ActionsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ ZnMimeType fromString: 'application/json;version=1.0.0'
+	^ 'application/json;version=1.0.0' asMediaType 
 ]
 
 { #category : #accessing }

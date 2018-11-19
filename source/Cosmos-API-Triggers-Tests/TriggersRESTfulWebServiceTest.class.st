@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 TriggersRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'tests support' }

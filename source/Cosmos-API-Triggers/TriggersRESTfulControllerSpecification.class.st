@@ -25,7 +25,7 @@ TriggersRESTfulControllerSpecification >> addTriggerJsonEncoderVersion1dot0dot0M
 { #category : #'media types' }
 TriggersRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'specification - routes' }
