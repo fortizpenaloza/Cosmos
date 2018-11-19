@@ -1,11 +1,11 @@
 Class {
-	#name : #HTTPHeadersParser,
+	#name : #HTTPHeadersDecoder,
 	#superclass : #Object,
-	#category : 'Cosmos-API-Actions'
+	#category : #'Cosmos-API-Actions'
 }
 
-{ #category : #parsing }
-HTTPHeadersParser >> parse: rawHeaders [
+{ #category : #decoding }
+HTTPHeadersDecoder >> decode: rawHeaders [
 
 	^ rawHeaders
 		inject: ZnHeaders new

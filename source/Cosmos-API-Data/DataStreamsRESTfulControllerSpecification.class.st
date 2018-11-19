@@ -34,7 +34,7 @@ DataStreamsRESTfulControllerSpecification >> addDataStreamEncoderVersion1dot0dot
 { #category : #'media types' }
 DataStreamsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'specification - routes' }
@@ -119,6 +119,12 @@ DataStreamsRESTfulControllerSpecification >> deleteDataStreamRoute [
 		handling: #DELETE
 		at: '/data-streams/<identifier:IsUUID>'
 		sending: #deleteStreamBasedOn:within:) asCorsAware 
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerSpecification >> endpoint [
+
+	^ '/data-streams'
 ]
 
 { #category : #'specification - routes' }

@@ -17,7 +17,7 @@ ActionsRESTfulControllerSpecification >> actionJsonDecoderVersion1dot0dot0 [
 						named: (rawAction at: #name)
 						evaluating:
 							(SendHttpRequestPolicy
-								sending: (HTTPRequestParser new parse: (rawAction at: #http_request))) ] ];
+								sending: (HTTPRequestDecoder new decode: (rawAction at: #http_request))) ] ];
 		nextAs: Action ]
 ]
 
@@ -82,7 +82,7 @@ ActionsRESTfulControllerSpecification >> addActionJsonEncoderVersion1dot0dot0Map
 { #category : #'media types' }
 ActionsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'specification - routes' }

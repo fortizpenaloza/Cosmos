@@ -11,7 +11,7 @@ Class {
 { #category : #'accessing - media types' }
 CommandsWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asZnMimeType
+	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #accessing }
@@ -198,5 +198,5 @@ CommandsWebServiceTest >> testGettingCommands [
 { #category : #'accessing - media types' }
 CommandsWebServiceTest >> textPlain [
 
-	^ ZnMimeType textPlain
+	^ 'text/plain;charset=utf-8' asZnMimeType
 ]

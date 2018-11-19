@@ -16,26 +16,20 @@ DataPointsRESTfulController class >> workingWith: aCosmosSystem [
 { #category : #API }
 DataPointsRESTfulController >> createPointsBasedOn: anHttpRequest within: aContext [
 
-	^ [ | rawData |
-
 	aContext hold: self currentDateTime under: #request_timestamp.
 
-	rawData := self
-		decode: anHttpRequest contents
-		at: self dataPointsKey
-		from: anHttpRequest contentType
-		within: aContext.
-
-	rawData
-		do: [ :rawDataPoint | 
-			self dataManagementSystem
-				register: rawDataPoint value
-				toStreamNamed: rawDataPoint key ].
-
-	ZnResponse created: 'multiple' ]
+	^ [ self
+		withCreatedResourceDo: [ :rawData | 
+			rawData
+				do:
+					[ :rawDataPoint | self dataManagementSystem 
+						register: rawDataPoint value 
+						toStreamNamed: rawDataPoint key ] ]
+		decodedUsing: self dataPointsKey
+		basedOn: anHttpRequest
+		within: aContext ]
 		on: ObjectNotFound
-		do:
-			[ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
 { #category : #'private - accessing' }
@@ -60,6 +54,12 @@ DataPointsRESTfulController >> dataPointsKey [
 DataPointsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 
 	cosmos := aCosmosSystem
+]
+
+{ #category : #'private - accessing' }
+DataPointsRESTfulController >> locationOf: aCollection [ 
+	
+	^ 'multiple'
 ]
 
 { #category : #specification }

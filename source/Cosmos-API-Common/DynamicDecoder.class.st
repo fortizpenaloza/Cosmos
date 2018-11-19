@@ -32,7 +32,7 @@ DynamicDecoder >> value: aDictionary [
 
 	| criteria |
 
-	criteria := aDictionary at: key ifAbsent: [ ObjectNotFound signal: 'lala' ].
+	criteria := aDictionary at: key ifAbsent: [ ObjectNotFound signal: 'Decoding failed' ].
 
 	^ decoders
 		at: criteria
