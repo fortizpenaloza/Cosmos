@@ -28,11 +28,9 @@ Cosmos uses [ba-st](https://github.com/ba-st) architectural projects, like [Kepl
 A Docker image is pushed to [Docker Hub](https://hub.docker.com) every time CI runs successfully.
 
 In order to use it you must pull the latest docker image by typing into your CLI 
-
 `docker pull fortizpenaloza/cosmos`
 
 and then start it typing 
-
 `docker run -v logs:/opt/cosmos/logs --rm -p 8090:8090 fortizpenaloza/cosmos`
 
 ### Using an Pharo image
