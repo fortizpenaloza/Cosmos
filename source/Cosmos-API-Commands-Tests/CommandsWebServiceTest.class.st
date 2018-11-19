@@ -66,7 +66,7 @@ CommandsWebServiceTest >> requestToDequeueCommandAccepting: aMediaType [
 		setAccept: aMediaType
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - requests' }
 CommandsWebServiceTest >> requestToGet: aUrl accepting: aMediaType [
 
 	^ TeaRequest
