@@ -1,5 +1,5 @@
 Class {
-	#name : #TriggersRESTfulWebServiceTest,
+	#name : #TriggersRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'resourceController'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
+TriggersRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asMediaType
 ]
 
 { #category : #'tests support' }
-TriggersRESTfulWebServiceTest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
+TriggersRESTfulControllerTest >> assert: aResponse wasSuccessfulWithContentEqualsTo: aString [
 
 	self
 		assert: aResponse code equals: 200;
@@ -22,51 +22,51 @@ TriggersRESTfulWebServiceTest >> assert: aResponse wasSuccessfulWithContentEqual
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulWebServiceTest >> baseUrl [
+TriggersRESTfulControllerTest >> baseUrl [
 
 	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> dateTimeFormattedAsISO8601 [
+TriggersRESTfulControllerTest >> dateTimeFormattedAsISO8601 [
 
 	^ ISO8601DateTimeFormatter usingExtendedFormat
 		format: self systemDateTime
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> eightPM [
+TriggersRESTfulControllerTest >> eightPM [
 	
 	^ TimeOfDay hours: 20
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> fiveMinutes [
+TriggersRESTfulControllerTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> getTriggersHttpRequest [
+TriggersRESTfulControllerTest >> getTriggersHttpRequest [
 
 	^ (ZnRequest get: resourceController specification endpoint)
 		setAccept: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> httpRequestContext [
+TriggersRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> ninePM [
+TriggersRESTfulControllerTest >> ninePM [
 	
 	^ TimeOfDay hours: 21
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
+TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
 		register:
@@ -82,26 +82,26 @@ TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointGreater
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
+TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
 		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream)
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
+TriggersRESTfulControllerTest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
 
 	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self fiveMinutes)
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulWebServiceTest >> resourceUrl [
+TriggersRESTfulControllerTest >> resourceUrl [
 
 	^ self baseUrl / resourceController specification endpoint
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> setTriggeredToTrue [
+TriggersRESTfulControllerTest >> setTriggeredToTrue [
 
 	^ self actionManagementSystem
 		actionNamed: 'Set triggered to true'
@@ -110,7 +110,7 @@ TriggersRESTfulWebServiceTest >> setTriggeredToTrue [
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
+TriggersRESTfulControllerTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
 
 	^ ActionTrigger
 		named: 'Set triggered to true after data point registration'
@@ -120,13 +120,13 @@ TriggersRESTfulWebServiceTest >> setTriggeredToTrueAfterDataPointRegistrationOn:
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod [
+TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod [
 
 	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
+TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
 
 	^ ActionTrigger
 		named: ('Set triggered to true every <1p>' expandMacrosWith: aTimePeriod)
@@ -136,7 +136,7 @@ TriggersRESTfulWebServiceTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfie
 ]
 
 { #category : #running }
-TriggersRESTfulWebServiceTest >> setUp [
+TriggersRESTfulControllerTest >> setUp [
 
 	super setUp.
 
@@ -153,7 +153,7 @@ TriggersRESTfulWebServiceTest >> setUp [
 ]
 
 { #category : #running }
-TriggersRESTfulWebServiceTest >> setUpRequirements [
+TriggersRESTfulControllerTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -164,7 +164,7 @@ TriggersRESTfulWebServiceTest >> setUpRequirements [
 ]
 
 { #category : #accessing }
-TriggersRESTfulWebServiceTest >> temperatureStream [
+TriggersRESTfulControllerTest >> temperatureStream [
 
 	^ self dataManagementSystem 
 		streamNamed: 'Temperature'
@@ -173,7 +173,7 @@ TriggersRESTfulWebServiceTest >> temperatureStream [
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureJustCreated [
+TriggersRESTfulControllerTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureJustCreated [
 
 	| response |
 
@@ -203,7 +203,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDa
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testGetTriggers [
+TriggersRESTfulControllerTest >> testGetTriggers [
 
 	| response |
 
@@ -223,7 +223,7 @@ TriggersRESTfulWebServiceTest >> testGetTriggers [
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion [
+TriggersRESTfulControllerTest >> testGettingTriggersFailsWhenRequestingInvalidResourceVersion [
 
 	self
 		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
@@ -244,7 +244,7 @@ TriggersRESTfulWebServiceTest >> testGettingTriggersFailsWhenRequestingInvalidRe
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven [
+TriggersRESTfulControllerTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanEleven [
 
 	| response |
 
@@ -262,7 +262,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM [
+TriggersRESTfulControllerTest >> testQueryingTriggersIncludesSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperatureAndItsGreaterThanElevenBetweenEightAndNinePM [
 
 	| response |
 
@@ -295,7 +295,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes [
+TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeriodicallyEveryFiveMinutes [
 
 	| response |
 
@@ -314,7 +314,7 @@ TriggersRESTfulWebServiceTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
+TriggersRESTfulControllerTest >> testRegistrationOfDataPointRegistered [
 
 	| response |
 
@@ -355,7 +355,7 @@ TriggersRESTfulWebServiceTest >> testRegistrationOfDataPointRegistered [
 ]
 
 { #category : #tests }
-TriggersRESTfulWebServiceTest >> testRegistrationOfPeriodicalTrigger [
+TriggersRESTfulControllerTest >> testRegistrationOfPeriodicalTrigger [
 
 	| response |
 

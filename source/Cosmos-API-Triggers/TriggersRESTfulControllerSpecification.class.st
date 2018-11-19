@@ -31,10 +31,10 @@ TriggersRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaTy
 { #category : #'specification - routes' }
 TriggersRESTfulControllerSpecification >> createTriggerRoute [
 
-	^ RouteSpecification 
+	^ (RouteSpecification
 		handling: #POST
 		at: self endpoint
-		sending: #createTriggerBasedOn:within:
+		sending: #createTriggerBasedOn:within:) asCorsAware
 ]
 
 { #category : #'specification - routes' }
@@ -57,7 +57,7 @@ TriggersRESTfulControllerSpecification >> getTriggersRoute [
 
 	^ RouteSpecification
 		handling: #GET
-		at: '/triggers'
+		at: self endpoint 
 		sending: #getTriggersBasedOn:within:
 ]
 
