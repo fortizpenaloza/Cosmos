@@ -22,6 +22,14 @@ With Cosmos, we aim to provide a platform to collect data from connected devices
 
 ## Quick Start
 
+A Docker image is pushed to [Docker Hub](https://hub.docker.com) every time CI runs successfully.
+
+Download the latest docker image by typing into the CLI
+`docker pull fortizpenaloza/cosmos`
+
+then type 
+`docker run -v logs:/opt/cosmos/logs -p 8090:8090 fortizpenaloza/cosmos`
+
 - Download the latest [Pharo 32](https://get.pharo.org/) or [64 bits VM](https://get.pharo.org/64/).
 - Download a ready to use image from the [release page](http://github.com/iot-uca/back-end/releases/latest)
 - Explore the [documentation](docs/).
