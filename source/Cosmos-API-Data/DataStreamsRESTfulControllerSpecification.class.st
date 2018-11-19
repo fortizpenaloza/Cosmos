@@ -42,7 +42,7 @@ DataStreamsRESTfulControllerSpecification >> createDataStreamRoute [
 
 	^ (RouteSpecification
 		handling: #POST
-		at: '/data-streams'
+		at: self endpoint
 		sending: #createStreamBasedOn:within:) asCorsAware
 ]
 
@@ -150,6 +150,6 @@ DataStreamsRESTfulControllerSpecification >> getDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET
-		at: '/data-streams'
+		at: self endpoint
 		sending: #getStreamsBasedOn:within:
 ]
