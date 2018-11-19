@@ -121,7 +121,7 @@ DataStreamsRESTfulControllerSpecification >> deleteDataStreamRoute [
 		sending: #deleteStreamBasedOn:within:) asCorsAware 
 ]
 
-{ #category : #'private - accessing' }
+{ #category : #accessing }
 DataStreamsRESTfulControllerSpecification >> endpoint [
 
 	^ '/data-streams'

@@ -83,7 +83,7 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 	self
 		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new asRBRule
 		onDeclaredPackagesExcluding:
-			{TriggersRESTfulWebServiceTest}
+			{TriggersRESTfulWebServiceTest. DataStreamsRESTfulControllerTest }
 ]
 
 { #category : #tests }

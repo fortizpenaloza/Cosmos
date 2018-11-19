@@ -152,6 +152,15 @@ DataStreamsRESTfulControllerTest >> setUpRequirements [
 ]
 
 { #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
+]
+
+{ #category : #'private - accessing' }
 DataStreamsRESTfulControllerTest >> temperatureStreamIdentifier [
 
 	^ identifierSequence first
@@ -281,7 +290,7 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 		assert: response status equals: 200;
 		assert: response contentType
 			equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag;
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
 		withJsonFromContentsIn: response contents
  		do: [ :json | 
 			self
@@ -346,19 +355,19 @@ DataStreamsRESTfulControllerTest >> testGetNotModifiedWhenValidETag [
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response entityTag equals: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag.
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag.
 		
 		response := resourceController
 		getStreamBasedOn:
 			(self
 				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
 				accepting: self applicationJsonVersion1dot0dot0MediaType
-				conditionalTo: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag)
+				conditionalTo: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag)
 		within: self httpRequestContext.
 		
 	self
 		assert: response status equals: 304;
-		assert: response entityTag equals: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag
 ]
 
 { #category : #tests }
