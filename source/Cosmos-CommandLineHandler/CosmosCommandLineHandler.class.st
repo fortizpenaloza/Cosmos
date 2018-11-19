@@ -108,6 +108,10 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	api install.
 	api beCORSAwareAllowing: self allowedOrigins.
+	api
+		on: self exceptionsToHandle
+		addErrorHandler: [ :signal :request | self dumpStackAndReport: signal ].
+
 	api start
 ]
 
@@ -135,19 +139,12 @@ CosmosCommandLineHandler >> buildAndStartScheduler [
 CosmosCommandLineHandler >> configurationDefinition [
 
 	^ OrderedCollection new
-		add:
-			(OptionalArgument
-				named: 'hostname'
-				defaultingTo: 'localhost');
-		add:
-			(OptionalArgument
-				named: 'port'
-				defaultingTo: 9000
-				convertingWith: #asNumber);
+		add: (OptionalArgument named: 'hostname' defaultingTo: 'localhost');
+		add: (OptionalArgument named: 'port' defaultingTo: 9000 convertingWith: #asNumber);
 		add:
 			(MandatoryArgument
 				named: 'allowed-origins'
-				convertingWith: [ :string | string substrings: ',' ]);
+				convertingWith: [ :string | ((string substrings: ',') collect: #trim) collect: #asUrl ]);
 		asArray
 ]
 

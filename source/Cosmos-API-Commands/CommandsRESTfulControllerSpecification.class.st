@@ -40,8 +40,8 @@ CommandsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaTy
 { #category : #'encoders and decoders' }
 CommandsRESTfulControllerSpecification >> commandJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
-	(NeoJSONReader on: aJSON readStream)
+	^ [ :json | 
+	(NeoJSONReader on: json readStream)
 		for: CommandWithPriority
 			customDo: [ :mapping | 
 			mapping
@@ -74,10 +74,10 @@ CommandsRESTfulControllerSpecification >> commandPlainTextEncoder [
 { #category : #'specification - routes' }
 CommandsRESTfulControllerSpecification >> createCommandsRoute [
 
-	^ RouteSpecification
+	^ (RouteSpecification
 		handling: #POST
-		at: '/commands'
-		sending: #createCommandBasedOn:within:
+		at: self endpoint
+		sending: #createCommandBasedOn:within:) asCorsAware
 ]
 
 { #category : #'specification - routes' }
@@ -99,13 +99,19 @@ CommandsRESTfulControllerSpecification >> dequeueCommandRoute [
 
 ]
 
+{ #category : #accessing }
+CommandsRESTfulControllerSpecification >> endpoint [ 
+
+	^ '/commands'
+]
+
 { #category : #'specification - routes' }
 CommandsRESTfulControllerSpecification >> getCommandsRoute [
 
-	^ RouteSpecification 
+	^ (RouteSpecification 
 		handling: #GET 
-		at: '/commands'
-	 	sending: #getCommandsBasedOn:within:
+		at: self endpoint
+	 	sending: #getCommandsBasedOn:within:) asCorsAware 
 ]
 
 { #category : #'media types' }

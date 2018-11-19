@@ -42,7 +42,7 @@ DataStreamsRESTfulControllerSpecification >> createDataStreamRoute [
 
 	^ (RouteSpecification
 		handling: #POST
-		at: '/data-streams'
+		at: self endpoint
 		sending: #createStreamBasedOn:within:) asCorsAware
 ]
 
@@ -69,8 +69,8 @@ DataStreamsRESTfulControllerSpecification >> dataPointJsonEncoderVersion1dot0dot
 { #category : #'encoders and decoders' }
 DataStreamsRESTfulControllerSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON | 
-	(NeoJSONReader on: aJSON readStream)
+	^ [ :json | 
+	(NeoJSONReader on: json readStream)
 		for: DataStream
 			customDo: [ :mapping | 
 			mapping
@@ -150,6 +150,6 @@ DataStreamsRESTfulControllerSpecification >> getDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET
-		at: '/data-streams'
+		at: self endpoint
 		sending: #getStreamsBasedOn:within:
 ]

@@ -33,7 +33,7 @@ TriggersRESTfulControllerSpecification >> createTriggerRoute [
 
 	^ RouteSpecification 
 		handling: #POST
-		at: '/triggers'
+		at: self endpoint
 		sending: #createTriggerBasedOn:within:
 ]
 
@@ -44,6 +44,12 @@ TriggersRESTfulControllerSpecification >> deleteTriggerRoute [
 		handling: #DELETE
 		at: '/triggers/<name>'
 		sending: #deregisterNamed:
+]
+
+{ #category : #accessing }
+TriggersRESTfulControllerSpecification >> endpoint [
+
+	^ '/triggers'
 ]
 
 { #category : #'specification - routes' }
@@ -58,9 +64,9 @@ TriggersRESTfulControllerSpecification >> getTriggersRoute [
 { #category : #'encoders and decoders' }
 TriggersRESTfulControllerSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 
-	^ [ :aJSON :context | 
-	(NeoJSONReader on: aJSON readStream)
-		for: #TriggerRegistration
+	^ [ :json :context | 
+	(NeoJSONReader on: json readStream)
+		for: ActionTrigger
 			customDo: [ :mapping | 
 			mapping
 				decoder: [ :rawTrigger | 
@@ -70,7 +76,7 @@ TriggersRESTfulControllerSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 						accordingTo: (context decodeTriggeringPolicyFrom: rawTrigger)
 						ifSatisfies: (context decodeTriggeringConditionFrom: rawTrigger) ] ];
 		propertyNamesAsSymbols: true;
-		nextAs: #TriggerRegistration ]
+		nextAs: ActionTrigger ]
 ]
 
 { #category : #'encoders and decoders' }

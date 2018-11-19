@@ -15,6 +15,12 @@ DataPointsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 ]
 
 { #category : #'private - accessing' }
+DataPointsRESTfulControllerTest >> baseUrl [
+
+	^ 'https://tests.cosmos.com' asZnUrl
+]
+
+{ #category : #'private - accessing' }
 DataPointsRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
@@ -45,15 +51,13 @@ DataPointsRESTfulControllerTest >> requestToCreateDataPointsFrom: aJson [
 { #category : #running }
 DataPointsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {UUID new.
-	UUID new.
-	UUID new.
-	UUID new}.
+	identifierSequence := {(UUID fromString: '29a17dd4-6637-0d00-bc60-582a0ae2e3e4')}.
 
 	super setUp.
-
+	
 	resourceController := DataPointsRESTfulController workingWith: rootSystem.
-	 		
+	resourceController serverUrl: self baseUrl asZnUrl.
+	
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
