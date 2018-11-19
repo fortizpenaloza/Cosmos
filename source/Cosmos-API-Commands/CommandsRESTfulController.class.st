@@ -24,7 +24,7 @@ CommandsRESTfulController >> createCommandBasedOn: anHttpRequest within: aContex
 
 	^ self
 		withCreatedResourceDo: [ :commandWithPriority | self commandManagementSystem register: commandWithPriority ]
-		decodedUsing: #commands
+		decodedUsing: self specification commandMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -50,7 +50,7 @@ CommandsRESTfulController >> dequeueCommandBasedOn: anHttpRequest within: aConte
 
 	^ self
 		get: [ self commandManagementSystem dequeueCommand ]
-		encodedUsing: #commands
+		encodedUsing: self specification commandMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -73,7 +73,7 @@ CommandsRESTfulController >> getCommandsBasedOn: anHttpRequest within: aContext 
 
 	^ self
 		get: [ self commandManagementSystem commands ]
-		asCollectionEncodedUsing: #commands
+		asCollectionEncodedUsing: self specification commandsMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -113,9 +113,7 @@ CommandsRESTfulController >> locationOf: aCommandWithPriority [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'commands' asZnUrl
-		with: (self identifierOf: aCommandWithPriority)
+	^ baseUrl / self specification endpoint / (self identifierOf: aCommandWithPriority) asString 
 ]
 
 { #category : #systems }
@@ -127,7 +125,7 @@ CommandsRESTfulController >> metadataSystem [
 { #category : #'private - accessing' }
 CommandsRESTfulController >> provideHypermediaPolicy [
 
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }

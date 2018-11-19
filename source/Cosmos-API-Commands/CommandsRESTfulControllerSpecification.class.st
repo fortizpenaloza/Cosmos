@@ -9,7 +9,7 @@ CommandsRESTfulControllerSpecification >> addCommandJsonDecoderVersion1dot0dot0M
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
-		to: #commands
+		to: self commandMappingKey 
 		using: self commandJsonDecoderVersion1dot0dot0
 ]
 
@@ -17,17 +17,22 @@ CommandsRESTfulControllerSpecification >> addCommandJsonDecoderVersion1dot0dot0M
 CommandsRESTfulControllerSpecification >> addCommandJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToEncode: #commands
+		addDefaultRuleToEncode: self commandMappingKey 
 		to: self applicationJsonVersion1dot0dot0MediaType
-		using: self commandJsonEncoderVersion1dot0dot0
+		using: self commandJsonEncoderVersion1dot0dot0.
+		
+	aBuilder
+		addDefaultRuleToEncode: self commandsMappingKey 
+		to: self applicationJsonVersion1dot0dot0MediaType
+		using: self commandsJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'specification - encoders and decoders' }
 CommandsRESTfulControllerSpecification >> addCommandPlainTextEncoderMappingIn: aBuilder [
 
 	aBuilder
-		addRuleToEncode: #commands
-		to: self textPlainMediaType 
+		addRuleToEncode: self commandMappingKey
+		to: self textPlainMediaType
 		using: self commandPlainTextEncoder
 ]
 
@@ -46,14 +51,17 @@ CommandsRESTfulControllerSpecification >> commandJsonDecoderVersion1dot0dot0 [
 			customDo: [ :mapping | 
 			mapping
 				decoder:
-					[ :rawCommand | CommandWithPriority holding: (rawCommand at: #command) and: (rawCommand at: #priority) ] ];
+					[ :rawCommand | 
+						CommandWithPriority 
+							holding: (rawCommand at: #command) 
+							and: (rawCommand at: #priority) ] ];
 		nextAs: CommandWithPriority ]
 ]
 
 { #category : #'encoders and decoders' }
 CommandsRESTfulControllerSpecification >> commandJsonEncoderVersion1dot0dot0 [
 
-	^ [ :commandWithPriority | 
+	^ [ :commandWithPriority :context | 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
@@ -61,14 +69,43 @@ CommandsRESTfulControllerSpecification >> commandJsonEncoderVersion1dot0dot0 [
 					do: [ :mapping | 
 					mapping
 						mapAccessor: #command;
-						mapAccessor: #priority ];
+						mapAccessor: #priority;
+						mapHypermediaControlsIn: context ];
 				nextPut: commandWithPriority ] ]
+]
+
+{ #category : #accessing }
+CommandsRESTfulControllerSpecification >> commandMappingKey [
+
+	^ #command
 ]
 
 { #category : #'encoders and decoders' }
 CommandsRESTfulControllerSpecification >> commandPlainTextEncoder [
 
 	^ [ :commandWithPriority | commandWithPriority command ]
+]
+
+{ #category : #'encoders and decoders' }
+CommandsRESTfulControllerSpecification >> commandsJsonEncoderVersion1dot0dot0 [
+
+	^ [ :commandsWithPriority :context | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: CommandWithPriority
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #command;
+						mapAccessor: #priority;
+						mapAsHypermediaControls: [ :commandWithPriority | context hypermediaControlsFor: commandWithPriority ] ];
+				nextPut: commandsWithPriority ] ]
+]
+
+{ #category : #accessing }
+CommandsRESTfulControllerSpecification >> commandsMappingKey [
+
+	^ #commands
 ]
 
 { #category : #'specification - routes' }

@@ -57,6 +57,27 @@ CosmosAPITest >> tearDown [
 ]
 
 { #category : #running }
+CosmosAPITest >> testCORSHeadersWhenNoAllowedOriginMatches [
+
+	| response |
+
+	api beCORSAwareAllowing: {'http://localhost' asUrl port: 8211}.
+	response := self newClient
+		url: self baseUrl / 'data-streams' asUrl;
+		headerAt: 'Access-Control-Request-Method' put: 'POST';
+		headerAt: 'Access-Control-Request-Headers' put: 'Origin';
+		headerAt: 'Origin' put: self baseUrl printString;
+		options;
+		response.
+
+	self
+		deny: (response headers includesKey: 'Vary');
+		deny: (response headers includesKey: 'Access-Control-Allow-Origin');
+		assert: (response headers at: 'Access-Control-Allow-Headers') equals: 'Access-Control-Allow-Origin, Content-Type, Accept';
+		assert: (response headers at: 'Access-Control-Allow-Methods') equals: 'POST'
+]
+
+{ #category : #running }
 CosmosAPITest >> testCORSHeadersWhenOriginIsAllowed [
 
 	| response |

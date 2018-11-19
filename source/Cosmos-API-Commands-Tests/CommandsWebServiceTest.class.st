@@ -3,30 +3,36 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'identifierSequence',
-		'controller'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
-{ #category : #'accessing - media types' }
+{ #category : #'private - media types' }
 CommandsWebServiceTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asMediaType
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
+CommandsWebServiceTest >> baseUrl [
+
+	^ 'https://tests.cosmos.com' asZnUrl
+]
+
+{ #category : #'private - accessing' }
 CommandsWebServiceTest >> commandWithMediumPriorityIdentifier [
 
 	^ identifierSequence second
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CommandsWebServiceTest >> httpRequestContext [
 
 	^ HttpRequestContext new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CommandsWebServiceTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: identifierSequence 
@@ -38,44 +44,61 @@ CommandsWebServiceTest >> installLedCommandsAddOn [
 	^ (LEDCommandsAddOn on: rootSystem) install
 ]
 
-{ #category : #'accessing - requests' }
+{ #category : #'private - requests' }
 CommandsWebServiceTest >> requestToCreateCommandFrom: aJson [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/commands')
 		entity: (ZnEntity json: aJson)
 ]
 
-{ #category : #'accessing - requests' }
+{ #category : #'private - requests' }
 CommandsWebServiceTest >> requestToDeleteCommandIdentifiedBy: anIdentifier [
 
 	^ TeaRequest
-		fromZnRequest: (ZnRequest delete: 'http://COSMOS_URL/commands/' , anIdentifier asString)
+		fromZnRequest: (ZnRequest delete: (self urlForResourceIdentifiedBy: anIdentifier))
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
-{ #category : #'accessing - requests' }
+{ #category : #'private - requests' }
 CommandsWebServiceTest >> requestToDequeueCommandAccepting: aMediaType [
 
 	^ (ZnRequest post: 'http://COSMOS_URL/commands/dequeue')
 		setAccept: aMediaType
 ]
 
-{ #category : #'accessing - requests' }
-CommandsWebServiceTest >> requestToGetCommands [
+{ #category : #'as yet unclassified' }
+CommandsWebServiceTest >> requestToGet: aUrl accepting: aMediaType [
 
-	^ (ZnRequest get: 'http://COSMOS_URL/commands')
-		setAccept: self applicationJsonVersion1dot0dot0MediaType
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: aUrl)
+				setAccept: aMediaType;
+				yourself)
+]
+
+{ #category : #'private - requests' }
+CommandsWebServiceTest >> requestToGetCommandsAccepting: aMediaType [
+
+	^ self requestToGet: self resourceUrl accepting: aMediaType
+]
+
+{ #category : #'private - accessing' }
+CommandsWebServiceTest >> resourceUrl [
+
+	^ self baseUrl / resourceController specification endpoint
 ]
 
 { #category : #running }
 CommandsWebServiceTest >> setUp [
 
-	identifierSequence := {UUID new.
-	UUID new}.
+	identifierSequence := {
+	(UUID fromString: 'af1ac24c-6c37-0d00-8b39-e65c01b794dc').
+	(UUID fromString: '7606aa4d-6c37-0d00-8b3a-dd4a01b794dc')}.
 
 	super setUp.
 
-	controller := CommandsRESTfulController workingWith: rootSystem
+	resourceController := CommandsRESTfulController workingWith: rootSystem.
+	resourceController serverUrl: self baseUrl asZnUrl
 ]
 
 { #category : #running }
@@ -83,8 +106,7 @@ CommandsWebServiceTest >> setUpRequirements [
 
 	super
 		setUpRequirements;
-		requireCommandManagementSystem.
-
+		requireCommandManagementSystem
 ]
 
 { #category : #tests }
@@ -94,14 +116,15 @@ CommandsWebServiceTest >> testCreateCommand [
 
 	self assert: self commandManagementSystem commands isEmpty.
 
-	response := controller
+	response := resourceController
 		createCommandBasedOn: (self requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location equals: '/commands/' , identifierSequence first asString;
+		assert: response location
+			equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc';
 		assert: response contentType equals: self textPlain.
 
 	self
@@ -121,7 +144,7 @@ CommandsWebServiceTest >> testDeleteCommand [
 
 	self assert: self commandManagementSystem commands size equals: 3.
 
-	response := controller
+	response := resourceController
 		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self commandWithMediumPriorityIdentifier)
 		within: self httpRequestContext.
 
@@ -139,7 +162,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsJson [
 
 	self installLedCommandsAddOn.
 
-	response := controller
+	response := resourceController
 		dequeueCommandBasedOn:
 			(self
 				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0MediaType)
@@ -153,7 +176,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsJson [
 
 	self
 		assert: response contents
-		equals: '{"command":"TURN_ON_LED","priority":100}'
+		equals: '{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}'
 ]
 
 { #category : #tests }
@@ -163,7 +186,7 @@ CommandsWebServiceTest >> testDequeueCommandEncodedAsPlainText [
 
 	self installLedCommandsAddOn.
 
-	response := controller
+	response := resourceController
 		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
 		within: self httpRequestContext.
 
@@ -182,8 +205,8 @@ CommandsWebServiceTest >> testGettingCommands [
 
 	self installLedCommandsAddOn.
 
-	response := controller
-		getCommandsBasedOn: self requestToGetCommands
+	response := resourceController
+		getCommandsBasedOn: (self requestToGetCommandsAccepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
@@ -192,11 +215,17 @@ CommandsWebServiceTest >> testGettingCommands [
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response contents
 			equals:
-			'[{"command":"TURN_ON_LED","priority":100},{"command":"TURN_OFF_LED","priority":50},{"command":"TURN_ON_LED","priority":1}]'
+			'[{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}},{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}]'
 ]
 
-{ #category : #'accessing - media types' }
+{ #category : #'private - media types' }
 CommandsWebServiceTest >> textPlain [
 
 	^ 'text/plain;charset=utf-8' asZnMimeType
+]
+
+{ #category : #'private - accessing' }
+CommandsWebServiceTest >> urlForResourceIdentifiedBy: anIdentifier [
+
+	^ self resourceUrl / anIdentifier printString asZnUrl
 ]
