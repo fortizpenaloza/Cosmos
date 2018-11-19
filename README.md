@@ -16,20 +16,24 @@ Cosmos is a Internet of Things (IoT) platform completly written in Smalltalk.
 
 With Cosmos, we aim to provide a platform to collect data from connected devices and act on them defining a set of rules.
 
+Cosmos uses [ba-st](https://github.com/ba-st) architectural projects, like [Kepler](https://github.com/ba-st/Kepler), [Stargate](https://github.com/ba-st/Stargate) and [Stardust](https://github.com/ba-st/Stardust).
+
 ## License
 - The code is licensed under [MIT](LICENSE).
 - The documentation is licensed under [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Quick Start
 
+### Using a ready to deploy docker image
 A Docker image is pushed to [Docker Hub](https://hub.docker.com) every time CI runs successfully.
 
 Download the latest docker image by typing into the CLI
 `docker pull fortizpenaloza/cosmos`
 
-then type 
+then type to start it  
 `docker run -v logs:/opt/cosmos/logs -p 8090:8090 fortizpenaloza/cosmos`
 
+### Using an image
 - Download the latest [Pharo 32](https://get.pharo.org/) or [64 bits VM](https://get.pharo.org/64/).
 - Download a ready to use image from the [release page](http://github.com/iot-uca/back-end/releases/latest)
 - Explore the [documentation](docs/).
@@ -42,19 +46,3 @@ To load the project in a Pharo image, or declare it as a dependency of your own 
 
 Check the [Contribution Guidelines](CONTRIBUTING.md)
 
-### Get started!
-
-
-On Pharo 6 open Playground and evaluate:
-
-```smalltalk
-Metacello new
-  baseline: 'Cosmos';
-  repository: 'github://iot-uca/back-end:master/source';
-  load: ('Development').
-  ```
-
-## Download Pharo + Cosmos!
-You may prefer to get a fresh new Pharo image and put IoT-UCA in it. You can use the [script](https://github.com/iot-uca/back-end/wiki/IoT-UCA-installation-script): it will get the last Pharo image+VM, install IoT-UCA code and give you a warming welcome!
-
-Cosmos uses BA-ST architecture projects, like [Stardust](https://github.com/ba-st/Stardust) and [Kepler](https://github.com/ba-st/Kepler).
