@@ -47,8 +47,10 @@ TriggersRESTfulControllerSpecification >> deleteTriggerRoute [
 
 	^ (RouteSpecification 
 		handling: #DELETE
-		at: '/triggers/<name>'
-		sending: #deregisterNamed:) asCorsAware 
+		at: self idTemplate
+		sending: #deleteTriggerBasedOn:within:) asCorsAware 
+		
+	
 ]
 
 { #category : #accessing }

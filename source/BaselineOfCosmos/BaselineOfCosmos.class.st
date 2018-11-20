@@ -199,7 +199,7 @@ BaselineOfCosmos >> registerTriggerManagementSystemInterface [
 	self
 		registerInterfaceAs: #TriggerManagementSystemInterface
 		named: 'Trigger Management System Interface'
-		declaring: #(#register: #deregisterNamed: #havePassed: #dataPointRegisteredOn: #triggers)
+		declaring: #(#register: #deregister: #havePassed: #dataPointRegisteredOn: #triggers)
 ]
 
 { #category : #dependencies }

@@ -28,13 +28,11 @@ TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContex
 ]
 
 { #category : #API }
-TriggersRESTfulController >> deregisterNamed: aName [
+TriggersRESTfulController >> deleteTriggerBasedOn: anHttpRequest within: aContext [
 
-	| name |
-
-	name := aName replaceAll: $_ with: Character space.
-
-	self triggerManagementSystem deregisterNamed: name.
+	self
+		withTriggerRequestedIn: anHttpRequest
+		do: [ :trigger | self triggerManagementSystem deregister: trigger ].
 
 	^ ZnResponse noContent
 ]
@@ -144,4 +142,10 @@ TriggersRESTfulController >> triggerManagementSystem [
 TriggersRESTfulController >> triggerRequestedIn: anHttpRequest [
 
 	^ self triggerManagementSystem triggerIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
+{ #category : #'private - API' }
+TriggersRESTfulController >> withTriggerRequestedIn: anHttpRequest do: aBlock [
+
+	aBlock value: (self triggerRequestedIn: anHttpRequest)
 ]

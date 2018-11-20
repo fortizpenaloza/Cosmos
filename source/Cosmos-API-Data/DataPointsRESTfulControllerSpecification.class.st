@@ -22,10 +22,10 @@ DataPointsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0Media
 { #category : #'specification - routes' }
 DataPointsRESTfulControllerSpecification >> createDataPointsRoute [
 
-	^ RouteSpecification
+	^ (RouteSpecification
 		handling: #POST
 		at: '/data-points'
-		sending: #createPointsBasedOn:within:
+		sending: #createPointsBasedOn:within:) asCorsAware 
 ]
 
 { #category : #'encoders and decoders' }
