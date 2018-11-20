@@ -45,6 +45,29 @@ ActionsRESTfulController >> deleteActionBasedOn: anHttpRequest within: aContext 
 	^ ZnResponse noContent
 ]
 
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> entityTagOf: anAction encodedAs: aMediaType [
+
+	^ ZnETag
+		with:
+			(SHA1 new
+				hashMessage:
+					('<1s>-<2s>-<3s>'
+						expandMacrosWith: (self identifierOf: anAction) asString
+						with: (self lastModificationOf: anAction) asString
+						with: aMediaType asString)) hex
+]
+
+{ #category : #API }
+ActionsRESTfulController >> getActionBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ self actionRequestedIn: anHttpRequest  ]
+		encodedUsing: self specification actionMappingKey 
+		basedOn: anHttpRequest
+		within: aContext
+]
+
 { #category : #API }
 ActionsRESTfulController >> getActionsBasedOn: anHttpRequest within: aContext [
 
@@ -53,6 +76,12 @@ ActionsRESTfulController >> getActionsBasedOn: anHttpRequest within: aContext [
 		asCollectionEncodedUsing: self specification actionsMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> identifierOf: anAction [
+
+	^ self identifierSystem identifierOf: anAction
 ]
 
 { #category : #'private - systems' }
@@ -67,7 +96,15 @@ ActionsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 	cosmos := aCosmosSystem
 ]
 
-{ #category : #'private - API' }
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> lastModificationOf: anAction [ 
+
+	^ self metadataSystem 
+		dataDescribing: #registration_timestamp
+		of: anAction
+]
+
+{ #category : #'private - accessing' }
 ActionsRESTfulController >> locationOf: anAction [
 
 	| baseUrl |
@@ -79,6 +116,12 @@ ActionsRESTfulController >> locationOf: anAction [
 	^ '<1p>/<2p>'
 		expandMacrosWith: baseUrl / 'actions' asZnUrl
 		with: (self identifierSystem identifierOf: anAction)
+]
+
+{ #category : #'private - systems' }
+ActionsRESTfulController >> metadataSystem [
+
+	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }

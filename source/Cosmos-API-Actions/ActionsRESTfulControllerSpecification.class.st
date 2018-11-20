@@ -62,6 +62,52 @@ ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 ]
 
 { #category : #accessing }
+ActionsRESTfulControllerSpecification >> actionMappingKey [
+	
+	^ #action
+]
+
+{ #category : #'encoders and decoders' }
+ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
+
+	^ [ :action | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: Action
+					do: [ :mapping | 
+					mapping mapInstVar: #name.
+					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy ];
+				for: #Policy
+					customDo: [ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
+				for: ZnRequest
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #requestLine to: #request_line;
+						mapAccessor: #headers;
+						mapAccessor: #entity ];
+				for: ZnRequestLine
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #method;
+						mapAccessor: #uri to: #url;
+						mapInstVar: #version ];
+				for: ZnUrl customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
+				for: ZnHeaders
+					customDo: [ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
+				for: Association
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #key;
+						mapAccessor: #value ];
+				for: DateTime
+					customDo: [ :mapping | 
+					mapping
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				nextPut: action ] ]
+]
+
+{ #category : #accessing }
 ActionsRESTfulControllerSpecification >> actionsMappingKey [
 	
 	^#actions
@@ -72,7 +118,7 @@ ActionsRESTfulControllerSpecification >> addActionJsonDecoderVersion1dot0dot0Map
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
-		to: #actions
+		to: self actionMappingKey 
 		using: self actionJsonDecoderVersion1dot0dot0
 ]
 
@@ -80,9 +126,14 @@ ActionsRESTfulControllerSpecification >> addActionJsonDecoderVersion1dot0dot0Map
 ActionsRESTfulControllerSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
+		addDefaultRuleToEncode: self actionMappingKey
+		to: self applicationJsonVersion1dot0dot0MediaType 
+		using: self actionJsonEncoderVersion1dot0dot0.
+
+	aBuilder
 		addDefaultRuleToEncode: self actionsMappingKey
 		to: self applicationJsonVersion1dot0dot0MediaType 
-		using: self actionJsonEncoderVersion1dot0dot0
+		using: self actionsJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'media types' }
@@ -113,6 +164,12 @@ ActionsRESTfulControllerSpecification >> deleteActionRoute [
 ActionsRESTfulControllerSpecification >> endpoint [
 
 	^ '/actions'
+]
+
+{ #category : #'specification - routes' }
+ActionsRESTfulControllerSpecification >> getActionRoute [
+
+	^ RouteSpecification handling: #GET at: self idTemplate sending: #getActionBasedOn:within:
 ]
 
 { #category : #'specification - routes' }

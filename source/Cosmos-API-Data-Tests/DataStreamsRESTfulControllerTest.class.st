@@ -185,7 +185,8 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location equals: (self resourceUrl / identifierSequence last asString) asString;
+		assert: response location
+			equals: 'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
 		assert: response contentType equals: self textPlainMediaType.
 
 	self dataManagementSystem

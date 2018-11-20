@@ -83,7 +83,9 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 	self
 		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new asRBRule
 		onDeclaredPackagesExcluding:
-			{TriggersRESTfulControllerTest. DataStreamsRESTfulControllerTest }
+			{TriggersRESTfulControllerTest.
+			DataStreamsRESTfulControllerTest.
+			CommandsRESTfulControllerTest}
 ]
 
 { #category : #tests }

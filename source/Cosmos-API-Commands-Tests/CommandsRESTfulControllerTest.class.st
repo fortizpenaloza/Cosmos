@@ -79,6 +79,7 @@ CommandsRESTfulControllerTest >> requestToGet: aUrl accepting: aMediaType [
 { #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToGetCommandIdentifiedBy: anIdentifier accepting: aMediaType [
 
+	self halt.
 	^ TeaRequest
 		fromZnRequest:
 			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
