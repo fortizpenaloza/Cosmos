@@ -78,12 +78,10 @@ DataStreamsRESTfulController >> getPointsBasedOn: anHttpRequest within: aContext
 DataStreamsRESTfulController >> getStreamBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-			get: [ 
-				aContext hold: self metadataSystem under: #metadata_system.
-				self streamRequestedIn: anHttpRequest ]
-			encodedUsing: #data_streams
-			basedOn: anHttpRequest
-			within: aContext ]
+		get: [ self streamRequestedIn: anHttpRequest ]
+		encodedUsing: self specification dataStreamMappingKey
+		basedOn: anHttpRequest
+		within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -92,12 +90,10 @@ DataStreamsRESTfulController >> getStreamBasedOn: anHttpRequest within: aContext
 DataStreamsRESTfulController >> getStreamsBasedOn: anHttpRequest within: aContext [
 
 	^ [ self
-			get: [ 
-				aContext hold: self metadataSystem under: #metadata_system.
-				self dataManagementSystem streams ]
-			asCollectionEncodedUsing: #data_streams
-			basedOn: anHttpRequest
-			within: aContext ]
+		get: [ self dataManagementSystem streams ]
+		asCollectionEncodedUsing: #data_streams
+		basedOn: anHttpRequest
+		within: aContext ]
 		on: DataStreamIsEmpty
 		do: [ :signal | signal resume: 'N/A' ]
 ]
@@ -140,6 +136,13 @@ DataStreamsRESTfulController >> locationOf: aDataStream [
 	^ baseUrl / self specification endpoint / (self identifierOf: aDataStream) asString 
 ]
 
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> mediaControlsFor: dataStream [
+
+	^ (super mediaControlsFor: dataStream)
+		, {('data_points' -> ((self locationOf: dataStream) / 'data-points' asUrl))}
+]
+
 { #category : #'private - systems' }
 DataStreamsRESTfulController >> metadataSystem [
 
@@ -149,7 +152,7 @@ DataStreamsRESTfulController >> metadataSystem [
 { #category : #'private - accessing' }
 DataStreamsRESTfulController >> provideHypermediaPolicy [
 
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }

@@ -23,11 +23,7 @@ DataStreamsRESTfulControllerTest >> baseUrl [
 { #category : #'private - expected results' }
 DataStreamsRESTfulControllerTest >> dataStreamsAsJSON [
 
-	^ '[{"name":"Temperature","current_value":16.5,"last_update":"<1s>","metadata":[{"identifier":"<2p>"},{"registration_timestamp":"<1s>"}]},{"name":"Pressure","current_value":1016,"last_update":"<1s>","metadata":[{"identifier":"<3p>"},{"registration_timestamp":"<1s>"}]},{"name":"Humidity","current_value":"N/A","last_update":"N/A","metadata":[{"identifier":"<4p>"},{"registration_timestamp":"<1s>"}]}]'
-		expandMacrosWith: self dateTimeFormattedAsISO8601
-		with: self temperatureStreamIdentifier
-		with: identifierSequence second
-		with: identifierSequence third
+	^ '[{"name":"Temperature","current_value":16.5,"last_update":"2014-10-01T12:00:00-03:00","links":{"data_points":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Pressure","current_value":1016,"last_update":"2014-10-01T12:00:00-03:00","links":{"data_points":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}},{"name":"Humidity","current_value":"N/A","last_update":"N/A","links":{"data_points":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc"}}]'
 ]
 
 { #category : #'private - accessing' }
@@ -63,7 +59,7 @@ DataStreamsRESTfulControllerTest >> requestToDeleteStreamIdentifiedBy: anIdentif
 	^ TeaRequest
 		fromZnRequest: (
 			ZnRequest delete: (self urlForResourceIdentifiedBy: anIdentifier))
-			pathParams: {(#identifier -> anIdentifier)} asDictionary
+		pathParams: {(#identifier -> anIdentifier)} asDictionary
 ]
 
 { #category : #'private - requests' }
@@ -296,16 +292,18 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType
-			equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
 		withJsonFromContentsIn: response contents
- 		do: [ :json | 
+			do: [ :json | 
 			self
 				assert: json name equals: 'Temperature';
 				assert: json current_value equals: 16.5;
 				assert: json last_update equals: self dateTimeFormattedAsISO8601;
-				assert: json metadata size equals: 2 ]
+				assert: json links self
+					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+				assert: json links data_points
+					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points' ]
 ]
 
 { #category : #tests }
