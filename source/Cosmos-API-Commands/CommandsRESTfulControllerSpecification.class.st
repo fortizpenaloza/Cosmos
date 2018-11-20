@@ -120,10 +120,10 @@ CommandsRESTfulControllerSpecification >> createCommandsRoute [
 { #category : #'specification - routes' }
 CommandsRESTfulControllerSpecification >> deleteCommandsRoute [
 
-	^ RouteSpecification
+	^ (RouteSpecification
 		handling: #DELETE
-		at: '/commands/<identifier:IsUUID>'
-		sending: #deleteCommandBasedOn:within:
+		at: self idTemplate
+		sending: #deleteCommandBasedOn:within:) asCorsAware 
 ]
 
 { #category : #'specification - routes' }
@@ -143,12 +143,33 @@ CommandsRESTfulControllerSpecification >> endpoint [
 ]
 
 { #category : #'specification - routes' }
+CommandsRESTfulControllerSpecification >> getCommandRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: self idTemplate
+		sending: #getCommandsBasedOn:within:
+]
+
+{ #category : #'specification - routes' }
 CommandsRESTfulControllerSpecification >> getCommandsRoute [
 
-	^ (RouteSpecification 
+	^ RouteSpecification 
 		handling: #GET 
 		at: self endpoint
-	 	sending: #getCommandsBasedOn:within:) asCorsAware 
+	 	sending: #getCommandsBasedOn:within:
+]
+
+{ #category : #accessing }
+CommandsRESTfulControllerSpecification >> idTemplate [
+
+	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: self identifierKey
+]
+
+{ #category : #accessing }
+CommandsRESTfulControllerSpecification >> identifierKey [
+
+	^ #identifier
 ]
 
 { #category : #'media types' }

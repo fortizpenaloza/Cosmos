@@ -18,7 +18,7 @@ DataStreamsRESTfulControllerSpecification >> addDataStreamDecoderVersion1dot0dot
 
 	aBuilder
 		addDefaultRuleToDecode: self applicationJsonVersion1dot0dot0MediaType
-		to: #data_streams
+		to: self dataStreamsMappingKey
 		using: self dataStreamJsonDecoderVersion1dot0dot0
 ]
 
@@ -26,7 +26,7 @@ DataStreamsRESTfulControllerSpecification >> addDataStreamDecoderVersion1dot0dot
 DataStreamsRESTfulControllerSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToEncode: #data_streams
+		addDefaultRuleToEncode: self dataStreamsMappingKey
 		to: self applicationJsonVersion1dot0dot0MediaType 
 		using: self dataStreamJsonEncoderVersion1dot0dot0
 ]
@@ -112,13 +112,19 @@ DataStreamsRESTfulControllerSpecification >> dataStreamJsonEncoderVersion1dot0do
 				nextPut: dataStreams ] ]
 ]
 
+{ #category : #accessing }
+DataStreamsRESTfulControllerSpecification >> dataStreamsMappingKey [
+
+	^ #data_streams
+]
+
 { #category : #'specification - routes' }
 DataStreamsRESTfulControllerSpecification >> deleteDataStreamRoute [
 
 	^ (RouteSpecification
 		handling: #DELETE
-		at: '/data-streams/<identifier:IsUUID>'
-		sending: #deleteStreamBasedOn:within:) asCorsAware 
+		at: self idTemplate
+		sending: #deleteStreamBasedOn:within:) asCorsAware
 ]
 
 { #category : #accessing }
@@ -141,7 +147,7 @@ DataStreamsRESTfulControllerSpecification >> getDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #GET
-		at: '/data-streams/<identifier:IsUUID>'
+		at: self idTemplate
 		sending: #getStreamBasedOn:within:
 ]
 
@@ -152,4 +158,16 @@ DataStreamsRESTfulControllerSpecification >> getDataStreamsRoute [
 		handling: #GET
 		at: self endpoint
 		sending: #getStreamsBasedOn:within:
+]
+
+{ #category : #accessing }
+DataStreamsRESTfulControllerSpecification >> idTemplate [
+
+	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: self identifierKey
+]
+
+{ #category : #accessing }
+DataStreamsRESTfulControllerSpecification >> identifierKey [
+
+	^ #identifier
 ]

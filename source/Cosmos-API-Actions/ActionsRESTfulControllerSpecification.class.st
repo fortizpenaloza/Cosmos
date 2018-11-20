@@ -61,6 +61,12 @@ ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 				nextPut: action ] ]
 ]
 
+{ #category : #accessing }
+ActionsRESTfulControllerSpecification >> actionsMappingKey [
+	
+	^#actions
+]
+
 { #category : #'specification - encoders and decoders' }
 ActionsRESTfulControllerSpecification >> addActionJsonDecoderVersion1dot0dot0MappingIn: aBuilder [
 
@@ -74,7 +80,7 @@ ActionsRESTfulControllerSpecification >> addActionJsonDecoderVersion1dot0dot0Map
 ActionsRESTfulControllerSpecification >> addActionJsonEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToEncode: #actions
+		addDefaultRuleToEncode: self actionsMappingKey
 		to: self applicationJsonVersion1dot0dot0MediaType 
 		using: self actionJsonEncoderVersion1dot0dot0
 ]
@@ -90,7 +96,7 @@ ActionsRESTfulControllerSpecification >> createActionRoute [
 
 	^ (RouteSpecification
 		handling: #POST
-		at: '/actions'
+		at: self endpoint
 		sending: #createActionBasedOn:within:) asCorsAware
 ]
 
@@ -99,12 +105,30 @@ ActionsRESTfulControllerSpecification >> deleteActionRoute [
 
 	^ (RouteSpecification
 		handling: #DELETE
-		at: '/actions/<name>'
+		at: self idTemplate
 		sending: #deleteActionBasedOn:within:) asCorsAware
+]
+
+{ #category : #accessing }
+ActionsRESTfulControllerSpecification >> endpoint [
+
+	^ '/actions'
 ]
 
 { #category : #'specification - routes' }
 ActionsRESTfulControllerSpecification >> getActionsRoute [
 
-	^ RouteSpecification handling: #GET at: '/actions' sending: #getActionsBasedOn:within:
+	^ RouteSpecification handling: #GET at: self endpoint sending: #getActionsBasedOn:within:
+]
+
+{ #category : #accessing }
+ActionsRESTfulControllerSpecification >> idTemplate [
+
+	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: self identifierKey
+]
+
+{ #category : #accessing }
+ActionsRESTfulControllerSpecification >> identifierKey [
+
+	^ #identifier
 ]

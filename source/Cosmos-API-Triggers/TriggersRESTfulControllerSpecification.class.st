@@ -40,10 +40,10 @@ TriggersRESTfulControllerSpecification >> createTriggerRoute [
 { #category : #'specification - routes' }
 TriggersRESTfulControllerSpecification >> deleteTriggerRoute [
 
-	^ RouteSpecification 
+	^ (RouteSpecification 
 		handling: #DELETE
 		at: '/triggers/<name>'
-		sending: #deregisterNamed:
+		sending: #deregisterNamed:) asCorsAware 
 ]
 
 { #category : #accessing }

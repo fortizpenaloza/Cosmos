@@ -19,12 +19,18 @@ ActionsRESTfulController >> actionManagementSystem [
 	^ cosmos systemImplementing: #ActionManagementSystemInterface
 ]
 
+{ #category : #'private - API' }
+ActionsRESTfulController >> actionRequestedIn: anHttpRequest [
+
+	^ self actionManagementSystem actionIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
 { #category : #API }
 ActionsRESTfulController >> createActionBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		withCreatedResourceDo: [ :action | self actionManagementSystem register: action ]
-		decodedUsing: #actions
+		decodedUsing: self specification actionMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -32,14 +38,9 @@ ActionsRESTfulController >> createActionBasedOn: anHttpRequest within: aContext 
 { #category : #API }
 ActionsRESTfulController >> deleteActionBasedOn: anHttpRequest within: aContext [
 
-	| name |
-
-	name := (anHttpRequest at: #name) replaceAll: $_ with: Character space.
-
-	self actionManagementSystem
-		actionNamed: name
-		ifFound: [ :action | self actionManagementSystem deregister: action ]
-		ifNone: [ ObjectNotFound signal ].
+	self
+		withActionRequestedIn: anHttpRequest
+		do: [ :action | self actionManagementSystem deregister: action ].
 
 	^ ZnResponse noContent
 ]
@@ -49,7 +50,7 @@ ActionsRESTfulController >> getActionsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self actionManagementSystem actions ]
-		asCollectionEncodedUsing: #actions
+		asCollectionEncodedUsing: self specification actionsMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -96,4 +97,10 @@ ActionsRESTfulController >> providePaginationPolicy [
 ActionsRESTfulController >> specification [
 	
 	^ ActionsRESTfulControllerSpecification new
+]
+
+{ #category : #'private - API' }
+ActionsRESTfulController >> withActionRequestedIn: anHttpRequest do: aBlock [
+
+	aBlock value: (self actionRequestedIn: anHttpRequest)
 ]

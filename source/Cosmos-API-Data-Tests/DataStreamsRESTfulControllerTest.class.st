@@ -67,6 +67,16 @@ DataStreamsRESTfulControllerTest >> requestToDeleteStreamIdentifiedBy: anIdentif
 ]
 
 { #category : #'private - requests' }
+DataStreamsRESTfulControllerTest >> requestToGet: aUrl accepting: aMediaType [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: aUrl)
+				setAccept: aMediaType;
+				yourself)
+]
+
+{ #category : #'private - requests' }
 DataStreamsRESTfulControllerTest >> requestToGetDataPointsOfDataStreamIdentifiedBy: anIdentifier accepting: aMediaType [
 
 	^ TeaRequest
@@ -101,13 +111,9 @@ DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdenti
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToGetDataStreams [
+DataStreamsRESTfulControllerTest >> requestToGetDataStreamsAccepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: 'http://COSMOS_URL/data-streams')
-				setAccept: self applicationJsonVersion1dot0dot0MediaType;
-				yourself)
+	^ self requestToGet: self resourceUrl accepting: aMediaType
 ]
 
 { #category : #'private - requests' }
@@ -331,7 +337,7 @@ DataStreamsRESTfulControllerTest >> testGetDataStreams [
 	| response |
 
 	response := resourceController
-		getStreamsBasedOn: self requestToGetDataStreams
+		getStreamsBasedOn: (self requestToGetDataStreamsAccepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self

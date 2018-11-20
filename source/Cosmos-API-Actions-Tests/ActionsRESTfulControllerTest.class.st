@@ -2,7 +2,8 @@ Class {
 	#name : #ActionsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'controller'
+		'resourceController',
+		'identifierSequence'
 	],
 	#category : #'Cosmos-API-Actions-Tests'
 }
@@ -11,6 +12,12 @@ Class {
 ActionsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asMediaType 
+]
+
+{ #category : #accessing }
+ActionsRESTfulControllerTest >> baseUrl [
+
+	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
 { #category : #accessing }
@@ -33,12 +40,24 @@ ActionsRESTfulControllerTest >> httpRequestContext [
 	^ HttpRequestContext new
 ]
 
+{ #category : #accessing }
+ActionsRESTfulControllerTest >> identifierProvider [
+
+	^ SequentialIdentifierProvider providing: identifierSequence 
+]
+
 { #category : #running }
 ActionsRESTfulControllerTest >> setUp [
 
+	identifierSequence := {
+	(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
+	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc')}.
+	
 	super setUp.
 
-	controller := ActionsRESTfulController workingWith: rootSystem
+	resourceController := ActionsRESTfulController workingWith: rootSystem.
+	resourceController serverUrl: self baseUrl asZnUrl.
+
 ]
 
 { #category : #running }
@@ -57,7 +76,7 @@ ActionsRESTfulControllerTest >> testCreateAction [
 
 	self assert: self actionManagementSystem actions isEmpty.
 
-	response := controller
+	response := resourceController
 		createActionBasedOn:
 			((ZnRequest post: 'http://COSMOS_URL/actions')
 				entity:
@@ -111,11 +130,11 @@ ActionsRESTfulControllerTest >> testDeleteAction [
 
 	self deny: self actionManagementSystem actions isEmpty.
 
-	controller
+	resourceController
 		deleteActionBasedOn:
 			(TeaRequest
 				fromZnRequest: (ZnRequest delete: 'List_DNS_Records')
-				pathParams: {(#name -> 'List_DNS_Records')} asDictionary )
+				pathParams: {(#identifier -> identifierSequence first)} asDictionary )
 		within: self httpRequestContext.
 
 	self assert: self actionManagementSystem actions isEmpty
@@ -172,7 +191,7 @@ ActionsRESTfulControllerTest >> testGetActions [
 										asDictionary);
 						yourself)).
 
-	response := controller
+	response := resourceController
 		getActionsBasedOn: self getActionsHttpRequest
 		within: self httpRequestContext.
 
