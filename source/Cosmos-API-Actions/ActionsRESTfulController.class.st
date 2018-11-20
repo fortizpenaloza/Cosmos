@@ -113,9 +113,7 @@ ActionsRESTfulController >> locationOf: anAction [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'actions' asZnUrl
-		with: (self identifierSystem identifierOf: anAction)
+	^ baseUrl / self specification endpoint / (self identifierOf: anAction) asString 
 ]
 
 { #category : #'private - systems' }

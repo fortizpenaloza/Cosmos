@@ -27,6 +27,12 @@ ActionsRESTfulControllerTest >> dateTimeFormattedAsISO8601 [
 		format: self systemDateTime
 ]
 
+{ #category : #'private - requests' }
+ActionsRESTfulControllerTest >> getDNSZonesAsJSON [
+
+	^ '{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc"}}'
+]
+
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> getDNSZonesIdentifier [
 	
@@ -232,17 +238,29 @@ ActionsRESTfulControllerTest >> testGetAction [
 
 	| response |
 
-	self registerGetDNSZones.
-	self registerAddDNSZone.
+	self
+		registerGetDNSZones;
+		registerAddDNSZone.
 
 	response := resourceController
-		getActionBasedOn: (self requestToGetActionIdentifiedBy: self getDNSZonesIdentifier accepting: self applicationJsonVersion1dot0dot0MediaType)
+		getActionBasedOn:
+			(self
+				requestToGetActionIdentifiedBy: self getDNSZonesIdentifier
+				accepting: self applicationJsonVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
+
 	self
-		assert: response code equals: 200; 
-		assert: response contents
-			equals:
-			'{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"''https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc''"}}'
+		assert: response isSuccess;
+		assert: response status equals: 200;
+		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag;
+		withJsonFromContentsIn: response contents
+			do: [ :json | 
+			self
+				assert: json name equals: 'Get DNS zones';
+				assert: json links self
+					equals: 'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc' ];
+		assert: response contents equals: self getDNSZonesAsJSON
 ]
 
 { #category : #tests }
