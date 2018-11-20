@@ -24,14 +24,15 @@ ActionsRESTfulControllerSpecification >> actionJsonDecoderVersion1dot0dot0 [
 { #category : #'encoders and decoders' }
 ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 
-	^ [ :action | 
+	^ [ :action :context | 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
 				for: Action
 					do: [ :mapping | 
 					mapping mapInstVar: #name.
-					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy ];
+					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy.
+					mapping mapHypermediaControlsIn: context ];
 				for: #Policy
 					customDo: [ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
 				for: ZnRequest
@@ -55,9 +56,8 @@ ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 						mapAccessor: #key;
 						mapAccessor: #value ];
 				for: DateTime
-					customDo: [ :mapping | 
-					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				nextPut: action ] ]
 ]
 
@@ -70,7 +70,7 @@ ActionsRESTfulControllerSpecification >> actionMappingKey [
 { #category : #'encoders and decoders' }
 ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 
-	^ [ :action | 
+	^ [ :actions :context | 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
@@ -104,7 +104,7 @@ ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				nextPut: action ] ]
+				nextPut: actions ] ]
 ]
 
 { #category : #accessing }

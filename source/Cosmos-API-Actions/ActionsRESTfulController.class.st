@@ -127,7 +127,7 @@ ActionsRESTfulController >> metadataSystem [
 { #category : #'private - accessing' }
 ActionsRESTfulController >> provideHypermediaPolicy [
 
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }
