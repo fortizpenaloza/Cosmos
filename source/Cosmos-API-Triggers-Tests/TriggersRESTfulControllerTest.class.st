@@ -198,6 +198,15 @@ TriggersRESTfulControllerTest >> setUpRequirements [
  
 ]
 
+{ #category : #'private - accessing' }
+TriggersRESTfulControllerTest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
+]
+
 { #category : #accessing }
 TriggersRESTfulControllerTest >> temperatureStream [
 
@@ -226,7 +235,7 @@ TriggersRESTfulControllerTest >> testGetTrigger [
 		assert: response isSuccess ;
 		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"70ac35f713b67f243e5f5303fa564ef8dd8448ba"' asETag;
+		assert: response entityTag equals: '"8fdd7769a8b44bd63f4b962583f13ef90e551344"' asETag;
 		withJsonFromContentsIn: response contents
 			do: [ :json | 
 				self assert: json name equals: 'Set triggered to true after data point registration';
