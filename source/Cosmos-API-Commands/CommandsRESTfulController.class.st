@@ -19,6 +19,12 @@ CommandsRESTfulController >> commandManagementSystem [
 	^ cosmos systemImplementing: #CommandManagementSystemInterface
 ]
 
+{ #category : #'private - API' }
+CommandsRESTfulController >> commandRequestedIn: anHttpRequest [
+
+	^ self commandManagementSystem commandIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
 { #category : #API }
 CommandsRESTfulController >> createCommandBasedOn: anHttpRequest within: aContext [
 
@@ -32,17 +38,15 @@ CommandsRESTfulController >> createCommandBasedOn: anHttpRequest within: aContex
 { #category : #API }
 CommandsRESTfulController >> deleteCommandBasedOn: anHttpRequest within: aContext [
 
-	^ [ | identifier |
+	^ [ 
+		self
+			withCommandRequestedIn: anHttpRequest
+			do: [ :commandWithPriority | 
+				self commandManagementSystem deregister: commandWithPriority ].
 
-	identifier := anHttpRequest at: #identifier.
-
-	self commandManagementSystem
-		withCommandIdentifiedBy: identifier
-		do: [ :commandWithPriority | 
-			self commandManagementSystem deregister: commandWithPriority.
-			ZnResponse noContent ] ]
-		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+		ZnResponse noContent ]
+			on: ObjectNotFound
+			do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
 ]
 
 { #category : #API }
@@ -66,6 +70,16 @@ CommandsRESTfulController >> entityTagOf: aCommandWithPriority encodedAs: aMedia
 						expandMacrosWith: (self identifierOf: aCommandWithPriority) asString
 						with: (self lastModificationOf: aCommandWithPriority) asString
 						with: aMediaType asString)) hex
+]
+
+{ #category : #API }
+CommandsRESTfulController >> getCommandBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ self commandRequestedIn: anHttpRequest  ]
+		encodedUsing: self specification commandMappingKey
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
@@ -138,4 +152,10 @@ CommandsRESTfulController >> providePaginationPolicy [
 CommandsRESTfulController >> specification [
 
 	^ CommandsRESTfulControllerSpecification new
+]
+
+{ #category : #'private - API' }
+CommandsRESTfulController >> withCommandRequestedIn: anHttpRequest do: aBlock [
+
+	aBlock value: (self commandRequestedIn: anHttpRequest)
 ]

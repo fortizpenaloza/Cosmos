@@ -19,12 +19,18 @@ ActionsRESTfulController >> actionManagementSystem [
 	^ cosmos systemImplementing: #ActionManagementSystemInterface
 ]
 
+{ #category : #'private - API' }
+ActionsRESTfulController >> actionRequestedIn: anHttpRequest [
+
+	^ self actionManagementSystem actionIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
 { #category : #API }
 ActionsRESTfulController >> createActionBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		withCreatedResourceDo: [ :action | self actionManagementSystem register: action ]
-		decodedUsing: #actions
+		decodedUsing: self specification actionMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -32,16 +38,34 @@ ActionsRESTfulController >> createActionBasedOn: anHttpRequest within: aContext 
 { #category : #API }
 ActionsRESTfulController >> deleteActionBasedOn: anHttpRequest within: aContext [
 
-	| name |
-
-	name := (anHttpRequest at: #name) replaceAll: $_ with: Character space.
-
-	self actionManagementSystem
-		actionNamed: name
-		ifFound: [ :action | self actionManagementSystem deregister: action ]
-		ifNone: [ ObjectNotFound signal ].
+	self
+		withActionRequestedIn: anHttpRequest
+		do: [ :action | self actionManagementSystem deregister: action ].
 
 	^ ZnResponse noContent
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> entityTagOf: anAction encodedAs: aMediaType [
+
+	^ ZnETag
+		with:
+			(SHA1 new
+				hashMessage:
+					('<1s>-<2s>-<3s>'
+						expandMacrosWith: (self identifierOf: anAction) asString
+						with: (self lastModificationOf: anAction) asString
+						with: aMediaType asString)) hex
+]
+
+{ #category : #API }
+ActionsRESTfulController >> getActionBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ self actionRequestedIn: anHttpRequest  ]
+		encodedUsing: self specification actionMappingKey 
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
@@ -49,9 +73,15 @@ ActionsRESTfulController >> getActionsBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self actionManagementSystem actions ]
-		asCollectionEncodedUsing: #actions
+		asCollectionEncodedUsing: self specification actionsMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> identifierOf: anAction [
+
+	^ self identifierSystem identifierOf: anAction
 ]
 
 { #category : #'private - systems' }
@@ -66,7 +96,15 @@ ActionsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 	cosmos := aCosmosSystem
 ]
 
-{ #category : #'private - API' }
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> lastModificationOf: anAction [ 
+
+	^ self metadataSystem 
+		dataDescribing: #registration_timestamp
+		of: anAction
+]
+
+{ #category : #'private - accessing' }
 ActionsRESTfulController >> locationOf: anAction [
 
 	| baseUrl |
@@ -75,15 +113,19 @@ ActionsRESTfulController >> locationOf: anAction [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'actions' asZnUrl
-		with: (self identifierSystem identifierOf: anAction)
+	^ baseUrl / self specification endpoint / (self identifierOf: anAction) asString 
+]
+
+{ #category : #'private - systems' }
+ActionsRESTfulController >> metadataSystem [
+
+	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }
 ActionsRESTfulController >> provideHypermediaPolicy [
 
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }
@@ -96,4 +138,10 @@ ActionsRESTfulController >> providePaginationPolicy [
 ActionsRESTfulController >> specification [
 	
 	^ ActionsRESTfulControllerSpecification new
+]
+
+{ #category : #'private - API' }
+ActionsRESTfulController >> withActionRequestedIn: anHttpRequest do: aBlock [
+
+	aBlock value: (self actionRequestedIn: anHttpRequest)
 ]

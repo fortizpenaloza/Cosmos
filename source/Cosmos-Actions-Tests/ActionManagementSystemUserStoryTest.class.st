@@ -9,7 +9,7 @@ ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
 
 	^ Action
 		named: 'Send text message to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "empty" ])
+		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
 ]
 
 { #category : #accessing }

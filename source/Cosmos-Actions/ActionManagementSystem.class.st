@@ -17,6 +17,15 @@ ActionManagementSystem class >> implementedInterface [
 ]
 
 { #category : #querying }
+ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
+	
+	^ identifierSystem
+		objectIdentifiedBy: anIdentifier
+		ifNone:
+			[ ObjectNotFound signal: 'Action with that identifier not found' ]
+]
+
+{ #category : #querying }
 ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [ 
 
 	^ actions

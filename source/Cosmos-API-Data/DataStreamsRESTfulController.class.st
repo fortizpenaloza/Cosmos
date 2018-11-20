@@ -18,7 +18,7 @@ DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aCont
 
 	^ [ self
 		withCreatedResourceDo: [ :dataStream | self dataManagementSystem register: dataStream ]
-		decodedUsing: self dataStreamsKey
+		decodedUsing: self specification dataStreamsMappingKey
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: InstanceCreationFailed
@@ -29,12 +29,6 @@ DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aCont
 DataStreamsRESTfulController >> dataManagementSystem [
 
 	^ cosmos systemImplementing: #DataManagementSystemInterface
-]
-
-{ #category : #'private - object types' }
-DataStreamsRESTfulController >> dataStreamsKey [
-
-	^ #data_streams
 ]
 
 { #category : #API }
@@ -69,8 +63,7 @@ DataStreamsRESTfulController >> getPointsBasedOn: anHttpRequest within: aContext
 
 	mediaType := self targetMediaTypeFrom: anHttpRequest.
 		resourceCollection := self
-		evaluateQuery: [ (self dataManagementSystem
-				streamIdentifiedBy: (anHttpRequest at: #identifier)) dataPoints ].
+		evaluateQuery: [ (self streamRequestedIn: anHttpRequest) dataPoints ].
 
 	encodedResourceCollection := self
 		encode: resourceCollection
