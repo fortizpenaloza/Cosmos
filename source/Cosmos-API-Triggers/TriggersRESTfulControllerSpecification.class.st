@@ -81,6 +81,12 @@ TriggersRESTfulControllerSpecification >> idTemplate [
 	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: self identifierKey
 ]
 
+{ #category : #accessing }
+TriggersRESTfulControllerSpecification >> identifierKey [
+
+	^ #identifier
+]
+
 { #category : #'encoders and decoders' }
 TriggersRESTfulControllerSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 
