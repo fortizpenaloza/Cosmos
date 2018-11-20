@@ -26,9 +26,14 @@ DataStreamsRESTfulControllerSpecification >> addDataStreamDecoderVersion1dot0dot
 DataStreamsRESTfulControllerSpecification >> addDataStreamEncoderVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
+		addDefaultRuleToEncode: self dataStreamMappingKey
+		to: self applicationJsonVersion1dot0dot0MediaType
+		using: self dataStreamJsonEncoderVersion1dot0dot0.
+
+	aBuilder
 		addDefaultRuleToEncode: self dataStreamsMappingKey
-		to: self applicationJsonVersion1dot0dot0MediaType 
-		using: self dataStreamJsonEncoderVersion1dot0dot0
+		to: self applicationJsonVersion1dot0dot0MediaType
+		using: self dataStreamsJsonEncoderVersion1dot0dot0
 ]
 
 { #category : #'media types' }
@@ -66,6 +71,12 @@ DataStreamsRESTfulControllerSpecification >> dataPointJsonEncoderVersion1dot0dot
 				nextPut: dataPoint ] ]
 ]
 
+{ #category : #accessing }
+DataStreamsRESTfulControllerSpecification >> dataPointsTemplate [
+
+	^ '<1s>/data-points' expandMacrosWith: self idTemplate
+]
+
 { #category : #'encoders and decoders' }
 DataStreamsRESTfulControllerSpecification >> dataStreamJsonDecoderVersion1dot0dot0 [
 
@@ -81,30 +92,44 @@ DataStreamsRESTfulControllerSpecification >> dataStreamJsonDecoderVersion1dot0do
 { #category : #'encoders and decoders' }
 DataStreamsRESTfulControllerSpecification >> dataStreamJsonEncoderVersion1dot0dot0 [
 
-	^ [ :dataStreams :context | | metadataSystem |
-	
-	metadataSystem := context objectUnder: #metadata_system ifNone: [ self halt ].
+	^ [ :dataStream :context | 
 
 	String
 		streamContents: [ :stream | 
 			(NeoJSONWriter on: stream)
 				for: DataStream
-					customDo: [ :mapping | 
+					do: [ :mapping | 
 					mapping
-						encoder: [ :dataStream | 
-							OrderedDictionary new
-								at: 'name' put: dataStream name;
-								at: 'current_value' put: dataStream currentValue;
-								at: 'last_update' put: dataStream lastUpdate;
-								at: 'metadata' put: (metadataSystem metadataFor: dataStream);
-								yourself ] ];
-				for: Metadata
-					customDo: [ :mapping | 
+						mapInstVar: #name;
+						mapAccessor: #currentValue to: 'current_value';
+						mapAccessor: #lastUpdate to: 'last_update';
+						mapHypermediaControlsIn: context];
+				for: DateTime
+					customDo:
+						[ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				nextPut: dataStream ] ]
+]
+
+{ #category : #accessing }
+DataStreamsRESTfulControllerSpecification >> dataStreamMappingKey [
+
+	^ #data_stream
+]
+
+{ #category : #'encoders and decoders' }
+DataStreamsRESTfulControllerSpecification >> dataStreamsJsonEncoderVersion1dot0dot0 [
+
+	^ [ :dataStreams :context | 
+	String
+		streamContents: [ :stream | 
+			(NeoJSONWriter on: stream)
+				for: DataStream
+					do: [ :mapping | 
 					mapping
-						encoder: [ :metadata | 
-							Dictionary new
-								at: metadata aspect put: metadata data;
-								yourself ] ];
+						mapInstVar: #name;
+						mapAccessor: #currentValue to: 'current_value';
+						mapAccessor: #lastUpdate to: 'last_update';
+						mapAsHypermediaControls: [ :dataStream | context hypermediaControlsFor: dataStream ] ];
 				for: DateTime
 					customDo: [ :mapping | 
 					mapping
@@ -138,7 +163,7 @@ DataStreamsRESTfulControllerSpecification >> getDataPointsRoute [
 
 	^ RouteSpecification
 		handling: #GET
-		at: '/data-streams/<identifier:IsUUID>/data-points'
+		at: self dataPointsTemplate
 		sending: #getPointsBasedOn:within:
 ]
 
