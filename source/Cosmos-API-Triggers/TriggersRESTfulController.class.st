@@ -20,7 +20,7 @@ TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContex
 		withCreatedResourceDo: [ :trigger | 
 			self triggerManagementSystem register: trigger.
 			trigger ]
-		decodedUsing: #triggers
+		decodedUsing: self specification triggerMappingKey 
 		basedOn: anHttpRequest
 		within: (TriggerDecodingContext workingWith: cosmos) ]
 		on: InstanceCreationFailed
@@ -39,14 +39,43 @@ TriggersRESTfulController >> deregisterNamed: aName [
 	^ ZnResponse noContent
 ]
 
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> entityTagOf: anActionTrigger encodedAs: aMediaType [ 
+	
+	^ ZnETag
+		with:
+			(SHA1 new
+				hashMessage:
+					('<1s>-<2s>-<3s>'
+						expandMacrosWith: (self identifierOf: anActionTrigger) asString
+						with: (self lastModificationOf: anActionTrigger) asString
+						with: aMediaType asString)) hex
+]
+
+{ #category : #API }
+TriggersRESTfulController >> getTriggerBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ self triggerRequestedIn: anHttpRequest ]
+		encodedUsing: self specification triggerMappingKey
+		basedOn: anHttpRequest
+		within: aContext
+]
+
 { #category : #API }
 TriggersRESTfulController >> getTriggersBasedOn: anHttpRequest within: aContext [
 
 	^ self
 		get: [ self triggerManagementSystem triggers ]
-		asCollectionEncodedUsing: #triggers
+		asCollectionEncodedUsing: self specification triggersMappingKey 
 		basedOn: anHttpRequest
 		within: aContext
+]
+
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> identifierOf: anActionTrigger [
+
+	^ self identifierSystem identifierOf: anActionTrigger
 ]
 
 { #category : #'private - systems' }
@@ -62,6 +91,14 @@ TriggersRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
+TriggersRESTfulController >> lastModificationOf: anActionTrigger [ 
+
+	^ self metadataSystem 
+		dataDescribing: #registration_timestamp
+		of: anActionTrigger
+]
+
+{ #category : #'private - accessing' }
 TriggersRESTfulController >> locationOf: anActionTrigger [
 
 	| baseUrl |
@@ -70,15 +107,19 @@ TriggersRESTfulController >> locationOf: anActionTrigger [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^ '<1p>/<2p>'
-		expandMacrosWith: baseUrl / 'triggers' asZnUrl
-		with: (self identifierSystem identifierOf: anActionTrigger)
+	^  baseUrl / self specification endpoint / (self identifierOf: anActionTrigger) asString 
+]
+
+{ #category : #systems }
+TriggersRESTfulController >> metadataSystem [
+
+	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }
 TriggersRESTfulController >> provideHypermediaPolicy [
 
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }
@@ -97,4 +138,10 @@ TriggersRESTfulController >> specification [
 TriggersRESTfulController >> triggerManagementSystem [
 	
 	^ cosmos systemImplementing: #TriggerManagementSystemInterface
+]
+
+{ #category : #'private - API' }
+TriggersRESTfulController >> triggerRequestedIn: anHttpRequest [
+
+	^ self triggerManagementSystem triggerIdentifiedBy: (anHttpRequest at: #identifier)
 ]

@@ -186,6 +186,15 @@ TriggerManagementSystem >> subscribeToTickEvents [
 		toBeNotifiedSending: #havePassed:
 ]
 
+{ #category : #querying }
+TriggerManagementSystem >> triggerIdentifiedBy: anIdentifier [
+	
+	^ identifierSystem
+		objectIdentifiedBy: anIdentifier
+		ifNone:
+			[ ObjectNotFound signal: 'Trigger with that identifier not found' ]
+]
+
 { #category : #'private - querying' }
 TriggerManagementSystem >> triggerNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
