@@ -128,7 +128,7 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 		assert: self triggerManagementSystem triggers
 		hasTheSameElementsInTheSameOrderThat: {trigger}.
 		
-	self triggerManagementSystem deregisterNamed: 'Set triggered to true every 5 minutes'.
+	self triggerManagementSystem deregister: trigger.
 	
 	self assert: self triggerManagementSystem triggers isEmpty 
 ]
@@ -137,7 +137,7 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterDataPointRegistration [
 
 	| trigger dataStream |
-	
+
 	dataStream := self temperatureStream.
 	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream.
 	self triggerManagementSystem register: trigger.
@@ -145,8 +145,7 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 		assert: self triggerManagementSystem triggers
 		hasTheSameElementsInTheSameOrderThat: {trigger}.
 
-	self triggerManagementSystem
-		deregisterNamed: 'Set triggered to true after data point registration'.
+	self triggerManagementSystem deregister: trigger.
 
 	self assert: self triggerManagementSystem triggers isEmpty
 ]

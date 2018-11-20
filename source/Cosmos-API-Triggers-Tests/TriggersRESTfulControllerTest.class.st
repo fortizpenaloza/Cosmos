@@ -8,7 +8,7 @@ Class {
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #'private - media types' }
 TriggersRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asMediaType
@@ -28,26 +28,19 @@ TriggersRESTfulControllerTest >> baseUrl [
 	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
-{ #category : #accessing }
-TriggersRESTfulControllerTest >> dateTimeFormattedAsISO8601 [
-
-	^ ISO8601DateTimeFormatter usingExtendedFormat
-		format: self systemDateTime
-]
-
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> eightPM [
 	
 	^ TimeOfDay hours: 20
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
@@ -59,13 +52,13 @@ TriggersRESTfulControllerTest >> identifierProvider [
 	^ SequentialIdentifierProvider providing: identifierSequence 
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> ninePM [
 	
 	^ TimeOfDay hours: 21
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
@@ -81,14 +74,14 @@ TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointGreater
 						isGreaterThan: 11))
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
 		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream)
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> registerSetTriggeredToTruePeriodicallyEveryFiveMinutes [
 
 	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self fiveMinutes)
@@ -121,7 +114,7 @@ TriggersRESTfulControllerTest >> resourceUrl [
 	^ self baseUrl / resourceController specification endpoint
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrue [
 
 	^ self actionManagementSystem
@@ -130,7 +123,7 @@ TriggersRESTfulControllerTest >> setTriggeredToTrue [
 		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
 
 	^ ActionTrigger
@@ -140,13 +133,13 @@ TriggersRESTfulControllerTest >> setTriggeredToTrueAfterDataPointRegistrationOn:
 		ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod [
 
 	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
 
 	^ ActionTrigger
@@ -207,13 +200,119 @@ TriggersRESTfulControllerTest >> systemDateTime [
 		zone: TimeZones buenosAires
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> temperatureStream [
 
 	^ self dataManagementSystem 
 		streamNamed: 'Temperature'
 		ifFound: [ :stream | stream ]
 		ifNone: [ ObjectNotFound signal: 'Data stream not found' ]
+]
+
+{ #category : #tests }
+TriggersRESTfulControllerTest >> testCreateOnDataPointRegistrationTrigger [
+
+	| response |
+
+	self triggerManagementSystem
+		triggerNamed: 'Set triggered to true on data point registration'
+		ifFound: [ :trigger | self fail ]
+		ifNone: [ "do nothing" ].
+
+	response := resourceController
+		createTriggerBasedOn:
+			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
+				entity:
+					(ZnEntity
+						with:
+							'{
+	"name" : "Set triggered to true on data point registration",
+	"action" : "Set triggered to true",
+	"policy" : {
+		"type" : "data_point_registration",
+		"data_stream" : "Temperature"
+	},
+	"conditions" : [ ]
+}'
+						type: self applicationJsonVersion1dot0dot0MediaType))
+		within: self httpRequestContext.
+
+	self
+		assert: response code equals: 201;
+		assert: response location equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'.
+
+	self triggerManagementSystem
+		triggerNamed: 'Set triggered to true on data point registration'
+		ifFound: [ :trigger | 
+			self
+				assert: trigger name
+					equals: 'Set triggered to true on data point registration' ]
+		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
+
+	| response |
+
+	self triggerManagementSystem
+		triggerNamed: 'Set triggered to true periodically every 5 minutes'
+		ifFound: [ :trigger | self fail ]
+		ifNone: [ "do nothing" ].
+
+	response := resourceController
+		createTriggerBasedOn:
+			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
+				entity:
+					(ZnEntity
+						with:
+							'{
+	"name" : "Set triggered to true periodically every 5 minutes",
+	"action" : "Set triggered to true",
+	"policy" : {
+		"type" : "periodical",
+		"time_interval" : "00:05:00"
+	},
+	"conditions" : [ ]
+}'
+						type: self applicationJsonVersion1dot0dot0MediaType))
+		within: self httpRequestContext.
+
+	self
+		assert: response code equals: 201;
+		assert: response location equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'.
+
+	self triggerManagementSystem
+		triggerNamed: 'Set triggered to true periodically every 5 minutes'
+		ifFound: [ :trigger | 
+			self
+				assert: trigger name
+					equals: 'Set triggered to true periodically every 5 minutes' ]
+		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+TriggersRESTfulControllerTest >> testDeleteTrigger [
+
+	| response |
+
+	self assert: self triggerManagementSystem triggers isEmpty.
+	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+	self deny: self triggerManagementSystem triggers isEmpty.
+
+	response := resourceController
+		deleteTriggerBasedOn:
+			(TeaRequest
+				fromZnRequest: (ZnRequest delete: (self urlForResourceIdentifiedBy: self setTriggeredToTrueIdentifier))
+				pathParams: {(#identifier -> self setTriggeredToTrueIdentifier)} asDictionary)
+		within: self httpRequestContext.
+
+
+	self
+		assert: response isSuccess;
+		assert: response status equals: 204;
+		deny: response hasEntity;
+		assert: self triggerManagementSystem triggers isEmpty
 ]
 
 { #category : #tests }
@@ -373,88 +472,6 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 		assert: response contents
 			equals:
 			'[{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}]'
-]
-
-{ #category : #tests }
-TriggersRESTfulControllerTest >> testRegistrationOfDataPointRegistered [
-
-	| response |
-
-	self triggerManagementSystem
-		triggerNamed: 'Set triggered to true on data point registration'
-		ifFound: [ :trigger | self fail ]
-		ifNone: [ "do nothing" ].
-
-	response := resourceController
-		createTriggerBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
-				entity:
-					(ZnEntity
-						with:
-							'{
-	"name" : "Set triggered to true on data point registration",
-	"action" : "Set triggered to true",
-	"policy" : {
-		"type" : "data_point_registration",
-		"data_stream" : "Temperature"
-	},
-	"conditions" : [ ]
-}'
-						type: self applicationJsonVersion1dot0dot0MediaType))
-		within: self httpRequestContext.
-
-	self
-		assert: response code equals: 201;
-		assert: response location equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'.
-
-	self triggerManagementSystem
-		triggerNamed: 'Set triggered to true on data point registration'
-		ifFound: [ :trigger | 
-			self
-				assert: trigger name
-					equals: 'Set triggered to true on data point registration' ]
-		ifNone: [ self fail ]
-]
-
-{ #category : #tests }
-TriggersRESTfulControllerTest >> testRegistrationOfPeriodicalTrigger [
-
-	| response |
-
-	self triggerManagementSystem
-		triggerNamed: 'Set triggered to true periodically every 5 minutes'
-		ifFound: [ :trigger | self fail ]
-		ifNone: [ "do nothing" ].
-
-	response := resourceController
-		createTriggerBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
-				entity:
-					(ZnEntity
-						with:
-							'{
-	"name" : "Set triggered to true periodically every 5 minutes",
-	"action" : "Set triggered to true",
-	"policy" : {
-		"type" : "periodical",
-		"time_interval" : "00:05:00"
-	},
-	"conditions" : [ ]
-}'
-						type: self applicationJsonVersion1dot0dot0MediaType))
-		within: self httpRequestContext.
-
-	self
-		assert: response code equals: 201;
-		assert: response location equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'.
-
-	self triggerManagementSystem
-		triggerNamed: 'Set triggered to true periodically every 5 minutes'
-		ifFound: [ :trigger | 
-			self
-				assert: trigger name
-					equals: 'Set triggered to true periodically every 5 minutes' ]
-		ifNone: [ self fail ]
 ]
 
 { #category : #'private - accessing' }

@@ -36,6 +36,12 @@ TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
 				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
 ]
 
+{ #category : #managing }
+TriggerManagementSystem >> deregister: anActionTrigger [
+
+	self deregister: anActionTrigger accordingTo: anActionTrigger triggeringPolicy
+]
+
 { #category : #'private - managing' }
 TriggerManagementSystem >> deregister: aTrigger accordingTo: aTriggeringPolicy [ 
 
@@ -53,15 +59,6 @@ TriggerManagementSystem >> deregister: aTrigger fromTriggeredPeriodicallyEvery: 
 TriggerManagementSystem >> deregister: aTrigger toStopTriggeringAfterDataPointRegistrationOn: aDataStream [ 
 	
 	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: aTrigger 	
-]
-
-{ #category : #managing }
-TriggerManagementSystem >> deregisterNamed: aName [
-
-	self
-		triggerNamed: aName
-		ifFound: [ :trigger | self deregister: trigger accordingTo: trigger triggeringPolicy ]
-		ifNone: [ ObjectNotFound signal: 'Trigger not found in the system' ]
 ]
 
 { #category : #'events handling' }
