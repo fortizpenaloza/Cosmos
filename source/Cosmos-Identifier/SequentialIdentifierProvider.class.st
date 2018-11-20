@@ -30,11 +30,11 @@ SequentialIdentifierProvider class >> providing: aSequence [
 
 	self assertIsNotEmpty: aSequence.
 
-	^ self new initiliazeProviding: aSequence
+	^ self new initializeProviding: aSequence
 ]
 
 { #category : #initialization }
-SequentialIdentifierProvider >> initiliazeProviding: aSequence [ 
+SequentialIdentifierProvider >> initializeProviding: aSequence [ 
 
 	sequence := CircularIterator cyclingOver: aSequence 
 ]
