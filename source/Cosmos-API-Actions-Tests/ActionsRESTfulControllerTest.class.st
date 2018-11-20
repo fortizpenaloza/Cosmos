@@ -160,6 +160,15 @@ ActionsRESTfulControllerTest >> setUpRequirements [
  
 ]
 
+{ #category : #'private - accessing' }
+ActionsRESTfulControllerTest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
+]
+
 { #category : #tests }
 ActionsRESTfulControllerTest >> testCreateAction [
 
@@ -253,7 +262,7 @@ ActionsRESTfulControllerTest >> testGetAction [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"c6060cbb6532a7786eac587e7d600714698b3bb1"' asETag;
+		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
 		withJsonFromContentsIn: response contents
 			do: [ :json | 
 			self
@@ -279,7 +288,7 @@ ActionsRESTfulControllerTest >> testGetActions [
 		assert: response code equals: 200;
 		assert: response contents
 			equals:
-			'[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}},{"name":"Add DNS zone","http_request":{"request_line":{"method":"POST","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]}}]'
+			'[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Add DNS zone","http_request":{"request_line":{"method":"POST","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"https://tests.cosmos.com/actions/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}}]'
 ]
 
 { #category : #'private - media types' }

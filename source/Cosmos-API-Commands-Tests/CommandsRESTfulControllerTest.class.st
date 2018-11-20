@@ -79,7 +79,6 @@ CommandsRESTfulControllerTest >> requestToGet: aUrl accepting: aMediaType [
 { #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToGetCommandIdentifiedBy: anIdentifier accepting: aMediaType [
 
-	self halt.
 	^ TeaRequest
 		fromZnRequest:
 			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
@@ -120,6 +119,15 @@ CommandsRESTfulControllerTest >> setUpRequirements [
 	super
 		setUpRequirements;
 		requireCommandManagementSystem
+]
+
+{ #category : #'private - accessing' }
+CommandsRESTfulControllerTest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
 ]
 
 { #category : #tests }
@@ -229,7 +237,7 @@ CommandsRESTfulControllerTest >> testGetCommand [
 		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"a1530d41d5b133615991dfb44210dd5ce144aa8a"' asETag;
+		assert: response entityTag equals: '"2cc1a5913c9c7a9cd2e624a950abdf7896918b0a"' asETag;
 		withJsonFromContentsIn: response contents
 			do: [ :json | 
 			self
@@ -265,7 +273,7 @@ CommandsRESTfulControllerTest >> textPlain [
 	^ 'text/plain;charset=utf-8' asZnMimeType
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> turnOnLedWithHighestPriorityIndentifier [
 	
 	^ identifierSequence first

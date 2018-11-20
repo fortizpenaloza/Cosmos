@@ -85,7 +85,8 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 		onDeclaredPackagesExcluding:
 			{TriggersRESTfulControllerTest.
 			DataStreamsRESTfulControllerTest.
-			CommandsRESTfulControllerTest}
+			CommandsRESTfulControllerTest.
+			ActionsRESTfulControllerTest }
 ]
 
 { #category : #tests }

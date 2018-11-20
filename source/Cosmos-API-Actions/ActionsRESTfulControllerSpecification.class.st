@@ -77,7 +77,8 @@ ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 				for: Action
 					do: [ :mapping | 
 					mapping mapInstVar: #name.
-					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy ];
+					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy.
+					mapping mapAsHypermediaControls: [ :action | context hypermediaControlsFor: action ]  ];
 				for: #Policy
 					customDo: [ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
 				for: ZnRequest
