@@ -31,14 +31,20 @@ DataPointsRESTfulControllerSpecification >> createDataPointsRoute [
 { #category : #'encoders and decoders' }
 DataPointsRESTfulControllerSpecification >> dataPointsDecoderVersion1dot0dot0 [
 
-	^ [ :json :context | 	| timestamp |
+	^ [ :json :context | | timestamp |
 
 	timestamp := self timestampFrom: context.
-	
-	(NeoJSONReader on: json readStream) next
-		collect: [ :dataStreamDataPoint | 
-			(dataStreamDataPoint at: #data_stream)
-				-> (DataPoint on: timestamp holding: (dataStreamDataPoint at: #value)) ] ]
+
+	(NeoJSONReader on: json readStream)
+		for: DataStream
+			customDo: [ :mapping | 
+			mapping
+				decoder:
+					[ :dataPoint | (dataPoint at: #data_stream) -> (DataPoint on: timestamp holding: (dataPoint at: #value)) ] ];
+		for: #DataPointCollection
+			customDo: [ :mapping | 
+				mapping listOfType: OrderedCollection andElementSchema: DataStream ];
+		nextAs: #DataPointCollection ]
 ]
 
 { #category : #'encoders and decoders' }
