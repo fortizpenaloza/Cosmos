@@ -140,7 +140,7 @@ CosmosCommandLineHandler >> configurationDefinition [
 
 	^ OrderedCollection new
 		add: (OptionalArgument named: 'hostname' defaultingTo: 'localhost');
-		add: (OptionalArgument named: 'port' defaultingTo: 9000 convertingWith: #asNumber);
+		add: (OptionalArgument named: 'port' defaultingTo: 57001 convertingWith: #asNumber);
 		add:
 			(MandatoryArgument
 				named: 'allowed-origins'
@@ -163,7 +163,15 @@ CosmosCommandLineHandler >> logPrefix [
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> periodicalScheduler [
 
-	^ PeriodicalScheduler workingWith: DelaySpinScheduler new
+	| schedulerClass |
+
+	self flag: 'hack due to a bad deprecation from pharo, remove after drop support to Pharo 6.x'.
+	
+	(Smalltalk hasClassNamed: #DelaySpinScheduler)
+		ifTrue: [ schedulerClass := Smalltalk classNamed: #DelaySpinScheduler ]
+		ifFalse: [ schedulerClass := Smalltalk classNamed: #DelaySemaphoreScheduler ].
+
+	^ PeriodicalScheduler workingWith: schedulerClass new
 ]
 
 { #category : #'private - accessing' }
