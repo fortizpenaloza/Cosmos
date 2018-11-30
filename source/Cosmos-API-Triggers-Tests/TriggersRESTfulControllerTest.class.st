@@ -88,6 +88,12 @@ TriggersRESTfulControllerTest >> registerSetTriggeredToTruePeriodicallyEveryFive
 ]
 
 { #category : #'private - requests' }
+TriggersRESTfulControllerTest >> requestToCreateTriggerFrom: aRepresentation [
+
+	^ self requestToPOST: aRepresentation as: self applicationJsonVersion1dot0dot0MediaType
+]
+
+{ #category : #'private - requests' }
 TriggersRESTfulControllerTest >> requestToGetTriggerIdentifiedBy:anIdentifier accepting: aMediaType [
 
 	^ TeaRequest
@@ -105,6 +111,16 @@ TriggersRESTfulControllerTest >> requestToGetTriggersAccepting: aMediaType [
 		fromZnRequest:
 			((ZnRequest get: self resourceUrl)
 				setAccept: aMediaType;
+				yourself)
+]
+
+{ #category : #'private - requests' }
+TriggersRESTfulControllerTest >> requestToPOST: aRepresentation as: aMediaType [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest post: self resourceUrl)
+				entity: (ZnEntity with: aRepresentation type: aMediaType);
 				yourself)
 ]
 
@@ -149,7 +165,7 @@ TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfie
 		ifSatisfies: aCondition
 ]
 
-{ #category : #tests }
+{ #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrueIdentifier [
 
 	^ identifierSequence fifth
@@ -262,11 +278,9 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 
 	response := resourceController
 		createTriggerBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/v1/triggers')
-				entity:
-					(ZnEntity
-						with:
-							'{
+			(self
+				requestToCreateTriggerFrom:
+					'{
 	"name" : "Set triggered to true periodically every 5 minutes",
 	"action" : "Set triggered to true",
 	"policy" : {
@@ -274,20 +288,20 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 		"time_interval" : "00:05:00"
 	},
 	"conditions" : [ ]
-}'
-						type: self applicationJsonVersion1dot0dot0MediaType))
+}')
 		within: self httpRequestContext.
 
 	self
+		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'.
+		assert: response location
+			equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858';
+		assert: response contentType equals: self textPlainMediaType.
 
 	self triggerManagementSystem
 		triggerNamed: 'Set triggered to true periodically every 5 minutes'
-		ifFound: [ :trigger | 
-			self
-				assert: trigger name
-					equals: 'Set triggered to true periodically every 5 minutes' ]
+		ifFound:
+			[ :trigger | self assert: trigger name equals: 'Set triggered to true periodically every 5 minutes' ]
 		ifNone: [ self fail ]
 ]
 
@@ -472,6 +486,12 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 		assert: response contents
 			equals:
 			'[{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}]'
+]
+
+{ #category : #'private - media types' }
+TriggersRESTfulControllerTest >> textPlainMediaType [
+
+	^ 'text/plain;charset=utf-8' asMediaType
 ]
 
 { #category : #'private - accessing' }

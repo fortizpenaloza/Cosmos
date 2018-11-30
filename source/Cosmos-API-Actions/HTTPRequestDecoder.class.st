@@ -34,7 +34,7 @@ HTTPRequestDecoder >> decode: aKey from: aDictionary with: aDecoder [
 		decode: aKey
 		from: aDictionary
 		using: aDecoder
-		ifAbsent: [ Error signal: ('<s1> is mandatory and must be present' expandMacrosWith: aKey) ]
+		ifAbsent: [ KeyNotFound signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
 ]
 
 { #category : #'private - decoders' }

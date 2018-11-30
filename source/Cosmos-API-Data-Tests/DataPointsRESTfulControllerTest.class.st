@@ -123,22 +123,16 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithMalf
 				createPointsBasedOn:
 					(self
 						requestToCreateDataPointsFrom:
-							'[
-			{
-				"xxx" : "Temperature",
-				"value" : 24
-			},
-			{
-				"data_stream" : "Pressure",
-				"value" : 89
-			}
-		]')
+							'{
+  "data_stream": "xxx",
+  "value": 24
+}')
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText
-					equals: 'key #data_stream not found in Dictionary';
+					equals: '[ expected';
 				assert: signal code equals: 400 ]
 ]
 
@@ -166,5 +160,32 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotV
 			self
 				assert: signal messageText
 					equals: 'Data stream not found in the system';
+				assert: signal code equals: 400 ]
+]
+
+{ #category : #tests }
+DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotValidKey [
+
+	self
+		should: [ resourceController
+				createPointsBasedOn:
+					(self
+						requestToCreateDataPointsFrom:
+							'[
+			{
+				"xxx" : "Temperature",
+				"value" : 24
+			},
+			{
+				"data_stream" : "Pressure",
+				"value" : 89
+			}
+		]')
+				within: self httpRequestContext ]
+		raise: HTTPClientError
+		withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+					equals: 'key #data_stream not found in Dictionary';
 				assert: signal code equals: 400 ]
 ]
