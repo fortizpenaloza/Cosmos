@@ -98,7 +98,7 @@ TriggersRESTfulControllerSpecification >> triggerJsonDecoderVersion1dot0dot0 [
 			customDo: [ :mapping | 
 			mapping
 				decoder: [ :rawTrigger | 
-					TriggerDecoder new decode: (rawTrigger).
+					(TriggerDecoder using: (context objectUnder: #cosmos)) decode: rawTrigger
 					"ActionTrigger
 						named: (rawTrigger at: #name)
 						triggering: (context decodeActionFrom: rawTrigger)

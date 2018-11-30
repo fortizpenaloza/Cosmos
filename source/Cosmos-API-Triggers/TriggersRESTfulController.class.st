@@ -16,13 +16,15 @@ TriggersRESTfulController class >> workingWith: aCosmosSystem [
 { #category : #API }
 TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContext [
 
+	aContext hold: cosmos under: #cosmos.
+
 	^ [ self
 		withCreatedResourceDo: [ :trigger | 
 			self triggerManagementSystem register: trigger.
 			trigger ]
 		decodedUsing: self specification triggerMappingKey 
 		basedOn: anHttpRequest
-		within: (TriggerDecodingContext workingWith: cosmos) ]
+		within: aContext ]
 		on: InstanceCreationFailed
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
