@@ -1,7 +1,7 @@
-Extension { #name : #DataManagementSystem }
+Extension { #name : #DataStreamManagementSystem }
 
 { #category : #'*Cosmos-Tools' }
-DataManagementSystem >> gtInspectorDataStreamsIn: aCompositePresentation [
+DataStreamManagementSystem >> gtInspectorDataStreamsIn: aCompositePresentation [
 
 	<gtInspectorPresentationOrder: 5>
 	aCompositePresentation table

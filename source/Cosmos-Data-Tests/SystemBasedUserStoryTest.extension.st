@@ -3,7 +3,7 @@ Extension { #name : #SystemBasedUserStoryTest }
 { #category : #'*Cosmos-Data-Tests' }
 SystemBasedUserStoryTest >> dataManagementSystem [
 
-	^ rootSystem systemImplementing: #DataManagementSystemInterface
+	^ rootSystem systemImplementing: #DataStreamManagementSystemInterface
 ]
 
 { #category : #'*Cosmos-Data-Tests' }
@@ -14,5 +14,5 @@ SystemBasedUserStoryTest >> requireDataManagementSystem [
 		requireEventNotificationSystem;
 		requireMetadataSystem;
 		requireIdentifierSystem.
-	systemBuilder add: DataManagementSystem new
+	systemBuilder add: DataStreamManagementSystem new
 ]

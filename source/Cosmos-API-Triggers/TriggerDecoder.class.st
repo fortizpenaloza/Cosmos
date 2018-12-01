@@ -27,7 +27,7 @@ TriggerDecoder >> actionDecoder [
 TriggerDecoder >> dataStreamDecoder [
 
 	^ [ :name | 
-	(cosmos systemImplementing: #DataManagementSystemInterface)
+	(cosmos systemImplementing: #DataStreamManagementSystemInterface)
 		streamNamed: name
 		ifFound: [ :stream | stream ]
 		ifNone: [ ObjectNotFound  signal: ('Data stream named <1s> not found' expandMacrosWith: name) ] ]

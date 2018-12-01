@@ -1,17 +1,17 @@
 Class {
-	#name : #DataManagementSystemUserStoryTests,
+	#name : #DataStreamManagementSystemUserStoryTests,
 	#superclass : #SystemBasedUserStoryTest,
 	#category : #'Cosmos-Data-Tests'
 }
 
 { #category : #accessing }
-DataManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
+DataStreamManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 
 	^ (October first , 2014) atNoon
 ]
 
 { #category : #running }
-DataManagementSystemUserStoryTests >> setUpRequirements [
+DataStreamManagementSystemUserStoryTests >> setUpRequirements [
 
 	super
 		setUpRequirements;
@@ -19,13 +19,13 @@ DataManagementSystemUserStoryTests >> setUpRequirements [
 ]
 
 { #category : #accessing }
-DataManagementSystemUserStoryTests >> temperatureStream [
+DataStreamManagementSystemUserStoryTests >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testDataPointRegistration [
+DataStreamManagementSystemUserStoryTests >> testDataPointRegistration [
 
 	| dataStream dataPoint |
 
@@ -41,7 +41,7 @@ DataManagementSystemUserStoryTests >> testDataPointRegistration [
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotFound [
+DataStreamManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotFound [
 
 	self
 		should: [ self dataManagementSystem
@@ -52,7 +52,7 @@ DataManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStreamNotF
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testDataStreamDeregistration [
+DataStreamManagementSystemUserStoryTests >> testDataStreamDeregistration [
 
 	| dataStream |
 
@@ -67,7 +67,7 @@ DataManagementSystemUserStoryTests >> testDataStreamDeregistration [
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testDataStreamRegistration [
+DataStreamManagementSystemUserStoryTests >> testDataStreamRegistration [
 
 	| dataStream |
 
@@ -81,7 +81,7 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistration [
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyExists [
+DataStreamManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyExists [
 
 	self dataManagementSystem register: self temperatureStream.
 
@@ -93,7 +93,7 @@ DataManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlreadyEx
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRegistration [
+DataStreamManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRegistration [
 
 	| dataStream metadata |
 
@@ -118,7 +118,7 @@ DataManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRegistra
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
+DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 
 	| dataStream |
 
@@ -131,7 +131,7 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
+DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 
 	| dataStream |
 
@@ -145,7 +145,7 @@ DataManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 ]
 
 { #category : #tests }
-DataManagementSystemUserStoryTests >> testQueryingDataStreamUsingWrongIdentifierGivesObjectNotFound [
+DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamUsingWrongIdentifierGivesObjectNotFound [
 
 	| dataStream |
 
