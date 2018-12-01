@@ -150,8 +150,8 @@ BaselineOfCosmos >> registerCommandManagementSystemInterface [
 BaselineOfCosmos >> registerDataManagementSystemInterface [
 
 	self
-		registerInterfaceAs: #DataManagementSystemInterface
-		named: 'Data Management System Interface'
+		registerInterfaceAs: #DataStreamManagementSystemInterface
+		named: 'Data Stream Management System Interface'
 		declaring: #(#register: #deregister: #register:toStreamNamed:  #streamIdentifiedBy: #streams)
 ]
 
@@ -214,7 +214,7 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate'
 			with: [ spec
-				repository: 'github://ba-st/stargate:v0.4.0/source';
+				repository: 'github://ba-st/stargate:v0.6.0/source';
 				loads: 'Deployment' ];
 		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [ spec loads: 'Development' ].
 

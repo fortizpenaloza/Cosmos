@@ -44,6 +44,14 @@ CosmosCommandLineHandler class >> description [
 	^ 'Cosmos command line handler'
 ]
 
+{ #category : #'private - building cosmos API' }
+CosmosCommandLineHandler >> addDumpStackErrorHandlerOn: api [
+
+	api
+		on: self exceptionsToHandle
+		addErrorHandler: [ :signal :request | self dumpStackAndReport: signal ]
+]
+
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> allowedOrigins [
 
@@ -68,7 +76,7 @@ CosmosCommandLineHandler >> basicActivate [
 			during: [ self buildAndStartScheduler ]
 ]
 
-{ #category : #'private - activation' }
+{ #category : #'private - building cosmos system' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
 	| builder |
@@ -79,7 +87,7 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 		add: EventNotificationSystem new;
 		add: MetadataSystem new;
 		add: (IdentifierSystem using: UUIDProvider new);
-		add: DataManagementSystem new;
+		add: DataStreamManagementSystem new;
 		add: TriggerManagementSystem new;
 		add: ActionManagementSystem new;
 		add: CommandManagementSystem new.
@@ -89,7 +97,7 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 	cosmos startUp
 ]
 
-{ #category : #'private - activation' }
+{ #category : #'private - building cosmos API' }
 CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 
 	| api |
@@ -106,16 +114,15 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 			(ActionsRESTfulController workingWith: cosmos).
 			(TriggersRESTfulController workingWith: cosmos)}.
 
-	api install.
-	api beCORSAwareAllowing: self allowedOrigins.
-	api
-		on: self exceptionsToHandle
-		addErrorHandler: [ :signal :request | self dumpStackAndReport: signal ].
+	self addDumpStackErrorHandlerOn: api.
+	self setAllowedCrossOriginResourseSharingOn: api.
 
-	api start
+	api
+		install;
+		start
 ]
 
-{ #category : #'private - activation' }
+{ #category : #'private - building scheduler' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
 	| scheduler  |
@@ -178,6 +185,12 @@ CosmosCommandLineHandler >> periodicalScheduler [
 CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'
+]
+
+{ #category : #'private - building cosmos API' }
+CosmosCommandLineHandler >> setAllowedCrossOriginResourseSharingOn: api [
+
+	api beCORSAwareAllowing: self allowedOrigins
 ]
 
 { #category : #'private - accessing' }

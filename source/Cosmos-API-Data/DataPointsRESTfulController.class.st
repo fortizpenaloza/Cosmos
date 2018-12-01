@@ -41,7 +41,7 @@ DataPointsRESTfulController >> currentDateTime [
 { #category : #'private - systems' }
 DataPointsRESTfulController >> dataManagementSystem [
 
-	^ cosmos systemImplementing: #DataManagementSystemInterface
+	^ cosmos systemImplementing: #DataStreamManagementSystemInterface
 ]
 
 { #category : #'private - object types' }

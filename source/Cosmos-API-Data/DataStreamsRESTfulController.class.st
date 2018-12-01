@@ -28,7 +28,7 @@ DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aCont
 { #category : #'private - systems' }
 DataStreamsRESTfulController >> dataManagementSystem [
 
-	^ cosmos systemImplementing: #DataManagementSystemInterface
+	^ cosmos systemImplementing: #DataStreamManagementSystemInterface
 ]
 
 { #category : #API }

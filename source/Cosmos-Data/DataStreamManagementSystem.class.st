@@ -4,7 +4,7 @@ I'm a system that manages data. I allow the registration of streams and data poi
 I also allow deregistration of streams.
 "
 Class {
-	#name : #DataManagementSystem,
+	#name : #DataStreamManagementSystem,
 	#superclass : #System,
 	#instVars : [
 		'dataStreams',
@@ -17,19 +17,19 @@ Class {
 }
 
 { #category : #'system specification' }
-DataManagementSystem class >> implementedInterface [
+DataStreamManagementSystem class >> implementedInterface [
 
-	^ SystemInterface >> #DataManagementSystemInterface 
+	^ SystemInterface >> #DataStreamManagementSystemInterface 
 ]
 
 { #category : #managing }
-DataManagementSystem >> deregister: aDataStream [ 
+DataStreamManagementSystem >> deregister: aDataStream [ 
 	
 	dataStreams remove: aDataStream 
 ]
 
 { #category : #initialization }
-DataManagementSystem >> initialize [
+DataStreamManagementSystem >> initialize [
 
 	super initialize.
 
@@ -42,14 +42,14 @@ DataManagementSystem >> initialize [
 ]
 
 { #category : #'events handling' }
-DataManagementSystem >> notifyDataPointWasRegisteredOn: aDataStream [
+DataStreamManagementSystem >> notifyDataPointWasRegisteredOn: aDataStream [
 
 	eventNotificationSystem
 		notifySubscribersTo: (DataPointRegistrationEvent on: aDataStream)
 ]
 
 { #category : #managing }
-DataManagementSystem >> register: aDataStream [
+DataStreamManagementSystem >> register: aDataStream [
 
 	self
 		streamNamed: aDataStream name
@@ -62,14 +62,14 @@ DataManagementSystem >> register: aDataStream [
 ]
 
 { #category : #'private - managing' }
-DataManagementSystem >> register: aDataPoint to: aDataStream [
+DataStreamManagementSystem >> register: aDataPoint to: aDataStream [
 
 	aDataStream add: aDataPoint.
 	self notifyDataPointWasRegisteredOn: aDataStream
 ]
 
 { #category : #managing }
-DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
+DataStreamManagementSystem >> register: aDataPoint toStreamNamed: aName [
 
 	self
 		streamNamed: aName
@@ -78,13 +78,13 @@ DataManagementSystem >> register: aDataPoint toStreamNamed: aName [
 ]
 
 { #category : #'private - managing' }
-DataManagementSystem >> registerIdentifierFor: aDataStream [
+DataStreamManagementSystem >> registerIdentifierFor: aDataStream [
 
 	identifierSystem registerIdentifierFor: aDataStream
 ]
 
 { #category : #'private - managing' }
-DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
+DataStreamManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 
 	metadataSystem
 		register:
@@ -95,7 +95,7 @@ DataManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 ]
 
 { #category : #'private - managing' }
-DataManagementSystem >> registerWithMetadata: aDataStream [
+DataStreamManagementSystem >> registerWithMetadata: aDataStream [
 
 	dataStreams add: aDataStream.
 
@@ -104,7 +104,7 @@ DataManagementSystem >> registerWithMetadata: aDataStream [
 ]
 
 { #category : #'private - dependency resolution' }
-DataManagementSystem >> resolveDependecies [
+DataStreamManagementSystem >> resolveDependecies [
 
 	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
 	eventNotificationSystem := self
@@ -114,7 +114,7 @@ DataManagementSystem >> resolveDependecies [
 ]
 
 { #category : #querying }
-DataManagementSystem >> streamIdentifiedBy: anIdentifier [
+DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 
 	^ identifierSystem
 		objectIdentifiedBy: anIdentifier
@@ -123,7 +123,7 @@ DataManagementSystem >> streamIdentifiedBy: anIdentifier [
 ]
 
 { #category : #'private - querying' }
-DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
+DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
 	^ dataStreams 	
 		detect: [ :dataStream | dataStream name = aName ]
@@ -132,7 +132,7 @@ DataManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlo
 ]
 
 { #category : #querying }
-DataManagementSystem >> streams [
+DataStreamManagementSystem >> streams [
 
 	^ dataStreams copy 
 ]
