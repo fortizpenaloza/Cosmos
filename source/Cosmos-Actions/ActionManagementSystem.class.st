@@ -17,18 +17,27 @@ ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
 ]
 
 { #category : #querying }
-ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [ 
+ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock [
 
 	^ actions
 		detect: [ :action | action name = aName ]
 		ifFound: aFoundBlock
-		ifNone: aNoneBlock 
+		ifNone: [ ObjectNotFound signal: ('Action named <1s> not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }
 ActionManagementSystem >> actions [
 
 	^ actions copy
+]
+
+{ #category : #'private - preconditions' }
+ActionManagementSystem >> assertIsNotAlreadyRegistered: anAction [
+
+	AssertionChecker
+		refuse: [ actions includes: anAction ]
+		because: 'An action with that name already exists in system'
+		raising: ConflictingObjectFound
 ]
 
 { #category : #installing }
@@ -77,15 +86,12 @@ ActionManagementSystem >> name [
 { #category : #managing }
 ActionManagementSystem >> register: anAction [
 
-	self flag: 'change for assert ble'.
-
-	self
-		actionNamed: anAction name
-		ifFound: [ :action | 
-			ConflictingObjectFound
-				signal: 'An action with that name already exists in system' ]
-		ifNone: [ self registerWithMetadata: anAction ].
-
+	self assertIsNotAlreadyRegistered: anAction.
+	
+	actions add: anAction.
+	self registerIdentifierFor: anAction.
+	self registerRegistrationTimestampFor: anAction.
+	
 	^ anAction
 ]
 
@@ -110,16 +116,7 @@ ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
 				of: anAction)
 ]
 
-{ #category : #'private - managing' }
-ActionManagementSystem >> registerWithMetadata: anAction [
-
-	actions add: anAction.
-
-	self registerIdentifierFor: anAction .
-	self registerRegistrationTimestampFor: anAction 
-]
-
-{ #category : #'private - system' }
+{ #category : #'private - systems' }
 ActionManagementSystem >> timeSystem [
 
 	^ self >> #TimeSystemInterface

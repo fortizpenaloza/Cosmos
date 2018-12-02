@@ -65,6 +65,20 @@ DataStreamTest >> testAddingDataPoint [
 ]
 
 { #category : #tests }
+DataStreamTest >> testHash [
+
+	| dataStream equivalentDataStream differentDataStream |
+
+	dataStream := DataStream named: 'Temperature'.
+	equivalentDataStream := DataStream named: 'Temperature'.
+	differentDataStream := DataStream named: 'Pressure'.
+
+	self
+		assert: dataStream hash equals: equivalentDataStream hash;
+		deny: dataStream hash = differentDataStream hash
+]
+
+{ #category : #tests }
 DataStreamTest >> testInstanceCreationAndAccessing [
 
 	| dataStream |

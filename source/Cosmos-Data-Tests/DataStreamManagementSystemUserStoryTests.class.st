@@ -139,12 +139,11 @@ DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 	| dataStream |
 
 	dataStream := self temperatureStream.
-	
+
 	self dataManagementSystem register: dataStream.
 	self dataManagementSystem
 		streamNamed: 'Temperature'
 		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
-		ifNone: [ self fail ]
 ]
 
 { #category : #tests }

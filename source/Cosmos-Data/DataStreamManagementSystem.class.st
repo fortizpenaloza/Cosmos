@@ -102,7 +102,6 @@ DataStreamManagementSystem >> register: aDataPoint toStreamNamed: aName [
 	self
 		streamNamed: aName
 		ifFound: [ :dataStream | self register: aDataPoint to: dataStream ]
-		ifNone: [ ObjectNotFound signal: 'Data stream not found in the system' ]
 ]
 
 { #category : #'private - managing' }
@@ -132,12 +131,12 @@ DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 ]
 
 { #category : #querying }
-DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
+DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock [
 
-	^ dataStreams 	
+	^ dataStreams
 		detect: [ :dataStream | dataStream name = aName ]
 		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
-		ifNone: aNoneBlock
+		ifNone: [ ObjectNotFound signal: ('Data stream named <1s> not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }

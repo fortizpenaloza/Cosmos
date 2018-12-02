@@ -37,8 +37,7 @@ DataPointsRESTfulControllerTest >> pressureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Pressure'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
+		ifFound: [ :dataStream | dataStream ]	
 ]
 
 { #category : #'private - requests' }
@@ -75,8 +74,7 @@ DataPointsRESTfulControllerTest >> temperatureStream [
 
 	^ self dataManagementSystem
 		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | dataStream ]
-		ifNone: [ "do nothing" ]
+		ifFound: [ :dataStream | dataStream ]	
 ]
 
 { #category : #tests }

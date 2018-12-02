@@ -182,7 +182,8 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: 'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
+			equals:
+			'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
 		assert: response contentType equals: self textPlainMediaType.
 
 	self dataManagementSystem
@@ -191,7 +192,6 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 			self
 				assert: dataStream name equals: 'pH';
 				assert: dataStream dataPoints isEmpty ]
-		ifNone: [ self fail ]
 ]
 
 { #category : #tests }
@@ -245,17 +245,19 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 		assert:
 			(self dataManagementSystem
 				streamNamed: 'Temperature'
-				ifFound: [ :dataStream | true ]
-				ifNone: [ self fail ]).
-				
+				ifFound: [ :dataStream | true ]).
+
 	response := resourceController
-		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
+		deleteStreamBasedOn:
+			(self
+				requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
-	self assert: (self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | self fail ]
-		ifNone: [ true ]).
+	self
+		assert:
+			(self dataManagementSystem
+				streamNamed: 'Temperature'
+				ifFound: [ :dataStream | self fail ]).
 
 	self
 		assert: response isSuccess;

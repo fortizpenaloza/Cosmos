@@ -1,13 +1,93 @@
 Class {
 	#name : #CosmosUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
+	#instVars : [
+		'triggered',
+		'timeSource'
+	],
 	#category : #'Cosmos-Tests'
 }
+
+{ #category : #accessing }
+CosmosUserStoryTest >> eightPM [
+	
+	^ TimeOfDay hours: 20
+]
 
 { #category : #'action evaluation' }
 CosmosUserStoryTest >> evaluateActionOn: anEvaluateActionEvent [
 
 	ActionEvaluator new evaluate: anEvaluateActionEvent action
+]
+
+{ #category : #systems }
+CosmosUserStoryTest >> eventNotificationSystem [
+
+	^ rootSystem >> #EventNotificationSystemInterface
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> fiveMinutes [
+
+	^ TimeUnits minute with: 5
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> ninePM [
+	
+	^ TimeOfDay hours: 21
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> octoberFirstOf2014AtNoon [
+
+	^ (October first , 2014) atNoon
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> oneMinute [
+
+	^ TimeUnits minute with: 1
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> setTriggeredToTrue [
+
+	^ Action
+		named: 'Set triggered to true'
+		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
+
+	^ ActionTrigger
+		named: 'Set triggered to true after data point registration'
+		triggering: self setTriggeredToTrue
+		accordingTo: (DataPointRegistrationTriggeringPolicy on: aDataStream)
+		ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod [
+
+	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
+
+	^ ActionTrigger
+		named: ('Set triggered to true every <1p>' expandMacrosWith: aTimePeriod)
+		triggering: self setTriggeredToTrue
+		accordingTo: (PeriodicalTriggeringPolicy every: aTimePeriod)
+		ifSatisfies: aCondition
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
+
+	^ self setTriggeredToTrueEvery: self fiveMinutes
 ]
 
 { #category : #running }
@@ -17,13 +97,48 @@ CosmosUserStoryTest >> setUp [
 	triggered := false.
 ]
 
-{ #category : #'tests - support' }
+{ #category : #running }
+CosmosUserStoryTest >> setUpRequirements [
+
+	timeSource := FixedTimeSource on: self octoberFirstOf2014AtNoon.
+
+	self
+		registerSubsystem:
+			(TimeSystem using: timeSource);
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: DataStreamManagementSystem new;
+		"registerSubsystem: ActionManagementSystem new;"
+			registerSubsystem: TriggerManagementSystem new
+]
+
+{ #category : #accessing }
 CosmosUserStoryTest >> suscribeToEvaluateActionEvent [
 
 	self eventNotificationSystem
 		subscribe: self
 		to: EvaluateActionEvent
 		toBeNotifiedSending: #evaluateActionOn:
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> systemDateTime [
+	
+	^ self octoberFirstOf2014AtNoon 
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> temperatureStream [
+
+	self flag: 'see TriggersRESTfulControllerTest>>#temperatureStream'.
+	^ DataStream named: 'Temperature'
+]
+
+{ #category : #accessing }
+CosmosUserStoryTest >> tenMinutes [
+
+	^ TimeUnits minute with: 10
 ]
 
 { #category : #tests }

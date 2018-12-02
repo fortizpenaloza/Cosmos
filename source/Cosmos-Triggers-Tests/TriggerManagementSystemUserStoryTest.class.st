@@ -77,7 +77,7 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
 	^ self setTriggeredToTrueEvery: self fiveMinutes
 ]
 
-{ #category : #'private - running' }
+{ #category : #running }
 TriggerManagementSystemUserStoryTest >> setUpRequirements [
 
 	self

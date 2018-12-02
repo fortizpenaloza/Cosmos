@@ -19,8 +19,7 @@ TriggerDecoder >> actionDecoder [
 	^ [ :name | 
 	(cosmos systemImplementing: #ActionManagementSystemInterface)
 		actionNamed: name
-		ifFound: [ :action | action ]
-		ifNone: [ ObjectNotFound signal: ('Action named <1s> not found' expandMacrosWith: name) ] ]
+		ifFound: [ :action | action ] ]
 ]
 
 { #category : #'private - decoders' }
@@ -29,8 +28,7 @@ TriggerDecoder >> dataStreamDecoder [
 	^ [ :name | 
 	(cosmos systemImplementing: #DataStreamManagementSystemInterface)
 		streamNamed: name
-		ifFound: [ :stream | stream ]
-		ifNone: [ ObjectNotFound  signal: ('Data stream named <1s> not found' expandMacrosWith: name) ] ]
+		ifFound: [ :stream | stream ] ]
 ]
 
 { #category : #decoding }

@@ -136,7 +136,6 @@ TriggersRESTfulControllerTest >> setTriggeredToTrue [
 	^ self actionManagementSystem
 		actionNamed: 'Set triggered to true'
 		ifFound: [ :action | action ]
-		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
 { #category : #'private - accessing' }
@@ -219,10 +218,9 @@ TriggersRESTfulControllerTest >> systemDateTime [
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> temperatureStream [
 
-	^ self dataManagementSystem 
+	^ self dataManagementSystem
 		streamNamed: 'Temperature'
 		ifFound: [ :stream | stream ]
-		ifNone: [ ObjectNotFound signal: 'Data stream not found' ]
 ]
 
 { #category : #tests }
