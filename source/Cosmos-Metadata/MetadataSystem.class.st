@@ -40,6 +40,8 @@ MetadataSystem >> dependencies [
 { #category : #querying }
 MetadataSystem >> describedObjectBy: data as: anAspect ifNone: ifNoneBlock [
 
+	self flag: 'el ifNone: hay que borrarlo'.
+	
 	^ self
 		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata data = data ] ]
 		ifFound: [ :foundMetadata | foundMetadata describedObject ]
