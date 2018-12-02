@@ -32,6 +32,12 @@ TriggerManagementSystemUserStoryTest >> ninePM [
 ]
 
 { #category : #accessing }
+TriggerManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
+
+	^ (October first , 2014) atNoon
+]
+
+{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> oneMinute [
 
 	^ TimeUnits minute with: 1
@@ -87,12 +93,12 @@ TriggerManagementSystemUserStoryTest >> setUp [
 { #category : #running }
 TriggerManagementSystemUserStoryTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem;
-		requireActionManagementSystem;
-		requireTriggerManagementSystem
-
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: TriggerManagementSystem new
 ]
 
 { #category : #'tests - support' }
@@ -102,6 +108,12 @@ TriggerManagementSystemUserStoryTest >> suscribeToEvaluateActionEvent [
 		subscribe: self
 		to: EvaluateActionEvent
 		toBeNotifiedSending: #evaluateActionOn:
+]
+
+{ #category : #accessing }
+TriggerManagementSystemUserStoryTest >> systemDateTime [
+	
+	^ self octoberFirstOf2014AtNoon 
 ]
 
 { #category : #accessing }

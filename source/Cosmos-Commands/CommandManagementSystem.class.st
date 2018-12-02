@@ -2,11 +2,8 @@ Class {
 	#name : #CommandManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'timeSystem',
 		'priorityQueue',
-		'commands',
-		'metadataSystem',
-		'identifierSystem'
+		'commands'
 	],
 	#category : #'Cosmos-Commands'
 }
@@ -14,7 +11,7 @@ Class {
 { #category : #querying }
 CommandManagementSystem >> commandIdentifiedBy: anIdentifier [
 
-	^ identifierSystem
+	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
 		ifNone: [ ObjectNotFound signal: 'Command with that identifier not found' ]
 ]
@@ -58,6 +55,12 @@ CommandManagementSystem >> deregister: aCommandWithPriority [
 	commands remove: aCommandWithPriority
 ]
 
+{ #category : #'private - systems' }
+CommandManagementSystem >> identifierSystem [
+
+	^ self >> #IdentifierSystemInterface
+]
+
 { #category : #installing }
 CommandManagementSystem >> implementedInterfaces [
 
@@ -70,6 +73,12 @@ CommandManagementSystem >> initialize [
 	super initialize.
 	commands := OrderedCollection new.
 	priorityQueue := PriorityQueue empty
+]
+
+{ #category : #'private - systems' }
+CommandManagementSystem >> metadataSystem [
+	
+	^ self >> #MetadataSystemInterface
 ]
 
 { #category : #accessing }
@@ -95,16 +104,22 @@ CommandManagementSystem >> register: aCommandWithPriority [
 { #category : #'private - managing' }
 CommandManagementSystem >> registerIdentifierFor: aCommandWithPriority [ 
 
-	identifierSystem registerIdentifierFor: aCommandWithPriority
+	self identifierSystem registerIdentifierFor: aCommandWithPriority
 ]
 
 { #category : #'private - managing' }
 CommandManagementSystem >> registerRegistrationTimestampFor: aCommandWithPriority [ 
 
-	metadataSystem
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: timeSystem dateTime
+				attaching: self timeSystem dateTime
 				as: #registration_timestamp
 				of: aCommandWithPriority)
+]
+
+{ #category : #'private - systems' }
+CommandManagementSystem >> timeSystem [
+	
+	^ self >> #TimeSystemInterface
 ]

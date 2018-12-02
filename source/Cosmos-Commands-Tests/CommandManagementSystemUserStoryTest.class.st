@@ -95,7 +95,7 @@ CommandManagementSystemUserStoryTest >> testMetadataRegistrationOnCommandRegistr
 				as: #identifier
 				of: turnOnLedWithHighPriority).
 			(Metadata
-				attaching: self systemDateTime
+				attaching: self octoberFirstOf2014AtNoon 
 				as: #registration_timestamp
 				of: turnOnLedWithHighPriority)} asOrderedCollection
 ]
