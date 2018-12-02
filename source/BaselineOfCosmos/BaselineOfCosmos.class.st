@@ -38,8 +38,7 @@ BaselineOfCosmos >> baseline: spec [
 				group: 'Tools' with: #('Cosmos-Tools');
 				group: 'CI' with: #('Deployment' 'Tests');
 				group: 'Development' with: #('CI' 'Tools');
-				group: 'default' with: #('Deployment').
-			spec postLoadDoIt: #postload:package: ]
+				group: 'default' with: #('Deployment') ]
 ]
 
 { #category : #baselines }
@@ -120,40 +119,6 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		group: 'Cosmos-Model-Tests'
 		with:
 			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
-]
-
-{ #category : #actions }
-BaselineOfCosmos >> postload: aLoader package: aPackageSpec [
-
-	self registerSystemInterfaces
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerActionManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #ActionManagementSystemInterface
-		named: 'Action Management System Interface'
-		declaring: #(#register: #deregister: actions)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerCommandManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #CommandManagementSystemInterface
-		named: 'Command Management System Interface'
-		declaring: #(#register: #deregister: #dequeueCommand #commands)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerSystemInterfaces [
-
-	self
-		registerIdentifierSystemInterface;
-		registerCommandManagementSystemInterface;
-		registerTriggerManagementSystemInterface;
-		registerActionManagementSystemInterface
 ]
 
 { #category : #'registering interfaces' }

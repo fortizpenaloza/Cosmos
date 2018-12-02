@@ -1,25 +1,16 @@
 Class {
 	#name : #ActionManagementSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'actions',
-		'timeSystem',
-		'metadataSystem',
-		'identifierSystem'
+		'actions'
 	],
 	#category : #'Cosmos-Actions'
 }
 
-{ #category : #'system specification' }
-ActionManagementSystem class >> implementedInterface [
-
-	^ SystemInterface >> #ActionManagementSystemInterface
-]
-
 { #category : #querying }
 ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
 	
-	^ identifierSystem
+	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
 		ifNone:
 			[ ObjectNotFound signal: 'Action with that identifier not found' ]
@@ -40,26 +31,53 @@ ActionManagementSystem >> actions [
 	^ actions copy
 ]
 
-{ #category : #managing }
-ActionManagementSystem >> deregister: action [
+{ #category : #installing }
+ActionManagementSystem >> dependencies [
 
-	^ actions remove: action
+	^ #(#TimeSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+]
+
+{ #category : #managing }
+ActionManagementSystem >> deregister: anAction [
+
+	^ actions remove: anAction
+]
+
+{ #category : #'private - systems' }
+ActionManagementSystem >> identifierSystem [
+
+	^ self >> #IdentifierSystemInterface
+]
+
+{ #category : #installing }
+ActionManagementSystem >> implementedInterfaces [ 
+
+	^#(#ActionManagementSystemInterface)
 ]
 
 { #category : #initialization }
 ActionManagementSystem >> initialize [
 
 	super initialize.
-
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
-
 	actions := OrderedCollection new
+]
+
+{ #category : #'private - systems' }
+ActionManagementSystem >> metadataSystem [
+
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+ActionManagementSystem >> name [
+
+	^ 'Action Management'
 ]
 
 { #category : #managing }
 ActionManagementSystem >> register: anAction [
+
+	self flag: 'change for assert ble'.
 
 	self
 		actionNamed: anAction name
@@ -74,16 +92,20 @@ ActionManagementSystem >> register: anAction [
 { #category : #'private - managing' }
 ActionManagementSystem >> registerIdentifierFor: anAction [
 
-	identifierSystem registerIdentifierFor: anAction
+	self identifierSystem registerIdentifierFor: anAction
 ]
 
 { #category : #'private - managing' }
 ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
 
-	metadataSystem
+	self flag: 'self timeEventSystem register: #registration of: anAction.
+	
+	self eventNotificationSystem notify: ObjectRegisteredEvent/ObjectUpdatedEvent'.
+
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: timeSystem dateTime
+				attaching: self timeSystem dateTime
 				as: #registration_timestamp
 				of: anAction)
 ]
@@ -97,10 +119,8 @@ ActionManagementSystem >> registerWithMetadata: anAction [
 	self registerRegistrationTimestampFor: anAction 
 ]
 
-{ #category : #'dependency resolution' }
-ActionManagementSystem >> resolveDependecies [
+{ #category : #'private - system' }
+ActionManagementSystem >> timeSystem [
 
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
+	^ self >> #TimeSystemInterface
 ]

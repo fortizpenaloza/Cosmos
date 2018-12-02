@@ -13,13 +13,8 @@ DataStreamManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 { #category : #running }
 DataStreamManagementSystemUserStoryTests >> setUpRequirements [
 
-	| timeSource timeSystem |
-
-	timeSource := FixedTimeSource on: self octoberFirstOf2014AtNoon.
-	timeSystem := TimeSystem using: timeSource.
-
 	self
-		registerSubsystem: timeSystem;
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);

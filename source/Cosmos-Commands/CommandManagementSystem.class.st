@@ -1,6 +1,6 @@
 Class {
 	#name : #CommandManagementSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
 		'timeSystem',
 		'priorityQueue',
@@ -10,12 +10,6 @@ Class {
 	],
 	#category : #'Cosmos-Commands'
 }
-
-{ #category : #'system specification' }
-CommandManagementSystem class >> implementedInterface [
-
-	^ SystemInterface >> #CommandManagementSystemInterface
-]
 
 { #category : #querying }
 CommandManagementSystem >> commandIdentifiedBy: anIdentifier [
@@ -29,6 +23,12 @@ CommandManagementSystem >> commandIdentifiedBy: anIdentifier [
 CommandManagementSystem >> commands [
 
 	^ commands copy
+]
+
+{ #category : #installing }
+CommandManagementSystem >> dependencies [
+
+	^ #(#TimeSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -58,16 +58,24 @@ CommandManagementSystem >> deregister: aCommandWithPriority [
 	commands remove: aCommandWithPriority
 ]
 
+{ #category : #installing }
+CommandManagementSystem >> implementedInterfaces [
+
+	^ #(#CommandManagementSystemInterface)
+]
+
 { #category : #initialization }
 CommandManagementSystem >> initialize [
 
 	super initialize.
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
-	
 	commands := OrderedCollection new.
 	priorityQueue := PriorityQueue empty
+]
+
+{ #category : #accessing }
+CommandManagementSystem >> name [ 
+	
+	^ 'Command Management'
 ]
 
 { #category : #managing }
@@ -99,12 +107,4 @@ CommandManagementSystem >> registerRegistrationTimestampFor: aCommandWithPriorit
 				attaching: timeSystem dateTime
 				as: #registration_timestamp
 				of: aCommandWithPriority)
-]
-
-{ #category : #'dependency resolution' }
-CommandManagementSystem >> resolveDependecies [
-
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
