@@ -1,18 +1,11 @@
 Class {
 	#name : #IdentifierSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'identifierProvider',
-		'metadataSystem'
+		'identifierProvider'
 	],
 	#category : #'Cosmos-Identifier'
 }
-
-{ #category : #'system specification' }
-IdentifierSystem class >> implementedInterface [
-
-	^ SystemInterface >> #IdentifierSystemInterface
-]
 
 { #category : #'instance creation' }
 IdentifierSystem class >> using: anIdentifierProvider [
@@ -20,24 +13,47 @@ IdentifierSystem class >> using: anIdentifierProvider [
 	^ self new initializeUsing: anIdentifierProvider 
 ]
 
+{ #category : #installing }
+IdentifierSystem >> dependencies [
+
+	^ #(#MetadataSystemInterface)
+]
+
 { #category : #querying }
 IdentifierSystem >> identifierOf: anObject [
 
 	| identifierMetadata |
 
-	identifierMetadata := (metadataSystem metadataFor: anObject)
+	identifierMetadata := (self metadataSystem metadataFor: anObject)
 		detect: [ :metadata | metadata aspect = #identifier ]
 		ifNone: [ ObjectNotFound signal: ('Identifier for <1p> not found' expandMacrosWith: anObject) ].
 
 	^ identifierMetadata data
 ]
 
+{ #category : #installing }
+IdentifierSystem >> implementedInterfaces [
+
+	^ #(#IdentifierSystemInterface)
+]
+
 { #category : #initialization }
 IdentifierSystem >> initializeUsing: anIdentifierProvider [
 
-	identifierProvider := anIdentifierProvider.
+	self initialize.
+	identifierProvider := anIdentifierProvider
+]
 
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface
+{ #category : #'private - systems' }
+IdentifierSystem >> metadataSystem [
+
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+IdentifierSystem >> name [
+
+	^ 'Identifier'
 ]
 
 { #category : #'private - providing identifier' }
@@ -49,7 +65,7 @@ IdentifierSystem >> next [
 { #category : #querying }
 IdentifierSystem >> objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock [
 
-	^ metadataSystem
+	^ self metadataSystem
 		describedObjectBy: anIdentifier
 		as: #identifier
 		ifNone: ifNoneBlock
@@ -58,16 +74,10 @@ IdentifierSystem >> objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock [
 { #category : #managing }
 IdentifierSystem >> registerIdentifierFor: anObject [
 	
-	metadataSystem
+	self metadataSystem
 		register:
 			(Metadata
 				attaching: self next
 				as: #identifier
 				of: anObject)
-]
-
-{ #category : #initialization }
-IdentifierSystem >> resolveDependecies [
-
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface
 ]

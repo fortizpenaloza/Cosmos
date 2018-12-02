@@ -13,9 +13,17 @@ DataStreamManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 { #category : #running }
 DataStreamManagementSystemUserStoryTests >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem
+	| timeSource timeSystem |
+
+	timeSource := FixedTimeSource on: self octoberFirstOf2014AtNoon.
+	timeSystem := TimeSystem using: timeSource.
+
+	self
+		registerSubsystem: timeSystem;
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: DataStreamManagementSystem new
 ]
 
 { #category : #accessing }
@@ -112,7 +120,7 @@ DataStreamManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRe
 				as: #identifier
 				of: dataStream).
 			(Metadata
-				attaching: self systemDateTime
+				attaching: self octoberFirstOf2014AtNoon
 				as: #registration_timestamp
 				of: dataStream)} asOrderedCollection 
 ]

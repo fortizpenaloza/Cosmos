@@ -147,47 +147,10 @@ BaselineOfCosmos >> registerCommandManagementSystemInterface [
 ]
 
 { #category : #'registering interfaces' }
-BaselineOfCosmos >> registerDataManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #DataStreamManagementSystemInterface
-		named: 'Data Stream Management System Interface'
-		declaring: #(#register: #deregister: #register:toStreamNamed:  #streamIdentifiedBy: #streams)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerIdentifierSystemInterface [
-
-	self
-		registerInterfaceAs: #IdentifierSystemInterface
-		named: 'Identifier System Interface'
-		declaring: #(#next)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorSet [
-
-	SystemInterface
-		bind: aKey
-		to: (Interface named: aName declaring: aSelectorSet) 
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerMetadataSystemInterface [
-
-	self
-		registerInterfaceAs: #MetadataSystemInterface
-		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #register: #describedObjectBy:as:ifNone:)
-]
-
-{ #category : #'registering interfaces' }
 BaselineOfCosmos >> registerSystemInterfaces [
 
 	self
 		registerIdentifierSystemInterface;
-		registerDataManagementSystemInterface;
-		registerMetadataSystemInterface;
 		registerCommandManagementSystemInterface;
 		registerTriggerManagementSystemInterface;
 		registerActionManagementSystemInterface
