@@ -13,12 +13,6 @@ TriggerManagementSystemUserStoryTest >> eightPM [
 	^ TimeOfDay hours: 20
 ]
 
-{ #category : #'action evaluation' }
-TriggerManagementSystemUserStoryTest >> evaluateActionOn: anEvaluateActionEvent [
-
-	ActionEvaluator new evaluate: anEvaluateActionEvent action
-]
-
 { #category : #accessing }
 TriggerManagementSystemUserStoryTest >> fiveMinutes [
 
@@ -83,14 +77,7 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
 	^ self setTriggeredToTrueEvery: self fiveMinutes
 ]
 
-{ #category : #running }
-TriggerManagementSystemUserStoryTest >> setUp [
-	
-	super setUp. 
-	triggered := false.
-]
-
-{ #category : #running }
+{ #category : #'private - running' }
 TriggerManagementSystemUserStoryTest >> setUpRequirements [
 
 	self
@@ -99,15 +86,6 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TriggerManagementSystem new
-]
-
-{ #category : #'tests - support' }
-TriggerManagementSystemUserStoryTest >> suscribeToEvaluateActionEvent [
-
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:
 ]
 
 { #category : #accessing }
@@ -227,157 +205,4 @@ TriggerManagementSystemUserStoryTest >> testRegistrationToBeTriggeredOnDataPoint
 			self
 				assert: foundTrigger name
 				equals: 'Set triggered to true after data point registration' ]
-]
-
-{ #category : #tests }
-TriggerManagementSystemUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesDataStreamCurrentValueCondition [
-
-	| dataStream trigger |
-
-	dataStream := self temperatureStream.
-	self dataManagementSystem register: dataStream.
-	self suscribeToEvaluateActionEvent.
-
-	trigger := ActionTrigger
-		named: 'Set triggered to true after data point registration'
-		triggering: self setTriggeredToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream)
-		ifSatisfies:
-			(DataStreamCurrentValueTriggeringCondition
-				of: dataStream
-				isLessThan: 11).
-	self triggerManagementSystem register: trigger.
-
-	self deny: triggered.
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
-	self deny: triggered.
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
-	self assert: triggered
-]
-
-{ #category : #tests }
-TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutes [
-
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
-	self triggerManagementSystem register: self setTriggeredToTrueEveryFiveMinutes.
-	self deny: triggered.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self oneMinute).
-
-	self deny: triggered.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self fiveMinutes).
-		
-	self assert: triggered
-]
-
-{ #category : #tests }
-TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated [
-
-	| dataStream condition |
-
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
-	dataStream := self temperatureStream.
-	self dataManagementSystem register: dataStream.
-
-	condition := DataStreamHasNotBeenUpdatedTriggeringCondition
-		checkingIf: dataStream
-		hasNotBeenUpdatedForMoreThan: self fiveMinutes.
-
- 	self triggerManagementSystem register: (self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition).
-	self deny: triggered.
-
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
-	self deny: triggered.
-
-	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self fiveMinutes).
-	self deny: triggered.
-
-	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
-	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self assert: triggered
-]
-
-{ #category : #tests }
-TriggerManagementSystemUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataStreamCurrentValueDuringATimeInterval [
-
-	| dataStream condition |
-
-	self suscribeToEvaluateActionEvent.
-	dataStream := self temperatureStream.
-	self dataManagementSystem register: dataStream.
-
-	condition := AndCompositeTriggeringCondition
-		with:
-			(DataStreamCurrentValueTriggeringCondition
-				of: dataStream
-				isLessThan: 11)
-		with:
-			(TimeIntervalTriggeringCondition
-				checkingCurrentTimeIsBetween: (self eightPM to: self ninePM)).
-
-	self triggerManagementSystem
-		register: (self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition).
-
-	self deny: triggered.
-
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self deny: triggered.
-
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self deny: triggered.
-
-	timeSource setTimeTo: self eightPM.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self deny: triggered.
-
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self assert: triggered
-]
-
-{ #category : #tests }
-TriggerManagementSystemUserStoryTest >> testTriggeringOnDataPointRegistration [
-
-	| dataStream |
-
-	self suscribeToEvaluateActionEvent.
-	dataStream := self temperatureStream.
-	self dataManagementSystem register: dataStream.
-
-	self triggerManagementSystem
-		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream).
-
-	self deny: triggered.
-	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
-	self assert: triggered
 ]

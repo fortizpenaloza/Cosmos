@@ -9,7 +9,7 @@ ArchitectureCodeQualityTest >> testSystemsMustImplementAllMessagesDeclaredInItsI
 
 	| systems |
 
-	systems := System allSubclasses
+	systems := SubsystemImplementation allSubclasses
 		reject: [ :class | class implementedInterface isImplementedByInstancesOf: class ].
 
 	self

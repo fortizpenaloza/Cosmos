@@ -70,7 +70,7 @@ ISO8601DateTimeFormatter >> putTimeOf: aDateTime on: stream [
 { #category : #'private-formatting' }
 ISO8601DateTimeFormatter >> putTimeZoneOf: aDateTime on: stream [
 
-	aDateTime zone = TimeZones universalTime
+	aDateTime zone offset = TimeZones universalTime offset
 		ifTrue: [ stream nextPut: self universalTimeZoneDesignator ]
 		ifFalse: [ stream nextPutAll: aDateTime zone offset asString ]
 ]
