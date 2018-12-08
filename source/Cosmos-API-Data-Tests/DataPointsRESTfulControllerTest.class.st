@@ -171,7 +171,7 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotV
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText
-					equals: 'Data stream named xxx not found';
+					equals: 'Data stream named "xxx" not found';
 				assert: signal code equals: 400 ]
 ]
 
