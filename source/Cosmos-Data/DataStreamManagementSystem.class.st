@@ -136,7 +136,7 @@ DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock [
 	^ dataStreams
 		detect: [ :dataStream | dataStream name = aName ]
 		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
-		ifNone: [ ObjectNotFound signal: ('Data stream named <1s> not found' expandMacrosWith: aName) ]
+		ifNone: [ ObjectNotFound signal: ('Data stream named "<1s>" not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }

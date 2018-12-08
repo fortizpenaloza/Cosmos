@@ -51,7 +51,7 @@ DataStreamManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStre
 				register: (DataPoint on: self octoberFirstOf2014AtNoon holding: 10)
 				toStreamNamed: 'Wrong name' ]
 		raise: ObjectNotFound
-		withMessageText: 'Data stream not found in the system'
+		withMessageText: 'Data stream named "Wrong name" not found'
 ]
 
 { #category : #tests }

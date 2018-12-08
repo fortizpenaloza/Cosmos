@@ -1,10 +1,7 @@
 Class {
 	#name : #TriggerManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'triggered'
-	],
-	#category : 'Cosmos-Triggers-Tests-SystemModel'
+	#category : #'Cosmos-Triggers-Tests-SystemModel'
 }
 
 { #category : #accessing }
@@ -42,7 +39,7 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
+		evaluating: (EvaluateBlockPolicy for: [ "triggered := true" ])
 ]
 
 { #category : #accessing }

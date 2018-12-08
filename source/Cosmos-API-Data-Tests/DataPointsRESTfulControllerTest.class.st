@@ -63,10 +63,24 @@ DataPointsRESTfulControllerTest >> setUp [
 { #category : #running }
 DataPointsRESTfulControllerTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem.
+	self flag: 'requireDataManagementSystem'.
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: DataStreamManagementSystem new.
+	
  
+]
+
+{ #category : #'private - accessing' }
+DataPointsRESTfulControllerTest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
 ]
 
 { #category : #'private - accessing' }
@@ -157,7 +171,7 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotV
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText
-					equals: 'Data stream not found in the system';
+					equals: 'Data stream named xxx not found';
 				assert: signal code equals: 400 ]
 ]
 

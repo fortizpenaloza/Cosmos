@@ -28,8 +28,8 @@ ActionsRESTfulControllerTest >> getDNSZonesAsJSON [
 
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> getDNSZonesIdentifier [
-	
-	^identifierSequence first
+
+	^ identifierSequence first
 ]
 
 { #category : #'private - accessing' }
@@ -41,7 +41,13 @@ ActionsRESTfulControllerTest >> httpRequestContext [
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> identifierProvider [
 
-	^ SequentialIdentifierProvider providing: identifierSequence 
+	^ SequentialIdentifierProvider providing: self identifierSequence 
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulControllerTest >> identifierSequence [
+
+	^ identifierSequence
 ]
 
 { #category : #'test support' }
@@ -105,6 +111,14 @@ ActionsRESTfulControllerTest >> registerGetDNSZones [
 ]
 
 { #category : #'private - requests' }
+ActionsRESTfulControllerTest >> requestToDeleteActionIdentifiedBy: anIdentifier [ 
+
+	^ TeaRequest
+		fromZnRequest: (self urlForResourceIdentifiedBy: anIdentifier)
+		pathParams: {(#identifier -> anIdentifier)} asDictionary
+]
+
+{ #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToGetActionIdentifiedBy: anIdentifier accepting: aMediaType [
 
 	^ TeaRequest
@@ -147,10 +161,13 @@ ActionsRESTfulControllerTest >> setUp [
 { #category : #running }
 ActionsRESTfulControllerTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireActionManagementSystem.
- 
+	self flag: 'requireActionManagementSystem'.
+	
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: ActionManagementSystem new
 ]
 
 { #category : #'private - accessing' }
@@ -213,23 +230,12 @@ ActionsRESTfulControllerTest >> testCreateAction [
 { #category : #tests }
 ActionsRESTfulControllerTest >> testDeleteAction [
 
-	| action |
-
 	self assert: self actionManagementSystem actions isEmpty.
-
-	action := Action
-		named: 'List DNS Records'
-		evaluating: (SendHttpRequestPolicy sending: ZnRequest empty).
-
-	self actionManagementSystem register: action.
-
+	self registerGetDNSZones.
 	self deny: self actionManagementSystem actions isEmpty.
 
 	resourceController
-		deleteActionBasedOn:
-			(TeaRequest
-				fromZnRequest: (ZnRequest delete: 'List_DNS_Records')
-				pathParams: {(#identifier -> identifierSequence first)} asDictionary )
+		deleteActionBasedOn: (self requestToDeleteActionIdentifiedBy: self getDNSZonesIdentifier)
 		within: self httpRequestContext.
 
 	self assert: self actionManagementSystem actions isEmpty
@@ -270,8 +276,9 @@ ActionsRESTfulControllerTest >> testGetActions [
 
 	| response |
 
-	self registerGetDNSZones.
-	self registerAddDNSZone.
+	self
+		registerGetDNSZones;
+		registerAddDNSZone.
 
 	response := resourceController
 		getActionsBasedOn: self requestToGetActions

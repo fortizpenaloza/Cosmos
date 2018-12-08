@@ -148,9 +148,14 @@ DataStreamsRESTfulControllerTest >> setUp [
 { #category : #running }
 DataStreamsRESTfulControllerTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem.
+	self flag: 'requireDataManagementSystem'.
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: DataStreamManagementSystem new.
+	
  
 ]
 
@@ -241,23 +246,17 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	| response |
 
-	self
-		assert:
-			(self dataManagementSystem
-				streamNamed: 'Temperature'
-				ifFound: [ :dataStream | true ]).
+	self assert: (self dataManagementSystem streamNamed: 'Temperature' ifFound: [ :dataStream | true ]).
 
 	response := resourceController
-		deleteStreamBasedOn:
-			(self
-				requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
+		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
 	self
-		assert:
-			(self dataManagementSystem
+		should: [ self dataManagementSystem
 				streamNamed: 'Temperature'
-				ifFound: [ :dataStream | self fail ]).
+				ifFound: [ :dataStream | ] ]
+		raise: ObjectNotFound.
 
 	self
 		assert: response isSuccess;

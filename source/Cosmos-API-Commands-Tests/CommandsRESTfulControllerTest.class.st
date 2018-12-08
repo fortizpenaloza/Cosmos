@@ -116,9 +116,13 @@ CommandsRESTfulControllerTest >> setUp [
 { #category : #running }
 CommandsRESTfulControllerTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireCommandManagementSystem
+	self flag: 'requireCommandManagementSystem'.
+	
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: CommandManagementSystem new
 ]
 
 { #category : #'private - accessing' }
