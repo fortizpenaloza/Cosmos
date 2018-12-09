@@ -104,6 +104,13 @@ TriggerManagementSystemUserStoryTest >> tenMinutes [
 ]
 
 { #category : #tests }
+TriggerManagementSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self triggerManagementSystem name equals: 'Trigger Management'
+	
+]
+
+{ #category : #tests }
 TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTriggered [
 
 	| trigger |

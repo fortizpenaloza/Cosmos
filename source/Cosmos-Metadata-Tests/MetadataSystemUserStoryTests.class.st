@@ -23,6 +23,13 @@ MetadataSystemUserStoryTests >> temperatureStream [
 ]
 
 { #category : #tests }
+MetadataSystemUserStoryTests >> testAccessing [ 
+	
+	self assert: self metadataSystem name equals: 'Metadata'
+	
+]
+
+{ #category : #tests }
 MetadataSystemUserStoryTests >> testMetadataRegistration [
 
 	| metadata |

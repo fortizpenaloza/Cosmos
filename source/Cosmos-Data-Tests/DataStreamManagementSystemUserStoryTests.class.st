@@ -28,6 +28,13 @@ DataStreamManagementSystemUserStoryTests >> temperatureStream [
 ]
 
 { #category : #tests }
+DataStreamManagementSystemUserStoryTests >> testAccessing [ 
+	
+	self assert: self dataManagementSystem name equals: 'Data Stream Management'
+	
+]
+
+{ #category : #tests }
 DataStreamManagementSystemUserStoryTests >> testDataPointRegistration [
 
 	| dataStream dataPoint |

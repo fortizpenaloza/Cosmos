@@ -21,6 +21,13 @@ CommandManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
+CommandManagementSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self commandManagementSystem name equals: 'Command Management'
+	
+]
+
+{ #category : #tests }
 CommandManagementSystemUserStoryTest >> testDequeueCommandFollowsPriorities [
 
 	| turnLedOnWithMediumPriority turnLedOnWithLowestPriority turnLedOnWithHighestPriority |

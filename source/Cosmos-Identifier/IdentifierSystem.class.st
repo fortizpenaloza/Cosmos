@@ -19,13 +19,19 @@ IdentifierSystem >> dependencies [
 	^ #(#MetadataSystemInterface)
 ]
 
+{ #category : #'private - accessing' }
+IdentifierSystem >> identifierAspect [
+
+	^ #identifier
+]
+
 { #category : #querying }
 IdentifierSystem >> identifierOf: anObject [
 
 	| identifierMetadata |
 
 	identifierMetadata := (self metadataSystem metadataFor: anObject)
-		detect: [ :metadata | metadata aspect = #identifier ]
+		detect: [ :metadata | metadata aspect = self identifierAspect ]
 		ifNone: [ ObjectNotFound signal: ('Identifier for <1p> not found' expandMacrosWith: anObject) ].
 
 	^ identifierMetadata data
@@ -56,28 +62,22 @@ IdentifierSystem >> name [
 	^ 'Identifier'
 ]
 
-{ #category : #'private - providing identifier' }
-IdentifierSystem >> next [
-	
-	^identifierProvider next 
-]
-
 { #category : #querying }
 IdentifierSystem >> objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock [
 
 	^ self metadataSystem
 		describedObjectBy: anIdentifier
-		as: #identifier
+		as: self identifierAspect 
 		ifNone: ifNoneBlock
 ]
 
 { #category : #managing }
 IdentifierSystem >> registerIdentifierFor: anObject [
-	
+
 	self metadataSystem
 		register:
 			(Metadata
-				attaching: self next
-				as: #identifier
+				attaching: identifierProvider next
+				as: self identifierAspect
 				of: anObject)
 ]

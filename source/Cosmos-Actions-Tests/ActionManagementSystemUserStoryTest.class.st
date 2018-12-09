@@ -37,6 +37,13 @@ ActionManagementSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
+ActionManagementSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self actionManagementSystem name equals: 'Action Management'
+	
+]
+
+{ #category : #tests }
 ActionManagementSystemUserStoryTest >> testDeregistration [
 
 	| action |

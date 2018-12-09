@@ -13,15 +13,22 @@ IdentifierSystemUserStoryTest >> setUpRequirements [
 ]
 
 { #category : #tests }
+IdentifierSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self identifierSystem name equals: 'Identifier'
+	
+]
+
+{ #category : #tests }
 IdentifierSystemUserStoryTest >> testIdentifierRegistration [
 
-	self identifierSystem registerIdentifierFor: #object.
+	self identifierSystem registerIdentifierFor: 1.
 	self
 		assert:
 			(self identifierSystem
 				objectIdentifiedBy: self currentIdentifier 
 				ifNone: [ self fail ])
-		equals: #object
+		equals: 1
 ]
 
 { #category : #tests }
@@ -43,5 +50,6 @@ IdentifierSystemUserStoryTest >> testQueryingIdentifierFailsIfNotRegistered [
 { #category : #tests }
 IdentifierSystemUserStoryTest >> testQueryingObjectByIdentifierFailsIfNotRegistered [
 
-	self assert: (self identifierSystem objectIdentifiedBy: self currentIdentifier ifNone: [ true ])
+	self
+		assert: (self identifierSystem objectIdentifiedBy: self currentIdentifier ifNone: [ true ])
 ]
