@@ -5,33 +5,15 @@ Class {
 }
 
 { #category : #accessing }
-TriggerManagementSystemUserStoryTest >> eightPM [
-
-	^ TimeOfDay hours: 20
-]
-
-{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
 ]
 
 { #category : #accessing }
-TriggerManagementSystemUserStoryTest >> ninePM [
-
-	^ TimeOfDay hours: 21
-]
-
-{ #category : #accessing }
 TriggerManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 
 	^ (October first , 2014) atNoon
-]
-
-{ #category : #accessing }
-TriggerManagementSystemUserStoryTest >> oneMinute [
-
-	^ TimeUnits minute with: 1
 ]
 
 { #category : #accessing }
@@ -95,12 +77,6 @@ TriggerManagementSystemUserStoryTest >> systemDateTime [
 TriggerManagementSystemUserStoryTest >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
-]
-
-{ #category : #accessing }
-TriggerManagementSystemUserStoryTest >> tenMinutes [
-
-	^ TimeUnits minute with: 10
 ]
 
 { #category : #tests }
