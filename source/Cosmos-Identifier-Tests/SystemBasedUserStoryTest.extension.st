@@ -17,10 +17,3 @@ SystemBasedUserStoryTest >> identifierSystem [
 
 	^ rootSystem systemImplementing: #IdentifierSystemInterface
 ]
-
-{ #category : #'*Cosmos-Identifier-Tests' }
-SystemBasedUserStoryTest >> requireIdentifierSystem [
-
-	self requireMetadataSystem.
-	systemBuilder add: (IdentifierSystem using: self identifierProvider)
-]

@@ -8,7 +8,7 @@ Class {
 	#category : #'Cosmos-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> eightPM [
 	
 	^ TimeOfDay hours: 20
@@ -26,31 +26,34 @@ CosmosUserStoryTest >> eventNotificationSystem [
 	^ rootSystem >> #EventNotificationSystemInterface
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> ninePM [
 	
 	^ TimeOfDay hours: 21
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> octoberFirstOf2014AtNoon [
 
-	^ (October first , 2014) atNoon
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> oneMinute [
 
 	^ TimeUnits minute with: 1
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
@@ -58,7 +61,7 @@ CosmosUserStoryTest >> setTriggeredToTrue [
 		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStream [
 
 	^ ActionTrigger
@@ -68,13 +71,13 @@ CosmosUserStoryTest >> setTriggeredToTrueAfterDataPointRegistrationOn: aDataStre
 		ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod [
 
 	^ self setTriggeredToTrueEvery: aTimePeriod ifSatisfies: AlwaysTriggeringCondition new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondition [
 
 	^ ActionTrigger
@@ -84,7 +87,7 @@ CosmosUserStoryTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfies: aCondit
 		ifSatisfies: aCondition
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
 
 	^ self setTriggeredToTrueEvery: self fiveMinutes
@@ -100,20 +103,19 @@ CosmosUserStoryTest >> setUp [
 { #category : #running }
 CosmosUserStoryTest >> setUpRequirements [
 
-	timeSource := FixedTimeSource on: self octoberFirstOf2014AtNoon.
+	timeSource := FixedTimeSource on: self systemDateTime .
 
 	self
-		registerSubsystem:
-			(TimeSystem using: timeSource);
+		registerSubsystem: (TimeSystem using: timeSource);
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: DataStreamManagementSystem new;
-		"registerSubsystem: ActionManagementSystem new;"
-			registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: ActionManagementSystem new;
+		registerSubsystem: TriggerManagementSystem new
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> suscribeToEvaluateActionEvent [
 
 	self eventNotificationSystem
@@ -122,20 +124,19 @@ CosmosUserStoryTest >> suscribeToEvaluateActionEvent [
 		toBeNotifiedSending: #evaluateActionOn:
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> systemDateTime [
 	
 	^ self octoberFirstOf2014AtNoon 
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> temperatureStream [
 
-	self flag: 'see TriggersRESTfulControllerTest>>#temperatureStream'.
 	^ DataStream named: 'Temperature'
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 CosmosUserStoryTest >> tenMinutes [
 
 	^ TimeUnits minute with: 10
