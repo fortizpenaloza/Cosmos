@@ -148,9 +148,14 @@ DataStreamsRESTfulControllerTest >> setUp [
 { #category : #running }
 DataStreamsRESTfulControllerTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem.
+	self flag: 'requireDataManagementSystem'.
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: DataStreamManagementSystem new.
+	
  
 ]
 
@@ -182,7 +187,8 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: 'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
+			equals:
+			'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
 		assert: response contentType equals: self textPlainMediaType.
 
 	self dataManagementSystem
@@ -191,7 +197,6 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 			self
 				assert: dataStream name equals: 'pH';
 				assert: dataStream dataPoints isEmpty ]
-		ifNone: [ self fail ]
 ]
 
 { #category : #tests }
@@ -241,21 +246,17 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	| response |
 
-	self
-		assert:
-			(self dataManagementSystem
-				streamNamed: 'Temperature'
-				ifFound: [ :dataStream | true ]
-				ifNone: [ self fail ]).
-				
+	self assert: (self dataManagementSystem streamNamed: 'Temperature' ifFound: [ :dataStream | true ]).
+
 	response := resourceController
 		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
 		within: self httpRequestContext.
 
-	self assert: (self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | self fail ]
-		ifNone: [ true ]).
+	self
+		should: [ self dataManagementSystem
+				streamNamed: 'Temperature'
+				ifFound: [ :dataStream | ] ]
+		raise: ObjectNotFound.
 
 	self
 		assert: response isSuccess;

@@ -1,18 +1,11 @@
 Class {
 	#name : #IdentifierSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'identifierProvider',
-		'metadataSystem'
+		'identifierProvider'
 	],
 	#category : #'Cosmos-Identifier'
 }
-
-{ #category : #'system specification' }
-IdentifierSystem class >> implementedInterface [
-
-	^ SystemInterface >> #IdentifierSystemInterface
-]
 
 { #category : #'instance creation' }
 IdentifierSystem class >> using: anIdentifierProvider [
@@ -20,54 +13,71 @@ IdentifierSystem class >> using: anIdentifierProvider [
 	^ self new initializeUsing: anIdentifierProvider 
 ]
 
+{ #category : #installing }
+IdentifierSystem >> dependencies [
+
+	^ #(#MetadataSystemInterface)
+]
+
+{ #category : #'private - accessing' }
+IdentifierSystem >> identifierAspect [
+
+	^ #identifier
+]
+
 { #category : #querying }
 IdentifierSystem >> identifierOf: anObject [
 
 	| identifierMetadata |
 
-	identifierMetadata := (metadataSystem metadataFor: anObject)
-		detect: [ :metadata | metadata aspect = #identifier ]
+	identifierMetadata := (self metadataSystem metadataFor: anObject)
+		detect: [ :metadata | metadata aspect = self identifierAspect ]
 		ifNone: [ ObjectNotFound signal: ('Identifier for <1p> not found' expandMacrosWith: anObject) ].
 
 	^ identifierMetadata data
 ]
 
+{ #category : #installing }
+IdentifierSystem >> implementedInterfaces [
+
+	^ #(#IdentifierSystemInterface)
+]
+
 { #category : #initialization }
 IdentifierSystem >> initializeUsing: anIdentifierProvider [
 
-	identifierProvider := anIdentifierProvider.
-
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface
+	self initialize.
+	identifierProvider := anIdentifierProvider
 ]
 
-{ #category : #'private - providing identifier' }
-IdentifierSystem >> next [
-	
-	^identifierProvider next 
+{ #category : #'private - systems' }
+IdentifierSystem >> metadataSystem [
+
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+IdentifierSystem >> name [
+
+	^ 'Identifier'
 ]
 
 { #category : #querying }
 IdentifierSystem >> objectIdentifiedBy: anIdentifier ifNone: ifNoneBlock [
 
-	^ metadataSystem
+	^ self metadataSystem
 		describedObjectBy: anIdentifier
-		as: #identifier
+		as: self identifierAspect 
 		ifNone: ifNoneBlock
 ]
 
 { #category : #managing }
 IdentifierSystem >> registerIdentifierFor: anObject [
-	
-	metadataSystem
+
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: self next
-				as: #identifier
+				attaching: identifierProvider next
+				as: self identifierAspect
 				of: anObject)
-]
-
-{ #category : #initialization }
-IdentifierSystem >> resolveDependecies [
-
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface
 ]

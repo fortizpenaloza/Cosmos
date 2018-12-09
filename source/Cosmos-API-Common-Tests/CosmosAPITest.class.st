@@ -49,6 +49,28 @@ CosmosAPITest >> setUp [
 ]
 
 { #category : #running }
+CosmosAPITest >> setUpRequirements [
+
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: DataStreamManagementSystem new;
+		registerSubsystem: ActionManagementSystem new;
+		registerSubsystem: TriggerManagementSystem new
+]
+
+{ #category : #'private - accessing' }
+CosmosAPITest >> systemDateTime [
+
+	^ DateTime 
+		date: October first , 2014 
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
+]
+
+{ #category : #running }
 CosmosAPITest >> tearDown [
 
 	api ifNotNil: [ api stop ].

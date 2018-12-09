@@ -2,8 +2,7 @@ Class {
 	#name : #TriggersRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'resourceController',
-		'identifierSequence'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Triggers-Tests'
 }
@@ -49,7 +48,18 @@ TriggersRESTfulControllerTest >> httpRequestContext [
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> identifierProvider [
 
-	^ SequentialIdentifierProvider providing: identifierSequence 
+	^ SequentialIdentifierProvider providing: self identifierSequence 
+]
+
+{ #category : #'private - accessing' }
+TriggersRESTfulControllerTest >> identifierSequence [
+
+	^ {(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
+	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
+	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
+	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc').
+	self setTriggeredToTrueIdentifier.
+	(UUID fromString: '1a8f38f0-7e37-0d00-9bcd-a0b00988c858')}
 ]
 
 { #category : #'private - accessing' }
@@ -136,7 +146,6 @@ TriggersRESTfulControllerTest >> setTriggeredToTrue [
 	^ self actionManagementSystem
 		actionNamed: 'Set triggered to true'
 		ifFound: [ :action | action ]
-		ifNone: [ ObjectNotFound signal: 'Action not found' ]
 ]
 
 { #category : #'private - accessing' }
@@ -168,20 +177,12 @@ TriggersRESTfulControllerTest >> setTriggeredToTrueEvery: aTimePeriod ifSatisfie
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrueIdentifier [
 
-	^ identifierSequence fifth
+	^ UUID fromString: '98c4eaee-7e37-0d00-9bcc-cab60988c858'
 ]
 
 { #category : #running }
 TriggersRESTfulControllerTest >> setUp [
 
-	identifierSequence := {
-	(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
-	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
-	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
-	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc').
-	(UUID fromString: '98c4eaee-7e37-0d00-9bcc-cab60988c858').
-	(UUID fromString: '1a8f38f0-7e37-0d00-9bcd-a0b00988c858')}.
-	
 	super setUp.
 
 	resourceController := TriggersRESTfulController workingWith: rootSystem.
@@ -199,11 +200,20 @@ TriggersRESTfulControllerTest >> setUp [
 { #category : #running }
 TriggersRESTfulControllerTest >> setUpRequirements [
 
-	super
+	self flag: 'super
 		setUpRequirements;
 		requireDataManagementSystem;
 		requireActionManagementSystem;
-		requireTriggerManagementSystem
+		requireTriggerManagementSystem'.
+		
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: DataStreamManagementSystem new;
+		registerSubsystem: ActionManagementSystem new;
+		registerSubsystem: TriggerManagementSystem new
  
 ]
 
@@ -219,10 +229,9 @@ TriggersRESTfulControllerTest >> systemDateTime [
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> temperatureStream [
 
-	^ self dataManagementSystem 
+	^ self dataManagementSystem
 		streamNamed: 'Temperature'
 		ifFound: [ :stream | stream ]
-		ifNone: [ ObjectNotFound signal: 'Data stream not found' ]
 ]
 
 { #category : #tests }

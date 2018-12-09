@@ -19,7 +19,7 @@ EvaluateBlockPolicy >> evaluateWith: anActionEvaluatorConfiguration [
 	block value
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 EvaluateBlockPolicy >> initializeFor: aBlock [
 
 	block := aBlock

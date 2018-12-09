@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+ActionManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
+
+	^ (October first , 2014) atNoon
+]
+
+{ #category : #accessing }
 ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
 
 	^ Action
@@ -20,13 +26,21 @@ ActionManagementSystemUserStoryTest >> sendYOToFran [
 		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
 ]
 
-{ #category : #initialization }
+{ #category : #'private - running' }
 ActionManagementSystemUserStoryTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireActionManagementSystem.
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: ActionManagementSystem new
+]
 
+{ #category : #tests }
+ActionManagementSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self actionManagementSystem name equals: 'Action Management'
+	
 ]
 
 { #category : #tests }

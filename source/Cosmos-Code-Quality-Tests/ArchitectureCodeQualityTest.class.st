@@ -1,20 +1,25 @@
 Class {
 	#name : #ArchitectureCodeQualityTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-Code-Quality-Tests'
+	#pools : [
+		'Kepler'
+	],
+	#category : #'Cosmos-Code-Quality-Tests'
 }
 
 { #category : #tests }
 ArchitectureCodeQualityTest >> testSystemsMustImplementAllMessagesDeclaredInItsInterface [
 
-	| systems |
+	| subsystemClassesNotImplementingInterfaces |
 
-	systems := System allSubclasses
-		reject: [ :class | class implementedInterface isImplementedByInstancesOf: class ].
+	subsystemClassesNotImplementingInterfaces := SubsystemImplementation allSubclasses
+		reject: [ :class | 
+			class new implementedInterfaces
+				allSatisfy: [ :interface | (SystemInterfaces >> interface) isImplementedByInstancesOf: class ] ].
 
 	self
-		assert: systems isEmpty
+		assert: subsystemClassesNotImplementingInterfaces isEmpty
 		description:
 			('At least one system implementation has defined all expected messages (declared by its implemented interface) (See <1s>)'
-				expandMacrosWith: systems asString)
+				expandMacrosWith: subsystemClassesNotImplementingInterfaces asString)
 ]

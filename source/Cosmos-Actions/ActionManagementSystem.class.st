@@ -1,37 +1,27 @@
 Class {
 	#name : #ActionManagementSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'actions',
-		'timeSystem',
-		'metadataSystem',
-		'identifierSystem'
+		'actions'
 	],
 	#category : #'Cosmos-Actions'
 }
 
-{ #category : #'system specification' }
-ActionManagementSystem class >> implementedInterface [
-
-	^ SystemInterface >> #ActionManagementSystemInterface
-]
-
 { #category : #querying }
 ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
-	
-	^ identifierSystem
+
+	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Action with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Action with that identifier not found' ]
 ]
 
 { #category : #querying }
-ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [ 
+ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock [
 
 	^ actions
 		detect: [ :action | action name = aName ]
 		ifFound: aFoundBlock
-		ifNone: aNoneBlock 
+		ifNone: [ ObjectNotFound signal: ('Action named <1s> not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }
@@ -40,67 +30,89 @@ ActionManagementSystem >> actions [
 	^ actions copy
 ]
 
-{ #category : #managing }
-ActionManagementSystem >> deregister: action [
+{ #category : #'private - preconditions' }
+ActionManagementSystem >> assertIsNotAlreadyRegistered: anAction [
 
-	^ actions remove: action
+	AssertionChecker
+		refuse: [ actions includes: anAction ]
+		because: 'An action with that name already exists in system'
+		raising: ConflictingObjectFound
+]
+
+{ #category : #installing }
+ActionManagementSystem >> dependencies [
+
+	^ #(#TimeSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+]
+
+{ #category : #managing }
+ActionManagementSystem >> deregister: anAction [
+
+	^ actions remove: anAction
+]
+
+{ #category : #'private - systems' }
+ActionManagementSystem >> identifierSystem [
+
+	^ self >> #IdentifierSystemInterface
+]
+
+{ #category : #installing }
+ActionManagementSystem >> implementedInterfaces [ 
+
+	^#(#ActionManagementSystemInterface)
 ]
 
 { #category : #initialization }
 ActionManagementSystem >> initialize [
 
 	super initialize.
-
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
-
 	actions := OrderedCollection new
+]
+
+{ #category : #'private - systems' }
+ActionManagementSystem >> metadataSystem [
+
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+ActionManagementSystem >> name [
+
+	^ 'Action Management'
 ]
 
 { #category : #managing }
 ActionManagementSystem >> register: anAction [
 
-	self
-		actionNamed: anAction name
-		ifFound: [ :action | 
-			ConflictingObjectFound
-				signal: 'An action with that name already exists in system' ]
-		ifNone: [ self registerWithMetadata: anAction ].
-
+	self assertIsNotAlreadyRegistered: anAction.
+	
+	actions add: anAction.
+	self registerIdentifierFor: anAction.
+	self registerRegistrationTimestampFor: anAction.
+	
 	^ anAction
 ]
 
 { #category : #'private - managing' }
 ActionManagementSystem >> registerIdentifierFor: anAction [
 
-	identifierSystem registerIdentifierFor: anAction
+	self identifierSystem registerIdentifierFor: anAction
 ]
 
 { #category : #'private - managing' }
 ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
 
-	metadataSystem
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: timeSystem dateTime
+				attaching: self timeSystem dateTime
 				as: #registration_timestamp
 				of: anAction)
 ]
 
-{ #category : #'private - managing' }
-ActionManagementSystem >> registerWithMetadata: anAction [
+{ #category : #'private - systems' }
+ActionManagementSystem >> timeSystem [
 
-	actions add: anAction.
-
-	self registerIdentifierFor: anAction .
-	self registerRegistrationTimestampFor: anAction 
-]
-
-{ #category : #'dependency resolution' }
-ActionManagementSystem >> resolveDependecies [
-
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
+	^ self >> #TimeSystemInterface
 ]

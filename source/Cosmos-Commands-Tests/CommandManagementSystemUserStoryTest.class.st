@@ -4,13 +4,27 @@ Class {
 	#category : #'Cosmos-Commands-Tests'
 }
 
+{ #category : #accessing }
+CommandManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
+
+	^ (October first , 2014) atNoon
+]
+
 { #category : #running }
 CommandManagementSystemUserStoryTest >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireCommandManagementSystem.
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: CommandManagementSystem new
+]
 
+{ #category : #tests }
+CommandManagementSystemUserStoryTest >> testAccessing [ 
+	
+	self assert: self commandManagementSystem name equals: 'Command Management'
+	
 ]
 
 { #category : #tests }
@@ -88,7 +102,7 @@ CommandManagementSystemUserStoryTest >> testMetadataRegistrationOnCommandRegistr
 				as: #identifier
 				of: turnOnLedWithHighPriority).
 			(Metadata
-				attaching: self systemDateTime
+				attaching: self octoberFirstOf2014AtNoon 
 				as: #registration_timestamp
 				of: turnOnLedWithHighPriority)} asOrderedCollection
 ]

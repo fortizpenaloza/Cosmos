@@ -21,7 +21,7 @@ SendHttpRequestPolicy >> evaluateWith: aConfiguration [
 		get
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 SendHttpRequestPolicy >> initializeSending: aRequest [
 	
 	requestToSend := aRequest

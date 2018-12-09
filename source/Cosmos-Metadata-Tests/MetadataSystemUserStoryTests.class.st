@@ -13,15 +13,20 @@ MetadataSystemUserStoryTests >> identifier [
 { #category : #running }
 MetadataSystemUserStoryTests >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireMetadataSystem
+	self registerSubsystem: MetadataSystem new
 ]
 
 { #category : #accessing }
 MetadataSystemUserStoryTests >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testAccessing [ 
+	
+	self assert: self metadataSystem name equals: 'Metadata'
+	
 ]
 
 { #category : #tests }

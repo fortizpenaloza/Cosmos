@@ -79,21 +79,18 @@ CosmosCommandLineHandler >> basicActivate [
 { #category : #'private - building cosmos system' }
 CosmosCommandLineHandler >> buildAndStartCosmos [
 
-	| builder |
+	cosmos := CompositeSystem new.
 
-	builder := CompositeSystemBuilder new.
-	builder
-		add: (TimeSystem using: SystemTimeSource new);
-		add: EventNotificationSystem new;
-		add: MetadataSystem new;
-		add: (IdentifierSystem using: UUIDProvider new);
-		add: DataStreamManagementSystem new;
-		add: TriggerManagementSystem new;
-		add: ActionManagementSystem new;
-		add: CommandManagementSystem new.
-
-	cosmos := builder build.
-
+	cosmos
+		register: (TimeSystem using: SystemTimeSource new);
+		register: EventNotificationSystem new;
+		register: MetadataSystem new;
+		register: (IdentifierSystem using: UUIDProvider new);
+		register: DataStreamManagementSystem new;
+		register: TriggerManagementSystem new;
+		register: ActionManagementSystem new;
+		register: CommandManagementSystem new.
+		
 	cosmos startUp
 ]
 

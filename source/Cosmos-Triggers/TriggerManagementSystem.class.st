@@ -7,24 +7,14 @@ My main responsability is to manage triggers and evaluate them when a condition 
 "
 Class {
 	#name : #TriggerManagementSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'eventNotificationSystem',
-		'timeSystem',
-		'metadataSystem',
-		'identifierSystem',
 		'triggers',
 		'triggersToTriggerPeriodically',
 		'triggersToTriggerAfterDataPointRegistration'
 	],
 	#category : #'Cosmos-Triggers-SystemModel'
 }
-
-{ #category : #'system specification' }
-TriggerManagementSystem class >> implementedInterface [
-
-	^ SystemInterface >> #TriggerManagementSystemInterface
-]
 
 { #category : #'events handling' }
 TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
@@ -34,6 +24,12 @@ TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
 			trigger
 				ifSatisfiedOn: self triggeringContext
 				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
+]
+
+{ #category : #installing }
+TriggerManagementSystem >> dependencies [
+
+	^ #(#TimeSystemInterface #EventNotificationSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -61,6 +57,12 @@ TriggerManagementSystem >> deregister: aTrigger toStopTriggeringAfterDataPointRe
 	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: aTrigger 	
 ]
 
+{ #category : #'private - systems' }
+TriggerManagementSystem >> eventNotificationSystem [
+	
+	^ self >> #EventNotificationSystemInterface
+]
+
 { #category : #'events handling' }
 TriggerManagementSystem >> havePassed: aTickEvent [
 	
@@ -71,25 +73,43 @@ TriggerManagementSystem >> havePassed: aTickEvent [
 				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
 ]
 
+{ #category : #'private - systems' }
+TriggerManagementSystem >> identifierSystem [
+	
+	^ self >> #IdentifierSystemInterface
+]
+
+{ #category : #installing }
+TriggerManagementSystem >> implementedInterfaces [
+
+	^ #(#TriggerManagementSystemInterface)
+]
+
 { #category : #initialization }
 TriggerManagementSystem >> initialize [
 
 	super initialize.
-	
-	eventNotificationSystem := self unresolvedSystemDependencyTo: #EventNotificationSystemInterface.
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
-
 	triggers := OrderedCollection new.
 	triggersToTriggerAfterDataPointRegistration := Dictionary new.
 	triggersToTriggerPeriodically := Dictionary new
 ]
 
+{ #category : #'private - systems' }
+TriggerManagementSystem >> metadataSystem [
+	
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+TriggerManagementSystem >> name [ 
+
+	^ 'Trigger Management'
+]
+
 { #category : #'events handling' }
 TriggerManagementSystem >> notifyEvaluationOf: action [
 
-	^ eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: action)
+	^ self eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: action)
 ]
 
 { #category : #managing }
@@ -133,28 +153,18 @@ TriggerManagementSystem >> register: aTrigger toTriggerPeriodicallyEvery: aTimeP
 { #category : #'private - managing' }
 TriggerManagementSystem >> registerIdentifierFor: anActionTrigger [ 
 
-	identifierSystem registerIdentifierFor: anActionTrigger
+	self identifierSystem registerIdentifierFor: anActionTrigger
 ]
 
 { #category : #'private - managing' }
 TriggerManagementSystem >> registerRegistrationTimestampFor: anActionTrigger [ 
 	
-	metadataSystem
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: timeSystem dateTime
+				attaching: self timeSystem dateTime
 				as: #registration_timestamp
 				of: anActionTrigger)
-]
-
-{ #category : #'private - dependency resolution' }
-TriggerManagementSystem >> resolveDependecies [
-
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self
-		resolveSystemDependencyTo: #EventNotificationSystemInterface.
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
 { #category : #'starting - stopping' }
@@ -168,7 +178,7 @@ TriggerManagementSystem >> startUp [
 { #category : #'private - subscribing' }
 TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 
-	eventNotificationSystem
+	self eventNotificationSystem
 		subscribe: self
 		to: DataPointRegistrationEvent
 		toBeNotifiedSending: #dataPointRegisteredOn:
@@ -177,19 +187,24 @@ TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 { #category : #'private - subscribing' }
 TriggerManagementSystem >> subscribeToTickEvents [
 
-	eventNotificationSystem
+	self eventNotificationSystem
 		subscribe: self
 		to: TickEvent
 		toBeNotifiedSending: #havePassed:
 ]
 
+{ #category : #'private - systems' }
+TriggerManagementSystem >> timeSystem [
+
+	^ self >> #TimeSystemInterface
+]
+
 { #category : #querying }
 TriggerManagementSystem >> triggerIdentifiedBy: anIdentifier [
-	
-	^ identifierSystem
+
+	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Trigger with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Trigger with that identifier not found' ]
 ]
 
 { #category : #'private - querying' }
@@ -204,7 +219,7 @@ TriggerManagementSystem >> triggerNamed: aName ifFound: aFoundBlock ifNone: aNon
 { #category : #'private - accessing' }
 TriggerManagementSystem >> triggeringContext [
 	
-	^ TriggeringContext providing: timeSystem dateTime
+	^ TriggeringContext providing: self timeSystem dateTime
 ]
 
 { #category : #querying }

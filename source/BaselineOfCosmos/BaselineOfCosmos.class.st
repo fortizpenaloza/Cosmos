@@ -38,8 +38,7 @@ BaselineOfCosmos >> baseline: spec [
 				group: 'Tools' with: #('Cosmos-Tools');
 				group: 'CI' with: #('Deployment' 'Tests');
 				group: 'Development' with: #('CI' 'Tools');
-				group: 'default' with: #('Deployment').
-			spec postLoadDoIt: #postload:package: ]
+				group: 'default' with: #('Deployment') ]
 ]
 
 { #category : #baselines }
@@ -98,7 +97,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		package: 'Cosmos-Tests';
 		package: 'Cosmos-UserStoryTests'
-			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers' 'Stargate-Tests') ];
+			with: [ spec requires: #('Cosmos-Data' 'Cosmos-Commands' 'Cosmos-Triggers' 'Kepler-SUnit') ];
 		package: 'Cosmos-Identifier-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Identifier') ];
 		package: 'Cosmos-Metadata-Tests'
@@ -122,106 +121,25 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
-{ #category : #actions }
-BaselineOfCosmos >> postload: aLoader package: aPackageSpec [
-
-	self registerSystemInterfaces
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerActionManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #ActionManagementSystemInterface
-		named: 'Action Management System Interface'
-		declaring: #(#register: #deregister: actions)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerCommandManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #CommandManagementSystemInterface
-		named: 'Command Management System Interface'
-		declaring: #(#register: #deregister: #dequeueCommand #commands)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerDataManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #DataStreamManagementSystemInterface
-		named: 'Data Stream Management System Interface'
-		declaring: #(#register: #deregister: #register:toStreamNamed:  #streamIdentifiedBy: #streams)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerIdentifierSystemInterface [
-
-	self
-		registerInterfaceAs: #IdentifierSystemInterface
-		named: 'Identifier System Interface'
-		declaring: #(#next)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerInterfaceAs: aKey named: aName declaring: aSelectorSet [
-
-	SystemInterface
-		bind: aKey
-		to: (Interface named: aName declaring: aSelectorSet) 
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerMetadataSystemInterface [
-
-	self
-		registerInterfaceAs: #MetadataSystemInterface
-		named: 'Metadata System Interface'
-		declaring: #(#metadataFor: #register: #describedObjectBy:as:ifNone:)
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerSystemInterfaces [
-
-	self
-		registerIdentifierSystemInterface;
-		registerDataManagementSystemInterface;
-		registerMetadataSystemInterface;
-		registerCommandManagementSystemInterface;
-		registerTriggerManagementSystemInterface;
-		registerActionManagementSystemInterface
-]
-
-{ #category : #'registering interfaces' }
-BaselineOfCosmos >> registerTriggerManagementSystemInterface [
-
-	self
-		registerInterfaceAs: #TriggerManagementSystemInterface
-		named: 'Trigger Management System Interface'
-		declaring: #(#register: #deregister: #havePassed: #dataPointRegisteredOn: #triggers #triggerIdentifiedBy:)
-]
-
 { #category : #dependencies }
 BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Kepler'
 		with: [ spec
-				repository: 'github://ba-st/Kepler:v2.0.3/source';
-				loads: #('Deployment' 'SystemBasedTests') ].
+				repository: 'github://ba-st/Kepler:v3/source';
+				loads: #('Deployment') ];
+		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'SUnit' ].
 
 	spec
 		baseline: 'Stargate'
 			with: [ spec
 				repository: 'github://ba-st/stargate:v0.6.0/source';
-				loads: 'Deployment' ];
-		project: 'Stargate-Tests' copyFrom: 'Stargate' with: [ spec loads: 'Development' ].
-
+				loads: 'Deployment' ].
 	spec
 		baseline: 'ApplicationStarter'
 			with: [ spec
-				repository: 'github://ba-st/ApplicationStarter:v1.0.0/source';
+				repository: 'github://ba-st/ApplicationStarter:v1.0.1/source';
 				loads: 'Deployment' ];
 		import: 'ApplicationStarter'.
 

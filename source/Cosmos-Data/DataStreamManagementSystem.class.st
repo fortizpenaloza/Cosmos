@@ -5,21 +5,26 @@ I also allow deregistration of streams.
 "
 Class {
 	#name : #DataStreamManagementSystem,
-	#superclass : #System,
+	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'dataStreams',
-		'timeSystem',
-		'eventNotificationSystem',
-		'metadataSystem',
-		'identifierSystem'
+		'dataStreams'
 	],
 	#category : #'Cosmos-Data'
 }
 
-{ #category : #'system specification' }
-DataStreamManagementSystem class >> implementedInterface [
+{ #category : #'private - preconditions' }
+DataStreamManagementSystem >> assertIsNotAlreadyRegistered: aDataStream [
 
-	^ SystemInterface >> #DataStreamManagementSystemInterface 
+	AssertionChecker
+		refuse: [ dataStreams includes: aDataStream ]
+		because: 'A data stream with that name already exists in system'
+		raising: ConflictingObjectFound
+]
+
+{ #category : #installing }
+DataStreamManagementSystem >> dependencies [
+
+	^ #(#TimeSystemInterface #EventNotificationSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -28,37 +33,60 @@ DataStreamManagementSystem >> deregister: aDataStream [
 	dataStreams remove: aDataStream 
 ]
 
+{ #category : #'private - systems' }
+DataStreamManagementSystem >> eventNotificationSystem [
+	
+	^ self >> #EventNotificationSystemInterface
+]
+
+{ #category : #'private - systems' }
+DataStreamManagementSystem >> identifierSystem [
+
+	^ self >> #IdentifierSystemInterface
+]
+
+{ #category : #installing }
+DataStreamManagementSystem >> implementedInterfaces [
+
+	^ #(#DataStreamManagementSystemInterface)
+]
+
 { #category : #initialization }
 DataStreamManagementSystem >> initialize [
 
 	super initialize.
-
-	timeSystem := self unresolvedSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self unresolvedSystemDependencyTo: #EventNotificationSystemInterface.
-	metadataSystem := self unresolvedSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self unresolvedSystemDependencyTo: #IdentifierSystemInterface.
-
 	dataStreams := OrderedCollection new
+]
+
+{ #category : #'private - systems' }
+DataStreamManagementSystem >> metadataSystem [
+	
+	^ self >> #MetadataSystemInterface
+]
+
+{ #category : #accessing }
+DataStreamManagementSystem >> name [ 
+
+	^ 'Data Stream Management'
 ]
 
 { #category : #'events handling' }
 DataStreamManagementSystem >> notifyDataPointWasRegisteredOn: aDataStream [
 
-	eventNotificationSystem
+	self eventNotificationSystem
 		notifySubscribersTo: (DataPointRegistrationEvent on: aDataStream)
 ]
 
 { #category : #managing }
 DataStreamManagementSystem >> register: aDataStream [
 
-	self
-		streamNamed: aDataStream name
-		ifFound: [ :dataStream | 
-			ConflictingObjectFound
-				signal: 'A data stream with that name already exists in system' ]
-		ifNone: [ self registerWithMetadata: aDataStream ].
-		
-	^ aDataStream 
+	self assertIsNotAlreadyRegistered: aDataStream.
+	
+	dataStreams add: aDataStream.
+	self registerIdentifierFor: aDataStream.
+	self registerRegistrationTimestampFor: aDataStream.
+	
+	^ aDataStream
 ]
 
 { #category : #'private - managing' }
@@ -74,65 +102,50 @@ DataStreamManagementSystem >> register: aDataPoint toStreamNamed: aName [
 	self
 		streamNamed: aName
 		ifFound: [ :dataStream | self register: aDataPoint to: dataStream ]
-		ifNone: [ ObjectNotFound signal: 'Data stream not found in the system' ]
 ]
 
 { #category : #'private - managing' }
 DataStreamManagementSystem >> registerIdentifierFor: aDataStream [
 
-	identifierSystem registerIdentifierFor: aDataStream
+	self identifierSystem registerIdentifierFor: aDataStream
 ]
 
 { #category : #'private - managing' }
 DataStreamManagementSystem >> registerRegistrationTimestampFor: aDataStream [
 
-	metadataSystem
+	self metadataSystem
 		register:
 			(Metadata
-				attaching: timeSystem dateTime
+				attaching: self timeSystem dateTime
 				as: #registration_timestamp
 				of: aDataStream)
-]
-
-{ #category : #'private - managing' }
-DataStreamManagementSystem >> registerWithMetadata: aDataStream [
-
-	dataStreams add: aDataStream.
-
-	self registerIdentifierFor: aDataStream.
-	self registerRegistrationTimestampFor: aDataStream
-]
-
-{ #category : #'private - dependency resolution' }
-DataStreamManagementSystem >> resolveDependecies [
-
-	timeSystem := self resolveSystemDependencyTo: #TimeSystemInterface.
-	eventNotificationSystem := self
-		resolveSystemDependencyTo: #EventNotificationSystemInterface.
-	metadataSystem := self resolveSystemDependencyTo: #MetadataSystemInterface.
-	identifierSystem := self resolveSystemDependencyTo: #IdentifierSystemInterface
 ]
 
 { #category : #querying }
 DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 
-	^ identifierSystem
+	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Data stream with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ]
 ]
 
-{ #category : #'private - querying' }
-DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
+{ #category : #querying }
+DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock [
 
-	^ dataStreams 	
+	^ dataStreams
 		detect: [ :dataStream | dataStream name = aName ]
 		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
-		ifNone: aNoneBlock
+		ifNone: [ ObjectNotFound signal: ('Data stream named "<1s>" not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }
 DataStreamManagementSystem >> streams [
 
 	^ dataStreams copy 
+]
+
+{ #category : #'private - systems' }
+DataStreamManagementSystem >> timeSystem [
+	
+	^ self >> #TimeSystemInterface
 ]

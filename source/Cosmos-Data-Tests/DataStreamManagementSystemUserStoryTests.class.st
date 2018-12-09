@@ -13,15 +13,25 @@ DataStreamManagementSystemUserStoryTests >> octoberFirstOf2014AtNoon [
 { #category : #running }
 DataStreamManagementSystemUserStoryTests >> setUpRequirements [
 
-	super
-		setUpRequirements;
-		requireDataManagementSystem
+	self
+		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: EventNotificationSystem new;
+		registerSubsystem: MetadataSystem new;
+		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: DataStreamManagementSystem new
 ]
 
 { #category : #accessing }
 DataStreamManagementSystemUserStoryTests >> temperatureStream [
 
 	^ DataStream named: 'Temperature'
+]
+
+{ #category : #tests }
+DataStreamManagementSystemUserStoryTests >> testAccessing [ 
+	
+	self assert: self dataManagementSystem name equals: 'Data Stream Management'
+	
 ]
 
 { #category : #tests }
@@ -48,7 +58,7 @@ DataStreamManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStre
 				register: (DataPoint on: self octoberFirstOf2014AtNoon holding: 10)
 				toStreamNamed: 'Wrong name' ]
 		raise: ObjectNotFound
-		withMessageText: 'Data stream not found in the system'
+		withMessageText: 'Data stream named "Wrong name" not found'
 ]
 
 { #category : #tests }
@@ -112,7 +122,7 @@ DataStreamManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRe
 				as: #identifier
 				of: dataStream).
 			(Metadata
-				attaching: self systemDateTime
+				attaching: self octoberFirstOf2014AtNoon
 				as: #registration_timestamp
 				of: dataStream)} asOrderedCollection 
 ]
@@ -136,12 +146,11 @@ DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByName [
 	| dataStream |
 
 	dataStream := self temperatureStream.
-	
+
 	self dataManagementSystem register: dataStream.
 	self dataManagementSystem
 		streamNamed: 'Temperature'
 		ifFound: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
-		ifNone: [ self fail ]
 ]
 
 { #category : #tests }

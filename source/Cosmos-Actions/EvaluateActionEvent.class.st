@@ -19,7 +19,7 @@ EvaluateActionEvent >> action [
 	^ action
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 EvaluateActionEvent >> initializeOf: anAction [
 
 	action := anAction
