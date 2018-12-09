@@ -14,5 +14,5 @@ ManifestCosmosIdentifier class >> initialize [
 	Kepler
 		registerInterfaceAt:  #IdentifierSystemInterface
 		named: 'Identifier System Interface'
-		declaring: #(#next)
+		declaring: #(#identifierOf: #objectIdentifiedBy:ifNone: #registerIdentifierFor:)
 ]
