@@ -9,11 +9,10 @@ Class {
 
 { #category : #querying }
 ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
-	
+
 	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Action with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Action with that identifier not found' ]
 ]
 
 { #category : #querying }
@@ -103,10 +102,6 @@ ActionManagementSystem >> registerIdentifierFor: anAction [
 
 { #category : #'private - managing' }
 ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
-
-	self flag: 'self timeEventSystem register: #registration of: anAction.
-	
-	self eventNotificationSystem notify: ObjectRegisteredEvent/ObjectUpdatedEvent'.
 
 	self metadataSystem
 		register:

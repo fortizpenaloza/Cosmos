@@ -201,11 +201,10 @@ TriggerManagementSystem >> timeSystem [
 
 { #category : #querying }
 TriggerManagementSystem >> triggerIdentifiedBy: anIdentifier [
-	
+
 	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Trigger with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Trigger with that identifier not found' ]
 ]
 
 { #category : #'private - querying' }

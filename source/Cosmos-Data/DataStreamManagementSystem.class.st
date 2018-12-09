@@ -126,8 +126,7 @@ DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 
 	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone:
-			[ ObjectNotFound signal: 'Data stream with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Data stream with that identifier not found' ]
 ]
 
 { #category : #querying }
