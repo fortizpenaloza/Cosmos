@@ -2,8 +2,7 @@ Class {
 	#name : #ActionsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'resourceController',
-		'identifierSequence'
+		'resourceController'
 	],
 	#category : #'Cosmos-API-Actions-Tests'
 }
@@ -29,7 +28,7 @@ ActionsRESTfulControllerTest >> getDNSZonesAsJSON [
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> getDNSZonesIdentifier [
 
-	^ identifierSequence first
+	^ UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc'
 ]
 
 { #category : #'private - accessing' }
@@ -47,7 +46,8 @@ ActionsRESTfulControllerTest >> identifierProvider [
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> identifierSequence [
 
-	^ identifierSequence
+	^ {self getDNSZonesIdentifier.
+	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc')}
 ]
 
 { #category : #'test support' }
@@ -147,10 +147,6 @@ ActionsRESTfulControllerTest >> resourceUrl [
 { #category : #running }
 ActionsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {
-	(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
-	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc')}.
-	
 	super setUp.
 
 	resourceController := ActionsRESTfulController workingWith: rootSystem.
@@ -166,6 +162,7 @@ ActionsRESTfulControllerTest >> setUpRequirements [
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
 		registerSubsystem: MetadataSystem new;
+		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: ActionManagementSystem new
 ]

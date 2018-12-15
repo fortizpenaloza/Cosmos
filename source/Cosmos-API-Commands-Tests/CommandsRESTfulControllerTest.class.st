@@ -2,7 +2,6 @@ Class {
 	#name : #CommandsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'identifierSequence',
 		'resourceController'
 	],
 	#category : #'Cosmos-API-Commands-Tests'
@@ -21,12 +20,6 @@ CommandsRESTfulControllerTest >> baseUrl [
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulControllerTest >> commandWithMediumPriorityIdentifier [
-
-	^ identifierSequence second
-]
-
-{ #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> httpRequestContext [
 
 	^ HttpRequestContext new
@@ -35,7 +28,15 @@ CommandsRESTfulControllerTest >> httpRequestContext [
 { #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> identifierProvider [
 
-	^ SequentialIdentifierProvider providing: identifierSequence 
+	^ SequentialIdentifierProvider providing: self identifierSequence 
+]
+
+{ #category : #'private - accessing' }
+CommandsRESTfulControllerTest >> identifierSequence [
+
+	^ {self turnOnLedWithHighestPriorityIndentifier.
+	self turnOffLedWithMediumPriorityIdentifier.
+	(UUID fromString: 'a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c')}
 ]
 
 { #category : #'tests - support' }
@@ -102,11 +103,6 @@ CommandsRESTfulControllerTest >> resourceUrl [
 { #category : #running }
 CommandsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {
-	(UUID fromString: 'af1ac24c-6c37-0d00-8b39-e65c01b794dc').
-	(UUID fromString: '7606aa4d-6c37-0d00-8b3a-dd4a01b794dc').
-	(UUID fromString: 'a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c')}.
-
 	super setUp.
 
 	resourceController := CommandsRESTfulController workingWith: rootSystem.
@@ -117,11 +113,12 @@ CommandsRESTfulControllerTest >> setUp [
 CommandsRESTfulControllerTest >> setUpRequirements [
 
 	self flag: 'requireCommandManagementSystem'.
-	
+
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: CommandManagementSystem new
 ]
 
@@ -170,7 +167,7 @@ CommandsRESTfulControllerTest >> testDeleteCommand [
 	self assert: self commandManagementSystem commands size equals: 3.
 
 	response := resourceController
-		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self commandWithMediumPriorityIdentifier)
+		deleteCommandBasedOn: (self requestToDeleteCommandIdentifiedBy: self turnOffLedWithMediumPriorityIdentifier)
 		within: self httpRequestContext.
 
 	self
@@ -278,9 +275,15 @@ CommandsRESTfulControllerTest >> textPlain [
 ]
 
 { #category : #'private - accessing' }
+CommandsRESTfulControllerTest >> turnOffLedWithMediumPriorityIdentifier [
+
+	^ UUID fromString: '7606aa4d-6c37-0d00-8b3a-dd4a01b794dc'
+]
+
+{ #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> turnOnLedWithHighestPriorityIndentifier [
-	
-	^ identifierSequence first
+
+	^ UUID fromString: 'af1ac24c-6c37-0d00-8b39-e65c01b794dc'
 ]
 
 { #category : #'private - accessing' }

@@ -25,7 +25,7 @@ CommandManagementSystem >> commands [
 { #category : #installing }
 CommandManagementSystem >> dependencies [
 
-	^ #(#TimeSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+	^ #(#TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -75,12 +75,6 @@ CommandManagementSystem >> initialize [
 	priorityQueue := PriorityQueue empty
 ]
 
-{ #category : #'private - systems' }
-CommandManagementSystem >> metadataSystem [
-	
-	^ self >> #MetadataSystemInterface
-]
-
 { #category : #accessing }
 CommandManagementSystem >> name [ 
 	
@@ -96,7 +90,7 @@ CommandManagementSystem >> register: aCommandWithPriority [
 		with: aCommandWithPriority priority.
 		
 	self registerIdentifierFor: aCommandWithPriority.
-	self registerRegistrationTimestampFor: aCommandWithPriority.
+	self registerTimestampFor: aCommandWithPriority.
 	
 	^ aCommandWithPriority 
 ]
@@ -108,18 +102,13 @@ CommandManagementSystem >> registerIdentifierFor: aCommandWithPriority [
 ]
 
 { #category : #'private - managing' }
-CommandManagementSystem >> registerRegistrationTimestampFor: aCommandWithPriority [ 
+CommandManagementSystem >> registerTimestampFor: aCommandWithPriority [
 
-	self metadataSystem
-		register:
-			(Metadata
-				attaching: self timeSystem dateTime
-				as: #registration_timestamp
-				of: aCommandWithPriority)
+	self timestampingSystem registerModificationFor: aCommandWithPriority
 ]
 
 { #category : #'private - systems' }
-CommandManagementSystem >> timeSystem [
-	
-	^ self >> #TimeSystemInterface
+CommandManagementSystem >> timestampingSystem [
+
+	^ self >> #TimestampingSystemInterface
 ]

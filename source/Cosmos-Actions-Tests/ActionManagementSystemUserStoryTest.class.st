@@ -33,6 +33,7 @@ ActionManagementSystemUserStoryTest >> setUpRequirements [
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: (TimestampingSystem new);
 		registerSubsystem: ActionManagementSystem new
 ]
 
@@ -65,6 +66,31 @@ ActionManagementSystemUserStoryTest >> testDeregistrationFailsIfNotExists [
 	self
 		should: [ self actionManagementSystem deregister: self sendYOToFran ]
 		raise: NotFound
+]
+
+{ #category : #tests }
+ActionManagementSystemUserStoryTest >> testMetadataRegistrationOnActionRegistration [
+
+	| action metadata |
+
+	action := self sendYOToFran.
+
+	self assert: (self metadataSystem metadataFor: action) isEmpty.
+	self actionManagementSystem register: action.
+
+	metadata := self metadataSystem metadataFor: action.
+	self
+		assert: metadata size equals: 2;
+		assert: metadata
+			equals:
+			{(Metadata 
+				attaching: self currentIdentifier 
+				as: #identifier 
+				of: action).
+			(Metadata 
+				attaching: self octoberFirstOf2014AtNoon 
+				as: #update_timestamp 
+				of: action)} asOrderedCollection
 ]
 
 { #category : #tests }

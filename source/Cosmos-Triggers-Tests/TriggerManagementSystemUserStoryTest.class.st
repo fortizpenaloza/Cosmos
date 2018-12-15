@@ -64,6 +64,7 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: TriggerManagementSystem new
 ]
 
@@ -142,7 +143,7 @@ TriggerManagementSystemUserStoryTest >> testMedataRegistrationOnTriggerRegistrat
 				of: trigger).
 			(Metadata
 				attaching: self systemDateTime
-				as: #registration_timestamp
+				as: #update_timestamp
 				of: trigger)} asOrderedCollection 
 ]
 

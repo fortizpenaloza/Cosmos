@@ -91,11 +91,9 @@ TriggersRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> lastModificationOf: anActionTrigger [ 
+TriggersRESTfulController >> lastModificationOf: anActionTrigger [
 
-	^ self metadataSystem 
-		dataDescribing: #registration_timestamp
-		of: anActionTrigger
+	^ self timestampingSystem lastModificationOf: anActionTrigger
 ]
 
 { #category : #'private - accessing' }
@@ -132,6 +130,12 @@ TriggersRESTfulController >> providePaginationPolicy [
 TriggersRESTfulController >> specification [
 	
 	^ TriggersRESTfulControllerSpecification new
+]
+
+{ #category : #'private - systems' }
+TriggersRESTfulController >> timestampingSystem [
+	
+	^ cosmos systemImplementing: #TimestampingSystemInterface
 ]
 
 { #category : #systems }

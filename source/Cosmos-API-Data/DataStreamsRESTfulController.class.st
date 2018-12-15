@@ -117,11 +117,9 @@ DataStreamsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> lastModificationOf: aDataStream [ 
+DataStreamsRESTfulController >> lastModificationOf: aDataStream [
 
-	^ self metadataSystem 
-		dataDescribing: #registration_timestamp
-		of: aDataStream
+	^ self timestampingSystem lastModificationOf: aDataStream
 ]
 
 { #category : #'private - accessing' }
@@ -141,12 +139,6 @@ DataStreamsRESTfulController >> mediaControlsFor: dataStream [
 
 	^ (super mediaControlsFor: dataStream)
 		, {('data_points' -> ((self locationOf: dataStream) / 'data-points' asUrl))}
-]
-
-{ #category : #'private - systems' }
-DataStreamsRESTfulController >> metadataSystem [
-
-	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }
@@ -172,6 +164,12 @@ DataStreamsRESTfulController >> streamRequestedIn: anHttpRequest [
 
 	^ self dataManagementSystem
 		streamIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
+{ #category : #'private - systems' }
+DataStreamsRESTfulController >> timestampingSystem [
+
+	^ cosmos systemImplementing: #TimestampingSystemInterface
 ]
 
 { #category : #'private - API' }

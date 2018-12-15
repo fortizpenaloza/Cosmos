@@ -29,7 +29,7 @@ TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
 { #category : #installing }
 TriggerManagementSystem >> dependencies [
 
-	^ #(#TimeSystemInterface #EventNotificationSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+	^ #(#TimeSystemInterface #EventNotificationSystemInterface #TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -94,12 +94,6 @@ TriggerManagementSystem >> initialize [
 	triggersToTriggerPeriodically := Dictionary new
 ]
 
-{ #category : #'private - systems' }
-TriggerManagementSystem >> metadataSystem [
-	
-	^ self >> #MetadataSystemInterface
-]
-
 { #category : #accessing }
 TriggerManagementSystem >> name [ 
 
@@ -129,7 +123,7 @@ TriggerManagementSystem >> register: aTrigger accordingTo: aTriggeringPolicy [
 	aTriggeringPolicy register: aTrigger to: self.
 
 	self registerIdentifierFor: aTrigger.
-	self registerRegistrationTimestampFor: aTrigger
+	self registerTimestampFor: aTrigger
 ]
 
 { #category : #'private - managing' }
@@ -157,14 +151,9 @@ TriggerManagementSystem >> registerIdentifierFor: anActionTrigger [
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> registerRegistrationTimestampFor: anActionTrigger [ 
-	
-	self metadataSystem
-		register:
-			(Metadata
-				attaching: self timeSystem dateTime
-				as: #registration_timestamp
-				of: anActionTrigger)
+TriggerManagementSystem >> registerTimestampFor: anActionTrigger [
+
+	self timestampingSystem registerModificationFor: anActionTrigger
 ]
 
 { #category : #'starting - stopping' }
@@ -197,6 +186,12 @@ TriggerManagementSystem >> subscribeToTickEvents [
 TriggerManagementSystem >> timeSystem [
 
 	^ self >> #TimeSystemInterface
+]
+
+{ #category : #'private - systems' }
+TriggerManagementSystem >> timestampingSystem [
+
+	^ self >> #TimestampingSystemInterface
 ]
 
 { #category : #querying }

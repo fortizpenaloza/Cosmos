@@ -111,11 +111,9 @@ CommandsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulController >> lastModificationOf: aCommandWithPriority [ 
+CommandsRESTfulController >> lastModificationOf: aCommandWithPriority [
 
-	^ self metadataSystem 
-		dataDescribing: #registration_timestamp
-		of: aCommandWithPriority
+	^ self timestampingSystem lastModificationOf: aCommandWithPriority
 ]
 
 { #category : #'private - accessing' }
@@ -152,6 +150,12 @@ CommandsRESTfulController >> providePaginationPolicy [
 CommandsRESTfulController >> specification [
 
 	^ CommandsRESTfulControllerSpecification new
+]
+
+{ #category : #'private - systems' }
+CommandsRESTfulController >> timestampingSystem [
+
+	^ cosmos systemImplementing: #TimestampingSystemInterface
 ]
 
 { #category : #'private - API' }
