@@ -134,12 +134,12 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate'
 			with: [ spec
-				repository: 'github://ba-st/stargate:v0.6.0/source';
+				repository: 'github://ba-st/stargate:v0.7.0/source';
 				loads: 'Deployment' ].
 	spec
 		baseline: 'ApplicationStarter'
 			with: [ spec
-				repository: 'github://ba-st/ApplicationStarter:v1.0.1/source';
+				repository: 'github://ba-st/ApplicationStarter:v1/source';
 				loads: 'Deployment' ];
 		import: 'ApplicationStarter'.
 
