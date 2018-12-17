@@ -108,12 +108,6 @@ TriggersRESTfulController >> locationOf: anActionTrigger [
 	^  baseUrl / self specification endpoint / (self identifierOf: anActionTrigger) asString 
 ]
 
-{ #category : #systems }
-TriggersRESTfulController >> metadataSystem [
-
-	^ cosmos systemImplementing: #MetadataSystemInterface
-]
-
 { #category : #'private - accessing' }
 TriggersRESTfulController >> provideHypermediaPolicy [
 
@@ -138,7 +132,7 @@ TriggersRESTfulController >> timestampingSystem [
 	^ cosmos systemImplementing: #TimestampingSystemInterface
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 TriggersRESTfulController >> triggerManagementSystem [
 	
 	^ cosmos systemImplementing: #TriggerManagementSystemInterface

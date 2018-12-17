@@ -128,12 +128,6 @@ CommandsRESTfulController >> locationOf: aCommandWithPriority [
 	^ baseUrl / self specification endpoint / (self identifierOf: aCommandWithPriority) asString 
 ]
 
-{ #category : #systems }
-CommandsRESTfulController >> metadataSystem [
-
-	^ cosmos systemImplementing: #MetadataSystemInterface
-]
-
 { #category : #'private - accessing' }
 CommandsRESTfulController >> provideHypermediaPolicy [
 
