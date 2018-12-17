@@ -2,7 +2,6 @@ Class {
 	#name : #DataStreamsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'identifierSequence',
 		'resourceController'
 	],
 	#category : #'Cosmos-API-Data-Tests'
@@ -42,7 +41,16 @@ DataStreamsRESTfulControllerTest >> httpRequestContext [
 { #category : #'private - accessing' }
 DataStreamsRESTfulControllerTest >> identifierProvider [
 
-	^ SequentialIdentifierProvider providing: identifierSequence 
+	^ SequentialIdentifierProvider providing: self identifierSequence 
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulControllerTest >> identifierSequence [
+
+	^ {self temperatureStreamIdentifier.
+	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
+	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
+	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc')}
 ]
 
 { #category : #'private - requests' }
@@ -131,17 +139,12 @@ DataStreamsRESTfulControllerTest >> resourceUrl [
 { #category : #running }
 DataStreamsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {
-	(UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc').
-	(UUID fromString: 'c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc').
-	(UUID fromString: '6fbb430b-4537-0d00-96aa-582b07fa2cfc').
-	(UUID fromString: '62ede40b-4537-0d00-96ab-a32d07fa2cfc')}.
-
 	super setUp.
-	
-	resourceController := DataStreamsRESTfulController workingWith: rootSystem.
+
+	resourceController := DataStreamsRESTfulController
+		workingWith: rootSystem.
 	resourceController serverUrl: self baseUrl asZnUrl.
-	
+
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
@@ -153,6 +156,7 @@ DataStreamsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: DataStreamManagementSystem new.
 	
@@ -171,7 +175,7 @@ DataStreamsRESTfulControllerTest >> systemDateTime [
 { #category : #'private - accessing' }
 DataStreamsRESTfulControllerTest >> temperatureStreamIdentifier [
 
-	^ identifierSequence first
+	^ UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc'
 ]
 
 { #category : #tests }

@@ -17,6 +17,7 @@ CommandManagementSystemUserStoryTest >> setUpRequirements [
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: (TimestampingSystem new);
 		registerSubsystem: CommandManagementSystem new
 ]
 
@@ -103,7 +104,7 @@ CommandManagementSystemUserStoryTest >> testMetadataRegistrationOnCommandRegistr
 				of: turnOnLedWithHighPriority).
 			(Metadata
 				attaching: self octoberFirstOf2014AtNoon 
-				as: #registration_timestamp
+				as: #update_timestamp
 				of: turnOnLedWithHighPriority)} asOrderedCollection
 ]
 

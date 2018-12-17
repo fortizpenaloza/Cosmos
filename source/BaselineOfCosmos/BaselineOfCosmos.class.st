@@ -77,8 +77,9 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 	spec
 		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
-		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Timestamping' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Commands' with: [ spec requires: #('Kepler') ];
 		package: 'Cosmos-Actions' with: [ spec requires: #('Kepler') ];
@@ -88,7 +89,7 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model'
 		with:
-			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
+			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Timestamping' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
 ]
 
 { #category : #baselines }
@@ -102,6 +103,8 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Identifier') ];
 		package: 'Cosmos-Metadata-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Metadata') ];
+		package: 'Cosmos-Timestamping-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Timestamping') ];
 		package: 'Cosmos-Data-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
 		package: 'Cosmos-Triggers-Tests'
@@ -118,7 +121,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		group: 'Cosmos-Model-Tests'
 		with:
-			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
+			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Timestamping-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
 { #category : #dependencies }
@@ -134,12 +137,12 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate'
 			with: [ spec
-				repository: 'github://ba-st/stargate:v0.6.0/source';
+				repository: 'github://ba-st/stargate:v0.7.0/source';
 				loads: 'Deployment' ].
 	spec
 		baseline: 'ApplicationStarter'
 			with: [ spec
-				repository: 'github://ba-st/ApplicationStarter:v1.0.1/source';
+				repository: 'github://ba-st/ApplicationStarter:v1/source';
 				loads: 'Deployment' ];
 		import: 'ApplicationStarter'.
 

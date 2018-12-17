@@ -18,6 +18,7 @@ DataStreamManagementSystemUserStoryTests >> setUpRequirements [
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: (TimestampingSystem new);
 		registerSubsystem: DataStreamManagementSystem new
 ]
 
@@ -123,7 +124,7 @@ DataStreamManagementSystemUserStoryTests >> testMedataRegistrationOnDataStreamRe
 				of: dataStream).
 			(Metadata
 				attaching: self octoberFirstOf2014AtNoon
-				as: #registration_timestamp
+				as: #update_timestamp
 				of: dataStream)} asOrderedCollection 
 ]
 

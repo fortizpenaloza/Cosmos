@@ -97,11 +97,9 @@ ActionsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-ActionsRESTfulController >> lastModificationOf: anAction [ 
+ActionsRESTfulController >> lastModificationOf: anAction [
 
-	^ self metadataSystem 
-		dataDescribing: #registration_timestamp
-		of: anAction
+	^ self timestampingSystem lastModificationOf: anAction
 ]
 
 { #category : #'private - accessing' }
@@ -114,12 +112,6 @@ ActionsRESTfulController >> locationOf: anAction [
 		ifUnused: [ '' asZnUrl ].
 
 	^ baseUrl / self specification endpoint / (self identifierOf: anAction) asString 
-]
-
-{ #category : #'private - systems' }
-ActionsRESTfulController >> metadataSystem [
-
-	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }
@@ -138,6 +130,12 @@ ActionsRESTfulController >> providePaginationPolicy [
 ActionsRESTfulController >> specification [
 	
 	^ ActionsRESTfulControllerSpecification new
+]
+
+{ #category : #'private - systems' }
+ActionsRESTfulController >> timestampingSystem [
+	
+	^ cosmos >> #TimestampingSystemInterface
 ]
 
 { #category : #'private - API' }

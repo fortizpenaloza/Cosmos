@@ -24,7 +24,7 @@ DataStreamManagementSystem >> assertIsNotAlreadyRegistered: aDataStream [
 { #category : #installing }
 DataStreamManagementSystem >> dependencies [
 
-	^ #(#TimeSystemInterface #EventNotificationSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+	^ #(#EventNotificationSystemInterface #TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -58,12 +58,6 @@ DataStreamManagementSystem >> initialize [
 	dataStreams := OrderedCollection new
 ]
 
-{ #category : #'private - systems' }
-DataStreamManagementSystem >> metadataSystem [
-	
-	^ self >> #MetadataSystemInterface
-]
-
 { #category : #accessing }
 DataStreamManagementSystem >> name [ 
 
@@ -84,7 +78,7 @@ DataStreamManagementSystem >> register: aDataStream [
 	
 	dataStreams add: aDataStream.
 	self registerIdentifierFor: aDataStream.
-	self registerRegistrationTimestampFor: aDataStream.
+	self registerTimestampFor: aDataStream.
 	
 	^ aDataStream
 ]
@@ -111,14 +105,9 @@ DataStreamManagementSystem >> registerIdentifierFor: aDataStream [
 ]
 
 { #category : #'private - managing' }
-DataStreamManagementSystem >> registerRegistrationTimestampFor: aDataStream [
+DataStreamManagementSystem >> registerTimestampFor: aDataStream [
 
-	self metadataSystem
-		register:
-			(Metadata
-				attaching: self timeSystem dateTime
-				as: #registration_timestamp
-				of: aDataStream)
+	self timestampingSystem registerModificationFor: aDataStream
 ]
 
 { #category : #querying }
@@ -145,7 +134,7 @@ DataStreamManagementSystem >> streams [
 ]
 
 { #category : #'private - systems' }
-DataStreamManagementSystem >> timeSystem [
+DataStreamManagementSystem >> timestampingSystem [
 	
-	^ self >> #TimeSystemInterface
+	^ self >> #TimestampingSystemInterface
 ]

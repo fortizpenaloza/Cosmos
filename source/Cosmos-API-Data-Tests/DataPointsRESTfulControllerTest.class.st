@@ -2,7 +2,6 @@ Class {
 	#name : #DataPointsRESTfulControllerTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'identifierSequence',
 		'resourceController'
 	],
 	#category : #'Cosmos-API-Data-Tests'
@@ -29,7 +28,13 @@ DataPointsRESTfulControllerTest >> httpRequestContext [
 { #category : #'private - accessing' }
 DataPointsRESTfulControllerTest >> identifierProvider [
 
-	^ SequentialIdentifierProvider providing: identifierSequence 
+	^ SequentialIdentifierProvider providing: self identifierSequence 
+]
+
+{ #category : #'private - accessing' }
+DataPointsRESTfulControllerTest >> identifierSequence [
+
+	^ {(UUID fromString: '29a17dd4-6637-0d00-bc60-582a0ae2e3e4')}
 ]
 
 { #category : #'private - accessing' }
@@ -50,13 +55,11 @@ DataPointsRESTfulControllerTest >> requestToCreateDataPointsFrom: aJson [
 { #category : #running }
 DataPointsRESTfulControllerTest >> setUp [
 
-	identifierSequence := {(UUID fromString: '29a17dd4-6637-0d00-bc60-582a0ae2e3e4')}.
-
 	super setUp.
-	
+
 	resourceController := DataPointsRESTfulController workingWith: rootSystem.
 	resourceController serverUrl: self baseUrl asZnUrl.
-	
+
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
@@ -68,6 +71,7 @@ DataPointsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
+		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: DataStreamManagementSystem new.
 	

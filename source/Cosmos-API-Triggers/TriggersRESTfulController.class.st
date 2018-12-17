@@ -91,11 +91,9 @@ TriggersRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> lastModificationOf: anActionTrigger [ 
+TriggersRESTfulController >> lastModificationOf: anActionTrigger [
 
-	^ self metadataSystem 
-		dataDescribing: #registration_timestamp
-		of: anActionTrigger
+	^ self timestampingSystem lastModificationOf: anActionTrigger
 ]
 
 { #category : #'private - accessing' }
@@ -108,12 +106,6 @@ TriggersRESTfulController >> locationOf: anActionTrigger [
 		ifUnused: [ '' asZnUrl ].
 
 	^  baseUrl / self specification endpoint / (self identifierOf: anActionTrigger) asString 
-]
-
-{ #category : #systems }
-TriggersRESTfulController >> metadataSystem [
-
-	^ cosmos systemImplementing: #MetadataSystemInterface
 ]
 
 { #category : #'private - accessing' }
@@ -134,7 +126,13 @@ TriggersRESTfulController >> specification [
 	^ TriggersRESTfulControllerSpecification new
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
+TriggersRESTfulController >> timestampingSystem [
+	
+	^ cosmos systemImplementing: #TimestampingSystemInterface
+]
+
+{ #category : #'private - systems' }
 TriggersRESTfulController >> triggerManagementSystem [
 	
 	^ cosmos systemImplementing: #TriggerManagementSystemInterface

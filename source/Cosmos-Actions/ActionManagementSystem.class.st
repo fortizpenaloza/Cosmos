@@ -42,7 +42,7 @@ ActionManagementSystem >> assertIsNotAlreadyRegistered: anAction [
 { #category : #installing }
 ActionManagementSystem >> dependencies [
 
-	^ #(#TimeSystemInterface #MetadataSystemInterface #IdentifierSystemInterface)
+	^ #(#TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
@@ -70,12 +70,6 @@ ActionManagementSystem >> initialize [
 	actions := OrderedCollection new
 ]
 
-{ #category : #'private - systems' }
-ActionManagementSystem >> metadataSystem [
-
-	^ self >> #MetadataSystemInterface
-]
-
 { #category : #accessing }
 ActionManagementSystem >> name [
 
@@ -89,7 +83,7 @@ ActionManagementSystem >> register: anAction [
 	
 	actions add: anAction.
 	self registerIdentifierFor: anAction.
-	self registerRegistrationTimestampFor: anAction.
+	self registerTimestampFor: anAction.
 	
 	^ anAction
 ]
@@ -101,18 +95,13 @@ ActionManagementSystem >> registerIdentifierFor: anAction [
 ]
 
 { #category : #'private - managing' }
-ActionManagementSystem >> registerRegistrationTimestampFor: anAction [
+ActionManagementSystem >> registerTimestampFor: anAction [
 
-	self metadataSystem
-		register:
-			(Metadata
-				attaching: self timeSystem dateTime
-				as: #registration_timestamp
-				of: anAction)
+	self timestampingSystem registerModificationFor: anAction
 ]
 
 { #category : #'private - systems' }
-ActionManagementSystem >> timeSystem [
+ActionManagementSystem >> timestampingSystem [
 
-	^ self >> #TimeSystemInterface
+	^ self >> #TimestampingSystemInterface
 ]
