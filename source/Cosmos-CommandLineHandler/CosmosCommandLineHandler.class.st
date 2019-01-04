@@ -86,6 +86,7 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 		register: EventNotificationSystem new;
 		register: MetadataSystem new;
 		register: (IdentifierSystem using: UUIDProvider new);
+		register: TimestampingSystem new;
 		register: DataStreamManagementSystem new;
 		register: TriggerManagementSystem new;
 		register: ActionManagementSystem new;
