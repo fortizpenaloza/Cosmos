@@ -38,7 +38,7 @@ BaselineOfCosmos >> baseline: spec [
 				group: 'Tools' with: #('Cosmos-Tools');
 				group: 'CI' with: #('Deployment' 'Tests');
 				group: 'Development' with: #('CI' 'Tools');
-				group: 'default' with: #('Deployment') ]
+				group: 'default' with: #('Development') ]
 ]
 
 { #category : #baselines }
@@ -129,16 +129,18 @@ BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Kepler'
-		with: [ spec
+			with: [ spec
 				repository: 'github://ba-st/Kepler:v3/source';
 				loads: #('Deployment') ];
 		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'SUnit' ].
 
 	spec
 		baseline: 'Stargate'
-			with: [ spec
-				repository: 'github://ba-st/stargate:v0.7.0/source';
-				loads: 'Deployment' ].
+		with: [ spec
+				repository: 'github://ba-st/Stargate:v0.7.0/source';
+				loads: 'Deployment' ];
+		import: 'Stargate'.
+		
 	spec
 		baseline: 'ApplicationStarter'
 			with: [ spec
@@ -147,8 +149,9 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		import: 'ApplicationStarter'.
 
 	spec
-		configuration: 'Roassal2'
-		with: [ spec
-				versionString: #stable;
-				repository: 'http://smalltalkhub.com/mc/ObjectProfile/Roassal2/main' ]
+		baseline: 'Roassal2'
+			with: [ spec
+				repository: 'github://ObjectProfile/Roassal2/src';
+				loads: #('Core' 'Roassal2-Exporter') ];
+		import: 'Roassal2'
 ]
