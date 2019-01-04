@@ -137,7 +137,7 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate'
 		with: [ spec
-				repository: 'github://ba-st/stargate:v0.7.0/source';
+				repository: 'github://ba-st/Stargate:v0.7.0/source';
 				loads: 'Deployment' ];
 		import: 'Stargate'.
 		
