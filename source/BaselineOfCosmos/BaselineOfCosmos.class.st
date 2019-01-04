@@ -138,7 +138,9 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		baseline: 'Stargate'
 		with: [ spec
 				repository: 'github://ba-st/stargate:v0.7.0/source';
-				loads: 'Deployment' ].
+				loads: 'Deployment' ];
+		import: 'Stargate'.
+		
 	spec
 		baseline: 'ApplicationStarter'
 			with: [ spec
@@ -150,6 +152,6 @@ BaselineOfCosmos >> setUpDependencies: spec [
 		baseline: 'Roassal2'
 			with: [ spec
 				repository: 'github://ObjectProfile/Roassal2/src';
-				loads: 'Minimal' ];
+				loads: #('Core' 'Roassal2-Exporter') ];
 		import: 'Roassal2'
 ]
