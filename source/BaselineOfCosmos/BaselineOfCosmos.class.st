@@ -149,7 +149,7 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Roassal2'
 			with: [ spec
-				repository: 'github://ba-st/ObjectProfile/Roassal2/src';
+				repository: 'github://ObjectProfile/Roassal2/src';
 				loads: 'Minimal' ];
 		import: 'Roassal2'
 ]
