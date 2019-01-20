@@ -22,7 +22,7 @@ SensorsSampleAddOn >> currentDateTime [
 { #category : #'private - systems' }
 SensorsSampleAddOn >> dataManagementSystem [
 
-	^ cosmos systemImplementing: #DataStreamManagementSystemInterface
+	^ cosmos >> #DataStreamManagementSystemInterface
 ]
 
 { #category : #initialization }
@@ -86,5 +86,5 @@ SensorsSampleAddOn >> registerTemperatureStreamWithSomeDataPoints [
 { #category : #'private - systems' }
 SensorsSampleAddOn >> timeSystem [
 
-	^ cosmos systemImplementing: #TimeSystemInterface
+	^ cosmos >> #TimeSystemInterface
 ]

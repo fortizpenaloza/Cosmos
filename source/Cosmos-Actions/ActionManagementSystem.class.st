@@ -16,12 +16,12 @@ ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
 ]
 
 { #category : #querying }
-ActionManagementSystem >> actionNamed: aName ifFound: aFoundBlock [
+ActionManagementSystem >> actionNamed: aName [
 
 	^ actions
 		detect: [ :action | action name = aName ]
-		ifFound: aFoundBlock
-		ifNone: [ ObjectNotFound signal: ('Action named <1s> not found' expandMacrosWith: aName) ]
+		ifNone: [ ObjectNotFound
+				signal: ('Action named <1p> not found' expandMacrosWith: aName) ]
 ]
 
 { #category : #querying }

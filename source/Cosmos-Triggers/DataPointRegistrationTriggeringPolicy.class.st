@@ -27,6 +27,15 @@ DataPointRegistrationTriggeringPolicy >> initializeOn: aDataStream [
 	dataStream := aDataStream
 ]
 
+{ #category : #'as yet unclassified' }
+DataPointRegistrationTriggeringPolicy >> printOn: aStream [
+
+	aStream
+		nextPutAll:
+			('On data point registration on <1p>'
+				expandMacrosWith: dataStream name)
+]
+
 { #category : #registering }
 DataPointRegistrationTriggeringPolicy >> register: aTrigger to: aTriggerSystem [
 

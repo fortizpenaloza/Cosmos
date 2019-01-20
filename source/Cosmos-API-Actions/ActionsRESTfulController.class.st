@@ -16,7 +16,7 @@ ActionsRESTfulController class >> workingWith: aCosmosSystem [
 { #category : #'private - systems' }
 ActionsRESTfulController >> actionManagementSystem [
 
-	^ cosmos systemImplementing: #ActionManagementSystemInterface
+	^ cosmos >> #ActionManagementSystemInterface
 ]
 
 { #category : #'private - API' }
@@ -87,7 +87,7 @@ ActionsRESTfulController >> identifierOf: anAction [
 { #category : #'private - systems' }
 ActionsRESTfulController >> identifierSystem [
 
-	^ cosmos systemImplementing: #IdentifierSystemInterface
+	^ cosmos >> #IdentifierSystemInterface
 ]
 
 { #category : #initialization }

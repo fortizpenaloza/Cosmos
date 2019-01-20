@@ -143,9 +143,7 @@ TriggersRESTfulControllerTest >> resourceUrl [
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> setTriggeredToTrue [
 
-	^ self actionManagementSystem
-		actionNamed: 'Set triggered to true'
-		ifFound: [ :action | action ]
+	^ self actionManagementSystem actionNamed: 'Set triggered to true'
 ]
 
 { #category : #'private - accessing' }
@@ -230,9 +228,7 @@ TriggersRESTfulControllerTest >> systemDateTime [
 { #category : #'private - accessing' }
 TriggersRESTfulControllerTest >> temperatureStream [
 
-	^ self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :stream | stream ]
+	^ self dataManagementSystem streamNamed: 'Temperature'
 ]
 
 { #category : #tests }

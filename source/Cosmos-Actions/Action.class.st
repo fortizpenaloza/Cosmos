@@ -46,3 +46,9 @@ Action >> name [
 
 	^ name
 ]
+
+{ #category : #'as yet unclassified' }
+Action >> printOn: aStream [
+
+	aStream nextPutAll: name
+]

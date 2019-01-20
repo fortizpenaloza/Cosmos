@@ -40,9 +40,7 @@ DataPointsRESTfulControllerTest >> identifierSequence [
 { #category : #'private - accessing' }
 DataPointsRESTfulControllerTest >> pressureStream [
 
-	^ self dataManagementSystem
-		streamNamed: 'Pressure'
-		ifFound: [ :dataStream | dataStream ]	
+	^ self dataManagementSystem streamNamed: 'Pressure'
 ]
 
 { #category : #'private - requests' }
@@ -90,9 +88,7 @@ DataPointsRESTfulControllerTest >> systemDateTime [
 { #category : #'private - accessing' }
 DataPointsRESTfulControllerTest >> temperatureStream [
 
-	^ self dataManagementSystem
-		streamNamed: 'Temperature'
-		ifFound: [ :dataStream | dataStream ]	
+	^ self dataManagementSystem streamNamed: 'Temperature'
 ]
 
 { #category : #tests }
