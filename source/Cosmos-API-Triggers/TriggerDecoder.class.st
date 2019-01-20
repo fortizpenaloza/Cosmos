@@ -17,8 +17,7 @@ TriggerDecoder class >> using: aCosmosSystem [
 TriggerDecoder >> actionDecoder [
 
 	^ WellKnownObjectDecoder
-		querying: #ActionManagementSystemInterface
-		on: cosmos
+		querying: cosmos >> #ActionManagementSystemInterface
 		sending: #actionNamed:
 ]
 
@@ -29,15 +28,6 @@ TriggerDecoder >> actionFrom: aRawTrigger [
 		decode: #action 
 		from: aRawTrigger 
 		using: self actionDecoder
-]
-
-{ #category : #'private - decoders' }
-TriggerDecoder >> dataStreamDecoder [
-
-	^ WellKnownObjectDecoder
-		querying: #DataStreamManagementSystemInterface
-		on: cosmos
-		sending: #streamNamed:
 ]
 
 { #category : #'private - decoding' }
@@ -118,7 +108,7 @@ TriggerDecoder >> timeIntervalDecoder [
 TriggerDecoder >> triggeringConditionDecoder [
 	
 	
-	^ TriggeringConditionDecoder new
+	^ TriggeringConditionDecoder using: cosmos 
 ]
 
 { #category : #'private - decoding' }

@@ -121,7 +121,7 @@ DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 { #category : #querying }
 DataStreamManagementSystem >> streamNamed: aName [
 
-	self withStreamNamed: aName do: [ :stream | stream ]
+	^ self withStreamNamed: aName do: [ :stream | stream ]
 ]
 
 { #category : #querying }
