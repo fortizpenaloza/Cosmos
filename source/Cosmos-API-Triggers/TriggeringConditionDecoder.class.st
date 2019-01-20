@@ -16,7 +16,7 @@ TriggeringConditionDecoder class >> using: aCosmosSystem [
 { #category : #'private - decoders' }
 TriggeringConditionDecoder >> conditionDecoder [
 	
-	^ ConditionDecoder new
+	^ ArithmeticConditionDecoder new
 ]
 
 { #category : #'private - decoding' }

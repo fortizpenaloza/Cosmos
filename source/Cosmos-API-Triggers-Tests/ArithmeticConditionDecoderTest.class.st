@@ -2,19 +2,19 @@
 A ConditionDecoderTest is a test class for testing the behavior of ConditionDecoder
 "
 Class {
-	#name : #ConditionDecoderTest,
+	#name : #ArithmeticConditionDecoderTest,
 	#superclass : #TestCase,
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
 { #category : #tests }
-ConditionDecoderTest >> encodeAsJson: json [
+ArithmeticConditionDecoderTest >> encodeAsJson: json [
 
 	^ NeoJSONReader fromString: json
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testDifferent [
+ArithmeticConditionDecoderTest >> testDifferent [
 
 	| condition json |
 
@@ -23,7 +23,7 @@ ConditionDecoderTest >> testDifferent [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		deny: (condition isSatisfiedBy: 1);
@@ -32,7 +32,7 @@ ConditionDecoderTest >> testDifferent [
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testEquals [
+ArithmeticConditionDecoderTest >> testEquals [
 
 	| condition json |
 
@@ -41,7 +41,7 @@ ConditionDecoderTest >> testEquals [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		assert: (condition isSatisfiedBy: 1);
@@ -50,7 +50,7 @@ ConditionDecoderTest >> testEquals [
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testFailedIfOperatorNotFound [
+ArithmeticConditionDecoderTest >> testFailedIfOperatorNotFound [
 
 	| json |
 
@@ -60,13 +60,13 @@ ConditionDecoderTest >> testFailedIfOperatorNotFound [
 }'.
 
 	self
-		should: [ ConditionDecoder new decode: (self encodeAsJson: json) ]
+		should: [ ArithmeticConditionDecoder new decode: (self encodeAsJson: json) ]
 		raise: KeyNotFound
 		withMessageText: 'key ''//'' not found in Dictionary'
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testGreaterOrEqualThan [
+ArithmeticConditionDecoderTest >> testGreaterOrEqualThan [
 
 	| condition json |
 
@@ -75,7 +75,7 @@ ConditionDecoderTest >> testGreaterOrEqualThan [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		deny: (condition isSatisfiedBy: 0);
@@ -84,7 +84,7 @@ ConditionDecoderTest >> testGreaterOrEqualThan [
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testGreaterThan [
+ArithmeticConditionDecoderTest >> testGreaterThan [
 
 	| condition json |
 
@@ -93,7 +93,7 @@ ConditionDecoderTest >> testGreaterThan [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		deny: (condition isSatisfiedBy: 0);
@@ -102,7 +102,7 @@ ConditionDecoderTest >> testGreaterThan [
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testLessOrEqualThan [
+ArithmeticConditionDecoderTest >> testLessOrEqualThan [
 
 	| condition json |
 
@@ -111,7 +111,7 @@ ConditionDecoderTest >> testLessOrEqualThan [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		assert: (condition isSatisfiedBy: 0);
@@ -120,7 +120,7 @@ ConditionDecoderTest >> testLessOrEqualThan [
 ]
 
 { #category : #tests }
-ConditionDecoderTest >> testLessThan [
+ArithmeticConditionDecoderTest >> testLessThan [
 
 	| condition json |
 
@@ -129,7 +129,7 @@ ConditionDecoderTest >> testLessThan [
 	"value": 1
 }'.
 
-	condition := ConditionDecoder new decode: (self encodeAsJson: json).
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
 
 	self
 		assert: (condition isSatisfiedBy: 0);

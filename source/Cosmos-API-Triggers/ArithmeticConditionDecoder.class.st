@@ -1,11 +1,11 @@
 Class {
-	#name : #ConditionDecoder,
+	#name : #ArithmeticConditionDecoder,
 	#superclass : #Object,
 	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #decoding }
-ConditionDecoder >> decode: aDictionary [
+ArithmeticConditionDecoder >> decode: aDictionary [
 
 	| decoderByType |
 
