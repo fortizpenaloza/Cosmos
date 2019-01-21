@@ -291,7 +291,7 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 	"action" : "Set triggered to true",
 	"policy" : {
 		"type" : "periodical",
-		"time_interval" : "00:05:00"
+		"time_interval" : "5 minutes"
 	},
 	"conditions" : [ ]
 }')

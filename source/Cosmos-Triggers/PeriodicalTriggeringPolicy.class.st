@@ -21,10 +21,19 @@ PeriodicalTriggeringPolicy >> deregister: aRegisteredTrigger from: aTriggerSyste
 		fromTriggeredPeriodicallyEvery: timePeriod
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 PeriodicalTriggeringPolicy >> initializeEvery: aTimePeriod [
 
 	timePeriod := aTimePeriod
+]
+
+{ #category : #printing }
+PeriodicalTriggeringPolicy >> printOn: aStream [
+
+	aStream
+		nextPutAll:
+			('Periodically every <1p>'
+				expandMacrosWith: timePeriod)
 ]
 
 { #category : #registering }
