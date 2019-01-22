@@ -83,25 +83,10 @@ TriggerDecoder >> decodeDataStreamFrom: aDictionary [
 		using: self dataStreamDecoder
 ]
 
-{ #category : #'private - decoding' }
-TriggerDecoder >> decodeTimeIntervalFrom: aDictionary [
-
-	^ self
-		decode: #time_interval
-		from: aDictionary
-		using: self timeIntervalDecoder
-]
-
 { #category : #'instance creation' }
 TriggerDecoder >> initializeUsing: aCosmosSystem [
 	
 	cosmos := aCosmosSystem
-]
-
-{ #category : #'private - decoders' }
-TriggerDecoder >> timeIntervalDecoder [
-
-	^ [ :string | TimeUnits minute with: 5 ]
 ]
 
 { #category : #'private - decoders' }

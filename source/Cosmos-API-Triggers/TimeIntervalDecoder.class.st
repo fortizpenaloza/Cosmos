@@ -5,22 +5,11 @@ Class {
 }
 
 { #category : #decoding }
-TimeIntervalDecoder >> decode: aString [
+TimeIntervalDecoder >> decode: aJSON [
 
-	| rawTimeInterval units |
+	| timeOfDayDecoder |
 
-	self flag: 'fix this'.
-	rawTimeInterval := aString substrings.
-	rawTimeInterval size ~= 2
-		ifTrue: [ Error signal: 'No lo defini' ].
+	timeOfDayDecoder := ISO8601TimeOfDayDecoder usingExtendedFormat.
 
-	units := {('second' -> TimeUnits second).
-	('seconds' -> TimeUnits second).
-	('minute' -> TimeUnits minute).
-	('minutes' -> TimeUnits minute).
-	('hour' -> TimeUnits hour).
-	('hours' -> TimeUnits hour)} asDictionary.
-
-	^ (units at: rawTimeInterval second)
-		with: rawTimeInterval first asInteger
+	^ (timeOfDayDecoder decode: aJSON start) to: (timeOfDayDecoder decode: aJSON stop)
 ]

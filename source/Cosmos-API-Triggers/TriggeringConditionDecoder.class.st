@@ -56,9 +56,18 @@ TriggeringConditionDecoder >> decode: aRaw [
 			DataStreamCurrentValueTriggeringCondition
 				of: (self dataStreamFrom: rawTriggeringCondition)
 				comparingWith: (self conditionFrom: rawTriggeringCondition) ];
+		at: #data_stream_has_not_been_updated
+			put: [ :rawTriggeringCondition | 
+			DataStreamHasNotBeenUpdatedTriggeringCondition
+				checkingIf: (self dataStreamFrom: rawTriggeringCondition)
+				hasNotBeenUpdatedForMoreThan: (self timePeriodFrom: rawTriggeringCondition) ];
+		at: #time_interval
+			put: [ :rawTriggeringCondition | 
+			TimeIntervalTriggeringCondition
+				checkingCurrentTimeIsBetween: (self timeIntervalFrom: rawTriggeringCondition) ];
 		yourself.
 
-	aRaw
+	^ aRaw
 		collect: [ :rawTriggeringCondition | 
 			(decoderByType at: (rawTriggeringCondition at: #type))
 				value: rawTriggeringCondition ]
@@ -87,4 +96,34 @@ TriggeringConditionDecoder >> decode: aKey from: aDictionary using: aDecoder ifA
 TriggeringConditionDecoder >> initializeUsing: aCosmosSystem [
 
 	cosmos := aCosmosSystem 
+]
+
+{ #category : #'as yet unclassified' }
+TriggeringConditionDecoder >> timeIntervalDecoder [
+
+	^ TimeIntervalDecoder new
+]
+
+{ #category : #'as yet unclassified' }
+TriggeringConditionDecoder >> timeIntervalFrom: aDictionary [
+
+	^ self
+		decode: #time_interval
+		from: aDictionary
+		using: self timeIntervalDecoder
+]
+
+{ #category : #'private - decoders' }
+TriggeringConditionDecoder >> timePeriodDecoder [
+
+	^ TimePeriodDecoder new 
+]
+
+{ #category : #'as yet unclassified' }
+TriggeringConditionDecoder >> timePeriodFrom: aDictionary [
+
+	^ self
+		decode: #time_period
+		from: aDictionary
+		using: self timePeriodDecoder
 ]

@@ -39,7 +39,7 @@ TriggeringPolicyDecoder >> decode: aRawTriggeringPolicy [
 		at: #periodical
 			put: [ :rawTriggeringPolicy | 
 			PeriodicalTriggeringPolicy
-				every: (self decodeTimeIntervalFrom: rawTriggeringPolicy) ];
+				every: (self timePeriodFrom: rawTriggeringPolicy) ];
 		at: #data_point_registration
 			put: [ :rawTriggeringPolicy | 
 			DataPointRegistrationTriggeringPolicy
@@ -69,23 +69,23 @@ TriggeringPolicyDecoder >> decode: aKey from: aDictionary using: aDecoder ifAbse
 		ifAbsent: aBlock
 ]
 
-{ #category : #'as yet unclassified' }
-TriggeringPolicyDecoder >> decodeTimeIntervalFrom: aDictionary [
-
-	^ self
-		decode: #time_interval
-		from: aDictionary
-		using: self timeIntervalDecoder
-]
-
 { #category : #initialization }
 TriggeringPolicyDecoder >> initializeUsing: aCosmosSystem [
 	
 	cosmos := aCosmosSystem 
 ]
 
-{ #category : #'as yet unclassified' }
-TriggeringPolicyDecoder >> timeIntervalDecoder [
+{ #category : #'private - decoders' }
+TriggeringPolicyDecoder >> timePeriodDecoder [
 
-	^ TimeIntervalDecoder new 
+	^ TimePeriodDecoder new 
+]
+
+{ #category : #'private - decoding' }
+TriggeringPolicyDecoder >> timePeriodFrom: aDictionary [
+
+	^ self
+		decode: #time_interval
+		from: aDictionary
+		using: self timePeriodDecoder
 ]
