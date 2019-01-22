@@ -98,13 +98,13 @@ TriggeringConditionDecoder >> initializeUsing: aCosmosSystem [
 	cosmos := aCosmosSystem 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - decoders' }
 TriggeringConditionDecoder >> timeIntervalDecoder [
 
 	^ TimeIntervalDecoder new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - decoding' }
 TriggeringConditionDecoder >> timeIntervalFrom: aDictionary [
 
 	^ self
@@ -119,7 +119,7 @@ TriggeringConditionDecoder >> timePeriodDecoder [
 	^ TimePeriodDecoder new 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - decoding' }
 TriggeringConditionDecoder >> timePeriodFrom: aDictionary [
 
 	^ self

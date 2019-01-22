@@ -30,15 +30,6 @@ TriggerDecoder >> actionFrom: aRawTrigger [
 		using: self actionDecoder
 ]
 
-{ #category : #'private - decoding' }
-TriggerDecoder >> dataStreamFrom: aDictionary [
-
-	^ self
-		decode: #data_stream
-		from: aDictionary
-		using: self dataStreamDecoder
-]
-
 { #category : #decoding }
 TriggerDecoder >> decode: aRawTrigger [
 
@@ -72,15 +63,6 @@ TriggerDecoder >> decode: aKey from: aDictionary using: aDecoder ifAbsent: aBloc
 		at: aKey
 		ifPresent: [ :rawData | aDecoder decode: rawData ]
 		ifAbsent: aBlock
-]
-
-{ #category : #'private - decoding' }
-TriggerDecoder >> decodeDataStreamFrom: aDictionary [
-
-	^ self
-		decode: #data_stream
-		from: aDictionary
-		using: self dataStreamDecoder
 ]
 
 { #category : #'instance creation' }
