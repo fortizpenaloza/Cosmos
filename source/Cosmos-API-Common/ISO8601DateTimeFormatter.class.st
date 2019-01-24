@@ -9,9 +9,11 @@ Class {
 }
 
 { #category : #'instance creation' }
-ISO8601DateTimeFormatter class >> formatingDateUsing: aDateFormatter andTimeOfDayUsing: aTimeOfDayFormatter [ 
-	
-	^ self new initializeFormattingDateUsing: aDateFormatter andTimeOfDayUsing: aTimeOfDayFormatter
+ISO8601DateTimeFormatter class >> formatingDateUsing: aDateFormatter andTimeOfDayUsing: aTimeOfDayFormatter [
+
+	^ self new
+		initializeFormattingDateUsing: aDateFormatter
+		andTimeOfDayUsing: aTimeOfDayFormatter
 ]
 
 { #category : #'instance creation' }
@@ -42,7 +44,7 @@ ISO8601DateTimeFormatter >> format: aDateTime [
 	^ stream contents
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ISO8601DateTimeFormatter >> initializeFormattingDateUsing: aDateFormatter andTimeOfDayUsing: aTimeOfDayFormatter [
 
 	dateFormatter := aDateFormatter.

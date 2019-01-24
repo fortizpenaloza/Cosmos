@@ -40,7 +40,7 @@ ISO8601DateFormatter >> format: aDate [
 	^ stream contents
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ISO8601DateFormatter >> initialize [
 
 	separator := Optional unusedBecause: 'No se definió un separador'
@@ -76,7 +76,7 @@ ISO8601DateFormatter >> putYearOf: aDate on: aStream [
 	aStream nextPutAll: aDate yearNumber asString
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ISO8601DateFormatter >> using: aSeparator [
 
 	separator := Optional containing: aSeparator

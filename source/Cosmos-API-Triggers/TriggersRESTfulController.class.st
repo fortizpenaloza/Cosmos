@@ -81,7 +81,7 @@ TriggersRESTfulController >> identifierOf: anActionTrigger [
 { #category : #'private - systems' }
 TriggersRESTfulController >> identifierSystem [
 
-	^ cosmos systemImplementing: #IdentifierSystemInterface
+	^ cosmos >> #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
@@ -129,13 +129,13 @@ TriggersRESTfulController >> specification [
 { #category : #'private - systems' }
 TriggersRESTfulController >> timestampingSystem [
 	
-	^ cosmos systemImplementing: #TimestampingSystemInterface
+	^ cosmos >> #TimestampingSystemInterface
 ]
 
 { #category : #'private - systems' }
 TriggersRESTfulController >> triggerManagementSystem [
 	
-	^ cosmos systemImplementing: #TriggerManagementSystemInterface
+	^ cosmos >> #TriggerManagementSystemInterface
 ]
 
 { #category : #'private - API' }

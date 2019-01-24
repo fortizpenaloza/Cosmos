@@ -21,7 +21,7 @@ PeriodicalTriggeringPolicy >> deregister: aRegisteredTrigger from: aTriggerSyste
 		fromTriggeredPeriodicallyEvery: timePeriod
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 PeriodicalTriggeringPolicy >> initializeEvery: aTimePeriod [
 
 	timePeriod := aTimePeriod

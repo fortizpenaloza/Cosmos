@@ -34,7 +34,7 @@ ISO8601TimeOfDayFormatter >> format: aTimeOfDay [
 	^ stream contents
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ISO8601TimeOfDayFormatter >> initialize [
 
 	separator := Optional unusedBecause: 'No se definió un separador'
@@ -70,7 +70,7 @@ ISO8601TimeOfDayFormatter >> putSeparatorOn: aStream [
 	separator withContentDo: [ :configuredSeparator | aStream nextPut: configuredSeparator ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ISO8601TimeOfDayFormatter >> using: aSeparator [
 
 	separator := Optional containing: aSeparator

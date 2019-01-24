@@ -21,7 +21,7 @@ DataPointRegistrationTriggeringPolicy >> deregister: aRegisteredTrigger from: aT
 		toStopTriggeringAfterDataPointRegistrationOn: dataStream
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 DataPointRegistrationTriggeringPolicy >> initializeOn: aDataStream [ 
 
 	dataStream := aDataStream

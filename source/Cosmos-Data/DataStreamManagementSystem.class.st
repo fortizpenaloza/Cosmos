@@ -94,8 +94,8 @@ DataStreamManagementSystem >> register: aDataPoint to: aDataStream [
 DataStreamManagementSystem >> register: aDataPoint toStreamNamed: aName [
 
 	self
-		streamNamed: aName
-		ifFound: [ :dataStream | self register: aDataPoint to: dataStream ]
+		withStreamNamed: aName
+		do: [ :dataStream | self register: aDataPoint to: dataStream ]
 ]
 
 { #category : #'private - managing' }
@@ -119,12 +119,9 @@ DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 ]
 
 { #category : #querying }
-DataStreamManagementSystem >> streamNamed: aName ifFound: aFoundBlock [
+DataStreamManagementSystem >> streamNamed: aName [
 
-	^ dataStreams
-		detect: [ :dataStream | dataStream name = aName ]
-		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
-		ifNone: [ ObjectNotFound signal: ('Data stream named "<1s>" not found' expandMacrosWith: aName) ]
+	^ self withStreamNamed: aName do: [ :stream | stream ]
 ]
 
 { #category : #querying }
@@ -137,4 +134,13 @@ DataStreamManagementSystem >> streams [
 DataStreamManagementSystem >> timestampingSystem [
 	
 	^ self >> #TimestampingSystemInterface
+]
+
+{ #category : #querying }
+DataStreamManagementSystem >> withStreamNamed: aName do: aFoundBlock [
+
+	^ dataStreams
+		detect: [ :dataStream | dataStream name = aName ]
+		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
+		ifNone: [ ObjectNotFound signal: ('Data stream named <1p> not found' expandMacrosWith: aName) ]
 ]

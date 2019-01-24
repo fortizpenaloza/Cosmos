@@ -196,8 +196,8 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 		assert: response contentType equals: self textPlainMediaType.
 
 	self dataManagementSystem
-		streamNamed: 'pH'
-		ifFound: [ :dataStream | 
+		withStreamNamed: 'pH'
+		do: [ :dataStream | 
 			self
 				assert: dataStream name equals: 'pH';
 				assert: dataStream dataPoints isEmpty ]
@@ -250,7 +250,7 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	| response |
 
-	self assert: (self dataManagementSystem streamNamed: 'Temperature' ifFound: [ :dataStream | true ]).
+	self assert: (self dataManagementSystem withStreamNamed: 'Temperature' do: [ :dataStream | true ]).
 
 	response := resourceController
 		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
@@ -258,8 +258,8 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	self
 		should: [ self dataManagementSystem
-				streamNamed: 'Temperature'
-				ifFound: [ :dataStream | ] ]
+				withStreamNamed: 'Temperature'
+				do: [ :dataStream | ] ]
 		raise: ObjectNotFound.
 
 	self

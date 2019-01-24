@@ -46,3 +46,9 @@ Action >> name [
 
 	^ name
 ]
+
+{ #category : #printing }
+Action >> printOn: aStream [
+
+	aStream nextPutAll: name
+]
