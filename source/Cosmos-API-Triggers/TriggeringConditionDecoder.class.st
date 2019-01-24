@@ -1,8 +1,9 @@
 Class {
 	#name : #TriggeringConditionDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#instVars : [
-		'cosmos'
+		'cosmos',
+		'decoderByType'
 	],
 	#category : #'Cosmos-API-Triggers'
 }
@@ -46,31 +47,20 @@ TriggeringConditionDecoder >> dataStreamFrom: rawTriggeringCondition [
 ]
 
 { #category : #decoding }
-TriggeringConditionDecoder >> decode: aRaw [
+TriggeringConditionDecoder >> decode: aRawTriggeringConditionCollection [
 
-	| decoderByType |
-
-	decoderByType := Dictionary new
-		at: #data_stream_current_value
-			put: [ :rawTriggeringCondition | 
-			DataStreamCurrentValueTriggeringCondition
-				of: (self dataStreamFrom: rawTriggeringCondition)
-				comparingWith: (self conditionFrom: rawTriggeringCondition) ];
-		at: #data_stream_has_not_been_updated
-			put: [ :rawTriggeringCondition | 
-			DataStreamHasNotBeenUpdatedTriggeringCondition
-				checkingIf: (self dataStreamFrom: rawTriggeringCondition)
-				hasNotBeenUpdatedForMoreThan: (self timePeriodFrom: rawTriggeringCondition) ];
-		at: #time_interval
-			put: [ :rawTriggeringCondition | 
-			TimeIntervalTriggeringCondition
-				checkingCurrentTimeIsBetween: (self timeIntervalFrom: rawTriggeringCondition) ];
-		yourself.
-
-	^ aRaw
-		collect: [ :rawTriggeringCondition | 
-			(decoderByType at: (rawTriggeringCondition at: #type))
-				value: rawTriggeringCondition ]
+	^ aRawTriggeringConditionCollection isEmpty
+		ifTrue: [ AlwaysTriggeringCondition new ]
+		ifFalse: [ aRawTriggeringConditionCollection size = 1
+				ifTrue: [ (decoderByType
+						at: (aRawTriggeringConditionCollection anyOne at: #type))
+						value: aRawTriggeringConditionCollection anyOne ]
+				ifFalse: [ AndCompositeTriggeringCondition
+						withAll:
+							(aRawTriggeringConditionCollection
+								collect: [ :rawTriggeringCondition | 
+									(decoderByType at: (rawTriggeringCondition at: #type))
+										value: rawTriggeringCondition ]) ] ]
 ]
 
 { #category : #'private - decoding' }
@@ -93,9 +83,31 @@ TriggeringConditionDecoder >> decode: aKey from: aDictionary using: aDecoder ifA
 ]
 
 { #category : #initialization }
+TriggeringConditionDecoder >> initializeDecoderByType [
+
+	decoderByType := Dictionary new
+		at: #data_stream_current_value
+			put: [ :rawTriggeringCondition | 
+			DataStreamCurrentValueTriggeringCondition
+				of: (self dataStreamFrom: rawTriggeringCondition)
+				comparingWith: (self conditionFrom: rawTriggeringCondition) ];
+		at: #data_stream_has_not_been_updated
+			put: [ :rawTriggeringCondition | 
+			DataStreamHasNotBeenUpdatedTriggeringCondition
+				checkingIf: (self dataStreamFrom: rawTriggeringCondition)
+				hasNotBeenUpdatedForMoreThan: (self timePeriodFrom: rawTriggeringCondition) ];
+		at: #time_interval
+			put: [ :rawTriggeringCondition | 
+			TimeIntervalTriggeringCondition
+				checkingCurrentTimeIsBetween: (self timeIntervalFrom: rawTriggeringCondition) ];
+		yourself
+]
+
+{ #category : #initialization }
 TriggeringConditionDecoder >> initializeUsing: aCosmosSystem [
 
-	cosmos := aCosmosSystem 
+	cosmos := aCosmosSystem.
+	self initializeDecoderByType.
 ]
 
 { #category : #'private - decoders' }

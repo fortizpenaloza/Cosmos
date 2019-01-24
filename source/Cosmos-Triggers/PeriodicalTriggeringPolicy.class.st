@@ -27,15 +27,6 @@ PeriodicalTriggeringPolicy >> initializeEvery: aTimePeriod [
 	timePeriod := aTimePeriod
 ]
 
-{ #category : #printing }
-PeriodicalTriggeringPolicy >> printOn: aStream [
-
-	aStream
-		nextPutAll:
-			('Periodically every <1p>'
-				expandMacrosWith: timePeriod)
-]
-
 { #category : #registering }
 PeriodicalTriggeringPolicy >> register: aTrigger to: aTriggerSystem [
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #TriggerDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#instVars : [
 		'cosmos'
 	],
@@ -73,9 +73,8 @@ TriggerDecoder >> initializeUsing: aCosmosSystem [
 
 { #category : #'private - decoders' }
 TriggerDecoder >> triggeringConditionDecoder [
-	
-	
-	^ TriggeringConditionDecoder using: cosmos 
+
+	^ TriggeringConditionDecoder using: cosmos
 ]
 
 { #category : #'private - decoding' }

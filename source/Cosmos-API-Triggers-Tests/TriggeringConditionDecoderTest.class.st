@@ -45,9 +45,52 @@ TriggeringConditionDecoderTest >> systemDateTime [
 ]
 
 { #category : #tests }
+TriggeringConditionDecoderTest >> testAlwaysTriggeringCondition [
+
+	| json condition |
+
+	json := '[]'.
+
+	condition := (TriggeringConditionDecoder using: rootSystem)
+		decode: (NeoJSONObject fromString: json).
+
+	self assert: (condition isKindOf: AlwaysTriggeringCondition)
+]
+
+{ #category : #tests }
+TriggeringConditionDecoderTest >> testAndCompositeTriggeringCondition [
+
+	| json condition |
+
+	json := '[
+	{
+		"type": "time_interval",
+		"time_interval" : { 
+			"start": "20:00",
+			"stop": "21:00"
+		}
+	},
+	{
+		"type": "data_stream_current_value",
+		"data_stream": "Temperature",
+		"condition": {
+			"operator": ">",
+			"value": 54
+		}
+	}	
+]'.
+
+	condition := (TriggeringConditionDecoder using: rootSystem)
+		decode: (NeoJSONObject fromString: json).
+
+
+	self assert: (condition isKindOf: AndCompositeTriggeringCondition)
+]
+
+{ #category : #tests }
 TriggeringConditionDecoderTest >> testDataStreamCurrentValueTriggeringCondition [
 
-	| json conditions |
+	| json condition |
 
 	json := '[
 	{
@@ -60,20 +103,18 @@ TriggeringConditionDecoderTest >> testDataStreamCurrentValueTriggeringCondition 
 	}
 ]'.
 
-	conditions := (TriggeringConditionDecoder using: rootSystem)
+	condition := (TriggeringConditionDecoder using: rootSystem)
 		decode: (NeoJSONObject fromString: json).
 
+
 	self
-		withTheOnlyOneIn: conditions
-		do: [ :condition | 
-			self
-				assert: (condition isKindOf: DataStreamCurrentValueTriggeringCondition) ]
+		assert: (condition isKindOf: DataStreamCurrentValueTriggeringCondition)
 ]
 
 { #category : #tests }
 TriggeringConditionDecoderTest >> testDataStreamHasNotBeenUpdatedTriggeringCondition [
 
-	| json conditions |
+	| json condition |
 
 	json := '[
 	{
@@ -83,20 +124,17 @@ TriggeringConditionDecoderTest >> testDataStreamHasNotBeenUpdatedTriggeringCondi
 	}
 ]'.
 
-	conditions := (TriggeringConditionDecoder using: rootSystem)
+	condition := (TriggeringConditionDecoder using: rootSystem)
 		decode: (NeoJSONObject fromString: json).
 
 	self
-		withTheOnlyOneIn: conditions
-		do: [ :condition | 
-			self
-				assert: (condition isKindOf: DataStreamHasNotBeenUpdatedTriggeringCondition) ]
+		assert: (condition isKindOf: DataStreamHasNotBeenUpdatedTriggeringCondition)
 ]
 
 { #category : #tests }
 TriggeringConditionDecoderTest >> testTimeIntervalTriggeringCondition [
 
-	| json conditions |
+	| json condition |
 
 	json := '[
 	{
@@ -108,12 +146,9 @@ TriggeringConditionDecoderTest >> testTimeIntervalTriggeringCondition [
 	}
 ]'.
 
-	conditions := (TriggeringConditionDecoder using: rootSystem)
+	condition := (TriggeringConditionDecoder using: rootSystem)
 		decode: (NeoJSONObject fromString: json).
 
-	self
-		withTheOnlyOneIn: conditions
-		do: [ :condition | 
-			self
-				assert: (condition isKindOf: TimeIntervalTriggeringCondition) ]
+
+	self assert: (condition isKindOf: TimeIntervalTriggeringCondition)
 ]

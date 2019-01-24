@@ -1,6 +1,6 @@
 Class {
 	#name : #WellKnownObjectDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#instVars : [
 		'messageToSend',
 		'systemToQuery'

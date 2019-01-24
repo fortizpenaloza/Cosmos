@@ -38,22 +38,22 @@ TriggeringPolicyDecoderTest >> testDecodingDataPointRegistrationTriggeringPolicy
 
 	policy := (TriggeringPolicyDecoder using: self) decode: (self encodeAsJson: json).
 
-	self assert: true
+	self assert: (policy isKindOf: DataPointRegistrationTriggeringPolicy )
 	
 ]
 
 { #category : #tests }
 TriggeringPolicyDecoderTest >> testDecodingPeriodicalTriggeringPolicy [
 
-	| json |
-	
+	| json policy |
+
 	json := '{
 	"type" : "periodical",
 	"time_interval" : "5 minutes"
 }'.
 
-	(TriggeringPolicyDecoder using: self) decode: (self encodeAsJson: json).
+	policy := (TriggeringPolicyDecoder using: self)
+		decode: (self encodeAsJson: json).
 
-	self assert: true
-	
+	self assert: (policy isKindOf: PeriodicalTriggeringPolicy)
 ]

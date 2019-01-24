@@ -1,28 +1,28 @@
 Class {
 	#name : #ArithmeticConditionDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#category : #'Cosmos-API-Triggers'
 }
 
 { #category : #decoding }
-ArithmeticConditionDecoder >> decode: aDictionary [
+ArithmeticConditionDecoder >> decode: aJson [
 
 	| decoderByType |
 
 	decoderByType := Dictionary new
 		at: '>'
-			put: [ ArithmeticCondition toBeGreaterThan: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeGreaterThan: (aJson at: #value) ];
 		at: '>='
-			put: [ ArithmeticCondition toBeGreaterOrEqualThan: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeGreaterOrEqualThan: (aJson at: #value) ];
 		at: '='
-			put: [ ArithmeticCondition toBeEqualTo: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeEqualTo: (aJson at: #value) ];
 		at: '~='
-			put: [ ArithmeticCondition toBeDifferentTo: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeDifferentTo: (aJson at: #value) ];
 		at: '<'
-			put: [ ArithmeticCondition toBeLessThan: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeLessThan: (aJson at: #value) ];
 		at: '<='
-			put: [ ArithmeticCondition toBeLessOrEqualThan: (aDictionary at: #value) ];
+			put: [ ArithmeticCondition toBeLessOrEqualThan: (aJson at: #value) ];
 		yourself.
 
-	^ (decoderByType at: (aDictionary at: #operator)) value
+	^ (decoderByType at: (aJson at: #operator)) value
 ]

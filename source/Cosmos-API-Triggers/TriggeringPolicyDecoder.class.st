@@ -1,6 +1,6 @@
 Class {
 	#name : #TriggeringPolicyDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#instVars : [
 		'cosmos'
 	],

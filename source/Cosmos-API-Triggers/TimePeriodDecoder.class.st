@@ -1,6 +1,6 @@
 Class {
 	#name : #TimePeriodDecoder,
-	#superclass : #Object,
+	#superclass : #Decoder,
 	#category : #'Cosmos-API-Triggers'
 }
 
