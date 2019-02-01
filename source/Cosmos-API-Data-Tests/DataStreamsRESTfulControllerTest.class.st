@@ -117,6 +117,12 @@ DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdenti
 { #category : #'private - requests' }
 DataStreamsRESTfulControllerTest >> requestToGetDataStreamsAccepting: aMediaType [
 
+	^ self requestToGetResourcesAccepting: aMediaType
+]
+
+{ #category : #'private - requests' }
+DataStreamsRESTfulControllerTest >> requestToGetResourcesAccepting: aMediaType [
+
 	^ self requestToGet: self resourceUrl accepting: aMediaType
 ]
 
