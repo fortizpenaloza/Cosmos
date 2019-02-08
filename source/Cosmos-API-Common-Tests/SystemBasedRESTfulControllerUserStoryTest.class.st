@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'resourceController'
 	],
-	#category : #'Cosmos-API-Actions-Tests'
+	#category : #'Cosmos-API-Common-Tests'
 }
 
 { #category : #'private - support' }
