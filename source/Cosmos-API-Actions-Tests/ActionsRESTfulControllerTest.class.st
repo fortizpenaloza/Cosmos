@@ -102,9 +102,9 @@ ActionsRESTfulControllerTest >> registerGetDNSZones [
 ]
 
 { #category : #'private - requests' }
-ActionsRESTfulControllerTest >> requestToCreateActionFrom: json [
+ActionsRESTfulControllerTest >> requestToCreateActionFrom: aJSON [
 
-	^ self requestToPost: json as: self applicationJsonVersion1dot0dot0MediaType 
+	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - requests' }

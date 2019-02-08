@@ -53,12 +53,12 @@ SystemBasedRESTfulControllerUserStoryTest >> requestToGetResourcesAccepting: aMe
 ]
 
 { #category : #'private - requests support' }
-SystemBasedRESTfulControllerUserStoryTest >> requestToPost: content as: aMediaType [ 
+SystemBasedRESTfulControllerUserStoryTest >> requestToPost: aRepresentation as: aMediaType [ 
 
 	^ TeaRequest
 		fromZnRequest:
 			((ZnRequest post: self resourceUrl)
-				entity: (ZnEntity with: content type: aMediaType);
+				entity: (ZnEntity with: aRepresentation type: aMediaType);
 				yourself)
 ]
 

@@ -24,7 +24,7 @@ DataPointsRESTfulControllerSpecification >> createDataPointsRoute [
 
 	^ (RouteSpecification
 		handling: #POST
-		at: '/data-points'
+		at: self endpoint 
 		sending: #createPointsBasedOn:within:) asCorsAware 
 ]
 
@@ -45,6 +45,12 @@ DataPointsRESTfulControllerSpecification >> dataPointsDecoderVersion1dot0dot0 [
 			customDo: [ :mapping | 
 				mapping listOfType: OrderedCollection andElementSchema: DataStream ];
 		nextAs: #DataPointCollection ]
+]
+
+{ #category : #acessing }
+DataPointsRESTfulControllerSpecification >> endpoint [
+
+	^ '/data-points'
 ]
 
 { #category : #'encoders and decoders' }

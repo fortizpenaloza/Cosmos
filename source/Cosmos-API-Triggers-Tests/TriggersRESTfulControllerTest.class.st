@@ -1,9 +1,6 @@
 Class {
 	#name : #TriggersRESTfulControllerTest,
-	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'resourceController'
-	],
+	#superclass : #SystemBasedRESTfulControllerUserStoryTest,
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
@@ -37,12 +34,6 @@ TriggersRESTfulControllerTest >> eightPM [
 TriggersRESTfulControllerTest >> fiveMinutes [
 
 	^ TimeUnits minute with: 5
-]
-
-{ #category : #'private - accessing' }
-TriggersRESTfulControllerTest >> httpRequestContext [
-
-	^ HttpRequestContext new
 ]
 
 { #category : #'private - accessing' }
@@ -88,7 +79,9 @@ TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointGreater
 TriggersRESTfulControllerTest >> registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature [
 
 	self triggerManagementSystem
-		register: (self setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream)
+		register:
+			(self
+				setTriggeredToTrueAfterDataPointRegistrationOn: self temperatureStream)
 ]
 
 { #category : #'private - accessing' }
@@ -98,46 +91,21 @@ TriggersRESTfulControllerTest >> registerSetTriggeredToTruePeriodicallyEveryFive
 ]
 
 { #category : #'private - requests' }
-TriggersRESTfulControllerTest >> requestToCreateTriggerFrom: aRepresentation [
+TriggersRESTfulControllerTest >> requestToCreateTriggerFrom: aJSON [
 
-	^ self requestToPOST: aRepresentation as: self applicationJsonVersion1dot0dot0MediaType
+	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
-TriggersRESTfulControllerTest >> requestToGetTriggerIdentifiedBy:anIdentifier accepting: aMediaType [
+TriggersRESTfulControllerTest >> requestToGetTriggerIdentifiedBy: anIdentifier accepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
-				setAccept: aMediaType;
-				yourself)
-		pathParams: {(#identifier -> anIdentifier)} asDictionary
+	^ self requestToGetResourceIdentifiedBy: anIdentifier accepting: aMediaType
 ]
 
 { #category : #'private - requests' }
 TriggersRESTfulControllerTest >> requestToGetTriggersAccepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: self resourceUrl)
-				setAccept: aMediaType;
-				yourself)
-]
-
-{ #category : #'private - requests' }
-TriggersRESTfulControllerTest >> requestToPOST: aRepresentation as: aMediaType [
-
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest post: self resourceUrl)
-				entity: (ZnEntity with: aRepresentation type: aMediaType);
-				yourself)
-]
-
-{ #category : #'private - accessing' }
-TriggersRESTfulControllerTest >> resourceUrl [
-
-	^ self baseUrl / resourceController specification endpoint
+	^ self requestToGetResourcesAccepting: aMediaType 
 ]
 
 { #category : #'private - accessing' }
@@ -183,9 +151,6 @@ TriggersRESTfulControllerTest >> setUp [
 
 	super setUp.
 
-	resourceController := TriggersRESTfulController workingWith: rootSystem.
-	resourceController serverUrl: self baseUrl asZnUrl.
-
 	(SensorsSampleAddOn on: rootSystem) install.
 
 	self actionManagementSystem
@@ -214,6 +179,13 @@ TriggersRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: ActionManagementSystem new;
 		registerSubsystem: TriggerManagementSystem new
  
+]
+
+{ #category : #running }
+TriggersRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := TriggersRESTfulController workingWith: rootSystem.
+
 ]
 
 { #category : #'private - accessing' }
@@ -498,10 +470,4 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 TriggersRESTfulControllerTest >> textPlainMediaType [
 
 	^ 'text/plain;charset=utf-8' asMediaType
-]
-
-{ #category : #'private - accessing' }
-TriggersRESTfulControllerTest >> urlForResourceIdentifiedBy: anIdentifier [
-
-	^ self resourceUrl / anIdentifier printString asZnUrl
 ]

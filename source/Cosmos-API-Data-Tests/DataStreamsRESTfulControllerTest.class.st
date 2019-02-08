@@ -1,16 +1,13 @@
 Class {
 	#name : #DataStreamsRESTfulControllerTest,
-	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'resourceController'
-	],
+	#superclass : #SystemBasedRESTfulControllerUserStoryTest,
 	#category : #'Cosmos-API-Data-Tests'
 }
 
 { #category : #'private - media types' }
 DataStreamsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asMediaType
+	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - accessing' }
@@ -33,12 +30,6 @@ DataStreamsRESTfulControllerTest >> dateTimeFormattedAsISO8601 [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulControllerTest >> httpRequestContext [
-
-	^ HttpRequestContext new
-]
-
-{ #category : #'private - accessing' }
 DataStreamsRESTfulControllerTest >> identifierProvider [
 
 	^ SequentialIdentifierProvider providing: self identifierSequence 
@@ -54,10 +45,10 @@ DataStreamsRESTfulControllerTest >> identifierSequence [
 ]
 
 { #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aRepresentation [
+DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aJSON [
 
 	^ self
-		requestToPOST: aRepresentation
+		requestToPost: aJSON
 		as: self applicationJsonVersion1dot0dot0MediaType
 ]
 
@@ -68,16 +59,6 @@ DataStreamsRESTfulControllerTest >> requestToDeleteStreamIdentifiedBy: anIdentif
 		fromZnRequest: (
 			ZnRequest delete: (self urlForResourceIdentifiedBy: anIdentifier))
 		pathParams: {(#identifier -> anIdentifier)} asDictionary
-]
-
-{ #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToGet: aUrl accepting: aMediaType [
-
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: aUrl)
-				setAccept: aMediaType;
-				yourself)
 ]
 
 { #category : #'private - requests' }
@@ -94,12 +75,7 @@ DataStreamsRESTfulControllerTest >> requestToGetDataPointsOfDataStreamIdentified
 { #category : #'private - requests' }
 DataStreamsRESTfulControllerTest >> requestToGetDataStreamIdentifiedBy: anIdentifier accepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
-				setAccept: aMediaType;
-				yourself)
-		pathParams: {(#identifier -> anIdentifier)} asDictionary
+	^ self requestToGetResourceIdentifiedBy: anIdentifier accepting: aMediaType
 ]
 
 { #category : #'private - requests' }
@@ -120,38 +96,12 @@ DataStreamsRESTfulControllerTest >> requestToGetDataStreamsAccepting: aMediaType
 	^ self requestToGetResourcesAccepting: aMediaType
 ]
 
-{ #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToGetResourcesAccepting: aMediaType [
-
-	^ self requestToGet: self resourceUrl accepting: aMediaType
-]
-
-{ #category : #'private - requests' }
-DataStreamsRESTfulControllerTest >> requestToPOST: aRepresentation as: aMediaType [
-
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest post: self resourceUrl)
-				entity: (ZnEntity with: aRepresentation type: aMediaType);
-				yourself)
-]
-
-{ #category : #'private - accessing' }
-DataStreamsRESTfulControllerTest >> resourceUrl [
-
-	^ self baseUrl / resourceController specification endpoint
-]
-
 { #category : #running }
-DataStreamsRESTfulControllerTest >> setUp [
-
+DataStreamsRESTfulControllerTest >> setUp [ 
+	
 	super setUp.
+	(SensorsSampleAddOn on: rootSystem) install.
 
-	resourceController := DataStreamsRESTfulController
-		workingWith: rootSystem.
-	resourceController serverUrl: self baseUrl asZnUrl.
-
-	(SensorsSampleAddOn on: rootSystem) install
 ]
 
 { #category : #running }
@@ -167,6 +117,13 @@ DataStreamsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: DataStreamManagementSystem new.
 	
  
+]
+
+{ #category : #running }
+DataStreamsRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := DataStreamsRESTfulController workingWith: rootSystem.
+
 ]
 
 { #category : #'private - accessing' }
@@ -196,7 +153,7 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
-		assert: response location
+		assertUrl: response location
 			equals:
 			'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
 		assert: response contentType equals: self textPlainMediaType.
@@ -228,7 +185,7 @@ DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsFromUnsupportedMe
 
 	self
 		should: [ resourceController
-				createStreamBasedOn: (self requestToPOST: '{"name":"Temperature"}' as: self unsupportedMediaType)
+				createStreamBasedOn: (self requestToPost: '{"name":"Temperature"}' as: self unsupportedMediaType)
 				within: self httpRequestContext ]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
@@ -311,9 +268,9 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 				assert: json name equals: 'Temperature';
 				assert: json current_value equals: 16.5;
 				assert: json last_update equals: self dateTimeFormattedAsISO8601;
-				assert: json links self
+				assertUrl: json links self
 					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-				assert: json links data_points
+				assertUrl: json links data_points
 					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points' ]
 ]
 
@@ -414,10 +371,4 @@ DataStreamsRESTfulControllerTest >> textPlainMediaType [
 DataStreamsRESTfulControllerTest >> unsupportedMediaType [
 	
 	^ self textPlainMediaType 
-]
-
-{ #category : #'private - accessing' }
-DataStreamsRESTfulControllerTest >> urlForResourceIdentifiedBy: anIdentifier [
-
-	^ self resourceUrl / anIdentifier printString asZnUrl
 ]

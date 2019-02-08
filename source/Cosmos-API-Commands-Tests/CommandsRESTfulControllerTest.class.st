@@ -37,9 +37,9 @@ CommandsRESTfulControllerTest >> installLedCommandsAddOn [
 ]
 
 { #category : #'private - requests' }
-CommandsRESTfulControllerTest >> requestToCreateCommandFrom: aJson [
+CommandsRESTfulControllerTest >> requestToCreateCommandFrom: aJSON [
 
-	^ self requestToPost: aJson as: self applicationJsonVersion1dot0dot0MediaType 
+	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - requests' }
