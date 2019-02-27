@@ -1,28 +1,19 @@
 Class {
 	#name : #DataPointsRESTfulControllerTest,
-	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'resourceController'
-	],
+	#superclass : #SystemBasedRESTfulControllerUserStoryTest,
 	#category : #'Cosmos-API-Data-Tests'
 }
 
 { #category : #'private - media types' }
 DataPointsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asMediaType
+	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - accessing' }
 DataPointsRESTfulControllerTest >> baseUrl [
 
 	^ 'https://tests.cosmos.com' asZnUrl
-]
-
-{ #category : #'private - accessing' }
-DataPointsRESTfulControllerTest >> httpRequestContext [
-
-	^ HttpRequestContext new
 ]
 
 { #category : #'private - accessing' }
@@ -46,18 +37,15 @@ DataPointsRESTfulControllerTest >> pressureStream [
 { #category : #'private - requests' }
 DataPointsRESTfulControllerTest >> requestToCreateDataPointsFrom: aJson [
 
-	^ (ZnRequest post: 'http://COSMOS_URL/v1/data-streams')
-		entity: (ZnEntity with: aJson type: self applicationJsonVersion1dot0dot0MediaType)
+	^ self
+		requestToPost: aJson
+		as: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #running }
 DataPointsRESTfulControllerTest >> setUp [
 
 	super setUp.
-
-	resourceController := DataPointsRESTfulController workingWith: rootSystem.
-	resourceController serverUrl: self baseUrl asZnUrl.
-
 	(SensorsSampleAddOn on: rootSystem) install
 ]
 
@@ -74,6 +62,13 @@ DataPointsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: DataStreamManagementSystem new.
 	
  
+]
+
+{ #category : #running }
+DataPointsRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := DataPointsRESTfulController workingWith: rootSystem.
+
 ]
 
 { #category : #'private - accessing' }

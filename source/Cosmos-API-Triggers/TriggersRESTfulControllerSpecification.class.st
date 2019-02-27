@@ -117,8 +117,7 @@ TriggersRESTfulControllerSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 						mapAccessor: #name;
 						mapInstVar: #action;
 						mapAccessor: #triggeringPolicy to: 'policy'.
-					(mapping mapInstVar: #condition to: #conditions)
-						valueSchema: #Conditions.
+					(mapping mapInstVar: #condition to: #conditions) valueSchema: #Conditions.
 					mapping mapHypermediaControlsIn: context ];
 				for: #Conditions
 					customDo: [ :mapping | 
@@ -136,8 +135,7 @@ TriggersRESTfulControllerSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 										with:
 											(OrderedDictionary new
 												at: #type put: #data_stream_current_value;
-												at: #data_stream
-													put: (condition instVarNamed: #dataStream) name;
+												at: #data_stream put: (condition instVarNamed: #dataStream) name;
 												at: #condition put: (condition instVarNamed: #condition);
 												yourself) ];
 								at: TimeIntervalTriggeringCondition
@@ -165,26 +163,22 @@ TriggersRESTfulControllerSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 						encoder: [ :condition | 
 							OrderedDictionary new
 								at: #type put: #data_stream_current_value;
-								at: #data_stream
-									put: (condition instVarNamed: #dataStream) name;
+								at: #data_stream put: (condition instVarNamed: #dataStream) name;
 								at: #condition put: (condition instVarNamed: #condition);
 								yourself ] ];
-				for: Action
-					customDo: [ :mapping | mapping encoder: [ :action | action name ] ];
+				for: Action customDo: [ :mapping | mapping encoder: [ :action | action name ] ];
 				for: PeriodicalTriggeringPolicy
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :policy | 
 							{(#type -> #periodical).
-							(#time_interval -> (policy instVarNamed: #timePeriod))}
-								asOrderedDictionary ] ];
+							(#time_interval -> (policy instVarNamed: #timePeriod))} asOrderedDictionary ] ];
 				for: DataPointRegistrationTriggeringPolicy
 					customDo: [ :mapping | 
 					mapping
 						encoder: [ :policy | 
 							{(#type -> #on_data_point_registration).
-							(#data_stream
-								-> ((policy instVarNamed: #dataStream) instVarNamed: #name))}
+							(#data_stream -> ((policy instVarNamed: #dataStream) instVarNamed: #name))}
 								asOrderedDictionary ] ];
 				for: ArithmeticCondition
 					do: [ :mapping | 
@@ -198,9 +192,8 @@ TriggersRESTfulControllerSpecification >> triggerJsonEnconderVersion1dot0dot0 [
 				for: DateTime
 					customDo: [ :mapping | 
 					mapping
-						encoder:
-							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
-				nextPut: trigger] ]
+						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+				nextPut: trigger ] ]
 ]
 
 { #category : #'specification - encoders and decoders' }

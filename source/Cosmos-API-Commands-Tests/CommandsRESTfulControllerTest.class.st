@@ -1,28 +1,19 @@
 Class {
 	#name : #CommandsRESTfulControllerTest,
-	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'resourceController'
-	],
+	#superclass : #SystemBasedRESTfulControllerUserStoryTest,
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
 { #category : #'private - media types' }
 CommandsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asMediaType
+	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> baseUrl [
 
 	^ 'https://tests.cosmos.com' asZnUrl
-]
-
-{ #category : #'private - accessing' }
-CommandsRESTfulControllerTest >> httpRequestContext [
-
-	^ HttpRequestContext new
 ]
 
 { #category : #'private - accessing' }
@@ -46,10 +37,9 @@ CommandsRESTfulControllerTest >> installLedCommandsAddOn [
 ]
 
 { #category : #'private - requests' }
-CommandsRESTfulControllerTest >> requestToCreateCommandFrom: aJson [
+CommandsRESTfulControllerTest >> requestToCreateCommandFrom: aJSON [
 
-	^ (ZnRequest post: 'http://COSMOS_URL/commands')
-		entity: (ZnEntity json: aJson)
+	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - requests' }
@@ -68,45 +58,15 @@ CommandsRESTfulControllerTest >> requestToDequeueCommandAccepting: aMediaType [
 ]
 
 { #category : #'private - requests' }
-CommandsRESTfulControllerTest >> requestToGet: aUrl accepting: aMediaType [
-
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: aUrl)
-				setAccept: aMediaType;
-				yourself)
-]
-
-{ #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToGetCommandIdentifiedBy: anIdentifier accepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
-				setAccept: aMediaType;
-				yourself)
-		pathParams: {(#identifier -> anIdentifier)} asDictionary
+	^ self requestToGetResourceIdentifiedBy: anIdentifier accepting: aMediaType
 ]
 
 { #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToGetCommandsAccepting: aMediaType [
 
-	^ self requestToGet: self resourceUrl accepting: aMediaType
-]
-
-{ #category : #'private - accessing' }
-CommandsRESTfulControllerTest >> resourceUrl [
-
-	^ self baseUrl / resourceController specification endpoint
-]
-
-{ #category : #running }
-CommandsRESTfulControllerTest >> setUp [
-
-	super setUp.
-
-	resourceController := CommandsRESTfulController workingWith: rootSystem.
-	resourceController serverUrl: self baseUrl asZnUrl
+	^ self requestToGetResourcesAccepting: aMediaType
 ]
 
 { #category : #running }
@@ -120,6 +80,12 @@ CommandsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: CommandManagementSystem new
+]
+
+{ #category : #running }
+CommandsRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := CommandsRESTfulController workingWith: rootSystem.
 ]
 
 { #category : #'private - accessing' }
@@ -284,10 +250,4 @@ CommandsRESTfulControllerTest >> turnOffLedWithMediumPriorityIdentifier [
 CommandsRESTfulControllerTest >> turnOnLedWithHighestPriorityIndentifier [
 
 	^ UUID fromString: 'af1ac24c-6c37-0d00-8b39-e65c01b794dc'
-]
-
-{ #category : #'private - accessing' }
-CommandsRESTfulControllerTest >> urlForResourceIdentifiedBy: anIdentifier [
-
-	^ self resourceUrl / anIdentifier printString asZnUrl
 ]

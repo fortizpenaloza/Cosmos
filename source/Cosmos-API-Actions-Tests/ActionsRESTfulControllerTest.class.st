@@ -1,16 +1,13 @@
 Class {
 	#name : #ActionsRESTfulControllerTest,
-	#superclass : #SystemBasedUserStoryTest,
-	#instVars : [
-		'resourceController'
-	],
+	#superclass : #SystemBasedRESTfulControllerUserStoryTest,
 	#category : #'Cosmos-API-Actions-Tests'
 }
 
 { #category : #'private - media types' }
 ActionsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ 'application/json;version=1.0.0' asMediaType 
+	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - accessing' }
@@ -29,12 +26,6 @@ ActionsRESTfulControllerTest >> getDNSZonesAsJSON [
 ActionsRESTfulControllerTest >> getDNSZonesIdentifier [
 
 	^ UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc'
-]
-
-{ #category : #'private - accessing' }
-ActionsRESTfulControllerTest >> httpRequestContext [
-
-	^ HttpRequestContext new
 ]
 
 { #category : #'private - accessing' }
@@ -111,6 +102,12 @@ ActionsRESTfulControllerTest >> registerGetDNSZones [
 ]
 
 { #category : #'private - requests' }
+ActionsRESTfulControllerTest >> requestToCreateActionFrom: aJSON [
+
+	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
+]
+
+{ #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToDeleteActionIdentifiedBy: anIdentifier [ 
 
 	^ TeaRequest
@@ -121,37 +118,13 @@ ActionsRESTfulControllerTest >> requestToDeleteActionIdentifiedBy: anIdentifier 
 { #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToGetActionIdentifiedBy: anIdentifier accepting: aMediaType [
 
-	^ TeaRequest
-		fromZnRequest:
-			((ZnRequest get: (self urlForResourceIdentifiedBy: anIdentifier))
-				setAccept: aMediaType;
-				yourself)
-		pathParams: {(#identifier -> anIdentifier)} asDictionary
+	^ self requestToGetResourceIdentifiedBy: anIdentifier accepting: aMediaType
 ]
 
 { #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToGetActions [
 
-	^ (ZnRequest get: self resourceUrl)
-		setAccept: self applicationJsonVersion1dot0dot0MediaType
-]
-
-{ #category : #'private - accessing' }
-ActionsRESTfulControllerTest >> resourceUrl [
-
-	^ self baseUrl / resourceController specification endpoint
-	
-
-]
-
-{ #category : #running }
-ActionsRESTfulControllerTest >> setUp [
-
-	super setUp.
-
-	resourceController := ActionsRESTfulController workingWith: rootSystem.
-	resourceController serverUrl: self baseUrl asZnUrl.
-
+	^ self requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType
 ]
 
 { #category : #running }
@@ -167,6 +140,12 @@ ActionsRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: ActionManagementSystem new
 ]
 
+{ #category : #running }
+ActionsRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := ActionsRESTfulController workingWith: rootSystem.
+]
+
 { #category : #'private - accessing' }
 ActionsRESTfulControllerTest >> systemDateTime [
 
@@ -179,17 +158,11 @@ ActionsRESTfulControllerTest >> systemDateTime [
 { #category : #tests }
 ActionsRESTfulControllerTest >> testCreateAction [
 
-	| response |
+	| response json |
 
 	self assert: self actionManagementSystem actions isEmpty.
-
-	response := resourceController
-		createActionBasedOn:
-			((ZnRequest post: 'http://COSMOS_URL/actions')
-				entity:
-					(ZnEntity
-						with:
-							'{
+	
+	json := '{
   "name": "List DNS records",
   "http_request": {
     "request_line": {
@@ -208,15 +181,18 @@ ActionsRESTfulControllerTest >> testCreateAction [
       }
     ]
   }
-}'
-						type: self applicationJsonVersion1dot0dot0MediaType))
+}'.
+
+	response := resourceController
+		createActionBasedOn: (self requestToCreateActionFrom: json)
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: 'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+			equals:
+			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
 		assert: response contentType equals: self textPlainMediaType.
 
 	self
@@ -257,14 +233,17 @@ ActionsRESTfulControllerTest >> testGetAction [
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
+		assert: response contentType
+			equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response entityTag
+			equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
 		withJsonFromContentsIn: response contents
 			do: [ :json | 
 			self
 				assert: json name equals: 'Get DNS zones';
 				assert: json links self
-					equals: 'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc' ];
+					equals:
+					'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc' ];
 		assert: response contents equals: self getDNSZonesAsJSON
 ]
 
@@ -292,10 +271,4 @@ ActionsRESTfulControllerTest >> testGetActions [
 ActionsRESTfulControllerTest >> textPlainMediaType [
 
 	^ 'text/plain;charset=utf-8' asMediaType
-]
-
-{ #category : #'private - accessing' }
-ActionsRESTfulControllerTest >> urlForResourceIdentifiedBy: anIdentifier [
-
-	^ self resourceUrl / anIdentifier printString asZnUrl
 ]
