@@ -16,7 +16,7 @@ BaselineOfCosmos >> baseline: spec [
 
 			spec package: 'Cosmos-Code-Quality-Tests'.
 
-			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
+			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2' 'Kepler-Tools' 'Stargate-Tools') ].
 
 			spec
 				group: 'Deployment'
@@ -35,14 +35,19 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-API-Common' with: [ spec requires: #('Stargate') ];
-		package: 'Cosmos-API-Data' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
-		package: 'Cosmos-API-Commands' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
-		package: 'Cosmos-API-Actions' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
-		package: 'Cosmos-API-Triggers' with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Triggers') ].
-	
-	spec
-		group: 'Cosmos-API-Model'
-		with: #('Cosmos-API-Common' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
+		group: 'Deployment' with: 'Cosmos-API-Common';
+		package: 'Cosmos-API-Data'
+			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
+		group: 'Deployment' with: 'Cosmos-API-Data';
+		package: 'Cosmos-API-Commands'
+			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
+		group: 'Deployment' with: 'Cosmos-API-Commands';
+		package: 'Cosmos-API-Actions'
+			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
+		group: 'Deployment' with: 'Cosmos-API-Actions';
+		package: 'Cosmos-API-Triggers'
+			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Triggers') ];
+		group: 'Deployment' with: 'Cosmos-API-Triggers'
 ]
 
 { #category : #'private - baselines' }
@@ -65,8 +70,8 @@ BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
-		with: [ spec
-				requires: #('ApplicationStarter' 'Cosmos-Model' 'Cosmos-API-Model') ]
+			with: [ spec requires: #('ApplicationStarter') ];
+		group: 'Deployment' with: 'Cosmos-CommandLineHandler'
 ]
 
 { #category : #'private - baselines' }
@@ -159,14 +164,16 @@ BaselineOfCosmos >> setUpDependencies: spec [
 			with: [ spec
 				repository: 'github://ba-st/Kepler:v4/source';
 				loads: #('Deployment') ];
-		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
-
+		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
+		project: 'Kepler-Tools' copyFrom: 'Kepler' with: [ spec loads: 'Tools' ].
+		
 	spec
 		baseline: 'Stargate'
 		with: [ spec
 				repository: 'github://ba-st/Stargate:v1/source';
 				loads: 'Deployment' ];
-		import: 'Stargate'.
+		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
+			
 		
 	spec
 		baseline: 'ApplicationStarter'
