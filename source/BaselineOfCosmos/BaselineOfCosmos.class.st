@@ -20,7 +20,7 @@ BaselineOfCosmos >> baseline: spec [
 
 			spec
 				group: 'Deployment'
-					with: #('Cosmos-Model' 'Cosmos-API-Model' 'Cosmos-CommandLineHandler');
+					with: #('Model' 'API' 'CommandLineHandler');
 				group: 'Tests'
 					with:
 					#('Cosmos-Model-Tests' 'Cosmos-API-Model-Tests' 'Cosmos-CommandLineHandler-Tests' 'Cosmos-Code-Quality-Tests');
@@ -35,19 +35,19 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-API-Common' with: [ spec requires: #('Stargate') ];
-		group: 'Deployment' with: 'Cosmos-API-Common';
+		group: 'API' with: 'Cosmos-API-Common';
 		package: 'Cosmos-API-Data'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
-		group: 'Deployment' with: 'Cosmos-API-Data';
+		group: 'API' with: 'Cosmos-API-Data';
 		package: 'Cosmos-API-Commands'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
-		group: 'Deployment' with: 'Cosmos-API-Commands';
+		group: 'API' with: 'Cosmos-API-Commands';
 		package: 'Cosmos-API-Actions'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
-		group: 'Deployment' with: 'Cosmos-API-Actions';
+		group: 'API' with: 'Cosmos-API-Actions';
 		package: 'Cosmos-API-Triggers'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Triggers') ];
-		group: 'Deployment' with: 'Cosmos-API-Triggers'
+		group: 'API' with: 'Cosmos-API-Triggers'
 ]
 
 { #category : #'private - baselines' }
@@ -71,7 +71,7 @@ BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
 	spec
 		package: 'Cosmos-CommandLineHandler'
 			with: [ spec requires: #('ApplicationStarter') ];
-		group: 'Deployment' with: 'Cosmos-CommandLineHandler'
+		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'
 ]
 
 { #category : #'private - baselines' }
@@ -99,23 +99,23 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Identifier';
+		group: 'Model' with: 'Cosmos-Identifier';
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Metadata';
+		group: 'Model' with: 'Cosmos-Metadata';
 		package: 'Cosmos-Timestamping' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Timestamping';
+		group: 'Model' with: 'Cosmos-Timestamping';
 		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Data';
+		group: 'Model' with: 'Cosmos-Data';
 		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Triggers';
+		group: 'Model' with: 'Cosmos-Triggers';
 		package: 'Cosmos-Commands' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Commands';
+		group: 'Model' with: 'Cosmos-Commands';
 		package: 'Cosmos-Actions' with: [ spec requires: #('Kepler') ];
-		group: 'Deployment' with: 'Cosmos-Actions';
+		group: 'Model' with: 'Cosmos-Actions';
 		package: 'Cosmos-PeriodicalScheduler-Core';
-		group: 'Deployment' with: 'Cosmos-PeriodicalScheduler-Core';
+		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
 		package: 'Cosmos-ActionEvaluator-Core';
-		group: 'Deployment' with: 'Cosmos-ActionEvaluator-Core'
+		group: 'Model' with: 'Cosmos-ActionEvaluator-Core'
 ]
 
 { #category : #'private - baselines' }
