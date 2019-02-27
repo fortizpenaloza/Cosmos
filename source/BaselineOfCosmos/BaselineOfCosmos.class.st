@@ -130,9 +130,9 @@ BaselineOfCosmos >> setUpDependencies: spec [
 	spec
 		baseline: 'Kepler'
 			with: [ spec
-				repository: 'github://ba-st/Kepler:v3/source';
+				repository: 'github://ba-st/Kepler:v4/source';
 				loads: #('Deployment') ];
-		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'SUnit' ].
+		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
 
 	spec
 		baseline: 'Stargate'
