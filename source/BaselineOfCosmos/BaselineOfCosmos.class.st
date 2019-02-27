@@ -124,6 +124,12 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Timestamping-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
+{ #category : #accessing }
+BaselineOfCosmos >> projectClass [
+
+	^ MetacelloCypressBaselineProject
+]
+
 { #category : #dependencies }
 BaselineOfCosmos >> setUpDependencies: spec [
 
