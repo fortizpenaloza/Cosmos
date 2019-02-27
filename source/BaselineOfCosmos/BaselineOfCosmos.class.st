@@ -9,23 +9,12 @@ BaselineOfCosmos >> baseline: spec [
 
 	<baseline>
 	spec
-		for: #common
-		do: [ self setUpDependencies: spec.
-			self
-				describeModelDependenciesOn: spec;
-				describeAPIDependenciesOn: spec;
-				describeModelTestsDependenciesOn: spec;
-				describeAPITestsDependenciesOn: spec.
+		for: #pharo
+		do: [ self
+				setUpDependencies: spec;
+				describeCosmosDependeciesOn: spec.
 
 			spec package: 'Cosmos-Code-Quality-Tests'.
-
-			spec
-				package: 'Cosmos-CommandLineHandler'
-				with: [ spec requires: #('ApplicationStarter' 'Cosmos-Model' 'Cosmos-API-Model') ].
-
-			spec
-				package: 'Cosmos-CommandLineHandler-Tests'
-				with: [ spec requires: #('Cosmos-CommandLineHandler') ].
 
 			spec package: 'Cosmos-Tools' with: [ spec requires: #('Roassal2') ].
 
@@ -41,7 +30,7 @@ BaselineOfCosmos >> baseline: spec [
 				group: 'default' with: #('Development') ]
 ]
 
-{ #category : #baselines }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
@@ -56,7 +45,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 		with: #('Cosmos-API-Common' 'Cosmos-API-Data' 'Cosmos-API-Commands' 'Cosmos-API-Actions' 'Cosmos-API-Triggers')
 ]
 
-{ #category : #baselines }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 
 	spec
@@ -71,28 +60,60 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 		with: #('Cosmos-API-Common-Tests' 'Cosmos-API-Data-Tests' 'Cosmos-API-Commands-Tests' 'Cosmos-API-Actions-Tests' 'Cosmos-API-Triggers-Tests')
 ]
 
-{ #category : #baselines }
+{ #category : #'private - baselines' }
+BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
+
+	spec
+		package: 'Cosmos-CommandLineHandler'
+		with: [ spec
+				requires: #('ApplicationStarter' 'Cosmos-Model' 'Cosmos-API-Model') ]
+]
+
+{ #category : #'private - baselines' }
+BaselineOfCosmos >> describeCommandLineHandlerTestsDependenciesOn: spec [
+
+	spec
+		package: 'Cosmos-CommandLineHandler-Tests'
+		with: [ spec requires: #('Cosmos-CommandLineHandler') ]
+]
+
+{ #category : #'private - baselines' }
+BaselineOfCosmos >> describeCosmosDependeciesOn: spec [
+
+	self
+		describeModelDependenciesOn: spec;
+		describeAPIDependenciesOn: spec;
+		describeCommandLineHandlerDependenciesOn: spec;
+		describeModelTestsDependenciesOn: spec;
+		describeAPITestsDependenciesOn: spec;
+		describeCommandLineHandlerTestsDependenciesOn: spec
+]
+
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Identifier';
 		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
-		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Metadata';
 		package: 'Cosmos-Timestamping' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Timestamping';
 		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Data';
 		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Triggers';
 		package: 'Cosmos-Commands' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Commands';
 		package: 'Cosmos-Actions' with: [ spec requires: #('Kepler') ];
+		group: 'Deployment' with: 'Cosmos-Actions';
 		package: 'Cosmos-PeriodicalScheduler-Core';
-		package: 'Cosmos-ActionEvaluator-Core'.
-
-	spec
-		group: 'Cosmos-Model'
-		with:
-			#('Cosmos-Identifier' 'Cosmos-Metadata' 'Cosmos-Timestamping' 'Cosmos-Data' 'Cosmos-Triggers' 'Cosmos-Commands' 'Cosmos-Actions' 'Cosmos-PeriodicalScheduler-Core' 'Cosmos-ActionEvaluator-Core')
+		group: 'Deployment' with: 'Cosmos-PeriodicalScheduler-Core';
+		package: 'Cosmos-ActionEvaluator-Core';
+		group: 'Deployment' with: 'Cosmos-ActionEvaluator-Core'
 ]
 
-{ #category : #baselines }
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 
 	spec
