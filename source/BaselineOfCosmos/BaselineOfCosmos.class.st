@@ -124,15 +124,21 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 			#('Cosmos-Tests' 'Cosmos-UserStoryTests' 'Cosmos-Identifier-Tests' 'Cosmos-Metadata-Tests' 'Cosmos-Timestamping-Tests' 'Cosmos-Data-Tests' 'Cosmos-Triggers-Tests' 'Cosmos-Commands-Tests' 'Cosmos-Actions-Tests' 'Cosmos-PeriodicalScheduler-Tests' 'Cosmos-ActionEvaluator-Tests')
 ]
 
+{ #category : #accessing }
+BaselineOfCosmos >> projectClass [
+
+	^ MetacelloCypressBaselineProject
+]
+
 { #category : #dependencies }
 BaselineOfCosmos >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Kepler'
 			with: [ spec
-				repository: 'github://ba-st/Kepler:v3/source';
+				repository: 'github://ba-st/Kepler:v4/source';
 				loads: #('Deployment') ];
-		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'SUnit' ].
+		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
 
 	spec
 		baseline: 'Stargate'
