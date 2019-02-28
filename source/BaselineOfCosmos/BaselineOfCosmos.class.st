@@ -12,22 +12,18 @@ BaselineOfCosmos >> baseline: spec [
 		for: #pharo
 		do: [ self
 				setUpDependencies: spec;
-				describeCosmosDependeciesOn: spec.
-
-			spec package: 'Cosmos-Code-Quality-Tests'.
-
-			spec
-				package: 'Cosmos-Tools'
-				with: [ spec requires: #('Roassal2' 'Kepler-Tools' 'Stargate-Tools') ].
+				describeCosmosDependeciesOn: spec;
+				describeCodeQualityDependenciesOn: spec;
+				describeToolsDependeciesOn: spec.
 
 			spec
 				group: 'Deployment' with: #('Model' 'API' 'CommandLineHandler');
 				group: 'Tests'
 					with:
-					#('Model-Tests' 'API-Tests' 'CommandLineHandler-Tests' 'Cosmos-Code-Quality-Tests');
+					#('Model-Tests' 'API-Tests' 'CommandLineHandler-Tests' 'Code-Quality-Tests');
 				group: 'Tools' with: #('Cosmos-Tools');
-				group: 'CI' with: #('Deployment' 'Tests');
-				group: 'Development' with: #('CI' 'Tools');
+				group: 'CI' with: #('Tests');
+				group: 'Development' with: #('Tests' 'Tools');
 				group: 'default' with: #('Development') ]
 ]
 
@@ -35,7 +31,7 @@ BaselineOfCosmos >> baseline: spec [
 BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-API-Common' with: [ spec requires: #('Stargate') ];
+		package: 'Cosmos-API-Common' with: [ spec requires: 'Stargate' ];
 		group: 'API' with: 'Cosmos-API-Common';
 		package: 'Cosmos-API-Data'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Data') ];
@@ -73,11 +69,19 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
+BaselineOfCosmos >> describeCodeQualityDependenciesOn: spec [
+
+	spec
+		package: 'Cosmos-Code-Quality-Tests';
+		group: 'Code-Quality-Tests' with: 'Cosmos-Code-Quality-Tests'
+]
+
+{ #category : #'private - baselines' }
 BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
-			with: [ spec requires: #('ApplicationStarter') ];
+			with: [ spec requires: 'ApplicationStarter' ];
 		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'
 ]
 
@@ -86,7 +90,7 @@ BaselineOfCosmos >> describeCommandLineHandlerTestsDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler-Tests'
-			with: [ spec requires: #('Cosmos-CommandLineHandler') ];
+			with: [ spec requires: 'Cosmos-CommandLineHandler' ];
 		group: 'CommandLineHandler-Tests'
 			with: 'Cosmos-CommandLineHandler-Tests'
 ]
@@ -107,19 +111,19 @@ BaselineOfCosmos >> describeCosmosDependeciesOn: spec [
 BaselineOfCosmos >> describeModelDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-Identifier' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Identifier' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Identifier';
-		package: 'Cosmos-Metadata' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Metadata' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Metadata';
-		package: 'Cosmos-Timestamping' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Timestamping' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Timestamping';
-		package: 'Cosmos-Data' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Data' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Data';
-		package: 'Cosmos-Triggers' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Triggers' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Triggers';
-		package: 'Cosmos-Commands' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Commands' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Commands';
-		package: 'Cosmos-Actions' with: [ spec requires: #('Kepler') ];
+		package: 'Cosmos-Actions' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Actions';
 		package: 'Cosmos-PeriodicalScheduler-Core';
 		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
@@ -163,6 +167,14 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-ActionEvaluator-Tests'
 			with: [ spec requires: #('Cosmos-ActionEvaluator-Core') ];
 		group: 'Model-Tests' with: 'Cosmos-ActionEvaluator-Tests'
+]
+
+{ #category : #'private - baselines' }
+BaselineOfCosmos >> describeToolsDependeciesOn: spec [
+
+	spec
+		package: 'Cosmos-Tools'
+		with: [ spec requires: #('Roassal2' 'Kepler-Tools' 'Stargate-Tools') ]
 ]
 
 { #category : #accessing }
