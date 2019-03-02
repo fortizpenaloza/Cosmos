@@ -74,3 +74,19 @@ PriorityQueueTest >> testIsEmptyAfterCreation [
 	priorityQueue := PriorityQueue empty.
 	self assert: priorityQueue isEmpty
 ]
+
+{ #category : #tests }
+PriorityQueueTest >> testQueryingEnqueuedElements [
+
+	| priorityQueue |
+
+	priorityQueue := PriorityQueue empty.
+	priorityQueue enqueue: 'a' with: self lowestPriority.
+	priorityQueue enqueue: 'b' with: self lowestPriority.
+	priorityQueue enqueue: 'c' with: self highestPriority.
+	priorityQueue enqueue: 'd' with: self highestPriority.
+
+	self
+		assertCollection: priorityQueue enqueuedElements
+		equals: #('c' 'd' 'a' 'b') asOrderedCollection 
+]

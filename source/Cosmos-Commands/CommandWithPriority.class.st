@@ -41,6 +41,13 @@ CommandWithPriority >> initializeHolding: aCommand and: aPriority [
 	priority := aPriority 
 ]
 
+{ #category : #printing }
+CommandWithPriority >> printOn: aStream [
+
+	aStream
+		nextPutAll: ('<1s> [<2p>]' expandMacrosWith: command with: priority)
+]
+
 { #category : #accessing }
 CommandWithPriority >> priority [
 

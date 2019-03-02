@@ -132,6 +132,29 @@ CommandManagementSystemUserStoryTest >> testQueryingCommands [
 ]
 
 { #category : #tests }
+CommandManagementSystemUserStoryTest >> testQueryingPrioritizedCommands [
+
+	| turnOnLedWithMediumPriority turnOnLedWithLowPriority turnOnLedWithHighPriority |
+	
+	turnOnLedWithMediumPriority := self turnOnLedWithMediumPriority.
+	self commandManagementSystem register: turnOnLedWithMediumPriority.
+
+	turnOnLedWithLowPriority := self turnOnLedWithLowPriority.
+	self commandManagementSystem register: turnOnLedWithLowPriority.
+
+	turnOnLedWithHighPriority := self turnOnLedWithHighPriority.
+	self commandManagementSystem register: turnOnLedWithHighPriority.
+
+	self
+		assert: self commandManagementSystem prioritizedCommands
+		hasTheSameElementsInTheSameOrderThat:
+			(OrderedCollection
+				with: turnOnLedWithHighPriority
+				with: turnOnLedWithMediumPriority
+				with: turnOnLedWithLowPriority)
+]
+
+{ #category : #tests }
 CommandManagementSystemUserStoryTest >> testRegistration [
 
 	| turnOnLedWithHighPriority |

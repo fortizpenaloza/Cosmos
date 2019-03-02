@@ -34,6 +34,12 @@ PriorityQueue >> enqueue: anElement with: aPriority [
 	elements add: element 
 ]
 
+{ #category : #accessing }
+PriorityQueue >> enqueuedElements [
+
+	^ elements reversed collect: #element
+]
+
 { #category : #initialization }
 PriorityQueue >> initialize [
 
