@@ -164,51 +164,6 @@ ActionsRESTfulControllerTest >> testCreateAction [
 	self assert: self actionManagementSystem actions isEmpty.
 	
 	json := '{
-  "name": "List DNS records",
-  "http_request": {
-    "request_line": {
-      "method": "GET",
-      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
-      "version": "HTTP/1.1"
-    },
-    "headers": [
-      {
-        "key": "X-Auth-Email",
-        "value": "patchinko@gmail.com"
-      },
-      {
-        "key": "X-Auth-Key",
-        "value": "93b0b7a99ad1fc123d0d2b6508849db7e6414"
-      }
-    ]
-  }
-}'.
-
-	response := resourceController
-		createActionBasedOn: (self requestToCreateActionFrom: json)
-		within: self httpRequestContext.
-
-	self
-		assert: response isSuccess;
-		assert: response code equals: 201;
-		assert: response location
-			equals:
-			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-		assert: response contentType equals: self textPlainMediaType.
-
-	self
-		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | self assert: action name equals: 'List DNS records' ]
-]
-
-{ #category : #tests }
-ActionsRESTfulControllerTest >> testCreateAction2 [
-
-	| response json |
-
-	self assert: self actionManagementSystem actions isEmpty.
-	
-	json := '{
   "name": "Add DNS zone",
   "http_request": {
     "request_line": {
@@ -248,6 +203,90 @@ ActionsRESTfulControllerTest >> testCreateAction2 [
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
 		do: [ :action | self assert: action name equals: 'Add DNS zone' ]
+]
+
+{ #category : #tests }
+ActionsRESTfulControllerTest >> testCreateActionWithoutEntity [
+
+	| response json |
+
+	self assert: self actionManagementSystem actions isEmpty.
+	
+	json := '{
+  "name": "List DNS records",
+  "http_request": {
+    "request_line": {
+      "method": "GET",
+      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
+      "version": "HTTP/1.1"
+    },
+    "headers": [
+      {
+        "key": "X-Auth-Email",
+        "value": "patchinko@gmail.com"
+      },
+      {
+        "key": "X-Auth-Key",
+        "value": "93b0b7a99ad1fc123d0d2b6508849db7e6414"
+      }
+    ]
+  }
+}'.
+
+	response := resourceController
+		createActionBasedOn: (self requestToCreateActionFrom: json)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 201;
+		assert: response location
+			equals:
+			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+		assert: response contentType equals: self textPlainMediaType.
+
+	self
+		withTheOnlyOneIn: self actionManagementSystem actions
+		do: [ :action | self assert: action name equals: 'List DNS records' ]
+]
+
+{ #category : #tests }
+ActionsRESTfulControllerTest >> testCreateActionWithoutHeaders [
+
+	| response json |
+
+	self assert: self actionManagementSystem actions isEmpty.
+	
+	json := '{
+  "name": "List DNS records",
+  "http_request": {
+    "request_line": {
+      "method": "GET",
+      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
+      "version": "HTTP/1.1"
+    },
+    "entity": { 
+		 "contentType": "application/json",
+		 "contents": "{\"isEnabled\": true}"
+	 }
+  }
+}'.
+
+	response := resourceController
+		createActionBasedOn: (self requestToCreateActionFrom: json)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 201;
+		assert: response location
+			equals:
+			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+		assert: response contentType equals: self textPlainMediaType.
+
+	self
+		withTheOnlyOneIn: self actionManagementSystem actions
+		do: [ :action | self assert: action name equals: 'List DNS records' ]
 ]
 
 { #category : #tests }
