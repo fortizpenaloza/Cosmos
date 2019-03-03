@@ -7,14 +7,16 @@ Class {
 { #category : #decoding }
 HTTPRequestDecoder >> decode: aRawRequest [
 
-	| requestLine headers |
+	| requestLine headers entity |
 
 	requestLine := self requestLineFrom: aRawRequest.
 	headers := self headersFrom: aRawRequest.
+	entity := self entityFrom: aRawRequest.
 
 	^ ZnRequest empty
 		requestLine: requestLine;
 		headers: headers;
+		entity: entity;
 		yourself
 ]
 
@@ -38,21 +40,55 @@ HTTPRequestDecoder >> decode: aKey from: aDictionary using: aDecoder ifAbsent: a
 ]
 
 { #category : #'private - decoders' }
+HTTPRequestDecoder >> entityDecoder [
+
+	^ [ :rawEntity | 
+	ZnStringEntity
+		with: (rawEntity at: #contents)
+		ofType: (rawEntity at: #contentType) asMediaType ]
+]
+
+{ #category : #decoding }
+HTTPRequestDecoder >> entityFrom: aRawRequest [
+
+	^ self
+		decode: #entity
+		from: aRawRequest
+		using: self entityDecoder
+		ifAbsent: ZnEntity new
+]
+
+{ #category : #'private - decoders' }
 HTTPRequestDecoder >> headersDecoder [
-	
-	^ HTTPHeadersDecoder new
+
+	^ [ :rawHeaders | 
+	rawHeaders
+		inject: ZnHeaders new
+		into: [ :headers :rawHeader | 
+			headers
+				at: (rawHeader at: #key) put: (rawHeader at: #value);
+				yourself ] ]
 ]
 
 { #category : #decoding }
 HTTPRequestDecoder >> headersFrom: aRawRequest [
 
-	^ self decode: #headers from: aRawRequest using: self headersDecoder
+	^ self
+		decode: #headers
+		from: aRawRequest
+		using: self headersDecoder
+		ifAbsent: ZnHeaders new
 ]
 
 { #category : #'private - decoders' }
 HTTPRequestDecoder >> requestLineDecoder [
-	
-	^ HTTPRequestLineDecoder new
+
+	^ [ :rawRequestLine | 
+	ZnRequestLine empty
+		method: (rawRequestLine at: #method);
+		uri: (rawRequestLine at: #url) asZnUrl;
+		version: (rawRequestLine at: #version);
+		yourself ]
 ]
 
 { #category : #decoding }

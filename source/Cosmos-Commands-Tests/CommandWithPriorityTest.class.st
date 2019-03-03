@@ -17,3 +17,13 @@ CommandWithPriorityTest >> testInstanceCreationAndAccessing [
 		assert: commandWithPriority hash
 			equals: (commandWithPriority command hash bitXor: commandWithPriority priority hash)
 ]
+
+{ #category : #tests }
+CommandWithPriorityTest >> testPrintOn [
+
+	| commandWithPriority |
+
+	commandWithPriority := CommandWithPriority holding: 'TURN_ON' and: 1.
+
+	self assert: commandWithPriority printString equals: 'TURN_ON [1]'
+]

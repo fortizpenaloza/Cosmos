@@ -81,6 +81,12 @@ CommandManagementSystem >> name [
 	^ 'Command Management'
 ]
 
+{ #category : #querying }
+CommandManagementSystem >> prioritizedCommands [
+
+	^ priorityQueue enqueuedElements 
+]
+
 { #category : #managing }
 CommandManagementSystem >> register: aCommandWithPriority [
 

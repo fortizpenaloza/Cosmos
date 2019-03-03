@@ -77,10 +77,13 @@ ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 				for: Action
 					do: [ :mapping | 
 					mapping mapInstVar: #name.
-					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy.
-					mapping mapAsHypermediaControls: [ :action | context hypermediaControlsFor: action ]  ];
+					(mapping mapInstVar: #evaluationPolicy to: #http_request)
+						valueSchema: #Policy.
+					mapping
+						mapAsHypermediaControls: [ :action | context hypermediaControlsFor: action ] ];
 				for: #Policy
-					customDo: [ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
 				for: ZnRequest
 					do: [ :mapping | 
 					mapping
@@ -93,9 +96,18 @@ ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 						mapAccessor: #method;
 						mapAccessor: #uri to: #url;
 						mapInstVar: #version ];
-				for: ZnUrl customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
+				for: ZnUrl
+					customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
 				for: ZnHeaders
-					customDo: [ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
+				for: ZnStringEntity
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #contentType;
+						mapAccessor: #contents ];
+				for: ZnMimeType
+					customDo: [ :mapping | mapping encoder: [ :mimeType | mimeType printString ] ];
 				for: Association
 					do: [ :mapping | 
 					mapping
@@ -104,14 +116,15 @@ ActionsRESTfulControllerSpecification >> actionsJsonEncoderVersion1dot0dot0 [
 				for: DateTime
 					customDo: [ :mapping | 
 					mapping
-						encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+						encoder:
+							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				nextPut: actions ] ]
 ]
 
 { #category : #accessing }
 ActionsRESTfulControllerSpecification >> actionsMappingKey [
-	
-	^#actions
+
+	^ #actions
 ]
 
 { #category : #'specification - encoders and decoders' }
