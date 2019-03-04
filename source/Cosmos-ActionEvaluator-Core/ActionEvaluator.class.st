@@ -14,9 +14,16 @@ ActionEvaluator class >> configuredBy: aConfiguration [
 ]
 
 { #category : #evaluating }
-ActionEvaluator >> evaluate: anAction [ 
+ActionEvaluator >> evaluate: anAction [
 
-	anAction evaluateWithin: configuration  
+	anAction evaluateWithin: configuration.
+	self notifyEvaluationOf: anAction
+]
+
+{ #category : #'private - systems' }
+ActionEvaluator >> eventNotificationSystem [
+	
+	^ configuration eventNotificationSystem  
 ]
 
 { #category : #'events handling' }
@@ -29,4 +36,10 @@ ActionEvaluator >> handleEvaluateActionOn: anEvent [
 ActionEvaluator >> initializeConfiguredBy: aConfiguration [
 
 	configuration := aConfiguration  
+]
+
+{ #category : #evaluating }
+ActionEvaluator >> notifyEvaluationOf: anAction [
+
+	self eventNotificationSystem notifySubscribersTo: (ActionEvaluatedEvent for: anAction)
 ]

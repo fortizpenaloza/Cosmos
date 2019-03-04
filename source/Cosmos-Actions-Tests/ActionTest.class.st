@@ -77,7 +77,7 @@ ActionTest >> testSendHttpRequest [
 			self assert: wasEvaluated ]
 ]
 
-{ #category : #'tests - support' }
+{ #category : #'tests support' }
 ActionTest >> withServerDo: aBlock [
 
 	| server |

@@ -184,7 +184,7 @@ TriggerManagementSystem >> startUp [
 	self subscribeToTickEvents
 ]
 
-{ #category : #'private - subscribing' }
+{ #category : #'private - events handling' }
 TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 
 	self eventNotificationSystem
@@ -193,7 +193,7 @@ TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 		toBeNotifiedSending: #handleDataPointRegistrationOn:
 ]
 
-{ #category : #'private - subscribing' }
+{ #category : #'private - events handling' }
 TriggerManagementSystem >> subscribeToTickEvents [
 
 	self eventNotificationSystem

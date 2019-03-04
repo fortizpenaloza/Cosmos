@@ -1,66 +1,132 @@
 Class {
 	#name : #ActionEvaluatorTest,
-	#superclass : #TestCase,
-	#category : 'Cosmos-ActionEvaluator-Tests'
+	#superclass : #SystemBasedUserStoryTest,
+	#instVars : [
+		'evaluator',
+		'wasNotified'
+	],
+	#category : #'Cosmos-ActionEvaluator-Tests'
 }
+
+{ #category : #'private - mocking' }
+ActionEvaluatorTest >> eventNotificationSystem [
+
+	^ rootSystem >> #EventNotificationSystemInterface
+]
+
+{ #category : #'tests support' }
+ActionEvaluatorTest >> handleActionEvaluatedOn: anEvent [
+
+	wasNotified := true
+]
+
+{ #category : #'private - mocking' }
+ActionEvaluatorTest >> httpClient [ 
+	
+	^ ZnClient new
+]
+
+{ #category : #tests }
+ActionEvaluatorTest >> setUp [
+
+	super setUp.
+
+	evaluator := ActionEvaluator configuredBy: self.
+	wasNotified := false.
+
+	self eventNotificationSystem
+		subscribe: self
+		to: ActionEvaluatedEvent
+		toBeNotifiedSending: #handleActionEvaluatedOn:
+]
+
+{ #category : #'private - running' }
+ActionEvaluatorTest >> setUpRequirements [
+
+	self registerSubsystem: EventNotificationSystem new
+]
 
 { #category : #tests }
 ActionEvaluatorTest >> testEvaluateBlock [
 
-	| evaluated |
+	| wasEvaluated |
 
-	evaluated := false.
-	self deny: evaluated.
+	wasEvaluated := false.
+	self
+		deny: wasEvaluated;
+		deny: wasNotified.
 
-	ActionEvaluator new
-		evaluate:
-			(Action named: 'Send YO to Fran' evaluating: [ evaluated := true ]).
+	evaluator
+		evaluate: (Action named: 'Send YO to Fran' evaluating: [ wasEvaluated := true ]).
 
-	self assert: evaluated
+	self
+		assert: wasEvaluated;
+		assert: wasNotified
 ]
 
 { #category : #tests }
 ActionEvaluatorTest >> testEventHandling [
 
-	| actionEvaluator action actionWasEvaluated |
+	| action wasEvaluated |
 
-	actionWasEvaluated := false.
+	wasEvaluated := false.
 	action := Action
 		named: 'Send YO to Fran'
-		evaluating: [ actionWasEvaluated := true ].
-	actionEvaluator := ActionEvaluator new.
+		evaluating: [ wasEvaluated := true ].
 
-	self deny: actionWasEvaluated.
+	self
+		deny: wasEvaluated;
+		deny: wasNotified.
 
-	actionEvaluator handleEvaluateActionOn: (EvaluateActionEvent of: action).
+	evaluator handleEvaluateActionOn: (EvaluateActionEvent of: action).
 
-	self assert: actionWasEvaluated
+	self
+		assert: wasEvaluated;
+		assert: wasNotified
 ]
 
 { #category : #tests }
 ActionEvaluatorTest >> testSendHttpRequest [
 
-	| evaluated actionEvaluationConfiguration evaluator request |
+	self
+		withServerDo: [ :server | 
+			| wasEvaluated |
 
-	evaluated := false.
-	self deny: evaluated.
+			wasEvaluated := false.
 
-	actionEvaluationConfiguration := PluggableMockObject new
-		respondTo: #httpClient
-		with: [ PluggableMockObject new
-				respondTo: #request: with: [  ];
-				respondTo: #get with: [ evaluated := true ] ].
+			server
+				onRequestRespond: [ :request | 
+					wasEvaluated := true.
+					ZnResponse noContent ].
+			self
+				deny: wasEvaluated;
+				deny: wasNotified.
 
-	evaluator := ActionEvaluator
-		configuredBy: actionEvaluationConfiguration.
-	request := ZnRequest get: 'http://zn.stfx.eu/zn/small.html'.
+			evaluator
+				evaluate:
+					(Action
+						named: 'Send YO to Fran'
+						sending: (ZnRequest get: server localUrl)).
 
-	self deny: evaluated.
+			self
+				assert: wasEvaluated;
+				assert: wasNotified ]
+]
 
-	evaluator
-		evaluate:
-			(Action
-				named: 'Send YO to Fran'
-				sending: request).
-	self assert: evaluated
+{ #category : #'tests support' }
+ActionEvaluatorTest >> withServerDo: aBlock [
+
+	| server |
+
+	server := ZnServer on: 1700 + 32 atRandom.
+	[ server start.
+
+	self
+		assert: server isRunning & server isListening
+		description:
+			('Failed to start server on port {1}. Is there one already?'
+				format: {server port}).
+				
+	aBlock cull: server ]
+		ensure: [ server stop ]
 ]

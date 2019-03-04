@@ -31,6 +31,7 @@ ActionManagementSystemUserStoryTest >> setUpRequirements [
 
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: (TimestampingSystem new);

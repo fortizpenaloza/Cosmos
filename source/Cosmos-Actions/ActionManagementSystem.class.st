@@ -2,7 +2,8 @@ Class {
 	#name : #ActionManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'actions'
+		'actions',
+		'evaluationSummaries'
 	],
 	#category : #'Cosmos-Actions'
 }
@@ -42,13 +43,32 @@ ActionManagementSystem >> assertIsNotAlreadyRegistered: anAction [
 { #category : #installing }
 ActionManagementSystem >> dependencies [
 
-	^ #(#TimestampingSystemInterface #IdentifierSystemInterface)
+	^ #(#TimestampingSystemInterface #IdentifierSystemInterface #EventNotificationSystemInterface)
 ]
 
 { #category : #managing }
 ActionManagementSystem >> deregister: anAction [
 
 	^ actions remove: anAction
+]
+
+{ #category : #systems }
+ActionManagementSystem >> eventNotificationSystem [
+
+	^ self >> #EventNotificationSystemInterface
+]
+
+{ #category : #'events handling' }
+ActionManagementSystem >> handleActionEvaluatedEventOn: anEvent [
+
+	evaluationSummaries
+		at: anEvent action
+		ifPresent: [ :summary | summary updatedOn: GregorianCalendar today ]
+		ifAbsentPut:
+			(ActionEvaluationSummary
+				for: anEvent action
+				lastUpdatedOn: GregorianCalendar today
+				totaling: 1)
 ]
 
 { #category : #'private - systems' }
@@ -67,7 +87,8 @@ ActionManagementSystem >> implementedInterfaces [
 ActionManagementSystem >> initialize [
 
 	super initialize.
-	actions := OrderedCollection new
+	actions := OrderedCollection new.
+	evaluationSummaries := Dictionary new.
 ]
 
 { #category : #accessing }
@@ -98,6 +119,23 @@ ActionManagementSystem >> registerIdentifierFor: anAction [
 ActionManagementSystem >> registerTimestampFor: anAction [
 
 	self timestampingSystem registerModificationFor: anAction
+]
+
+{ #category : #controlling }
+ActionManagementSystem >> startUp [
+
+	super startUp.
+
+	self subscribeToActionEvaluatedEvents
+]
+
+{ #category : #'private - events handling' }
+ActionManagementSystem >> subscribeToActionEvaluatedEvents [
+
+	self eventNotificationSystem
+		subscribe: self
+		to: ActionEvaluatedEvent
+		toBeNotifiedSending: #handleActionEvaluatedEventOn:
 ]
 
 { #category : #'private - systems' }
