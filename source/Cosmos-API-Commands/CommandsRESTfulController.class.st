@@ -16,13 +16,21 @@ CommandsRESTfulController class >> workingWith: aCosmosSystem [
 { #category : #'private - systems' }
 CommandsRESTfulController >> commandManagementSystem [
 
-	^ cosmos systemImplementing: #CommandManagementSystemInterface
+	^ cosmos >> #CommandManagementSystemInterface
 ]
 
 { #category : #'private - API' }
 CommandsRESTfulController >> commandRequestedIn: anHttpRequest [
 
 	^ self commandManagementSystem commandIdentifiedBy: (anHttpRequest at: #identifier)
+]
+
+{ #category : #'private - API' }
+CommandsRESTfulController >> commandsOrderedAccordingTo: orderingPolicy [
+
+	^ orderingPolicy = 'priority'
+		ifTrue: [ self commandManagementSystem prioritizedCommands ]
+		ifFalse: [ self commandManagementSystem commands ]
 ]
 
 { #category : #API }
@@ -86,8 +94,10 @@ CommandsRESTfulController >> getCommandBasedOn: anHttpRequest within: aContext [
 CommandsRESTfulController >> getCommandsBasedOn: anHttpRequest within: aContext [
 
 	^ self
-		get: [ self commandManagementSystem commands ]
-		asCollectionEncodedUsing: self specification commandsMappingKey 
+		get: [ self
+				withOrderingPolicyRequestedIn: anHttpRequest
+				do: [ :orderingPolicy | self commandsOrderedAccordingTo: orderingPolicy ] ]
+		asCollectionEncodedUsing: self specification commandsMappingKey
 		basedOn: anHttpRequest
 		within: aContext
 ]
@@ -101,7 +111,7 @@ CommandsRESTfulController >> identifierOf: aCommandWithPriority [
 { #category : #'private - systems' }
 CommandsRESTfulController >> identifierSystem [
 
-	^ cosmos systemImplementing: #IdentifierSystemInterface
+	^ cosmos >> #IdentifierSystemInterface
 ]
 
 { #category : #initialization }
@@ -149,11 +159,18 @@ CommandsRESTfulController >> specification [
 { #category : #'private - systems' }
 CommandsRESTfulController >> timestampingSystem [
 
-	^ cosmos systemImplementing: #TimestampingSystemInterface
+	^ cosmos >> #TimestampingSystemInterface
 ]
 
 { #category : #'private - API' }
 CommandsRESTfulController >> withCommandRequestedIn: anHttpRequest do: aBlock [
 
 	aBlock value: (self commandRequestedIn: anHttpRequest)
+]
+
+{ #category : #'private - API' }
+CommandsRESTfulController >> withOrderingPolicyRequestedIn: anHttpRequest do: aBlock [
+
+	^ aBlock
+		value: (anHttpRequest at: #order ifAbsent: [ 'registration' ])
 ]

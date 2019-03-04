@@ -26,14 +26,9 @@ CommandsRESTfulControllerTest >> identifierProvider [
 CommandsRESTfulControllerTest >> identifierSequence [
 
 	^ {self turnOnLedWithHighestPriorityIndentifier.
+	self turnOnLedWithLowestPriorityIdentifier.
 	self turnOffLedWithMediumPriorityIdentifier.
-	(UUID fromString: 'a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c')}
-]
-
-{ #category : #'tests - support' }
-CommandsRESTfulControllerTest >> installLedCommandsAddOn [
-
-	^ (LEDCommandsAddOn on: rootSystem) install
+	(UUID fromString: '4ffbff8b-9c3f-0d00-bdbd-482504a01069')}
 ]
 
 { #category : #'private - requests' }
@@ -69,6 +64,25 @@ CommandsRESTfulControllerTest >> requestToGetCommandsAccepting: aMediaType [
 	^ self requestToGetResourcesAccepting: aMediaType
 ]
 
+{ #category : #tests }
+CommandsRESTfulControllerTest >> requestToGetCommandsOrderedAccoringTo: order accepting: mediaType [
+
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest get: self resourceUrl)
+				setAccept: mediaType;
+				yourself)
+		pathParams: {(#order -> order)} asDictionary
+]
+
+{ #category : #running }
+CommandsRESTfulControllerTest >> setUp [
+
+	super setUp.
+
+	(LEDCommandsAddOn on: rootSystem) install
+]
+
 { #category : #running }
 CommandsRESTfulControllerTest >> setUpRequirements [
 
@@ -100,35 +114,36 @@ CommandsRESTfulControllerTest >> systemDateTime [
 { #category : #tests }
 CommandsRESTfulControllerTest >> testCreateCommand [
 
-	| response |
+	| response commandWithPriority |
 
-	self assert: self commandManagementSystem commands isEmpty.
+	self assert: self commandManagementSystem commands size equals: 3.
 
 	response := resourceController
-		createCommandBasedOn: (self requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
+		createCommandBasedOn:
+			(self
+				requestToCreateCommandFrom: '{"command":"TURN_ON_LED","priority":100}')
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc';
+			equals:
+			'https://tests.cosmos.com/commands/4ffbff8b-9c3f-0d00-bdbd-482504a01069';
 		assert: response contentType equals: self textPlain.
 
+	self assert: self commandManagementSystem commands size equals: 4.
+	commandWithPriority := self commandManagementSystem commands last.
+
 	self
-		withTheOnlyOneIn: self commandManagementSystem commands
-		do: [ :commandWithPriority | 
-			self
-				assert: commandWithPriority command equals: 'TURN_ON_LED';
-				assert: commandWithPriority priority equals: 100 ]
+		assert: commandWithPriority command equals: 'TURN_ON_LED';
+		assert: commandWithPriority priority equals: 100
 ]
 
 { #category : #tests }
 CommandsRESTfulControllerTest >> testDeleteCommand [
 
 	| response |
-
-	self installLedCommandsAddOn.
 
 	self assert: self commandManagementSystem commands size equals: 3.
 
@@ -148,8 +163,6 @@ CommandsRESTfulControllerTest >> testDequeueCommandEncodedAsJson [
 
 	| response |
 
-	self installLedCommandsAddOn.
-
 	response := resourceController
 		dequeueCommandBasedOn:
 			(self
@@ -164,15 +177,13 @@ CommandsRESTfulControllerTest >> testDequeueCommandEncodedAsJson [
 
 	self
 		assert: response contents
-		equals: '{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}'
+		equals: '{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}}'
 ]
 
 { #category : #tests }
 CommandsRESTfulControllerTest >> testDequeueCommandEncodedAsPlainText [
 
 	| response |
-
-	self installLedCommandsAddOn.
 
 	response := resourceController
 		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
@@ -191,8 +202,6 @@ CommandsRESTfulControllerTest >> testGetCommand [
 
 	| response |
 
-	self installLedCommandsAddOn.
-
 	response := resourceController
 		getCommandBasedOn:
 			(self
@@ -208,7 +217,7 @@ CommandsRESTfulControllerTest >> testGetCommand [
 		withJsonFromContentsIn: response contents
 			do: [ :json | 
 			self
-				assert: json priority equals: 100;
+				assert: json priority equals: 1;
 				assert: json command equals: 'TURN_ON_LED';
 				assert: json links self
 					equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc' ]
@@ -218,8 +227,6 @@ CommandsRESTfulControllerTest >> testGetCommand [
 CommandsRESTfulControllerTest >> testGetCommands [
 
 	| response |
-
-	self installLedCommandsAddOn.
 
 	response := resourceController
 		getCommandsBasedOn: (self requestToGetCommandsAccepting: self applicationJsonVersion1dot0dot0MediaType)
@@ -231,7 +238,31 @@ CommandsRESTfulControllerTest >> testGetCommands [
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response contents
 			equals:
-			'[{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}},{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}}]'
+			'[{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}},{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}}]'
+]
+
+{ #category : #tests }
+CommandsRESTfulControllerTest >> testGetPrioritizedCommands [
+
+	| response orderingPolicy mediaType |
+
+	orderingPolicy := 'priority'.
+	mediaType := self applicationJsonVersion1dot0dot0MediaType.
+
+	response := resourceController
+		getCommandsBasedOn:
+			(self
+				requestToGetCommandsOrderedAccoringTo: orderingPolicy
+				accepting: mediaType)
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 200;
+		assert: response contentType equals: mediaType;
+		assert: response contents
+			equals:
+			'[{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}},{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}]'
 ]
 
 { #category : #'private - media types' }
@@ -250,4 +281,10 @@ CommandsRESTfulControllerTest >> turnOffLedWithMediumPriorityIdentifier [
 CommandsRESTfulControllerTest >> turnOnLedWithHighestPriorityIndentifier [
 
 	^ UUID fromString: 'af1ac24c-6c37-0d00-8b39-e65c01b794dc'
+]
+
+{ #category : #'private - accessing' }
+CommandsRESTfulControllerTest >> turnOnLedWithLowestPriorityIdentifier [
+
+	^ UUID fromString: 'a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c'
 ]
