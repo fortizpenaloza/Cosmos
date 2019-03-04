@@ -13,6 +13,12 @@ ActionEvaluatedEvent class >> for: anAction [
 	^ self new initializeFor: anAction
 ]
 
+{ #category : #accessing }
+ActionEvaluatedEvent >> action [
+
+	^ action
+]
+
 { #category : #initialization }
 ActionEvaluatedEvent >> initializeFor: anAction [ 
 	

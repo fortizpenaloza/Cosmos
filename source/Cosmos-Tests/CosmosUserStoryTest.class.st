@@ -17,7 +17,9 @@ CosmosUserStoryTest >> eightPM [
 { #category : #'action evaluation' }
 CosmosUserStoryTest >> evaluateActionOn: anEvaluateActionEvent [
 
-	ActionEvaluator new evaluate: anEvaluateActionEvent action
+	(ActionEvaluator
+		configuredBy: (ActionEvaluatorConfiguration workingWith: rootSystem))
+		evaluate: anEvaluateActionEvent action
 ]
 
 { #category : #systems }
