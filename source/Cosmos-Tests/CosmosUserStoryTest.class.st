@@ -58,7 +58,7 @@ CosmosUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
+		evaluating: [ triggered := true ]
 ]
 
 { #category : #'private - accessing' }

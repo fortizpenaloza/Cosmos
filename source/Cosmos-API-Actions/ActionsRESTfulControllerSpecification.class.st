@@ -15,9 +15,7 @@ ActionsRESTfulControllerSpecification >> actionJsonDecoderVersion1dot0dot0 [
 				decoder: [ :rawAction | 
 					Action
 						named: (rawAction at: #name)
-						evaluating:
-							(SendHttpRequestPolicy
-								sending: (HTTPRequestDecoder new decode: (rawAction at: #http_request))) ] ];
+						sending: (HTTPRequestDecoder new decode: (rawAction at: #http_request)) ] ];
 		nextAs: Action ]
 ]
 
@@ -31,10 +29,12 @@ ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 				for: Action
 					do: [ :mapping | 
 					mapping mapInstVar: #name.
-					(mapping mapInstVar: #evaluationPolicy to: #http_request) valueSchema: #Policy.
+					(mapping mapInstVar: #evaluationPolicy to: #http_request)
+						valueSchema: #Policy.
 					mapping mapHypermediaControlsIn: context ];
 				for: #Policy
-					customDo: [ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :policy | policy instVarNamed: #requestToSend ] ];
 				for: ZnRequest
 					do: [ :mapping | 
 					mapping
@@ -47,17 +47,28 @@ ActionsRESTfulControllerSpecification >> actionJsonEncoderVersion1dot0dot0 [
 						mapAccessor: #method;
 						mapAccessor: #uri to: #url;
 						mapInstVar: #version ];
-				for: ZnUrl customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
+				for: ZnUrl
+					customDo: [ :mapping | mapping encoder: [ :url | url printString ] ];
 				for: ZnHeaders
-					customDo: [ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
+					customDo:
+						[ :mapping | mapping encoder: [ :headers | headers headers associations ] ];
+				for: ZnStringEntity
+					do: [ :mapping | 
+					mapping
+						mapAccessor: #contentType;
+						mapAccessor: #contents ];
+				for: ZnMimeType
+					customDo: [ :mapping | mapping encoder: [ :mimeType | mimeType printString ] ];
 				for: Association
 					do: [ :mapping | 
 					mapping
 						mapAccessor: #key;
 						mapAccessor: #value ];
 				for: DateTime
-					customDo:
-						[ :mapping | mapping encoder: [ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
+					customDo: [ :mapping | 
+					mapping
+						encoder:
+							[ :dateTime | ISO8601DateTimeFormatter usingExtendedFormat format: dateTime ] ];
 				nextPut: action ] ]
 ]
 

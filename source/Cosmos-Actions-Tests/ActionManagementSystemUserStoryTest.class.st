@@ -15,7 +15,7 @@ ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
 
 	^ Action
 		named: 'Send text message to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
+		evaluating: [ "do nothing" ]
 ]
 
 { #category : #accessing }
@@ -23,7 +23,7 @@ ActionManagementSystemUserStoryTest >> sendYOToFran [
 
 	^ Action
 		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
+		evaluating: [ "do nothing" ]
 ]
 
 { #category : #'private - running' }

@@ -16,13 +16,13 @@ ActionEvaluator class >> configuredBy: aConfiguration [
 { #category : #evaluating }
 ActionEvaluator >> evaluate: anAction [ 
 
-	anAction evaluateWith: configuration  
+	anAction evaluateWithin: configuration  
 ]
 
 { #category : #'events handling' }
-ActionEvaluator >> evaluateOn: anEvaluateActionEvent [ 
+ActionEvaluator >> handleEvaluateActionOn: anEvent [ 
 	
-	self evaluate: anEvaluateActionEvent action
+	self evaluate: anEvent action
 ]
 
 { #category : #initialization }

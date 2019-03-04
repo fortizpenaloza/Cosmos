@@ -21,7 +21,7 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		evaluating: (EvaluateBlockPolicy for: [ "triggered := true" ])
+		evaluating: [ "do nothing" ]
 ]
 
 { #category : #accessing }

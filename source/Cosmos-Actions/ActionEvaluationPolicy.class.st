@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #evaluating }
-ActionEvaluationPolicy >> evaluateWith: anActionEvaluatorConfiguration [
+ActionEvaluationPolicy >> evaluateWithin: anEvaluationContext [
 
 	self subclassResponsibility 
 ]

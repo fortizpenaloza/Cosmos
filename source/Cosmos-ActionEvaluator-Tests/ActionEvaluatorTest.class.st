@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #tests }
-ActionEvaluatorTest >> testActionBlockEvaluation [
+ActionEvaluatorTest >> testEvaluateBlock [
 
 	| evaluated |
 
@@ -14,33 +14,31 @@ ActionEvaluatorTest >> testActionBlockEvaluation [
 
 	ActionEvaluator new
 		evaluate:
-			(Action
-				named: 'Send YO to Fran'
-				evaluating: (EvaluateBlockPolicy for: [ evaluated := true ])).
+			(Action named: 'Send YO to Fran' evaluating: [ evaluated := true ]).
 
 	self assert: evaluated
 ]
 
 { #category : #tests }
-ActionEvaluatorTest >> testActionEvaluationTroughtEventNotification [
+ActionEvaluatorTest >> testEventHandling [
 
 	| actionEvaluator action actionWasEvaluated |
-	
+
 	actionWasEvaluated := false.
 	action := Action
 		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ actionWasEvaluated := true ]).
+		evaluating: [ actionWasEvaluated := true ].
 	actionEvaluator := ActionEvaluator new.
-	
+
 	self deny: actionWasEvaluated.
-	
-	actionEvaluator evaluateOn: (EvaluateActionEvent of: action).
+
+	actionEvaluator handleEvaluateActionOn: (EvaluateActionEvent of: action).
 
 	self assert: actionWasEvaluated
 ]
 
 { #category : #tests }
-ActionEvaluatorTest >> testActionHTTPRequestEvaluation [
+ActionEvaluatorTest >> testSendHttpRequest [
 
 	| evaluated actionEvaluationConfiguration evaluator request |
 
@@ -63,6 +61,6 @@ ActionEvaluatorTest >> testActionHTTPRequestEvaluation [
 		evaluate:
 			(Action
 				named: 'Send YO to Fran'
-				evaluating: (SendHttpRequestPolicy sending: request)).
+				sending: request).
 	self assert: evaluated
 ]
