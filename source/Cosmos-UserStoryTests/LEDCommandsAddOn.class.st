@@ -28,10 +28,10 @@ LEDCommandsAddOn class >> turnOnLedCommand [
 { #category : #systems }
 LEDCommandsAddOn >> commandManagementSystem [
 
-	^ rootSystem systemImplementing: #CommandManagementSystemInterface
+	^ rootSystem >> #CommandManagementSystemInterface
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 LEDCommandsAddOn >> initializeOn: aCompositeSystem [ 
 	
 	rootSystem := aCompositeSystem 
@@ -41,11 +41,11 @@ LEDCommandsAddOn >> initializeOn: aCompositeSystem [
 LEDCommandsAddOn >> install [
 
 	self commandManagementSystem
+		register: (CommandWithPriority holding: self class turnOnLedCommand and: 1).
+
+	self commandManagementSystem
 		register: (CommandWithPriority holding: self class turnOnLedCommand and: 100).
-
+		
 	self commandManagementSystem
-		register: (CommandWithPriority holding: self class turnOffLedCommand and: 50).
-
-	self commandManagementSystem
-		register: (CommandWithPriority holding: self class turnOnLedCommand and: 1)
+		register: (CommandWithPriority holding: self class turnOffLedCommand and: 50)
 ]
