@@ -1,7 +1,7 @@
-Extension { #name : #TestCase }
+Extension { #name : #TestAsserter }
 
 { #category : #'*Cosmos-Tests' }
-TestCase >> assert: referenceSequenceableCollection hasTheSameElementsInTheSameOrderThat: sequenceableCollectionToCompare [
+TestAsserter >> assert: referenceSequenceableCollection hasSameElementsInOrderAs: sequenceableCollectionToCompare [
 
 	self
 		assert: referenceSequenceableCollection isSequenceable;

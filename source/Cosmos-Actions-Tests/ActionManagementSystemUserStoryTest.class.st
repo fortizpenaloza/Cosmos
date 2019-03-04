@@ -49,13 +49,13 @@ ActionManagementSystemUserStoryTest >> testDeregistration [
 
 	| action |
 
-	action := self sendYOToFran.	
-		
+	action := self sendYOToFran.
+
 	self actionManagementSystem register: action.
 	self
-		assert: self actionManagementSystem actions
-		hasTheSameElementsInTheSameOrderThat: {action}.
-		
+		assertCollection: self actionManagementSystem actions
+		hasSameElements: {action}.
+
 	self actionManagementSystem deregister: action.
 	self assert: self actionManagementSystem actions isEmpty
 ]
@@ -106,7 +106,7 @@ ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 
 	self
 		assert: self actionManagementSystem actions
-		hasTheSameElementsInTheSameOrderThat:
+		hasSameElementsInOrderAs:
 			{action.
 			anotherAction}
 ]

@@ -96,8 +96,8 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 	self triggerManagementSystem register: trigger.
 	
 	self
-		assert: self triggerManagementSystem triggers
-		hasTheSameElementsInTheSameOrderThat: {trigger}.
+		assertCollection: self triggerManagementSystem triggers
+		hasSameElements: {trigger}.
 		
 	self triggerManagementSystem deregister: trigger.
 	
@@ -113,8 +113,8 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream.
 	self triggerManagementSystem register: trigger.
 	self
-		assert: self triggerManagementSystem triggers
-		hasTheSameElementsInTheSameOrderThat: {trigger}.
+		assertCollection: self triggerManagementSystem triggers
+		hasSameElements: {trigger}.
 
 	self triggerManagementSystem deregister: trigger.
 
