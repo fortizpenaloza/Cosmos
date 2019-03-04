@@ -28,7 +28,7 @@ ActionTriggerTest >> testInstanceCreationAndAccessing [
 			equals: 'Set triggered to true periodically every 5 minutes';
 		deny: triggered.
 
-	trigger ifSatisfiedOn: nil withActionDo: [ :action | action value ].
+	trigger do: [ :action | action value ] ifSatisfiedWithin: nil.
 	self assert: triggered
 ]
 

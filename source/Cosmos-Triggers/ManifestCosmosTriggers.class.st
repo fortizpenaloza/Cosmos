@@ -12,5 +12,5 @@ ManifestCosmosTriggers class >> initialize [
 		registerInterfaceAt: #TriggerManagementSystemInterface
 		named: 'Trigger Management System Interface'
 		declaring:
-			#(#register: #deregister: #havePassed: #dataPointRegisteredOn: #triggers #triggerIdentifiedBy:)
+			#(#register: #deregister: #handleTickOn: #handleDataPointRegistrationOn: #triggers #triggerIdentifiedBy:)
 ]

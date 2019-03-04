@@ -25,7 +25,7 @@ ActionEvaluator >> evaluateOn: anEvaluateActionEvent [
 	self evaluate: anEvaluateActionEvent action
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #initialization }
 ActionEvaluator >> initializeConfiguredBy: aConfiguration [
 
 	configuration := aConfiguration  

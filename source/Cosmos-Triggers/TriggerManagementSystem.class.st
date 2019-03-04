@@ -16,16 +16,6 @@ Class {
 	#category : #'Cosmos-Triggers-SystemModel'
 }
 
-{ #category : #'events handling' }
-TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
-
-	(self triggersToTriggerAfterDataPointRegistrationOn: anEvent dataStream)
-		do: [ :trigger | 
-			trigger
-				ifSatisfiedOn: self triggeringContext
-				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
-]
-
 { #category : #installing }
 TriggerManagementSystem >> dependencies [
 
@@ -57,6 +47,22 @@ TriggerManagementSystem >> deregister: aTrigger toStopTriggeringAfterDataPointRe
 	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: aTrigger 	
 ]
 
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> do: aBlock withSatisfiedTriggersWithin: aTriggeringContext afterDataPointWasRegisteredOn: aDataStream [
+
+	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream)
+		do:
+			[ :actionTrigger | actionTrigger do: aBlock ifSatisfiedWithin: aTriggeringContext ]
+]
+
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> do: aBlock withSatisfiedTriggersWithin: aTriggeringContext havingPassed: aTimePeriod [
+
+	(self triggersToTriggerPeriodicallyEvery: aTimePeriod)
+		do:
+			[ :actionTrigger | actionTrigger do: aBlock ifSatisfiedWithin: aTriggeringContext ]
+]
+
 { #category : #'private - systems' }
 TriggerManagementSystem >> eventNotificationSystem [
 	
@@ -64,13 +70,21 @@ TriggerManagementSystem >> eventNotificationSystem [
 ]
 
 { #category : #'events handling' }
-TriggerManagementSystem >> havePassed: aTickEvent [
-	
-	(self triggersToTriggerPeriodicallyEvery: aTickEvent timePeriod)
-		do: [ :trigger | 
-			trigger
-				ifSatisfiedOn: self triggeringContext
-				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
+TriggerManagementSystem >> handleDataPointRegistrationOn: anEvent [
+
+	self
+		do: [ :action | self notifyEvaluationOf: action ]
+		withSatisfiedTriggersWithin: self triggeringContext
+		afterDataPointWasRegisteredOn: anEvent dataStream
+]
+
+{ #category : #'events handling' }
+TriggerManagementSystem >> handleTickOn: anEvent [
+
+	self
+		do: [ :action | self notifyEvaluationOf: action ]
+		withSatisfiedTriggersWithin: self triggeringContext
+		havingPassed: anEvent timePeriod
 ]
 
 { #category : #'private - systems' }
@@ -90,6 +104,7 @@ TriggerManagementSystem >> initialize [
 
 	super initialize.
 	triggers := OrderedCollection new.
+	
 	triggersToTriggerAfterDataPointRegistration := Dictionary new.
 	triggersToTriggerPeriodically := Dictionary new
 ]
@@ -100,10 +115,11 @@ TriggerManagementSystem >> name [
 	^ 'Trigger Management'
 ]
 
-{ #category : #'events handling' }
-TriggerManagementSystem >> notifyEvaluationOf: action [
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> notifyEvaluationOf: anAction [
 
-	^ self eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: action)
+	self eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: anAction)
+	
 ]
 
 { #category : #managing }
@@ -111,9 +127,12 @@ TriggerManagementSystem >> register: anActionTrigger [
 
 	self
 		triggerNamed: anActionTrigger name
-		ifFound:
-			[ :trigger | ConflictingObjectFound signal: 'Trigger with that name already exists in system' ]
-		ifNone: [ self register: anActionTrigger accordingTo: anActionTrigger triggeringPolicy ]
+		ifFound: [ :trigger | 
+			ConflictingObjectFound
+				signal: 'Trigger with that name already exists in system' ]
+		ifNone: [ self
+				register: anActionTrigger
+				accordingTo: anActionTrigger triggeringPolicy ]
 ]
 
 { #category : #'private - managing' }
@@ -160,8 +179,9 @@ TriggerManagementSystem >> registerTimestampFor: anActionTrigger [
 TriggerManagementSystem >> startUp [
 
 	super startUp.
-	self subscribeToDataPointRegistrationEvents .
-	self subscribeToTickEvents 
+	
+	self subscribeToDataPointRegistrationEvents.
+	self subscribeToTickEvents
 ]
 
 { #category : #'private - subscribing' }
@@ -170,7 +190,7 @@ TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 	self eventNotificationSystem
 		subscribe: self
 		to: DataPointRegistrationEvent
-		toBeNotifiedSending: #dataPointRegisteredOn:
+		toBeNotifiedSending: #handleDataPointRegistrationOn:
 ]
 
 { #category : #'private - subscribing' }
@@ -179,7 +199,7 @@ TriggerManagementSystem >> subscribeToTickEvents [
 	self eventNotificationSystem
 		subscribe: self
 		to: TickEvent
-		toBeNotifiedSending: #havePassed:
+		toBeNotifiedSending: #handleTickOn:
 ]
 
 { #category : #'private - systems' }
