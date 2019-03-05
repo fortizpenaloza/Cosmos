@@ -13,7 +13,7 @@ DataPointsRESTfulControllerSpecification >> addDataPointsDecoderVersion1dot0dot0
 		using: self dataPointsDecoderVersion1dot0dot0
 ]
 
-{ #category : #'specification - encoders and decoders' }
+{ #category : #'media types' }
 DataPointsRESTfulControllerSpecification >> applicationJsonVersion1dot0dot0MediaType [
 
 	^ 'application/json;version=1.0.0' asMediaType

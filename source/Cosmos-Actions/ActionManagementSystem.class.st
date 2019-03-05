@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : #querying }
+ActionManagementSystem >> actionEvaluationSummaries [
+	
+	^ evaluationSummaries values
+]
+
+{ #category : #querying }
 ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
 
 	^ self identifierSystem
