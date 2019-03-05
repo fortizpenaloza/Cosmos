@@ -14,6 +14,12 @@ ActionEvaluatorConfiguration class >> workingWith: aCosmosSystem [
 ]
 
 { #category : #accessing }
+ActionEvaluatorConfiguration >> currentDateTime [
+
+	^ (cosmos >> #TimeSystemInterface) dateTime
+]
+
+{ #category : #accessing }
 ActionEvaluatorConfiguration >> eventNotificationSystem [
 
 	^ cosmos >> #EventNotificationSystemInterface
