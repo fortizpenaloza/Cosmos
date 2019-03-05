@@ -59,15 +59,15 @@ ActionManagementSystem >> eventNotificationSystem [
 ]
 
 { #category : #'events handling' }
-ActionManagementSystem >> handleActionEvaluatedEventOn: anEvent [
+ActionManagementSystem >> handleActionEvaluatedOn: anEvent [
 
 	evaluationSummaries
 		at: anEvent action
-		ifPresent: [ :summary | summary updatedOn: GregorianCalendar today ]
+		ifPresent: [ :summary | summary registerEvaluationOn: anEvent evaluationDateTime ]
 		ifAbsentPut:
 			(ActionEvaluationSummary
 				of: anEvent action
-				lastEvaluatedOn: GregorianCalendar today
+				lastEvaluatedOn: anEvent evaluationDateTime
 				totaling: 1)
 ]
 
@@ -135,7 +135,7 @@ ActionManagementSystem >> subscribeToActionEvaluatedEvents [
 	self eventNotificationSystem
 		subscribe: self
 		to: ActionEvaluatedEvent
-		toBeNotifiedSending: #handleActionEvaluatedEventOn:
+		toBeNotifiedSending: #handleActionEvaluatedOn:
 ]
 
 { #category : #'private - systems' }

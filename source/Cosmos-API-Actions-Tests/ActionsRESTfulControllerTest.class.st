@@ -131,6 +131,7 @@ ActionsRESTfulControllerTest >> setUpRequirements [
 	
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);

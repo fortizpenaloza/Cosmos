@@ -8,6 +8,12 @@ Class {
 	#category : #'Cosmos-ActionEvaluator-Tests'
 }
 
+{ #category : #accessing }
+ActionEvaluatorTest >> currentDateTime [
+
+	^ (rootSystem >> #TimeSystemInterface) dateTime
+]
+
 { #category : #'private - mocking' }
 ActionEvaluatorTest >> eventNotificationSystem [
 
@@ -43,7 +49,9 @@ ActionEvaluatorTest >> setUp [
 { #category : #'private - running' }
 ActionEvaluatorTest >> setUpRequirements [
 
-	self registerSubsystem: EventNotificationSystem new
+	self
+		registerSubsystem: (TimeSystem using: SystemTimeSource new);
+		registerSubsystem: EventNotificationSystem new
 ]
 
 { #category : #tests }

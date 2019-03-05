@@ -2,15 +2,16 @@ Class {
 	#name : #ActionEvaluatedEvent,
 	#superclass : #NotifiableEvent,
 	#instVars : [
-		'action'
+		'action',
+		'evaluationDateTime'
 	],
 	#category : #'Cosmos-Actions'
 }
 
 { #category : #'instance creation' }
-ActionEvaluatedEvent class >> for: anAction [ 
+ActionEvaluatedEvent class >> of: anAction on: aDateTime [ 
 	
-	^ self new initializeFor: anAction
+	^ self new initializeOf: anAction on: aDateTime
 ]
 
 { #category : #accessing }
@@ -19,8 +20,15 @@ ActionEvaluatedEvent >> action [
 	^ action
 ]
 
+{ #category : #accessing }
+ActionEvaluatedEvent >> evaluationDateTime [
+
+	^ evaluationDateTime
+]
+
 { #category : #initialization }
-ActionEvaluatedEvent >> initializeFor: anAction [ 
+ActionEvaluatedEvent >> initializeOf: anAction on: aDateTime [
 	
-	action := anAction 
+	action := anAction.
+	evaluationDateTime := aDateTime
 ]

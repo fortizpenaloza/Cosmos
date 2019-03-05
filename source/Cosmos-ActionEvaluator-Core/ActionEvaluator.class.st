@@ -13,6 +13,12 @@ ActionEvaluator class >> configuredBy: aConfiguration [
 	^ self new initializeConfiguredBy: aConfiguration
 ]
 
+{ #category : #accessing }
+ActionEvaluator >> currentDateTime [
+
+	^ configuration currentDateTime
+]
+
 { #category : #evaluating }
 ActionEvaluator >> evaluate: anAction [
 
@@ -41,5 +47,6 @@ ActionEvaluator >> initializeConfiguredBy: aConfiguration [
 { #category : #evaluating }
 ActionEvaluator >> notifyEvaluationOf: anAction [
 
-	self eventNotificationSystem notifySubscribersTo: (ActionEvaluatedEvent for: anAction)
+	self eventNotificationSystem
+		notifySubscribersTo: (ActionEvaluatedEvent of: anAction on: self currentDateTime)
 ]
