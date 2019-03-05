@@ -66,8 +66,8 @@ ActionManagementSystem >> handleActionEvaluatedEventOn: anEvent [
 		ifPresent: [ :summary | summary updatedOn: GregorianCalendar today ]
 		ifAbsentPut:
 			(ActionEvaluationSummary
-				for: anEvent action
-				lastUpdatedOn: GregorianCalendar today
+				of: anEvent action
+				lastEvaluatedOn: GregorianCalendar today
 				totaling: 1)
 ]
 
