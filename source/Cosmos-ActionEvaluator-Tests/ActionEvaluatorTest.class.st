@@ -3,18 +3,13 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'evaluator',
-		'wasNotified'
+		'wasNotified',
+		'wasEvaluated'
 	],
 	#category : #'Cosmos-ActionEvaluator-Tests'
 }
 
-{ #category : #accessing }
-ActionEvaluatorTest >> currentDateTime [
-
-	^ (rootSystem >> #TimeSystemInterface) dateTime
-]
-
-{ #category : #'private - mocking' }
+{ #category : #'private - systems' }
 ActionEvaluatorTest >> eventNotificationSystem [
 
 	^ rootSystem >> #EventNotificationSystemInterface
@@ -26,19 +21,16 @@ ActionEvaluatorTest >> handleActionEvaluatedOn: anEvent [
 	wasNotified := true
 ]
 
-{ #category : #'private - mocking' }
-ActionEvaluatorTest >> httpClient [ 
-	
-	^ ZnClient new
-]
-
-{ #category : #tests }
+{ #category : #running }
 ActionEvaluatorTest >> setUp [
 
 	super setUp.
-
-	evaluator := ActionEvaluator configuredBy: self.
+	
+	wasEvaluated := false.
 	wasNotified := false.
+
+	evaluator := ActionEvaluator
+		configuredBy: (ActionEvaluatorConfiguration workingWith: rootSystem).
 
 	self eventNotificationSystem
 		subscribe: self
@@ -57,9 +49,6 @@ ActionEvaluatorTest >> setUpRequirements [
 { #category : #tests }
 ActionEvaluatorTest >> testEvaluateBlock [
 
-	| wasEvaluated |
-
-	wasEvaluated := false.
 	self
 		deny: wasEvaluated;
 		deny: wasNotified.
@@ -75,9 +64,8 @@ ActionEvaluatorTest >> testEvaluateBlock [
 { #category : #tests }
 ActionEvaluatorTest >> testEventHandling [
 
-	| action wasEvaluated |
+	| action |
 
-	wasEvaluated := false.
 	action := Action
 		named: 'Send YO to Fran'
 		evaluating: [ wasEvaluated := true ].
@@ -98,9 +86,6 @@ ActionEvaluatorTest >> testSendHttpRequest [
 
 	self
 		withServerDo: [ :server | 
-			| wasEvaluated |
-
-			wasEvaluated := false.
 
 			server
 				onRequestRespond: [ :request | 
