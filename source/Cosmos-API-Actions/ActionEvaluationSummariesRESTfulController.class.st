@@ -36,12 +36,6 @@ ActionEvaluationSummariesRESTfulController >> initializeWorkingWith: aCosmosSyst
 ]
 
 { #category : #'private - accessing' }
-ActionEvaluationSummariesRESTfulController >> locationOf: resource [
-
-	self halt
-]
-
-{ #category : #'private - accessing' }
 ActionEvaluationSummariesRESTfulController >> provideHypermediaPolicy [
 	
 	^ NonHypermediaDrivenRESTfulControllerPolicy new

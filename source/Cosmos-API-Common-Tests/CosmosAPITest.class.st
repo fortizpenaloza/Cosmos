@@ -41,6 +41,7 @@ CosmosAPITest >> setUp [
 			(DataPointsRESTfulController workingWith: rootSystem).
 			(CommandsRESTfulController workingWith: rootSystem).
 			(ActionsRESTfulController workingWith: rootSystem).
+			(ActionEvaluationSummariesRESTfulController workingWith: rootSystem).
 			(TriggersRESTfulController workingWith: rootSystem)}.
 
 	api

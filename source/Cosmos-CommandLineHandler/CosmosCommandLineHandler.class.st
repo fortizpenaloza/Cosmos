@@ -110,6 +110,7 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 			(DataPointsRESTfulController workingWith: cosmos).
 			(CommandsRESTfulController workingWith: cosmos).
 			(ActionsRESTfulController workingWith: cosmos).
+			(ActionEvaluationSummariesRESTfulController workingWith: cosmos).
 			(TriggersRESTfulController workingWith: cosmos)}.
 
 	self addDumpStackErrorHandlerOn: api.

@@ -10,13 +10,22 @@ ActionEvaluationSummariesRESTfulControllerTest >> applicationJsonVersion1dot0dot
 	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
 ]
 
+{ #category : #accessing }
+ActionEvaluationSummariesRESTfulControllerTest >> aprilEleventh2019AtNoon [
+
+	^ DateTime 
+		date: April eleventh , 2019
+		timeOfDay: TimeOfDay noon 
+		zone: TimeZones buenosAires
+]
+
 { #category : #'private - accessing' }
 ActionEvaluationSummariesRESTfulControllerTest >> baseUrl [
 
 	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'tests support' }
 ActionEvaluationSummariesRESTfulControllerTest >> registerGetDNSZones [
 
 	| action |
@@ -64,7 +73,7 @@ ActionEvaluationSummariesRESTfulControllerTest >> setUpResourceController [
 	resourceController := ActionEvaluationSummariesRESTfulController workingWith: rootSystem.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ActionEvaluationSummariesRESTfulControllerTest >> systemDateTime [
 
 	^ DateTime 
@@ -80,6 +89,34 @@ ActionEvaluationSummariesRESTfulControllerTest >> testGetActionEvaluationSummari
 
 	self registerGetDNSZones.
 
+	self actionManagementSystem
+		handleActionEvaluatedOn:
+			(ActionEvaluatedEvent
+				of: self actionManagementSystem actions first
+				on: self aprilEleventh2019AtNoon).
+
+	response := resourceController
+		getActionEvaluationSummariesBasedOn:
+			(self
+				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		within: self httpRequestContext.
+
+	self
+		deny: self actionManagementSystem actionEvaluationSummaries isEmpty.
+	self
+		assert: response code equals: 200;
+		assert: response contents
+			equals:
+			'[{"action":{"name":"Get DNS zones"},"lastEvaluation":"2019-04-11T12:00:00-03:00","evaluationCount":1}]'
+]
+
+{ #category : #tests }
+ActionEvaluationSummariesRESTfulControllerTest >> testGetActionEvaluationSummariesEmpty [
+
+	| response |
+
+	self registerGetDNSZones.
+
 	response := resourceController
 		getActionEvaluationSummariesBasedOn:
 			(self
@@ -89,30 +126,4 @@ ActionEvaluationSummariesRESTfulControllerTest >> testGetActionEvaluationSummari
 	self
 		assert: response code equals: 200;
 		assert: response contents equals: '[]'
-]
-
-{ #category : #tests }
-ActionEvaluationSummariesRESTfulControllerTest >> testGetActionEvaluationSummaries2 [
-
-	| response |
-
-	self
-		registerGetDNSZones.
-
-	self actionManagementSystem
-		handleActionEvaluatedOn:
-			(ActionEvaluatedEvent
-				of: self actionManagementSystem actions first
-				on: (April eleventh , 2019) atNoon).
-
-	response := resourceController
-		getActionEvaluationSummariesBasedOn: (self
-				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
-		within: self httpRequestContext.
-
-	self
-		deny: self actionManagementSystem actionEvaluationSummaries isEmpty.
-	self
-		assert: response code equals: 200;
-		assert: response contents equals: '[{"action":{"name":"Get DNS zones"},"lastEvaluation":"2019-04-11T12:00:00-03:00","evaluationCount":1}]'
 ]
