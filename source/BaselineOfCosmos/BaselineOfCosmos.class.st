@@ -127,8 +127,8 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 		group: 'Model' with: 'Cosmos-Actions';
 		package: 'Cosmos-PeriodicalScheduler-Core';
 		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
-		package: 'Cosmos-ActionEvaluator-Core';
-		group: 'Model' with: 'Cosmos-ActionEvaluator-Core'
+		package: 'Cosmos-ActionEvaluator';
+		group: 'Model' with: 'Cosmos-ActionEvaluator'
 ]
 
 { #category : #'private - baselines' }
@@ -165,7 +165,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 			with: [ spec requires: #('Cosmos-PeriodicalScheduler-Core') ];
 		group: 'Model-Tests' with: 'Cosmos-PeriodicalScheduler-Tests';
 		package: 'Cosmos-ActionEvaluator-Tests'
-			with: [ spec requires: #('Cosmos-ActionEvaluator-Core') ];
+			with: [ spec requires: #('Cosmos-ActionEvaluator') ];
 		group: 'Model-Tests' with: 'Cosmos-ActionEvaluator-Tests'
 ]
 

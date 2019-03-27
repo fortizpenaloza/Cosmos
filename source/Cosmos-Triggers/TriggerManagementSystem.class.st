@@ -175,11 +175,11 @@ TriggerManagementSystem >> registerTimestampFor: anActionTrigger [
 	self timestampingSystem registerModificationFor: anActionTrigger
 ]
 
-{ #category : #'starting - stopping' }
-TriggerManagementSystem >> startUp [
+{ #category : #'private - controlling' }
+TriggerManagementSystem >> startUpWhenStopped [
 
-	super startUp.
-	
+	super startUpWhenStopped.
+
 	self subscribeToDataPointRegistrationEvents.
 	self subscribeToTickEvents
 ]

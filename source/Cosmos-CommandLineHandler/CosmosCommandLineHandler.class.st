@@ -73,7 +73,18 @@ CosmosCommandLineHandler >> basicActivate [
 		logInfo: 'Building and starting RESTful API' 
 			during: [ self buildAndStartCosmosAPI ];
 		logInfo: 'Building and starting the periodical scheduler'
-			during: [ self buildAndStartScheduler ]
+			during: [ self buildAndStartScheduler ];
+		logInfo: 'Building and starting the action evaluator'
+			during: [ self buildActionEvaluator ]
+]
+
+{ #category : #activation }
+CosmosCommandLineHandler >> buildActionEvaluator [
+
+	ActionEvaluator
+		evaluatingAll: nil
+		using: nil
+		registeringEvaluationsOn: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
 ]
 
 { #category : #'private - building cosmos system' }

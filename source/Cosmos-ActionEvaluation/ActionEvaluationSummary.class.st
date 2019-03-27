@@ -6,7 +6,7 @@ Class {
 		'lastEvaluation',
 		'evaluationCount'
 	],
-	#category : #'Cosmos-Actions'
+	#category : #'Cosmos-ActionEvaluation'
 }
 
 { #category : #'instance creation' }

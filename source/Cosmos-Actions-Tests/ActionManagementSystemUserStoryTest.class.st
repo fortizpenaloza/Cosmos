@@ -95,33 +95,6 @@ ActionManagementSystemUserStoryTest >> testMetadataRegistrationOnActionRegistrat
 ]
 
 { #category : #tests }
-ActionManagementSystemUserStoryTest >> testQueringActionEvaluationSummaries [
-
-	| action anotherAction |
-
-	action := self sendYOToFran.
-	self actionManagementSystem register: action.
-
-	anotherAction := self sendTextMessageToFran.
-	self actionManagementSystem register: anotherAction.
-
-	self
-		assert: self actionManagementSystem actionEvaluationSummaries isEmpty.
-
-	self actionManagementSystem
-		handleActionEvaluatedOn: (ActionEvaluatedEvent of: action on: self octoberFirstOf2014AtNoon).
-
-	self
-		withTheOnlyOneIn: self actionManagementSystem actionEvaluationSummaries
-		do: [ :summary | 
-			self
-				assert: summary action equals: action;
-				assert: summary lastEvaluation
-					equals: self octoberFirstOf2014AtNoon;
-				assert: summary evaluationCount equals: 1 ]
-]
-
-{ #category : #tests }
 ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 
 	| action anotherAction |

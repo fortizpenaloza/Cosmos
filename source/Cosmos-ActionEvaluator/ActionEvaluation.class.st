@@ -1,33 +1,33 @@
 Class {
-	#name : #ActionEvaluatedEvent,
+	#name : #ActionEvaluation,
 	#superclass : #NotifiableEvent,
 	#instVars : [
 		'action',
 		'evaluationDateTime'
 	],
-	#category : #'Cosmos-Actions'
+	#category : #'Cosmos-ActionEvaluator'
 }
 
 { #category : #'instance creation' }
-ActionEvaluatedEvent class >> of: anAction on: aDateTime [ 
+ActionEvaluation class >> of: anAction on: aDateTime [ 
 	
 	^ self new initializeOf: anAction on: aDateTime
 ]
 
 { #category : #accessing }
-ActionEvaluatedEvent >> action [
+ActionEvaluation >> action [
 
 	^ action
 ]
 
 { #category : #accessing }
-ActionEvaluatedEvent >> evaluationDateTime [
+ActionEvaluation >> evaluationDateTime [
 
 	^ evaluationDateTime
 ]
 
 { #category : #initialization }
-ActionEvaluatedEvent >> initializeOf: anAction on: aDateTime [
+ActionEvaluation >> initializeOf: anAction on: aDateTime [
 	
 	action := anAction.
 	evaluationDateTime := aDateTime

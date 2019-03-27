@@ -2,17 +2,10 @@ Class {
 	#name : #ActionManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'actions',
-		'evaluationSummaries'
+		'actions'
 	],
 	#category : #'Cosmos-Actions'
 }
-
-{ #category : #querying }
-ActionManagementSystem >> actionEvaluationSummaries [
-	
-	^ evaluationSummaries values
-]
 
 { #category : #querying }
 ActionManagementSystem >> actionIdentifiedBy: anIdentifier [
@@ -49,32 +42,13 @@ ActionManagementSystem >> assertIsNotAlreadyRegistered: anAction [
 { #category : #installing }
 ActionManagementSystem >> dependencies [
 
-	^ #(#TimestampingSystemInterface #IdentifierSystemInterface #EventNotificationSystemInterface)
+	^ #(#TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
 { #category : #managing }
 ActionManagementSystem >> deregister: anAction [
 
 	^ actions remove: anAction
-]
-
-{ #category : #systems }
-ActionManagementSystem >> eventNotificationSystem [
-
-	^ self >> #EventNotificationSystemInterface
-]
-
-{ #category : #'events handling' }
-ActionManagementSystem >> handleActionEvaluatedOn: anEvent [
-
-	evaluationSummaries
-		at: anEvent action
-		ifPresent: [ :summary | summary registerEvaluationOn: anEvent evaluationDateTime ]
-		ifAbsentPut:
-			(ActionEvaluationSummary
-				of: anEvent action
-				lastEvaluatedOn: anEvent evaluationDateTime
-				totaling: 1)
 ]
 
 { #category : #'private - systems' }
@@ -93,8 +67,7 @@ ActionManagementSystem >> implementedInterfaces [
 ActionManagementSystem >> initialize [
 
 	super initialize.
-	actions := OrderedCollection new.
-	evaluationSummaries := Dictionary new.
+	actions := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -125,23 +98,6 @@ ActionManagementSystem >> registerIdentifierFor: anAction [
 ActionManagementSystem >> registerTimestampFor: anAction [
 
 	self timestampingSystem registerModificationFor: anAction
-]
-
-{ #category : #controlling }
-ActionManagementSystem >> startUp [
-
-	super startUp.
-
-	self subscribeToActionEvaluatedEvents
-]
-
-{ #category : #'private - events handling' }
-ActionManagementSystem >> subscribeToActionEvaluatedEvents [
-
-	self eventNotificationSystem
-		subscribe: self
-		to: ActionEvaluatedEvent
-		toBeNotifiedSending: #handleActionEvaluatedOn:
 ]
 
 { #category : #'private - systems' }

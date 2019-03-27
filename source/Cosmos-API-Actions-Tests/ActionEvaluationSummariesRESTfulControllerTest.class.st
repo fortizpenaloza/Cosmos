@@ -91,7 +91,7 @@ ActionEvaluationSummariesRESTfulControllerTest >> testGetActionEvaluationSummari
 
 	self actionManagementSystem
 		handleActionEvaluatedOn:
-			(ActionEvaluatedEvent
+			(ActionEvaluation
 				of: self actionManagementSystem actions first
 				on: self aprilEleventh2019AtNoon).
 
