@@ -102,8 +102,8 @@ ActionEvaluationSystem >> register: anActionEvaluation [
 ActionEvaluationSystem >> shutDownWhenStarted [
 
 	super shutDownWhenStarted.
-	
-	self halt
+
+	dequeuingProcess terminate
 ]
 
 { #category : #'private - controlling' }
