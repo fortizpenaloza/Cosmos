@@ -3,9 +3,9 @@ Class {
 	#superclass : #SubsystemImplementation,
 	#instVars : [
 		'evaluatedActions',
+		'evaluationSummaries',
 		'dequeuingProcess',
 		'actionEvaluations',
-		'evaluationSummaries',
 		'pendingEvaluationActions'
 	],
 	#category : #'Cosmos-ActionEvaluation'

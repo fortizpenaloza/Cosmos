@@ -6,7 +6,8 @@ Class {
 		'wasEvaluated',
 		'timeSource',
 		'pendingActions',
-		'evaluatedActions'
+		'evaluatedActions',
+		'pendingEvaluationActions'
 	],
 	#category : #'Cosmos-ActionEvaluator-Tests'
 }
@@ -17,13 +18,13 @@ ActionEvaluatorTest >> setUp [
 	super setUp.
 
 	wasEvaluated := false.
-	pendingActions := WaitfreeQueue new.
+	pendingEvaluationActions := WaitfreeQueue new.
 	evaluatedActions := WaitfreeQueue new.
 
 	timeSource := SystemTimeSource new.
 
 	evaluator := ActionEvaluator
-		evaluatingAll: pendingActions
+		evaluatingAll: pendingEvaluationActions
 		using: (ActionEvaluatorConfiguration workingWith: timeSource)
 		registeringEvaluationsOn: evaluatedActions
 ]
@@ -39,14 +40,14 @@ ActionEvaluatorTest >> testEvaluateBlock [
 
 	self
 		deny: wasEvaluated;
-		assert: pendingActions isEmpty;
+		assert: pendingEvaluationActions isEmpty;
 		assert: evaluatedActions isEmpty.
 
-	pendingActions
+	pendingEvaluationActions
 		enqueue: (Action named: 'Send YO to Fran' evaluating: [ wasEvaluated := true ]).
 
 	self
-		assert: pendingActions size equals: 1;
+		assert: pendingEvaluationActions size equals: 1;
 		assert: evaluatedActions isEmpty.
 
 	evaluator start.
@@ -55,7 +56,7 @@ ActionEvaluatorTest >> testEvaluateBlock [
 		wait: 10 milliSeconds
 		andDo: [ self
 				assert: wasEvaluated;
-				assert: pendingActions isEmpty;
+				assert: pendingEvaluationActions isEmpty;
 				assert: evaluatedActions size equals: 1 ]
 ]
 
@@ -71,17 +72,17 @@ ActionEvaluatorTest >> testSendHttpRequest [
 
 			self
 				deny: wasEvaluated;
-				assert: pendingActions isEmpty;
+				assert: pendingEvaluationActions isEmpty;
 				assert: evaluatedActions isEmpty.
 
-			pendingActions
+			pendingEvaluationActions
 				enqueue:
 					(Action
 						named: 'Send YO to Fran'
 						sending: (ZnRequest get: server localUrl)).
 
 			self
-				assert: pendingActions size equals: 1;
+				assert: pendingEvaluationActions size equals: 1;
 				assert: evaluatedActions isEmpty.
 
 			evaluator start.
@@ -90,7 +91,7 @@ ActionEvaluatorTest >> testSendHttpRequest [
 				wait: 100 milliSeconds
 				andDo: [ self
 						assert: wasEvaluated;
-						assert: pendingActions isEmpty;
+						assert: pendingEvaluationActions isEmpty;
 						assert: evaluatedActions size equals: 1 ] ]
 ]
 

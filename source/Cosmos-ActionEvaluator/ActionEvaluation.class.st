@@ -1,6 +1,6 @@
 Class {
 	#name : #ActionEvaluation,
-	#superclass : #NotifiableEvent,
+	#superclass : #Object,
 	#instVars : [
 		'action',
 		'evaluationDateTime'

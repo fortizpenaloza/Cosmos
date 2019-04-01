@@ -3,7 +3,8 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'evaluatedActions',
-		'pendingEvaluationActions'
+		'pendingEvaluationActions',
+		'actionEvaluations'
 	],
 	#category : #'Cosmos-ActionEvaluation-Tests'
 }
@@ -38,7 +39,7 @@ ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 ActionEvaluationSystemUserStoryTest >> setUp [
 
 	pendingEvaluationActions := WaitfreeQueue new.
-	evaluatedActions := WaitfreeQueue new.
+	actionEvaluations := WaitfreeQueue new.
 
 	super setUp
 ]
@@ -49,7 +50,7 @@ ActionEvaluationSystemUserStoryTest >> setUpRequirements [
 	self
 		registerSubsystem:
 			(ActionEvaluationSystem
-				registeringAll: evaluatedActions
+				registeringAll: actionEvaluations
 				addingPendingActionsTo: pendingEvaluationActions)
 ]
 
@@ -71,6 +72,7 @@ ActionEvaluationSystemUserStoryTest >> testQueringActionEvaluationSummaries [
 	self actionEvaluationSystem evaluate: anotherAction.
 
 	self
+		assert: pendingEvaluationActions size equals: 2;
 		assert: self actionEvaluationSystem actionEvaluationSummaries isEmpty.
 
 	self actionEvaluationSystem

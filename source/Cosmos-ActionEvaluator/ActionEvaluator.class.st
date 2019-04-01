@@ -8,9 +8,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'configuration',
-		'evaluatedActions',
 		'dequeuingProcess',
-		'pendingEvaluationActions'
+		'pendingEvaluationActions',
+		'actionEvaluations'
 	],
 	#category : #'Cosmos-ActionEvaluator'
 }
@@ -18,7 +18,10 @@ Class {
 { #category : #'instance creation' }
 ActionEvaluator class >> evaluatingAll: anActionCollection using: aConfiguration registeringEvaluationsOn: anActionEvaluationCollection [
 
-	^ self new initializeEvaluatingAll: anActionCollection using: aConfiguration registeringEvaluationsOn: anActionEvaluationCollection
+	^ self new
+		initializeEvaluatingAll: anActionCollection
+		using: aConfiguration
+		registeringEvaluationsOn: anActionEvaluationCollection
 ]
 
 { #category : #'private - accessing' }
@@ -40,7 +43,7 @@ ActionEvaluator >> dequeuingProcess [
 ActionEvaluator >> evaluate: anAction [
 
 	anAction evaluateWithin: configuration.
-	evaluatedActions
+	actionEvaluations
 		enqueue: (ActionEvaluation of: anAction on: self dateTime)
 ]
 
@@ -59,7 +62,7 @@ ActionEvaluator >> initializeEvaluatingAll: anActionCollection using: aConfigura
 
 	configuration := aConfiguration.
 	pendingEvaluationActions := anActionCollection.
-	evaluatedActions := anActionEvaluationCollection.
+	actionEvaluations := anActionEvaluationCollection.
 	
 	self flag: 'rename to show pendingActions'.
 	self initializeDequeuingProcess
