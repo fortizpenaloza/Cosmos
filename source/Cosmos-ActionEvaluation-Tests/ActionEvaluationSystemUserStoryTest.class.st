@@ -38,8 +38,8 @@ ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 { #category : #running }
 ActionEvaluationSystemUserStoryTest >> setUp [
 
-	pendingEvaluationActions := WaitfreeQueue new.
-	actionEvaluations := WaitfreeQueue new.
+	pendingEvaluationActions := AtomicSharedQueue new.
+	actionEvaluations := AtomicSharedQueue new.
 
 	super setUp
 ]

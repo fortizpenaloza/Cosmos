@@ -18,8 +18,8 @@ ActionEvaluatorTest >> setUp [
 	super setUp.
 
 	wasEvaluated := false.
-	pendingEvaluationActions := WaitfreeQueue new.
-	evaluatedActions := WaitfreeQueue new.
+	pendingEvaluationActions := AtomicSharedQueue new.
+	evaluatedActions := AtomicSharedQueue new.
 
 	timeSource := SystemTimeSource new.
 

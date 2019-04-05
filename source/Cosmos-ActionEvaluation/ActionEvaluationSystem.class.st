@@ -2,11 +2,11 @@ Class {
 	#name : #ActionEvaluationSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'evaluatedActions',
 		'evaluationSummaries',
 		'dequeuingProcess',
 		'actionEvaluations',
-		'pendingEvaluationActions'
+		'pendingEvaluationActions',
+		'actionEvaluationQueue'
 	],
 	#category : #'Cosmos-ActionEvaluation'
 }
@@ -14,9 +14,7 @@ Class {
 { #category : #'instance creation' }
 ActionEvaluationSystem class >> registeringAll: anActionEvaluationCollection addingPendingActionsTo: anActionCollection [
 
-	^ self new
-		initializeRegisteringAll: anActionEvaluationCollection
-		addingPendingActionsTo: anActionCollection
+	^ self new initializeRegisteringAll: anActionEvaluationCollection
 ]
 
 { #category : #managing }
@@ -36,7 +34,7 @@ ActionEvaluationSystem >> dequeuingProcess [
 
 	[ | nextActionEvaluation |
 
-	[ nextActionEvaluation := evaluatedActions dequeue ]
+	[ nextActionEvaluation := actionEvaluationQueue dequeue ]
 		whileNotNil: [ self register: nextActionEvaluation ] ] repeat
 ]
 
@@ -63,12 +61,12 @@ ActionEvaluationSystem >> initializeDequeuingProcess [
 ]
 
 { #category : #initialization }
-ActionEvaluationSystem >> initializeRegisteringAll: anActionEvaluationCollection addingPendingActionsTo: anActionCollection [
+ActionEvaluationSystem >> initializeRegisteringAll: anActionEvaluationCollection [
 
 	self initialize.
 
-	pendingEvaluationActions := anActionCollection.
-	evaluatedActions := anActionEvaluationCollection.
+	self flag: 'borrar la primera y renombrar la segunda, es un proceso'.
+	actionEvaluationQueue := anActionEvaluationCollection.
 
 	actionEvaluations := OrderedCollection new.
 	evaluationSummaries := Dictionary new.
@@ -102,7 +100,6 @@ ActionEvaluationSystem >> register: anActionEvaluation [
 ActionEvaluationSystem >> shutDownWhenStarted [
 
 	super shutDownWhenStarted.
-
 	dequeuingProcess terminate
 ]
 
