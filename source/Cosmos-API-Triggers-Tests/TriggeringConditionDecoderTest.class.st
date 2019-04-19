@@ -29,8 +29,7 @@ TriggeringConditionDecoderTest >> setUpRequirements [
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: DataStreamManagementSystem new;
-		registerSubsystem: ActionManagementSystem new;
-		registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: ActionManagementSystem new
 ]
 
 { #category : #'private - accessing' }

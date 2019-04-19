@@ -3,8 +3,8 @@ Class {
 	#superclass : #SubsystemImplementation,
 	#instVars : [
 		'actionEvaluations',
-		'actionEvaluationsSummaries',
-		'actionEvaluationsDequeuingProcess'
+		'actionEvaluationsDequeuingProcess',
+		'actionEvaluationSummaries'
 	],
 	#category : #'Cosmos-ActionEvaluation'
 }
@@ -18,7 +18,7 @@ ActionEvaluationSystem class >> registeringFrom: anActionEvaluationsQueue [
 { #category : #querying }
 ActionEvaluationSystem >> actionEvaluationSummaries [
 	
-	^ actionEvaluationsSummaries values
+	^ actionEvaluationSummaries values
 ]
 
 { #category : #querying }
@@ -55,7 +55,7 @@ ActionEvaluationSystem >> initializeRegisteringFrom: anActionEvaluationsQueue [
 	self initializeDequeuingProcessFrom: anActionEvaluationsQueue.
 
 	actionEvaluations := OrderedCollection new.
-	actionEvaluationsSummaries := Dictionary new
+	actionEvaluationSummaries := Dictionary new
 ]
 
 { #category : #'private - managing' }
@@ -80,7 +80,7 @@ ActionEvaluationSystem >> register: anActionEvaluation [
 { #category : #'private - managing' }
 ActionEvaluationSystem >> registerToSummary: anActionEvaluation [
 
-	actionEvaluationsSummaries
+	actionEvaluationSummaries
 		at: anActionEvaluation action
 		ifPresent:
 			[ :summary | summary synchronizeWith: anActionEvaluation evaluationDateTime ]

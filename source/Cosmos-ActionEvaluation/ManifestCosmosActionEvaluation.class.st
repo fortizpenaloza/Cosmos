@@ -11,5 +11,5 @@ ManifestCosmosActionEvaluation class >> initialize [
 	Kepler
 		registerInterfaceAt: #ActionEvaluationSystemInterface
 		named: 'Action Evaluation System Interface'
-		declaring: #(#register: #deregister: actions)
+		declaring: #(#register: actionEvaluationSummaries actionEvaluations)
 ]

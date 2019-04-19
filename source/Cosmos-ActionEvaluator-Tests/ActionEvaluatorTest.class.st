@@ -5,7 +5,6 @@ Class {
 		'evaluator',
 		'wasEvaluated',
 		'timeSource',
-		'pendingActions',
 		'pendingActionsQueue',
 		'actionEvaluationsQueue'
 	],

@@ -52,11 +52,11 @@ ActionEvaluator >> initializeEvaluatingActionsFrom: aPendingActionsQueue using: 
 { #category : #controlling }
 ActionEvaluator >> start [
 
-	pendingActionsDequeuingProcess resume
+	pendingActionsDequeuingProcess start
 ]
 
 { #category : #controlling }
 ActionEvaluator >> stop [
 
-	pendingActionsDequeuingProcess terminate
+	pendingActionsDequeuingProcess stop
 ]

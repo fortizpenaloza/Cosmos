@@ -64,7 +64,7 @@ CommandsRESTfulControllerTest >> requestToGetCommandsAccepting: aMediaType [
 	^ self requestToGetResourcesAccepting: aMediaType
 ]
 
-{ #category : #tests }
+{ #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToGetCommandsOrderedAccoringTo: order accepting: mediaType [
 
 	^ TeaRequest

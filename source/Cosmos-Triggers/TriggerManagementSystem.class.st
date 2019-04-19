@@ -11,11 +11,17 @@ Class {
 	#instVars : [
 		'triggersToTriggerPeriodically',
 		'triggersToTriggerAfterDataPointRegistration',
-		'pendingActionsQueue',
-		'actionTriggers'
+		'actionTriggers',
+		'pendingActionsQueue'
 	],
 	#category : #'Cosmos-Triggers-SystemModel'
 }
+
+{ #category : #'instance creation' }
+TriggerManagementSystem class >> enqueuingActionsInto: aPendingActionsQueue [
+		
+	^ self new initializeEnqueuingActionsInto: aPendingActionsQueue 
+]
 
 { #category : #installing }
 TriggerManagementSystem >> dependencies [
@@ -108,11 +114,12 @@ TriggerManagementSystem >> implementedInterfaces [
 ]
 
 { #category : #initialization }
-TriggerManagementSystem >> initialize [
-
-	super initialize.
-	actionTriggers := OrderedCollection new.
+TriggerManagementSystem >> initializeEnqueuingActionsInto: aPendingActionsQueue [ 
 	
+	self initialize.
+	pendingActionsQueue := aPendingActionsQueue.
+	
+	actionTriggers := OrderedCollection new.
 	triggersToTriggerAfterDataPointRegistration := Dictionary new.
 	triggersToTriggerPeriodically := Dictionary new
 ]

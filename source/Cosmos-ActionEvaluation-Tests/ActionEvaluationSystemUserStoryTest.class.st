@@ -2,24 +2,24 @@ Class {
 	#name : #ActionEvaluationSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'actionEvaluations'
+		'actionEvaluationsQueue'
 	],
 	#category : #'Cosmos-ActionEvaluation-Tests'
 }
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 ActionEvaluationSystemUserStoryTest >> actionEvaluationSystem [
 	
 	^ rootSystem >> #ActionEvaluationSystemInterface
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionEvaluationSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 
 	^ (October first , 2014) atNoon
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionEvaluationSystemUserStoryTest >> sendTextMessageToFran [
 
 	^ Action
@@ -27,7 +27,7 @@ ActionEvaluationSystemUserStoryTest >> sendTextMessageToFran [
 		evaluating: [ "do nothing" ]
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 
 	^ Action named: 'Send YO to Fran' evaluating: [ "Send YO to Fran" ]
@@ -36,7 +36,7 @@ ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 { #category : #running }
 ActionEvaluationSystemUserStoryTest >> setUp [
 
-	actionEvaluations := AtomicSharedQueue new.
+	actionEvaluationsQueue := AtomicSharedQueue new.
 	super setUp
 ]
 
@@ -44,7 +44,7 @@ ActionEvaluationSystemUserStoryTest >> setUp [
 ActionEvaluationSystemUserStoryTest >> setUpRequirements [
 
 	self
-		registerSubsystem: (ActionEvaluationSystem registeringFrom: actionEvaluations)
+		registerSubsystem: (ActionEvaluationSystem registeringFrom: actionEvaluationsQueue)
 ]
 
 { #category : #running }
@@ -59,20 +59,27 @@ ActionEvaluationSystemUserStoryTest >> testQueringActionEvaluationSummaries [
 	| action |
 
 	action := self sendYOToFran.
-	actionEvaluations
+	actionEvaluationsQueue
 		enqueue: (ActionEvaluation of: action on: self octoberFirstOf2014AtNoon).
 
 	self
 		assert: self actionEvaluationSystem actionEvaluationSummaries isEmpty.
 
-	(Delay forDuration: 10 milliSeconds) wait. 
-	
 	self
-		withTheOnlyOneIn: self actionEvaluationSystem actionEvaluationSummaries
-		do: [ :summary | 
-			self
-				assert: summary action equals: action;
-				assert: summary lastEvaluation
-					equals: self octoberFirstOf2014AtNoon;
-				assert: summary evaluationCount equals: 1 ]
+		wait: 10 milliSeconds
+		andDo: [ self
+				withTheOnlyOneIn: self actionEvaluationSystem actionEvaluationSummaries
+				do: [ :summary | 
+					self
+						assert: summary action equals: action;
+						assert: summary lastEvaluation
+							equals: self octoberFirstOf2014AtNoon;
+						assert: summary evaluationCount equals: 1 ] ]
+]
+
+{ #category : #'tests support' }
+ActionEvaluationSystemUserStoryTest >> wait: aDuration andDo: aBlock [
+
+	(Delay forDuration: aDuration) wait.
+	aBlock value
 ]

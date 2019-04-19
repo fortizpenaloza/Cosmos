@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'process'
 	],
-	#category : #'Cosmos-ActionEvaluator-Tests'
+	#category : #'Cosmos-ActionEvaluator'
 }
 
 { #category : #'instance creation' }

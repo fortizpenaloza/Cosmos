@@ -27,7 +27,9 @@ Class {
 	#name : #CosmosCommandLineHandler,
 	#superclass : #ApplicationStarterCommandLineHandler,
 	#instVars : [
-		'cosmos'
+		'cosmos',
+		'pendingActionsQueue',
+		'actionEvaluationsQueue'
 	],
 	#category : #'Cosmos-CommandLineHandler'
 }
@@ -68,6 +70,10 @@ CosmosCommandLineHandler >> baseUrl [
 CosmosCommandLineHandler >> basicActivate [
 
 	self
+		logInfo: 'Creating pending evaluation actions queue'
+			during: [ pendingActionsQueue := AtomicSharedQueue new ];
+		logInfo: 'Creating action evaluation queue'
+			during: [ actionEvaluationsQueue := AtomicSharedQueue new ];
 		logInfo: 'Building and starting cosmos' 
 			during: [ self buildAndStartCosmos ];
 		logInfo: 'Building and starting RESTful API' 
@@ -75,16 +81,22 @@ CosmosCommandLineHandler >> basicActivate [
 		logInfo: 'Building and starting the periodical scheduler'
 			during: [ self buildAndStartScheduler ];
 		logInfo: 'Building and starting the action evaluator'
-			during: [ self buildActionEvaluator ]
+			during: [ self buildAndStartActionEvaluator ]
 ]
 
 { #category : #activation }
-CosmosCommandLineHandler >> buildActionEvaluator [
+CosmosCommandLineHandler >> buildAndStartActionEvaluator [
 
-	ActionEvaluator
-		evaluatingActionsFrom: nil
-		using: nil
-		registeringEvaluationsInto: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
+	| evaluator |
+
+	evaluator := ActionEvaluator
+		evaluatingActionsFrom: pendingActionsQueue
+		using: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
+		registeringEvaluationsInto: actionEvaluationsQueue.
+
+	evaluator start
+	
+
 ]
 
 { #category : #'private - building cosmos system' }
@@ -99,8 +111,9 @@ CosmosCommandLineHandler >> buildAndStartCosmos [
 		register: (IdentifierSystem using: UUIDProvider new);
 		register: TimestampingSystem new;
 		register: DataStreamManagementSystem new;
-		register: TriggerManagementSystem new;
+		register: (TriggerManagementSystem enqueuingActionsInto: pendingActionsQueue);
 		register: ActionManagementSystem new;
+		register: (ActionEvaluationSystem registeringFrom: actionEvaluationsQueue);
 		register: CommandManagementSystem new.
 		
 	cosmos startUp
@@ -121,7 +134,7 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 			(DataPointsRESTfulController workingWith: cosmos).
 			(CommandsRESTfulController workingWith: cosmos).
 			(ActionsRESTfulController workingWith: cosmos).
-			(ActionEvaluationSummariesRESTfulController workingWith: cosmos).
+			(ActionEvaluationsRESTfulController workingWith: cosmos).
 			(TriggersRESTfulController workingWith: cosmos)}.
 
 	self addDumpStackErrorHandlerOn: api.

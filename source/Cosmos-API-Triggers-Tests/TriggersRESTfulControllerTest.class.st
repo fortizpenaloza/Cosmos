@@ -175,7 +175,7 @@ TriggersRESTfulControllerTest >> setUpRequirements [
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: DataStreamManagementSystem new;
 		registerSubsystem: ActionManagementSystem new;
-		registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: (TriggerManagementSystem enqueuingActionsInto: self)
  
 ]
 

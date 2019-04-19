@@ -8,6 +8,14 @@ Class {
 	#category : #'Cosmos-ActionEvaluator-Tests'
 }
 
+{ #category : #tests }
+DequeuingProcessTest >> assertQueueHasOneElement [
+
+	self assert: queue isEmpty.
+	queue enqueue: 1.
+	self deny: queue isEmpty
+]
+
 { #category : #running }
 DequeuingProcessTest >> setUp [
 	
@@ -16,26 +24,33 @@ DequeuingProcessTest >> setUp [
 ]
 
 { #category : #tests }
-DequeuingProcessTest >> test01 [
+DequeuingProcessTest >> testDequeueing [
 
 	| dequeuingProcess |
 
-	self assert: queue isEmpty.
-	queue nextPut: 1.
-	self deny: queue isEmpty.
+	self assertQueueHasOneElement.
+	
 	dequeuingProcess := DequeuingProcess
 		named: 'Test process'
 		from: queue
 		applying: [ :element | wasDequeued := true ].
-
+	
 	self
 		deny: queue isEmpty;
 		deny: wasDequeued.
-
-	[ dequeuingProcess start.
-	(Delay forDuration: 10 milliSeconds) wait.
+	
+[ dequeuingProcess start.
 	self
-		assert: queue isEmpty;
-		assert: wasDequeued ]
+		wait: 10 milliSeconds
+		andDo: [ self
+				assert: queue isEmpty;
+				assert: wasDequeued ] ]
 		ensure: [ dequeuingProcess stop ]
+]
+
+{ #category : #'tests support' }
+DequeuingProcessTest >> wait: aDuration andDo: aBlock [
+
+	(Delay forDuration: aDuration) wait.
+	aBlock value
 ]
