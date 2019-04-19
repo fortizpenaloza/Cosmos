@@ -41,6 +41,7 @@ CosmosAPITest >> setUp [
 			(DataPointsRESTfulController workingWith: rootSystem).
 			(CommandsRESTfulController workingWith: rootSystem).
 			(ActionsRESTfulController workingWith: rootSystem).
+			(ActionEvaluationsRESTfulController workingWith: rootSystem).
 			(TriggersRESTfulController workingWith: rootSystem)}.
 
 	api
@@ -57,9 +58,7 @@ CosmosAPITest >> setUpRequirements [
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TimestampingSystem new;
-		registerSubsystem: DataStreamManagementSystem new;
-		registerSubsystem: ActionManagementSystem new;
-		registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: DataStreamManagementSystem new
 ]
 
 { #category : #'private - accessing' }

@@ -21,7 +21,7 @@ ActionTrigger class >> named: aName triggering: anAction accordingTo: aTriggerin
 ]
 
 { #category : #testing }
-ActionTrigger >> ifSatisfiedOn: aContext withActionDo: aBlock [
+ActionTrigger >> do: aBlock ifSatisfiedWithin: aContext [
 
 	(condition isSatisfiedOn: aContext)
 		ifTrue: [ aBlock value: action ]

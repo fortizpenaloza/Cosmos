@@ -14,7 +14,7 @@ EvaluateBlockPolicy class >> for: aBlock [
 ]
 
 { #category : #evaluating }
-EvaluateBlockPolicy >> evaluateWith: anActionEvaluatorConfiguration [
+EvaluateBlockPolicy >> evaluateWithin: anEvaluationContext [
 
 	block value
 ]

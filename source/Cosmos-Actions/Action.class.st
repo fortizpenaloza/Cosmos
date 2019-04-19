@@ -9,9 +9,21 @@ Class {
 }
 
 { #category : #'instance creation' }
-Action class >> named: aName evaluating: anEvaluationPolicy [
+Action class >> named: aName doing: anEvaluationPolicy [
+	
+	^self new initializeNamed: aName doing: anEvaluationPolicy
+]
 
-	^ self new initializeNamed: aName evaluating: anEvaluationPolicy
+{ #category : #'instance creation' }
+Action class >> named: aName evaluating: aBlock [
+
+	^ self named: aName doing: (EvaluateBlockPolicy for: aBlock)
+]
+
+{ #category : #'instance creation' }
+Action class >> named: aName sending: anHttpRequest [
+
+	^ self named: aName doing: (SendHttpRequestPolicy sending: anHttpRequest)
 ]
 
 { #category : #comparing }
@@ -23,9 +35,9 @@ Action >> = anObject [
 ]
 
 { #category : #evaluation }
-Action >> evaluateWith: aConfiguration [
+Action >> evaluateWithin: anEvaluationContext [
 
-	evaluationPolicy evaluateWith: aConfiguration
+	evaluationPolicy evaluateWithin: anEvaluationContext
 ]
 
 { #category : #comparing }
@@ -35,7 +47,7 @@ Action >> hash [
 ]
 
 { #category : #initialization }
-Action >> initializeNamed: aName evaluating: anEvaluationPolicy [ 
+Action >> initializeNamed: aName doing: anEvaluationPolicy [ 
 
 	name := aName.
 	evaluationPolicy := anEvaluationPolicy

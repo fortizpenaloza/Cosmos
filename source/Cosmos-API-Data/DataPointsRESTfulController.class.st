@@ -16,7 +16,7 @@ DataPointsRESTfulController class >> workingWith: aCosmosSystem [
 { #category : #API }
 DataPointsRESTfulController >> createPointsBasedOn: anHttpRequest within: aContext [
 
-	aContext hold: self currentDateTime under: #request_timestamp.
+	aContext hold: self dateTime under: #request_timestamp.
 
 	^ [ self
 		withCreatedResourceDo: [ :rawData | 
@@ -32,12 +32,6 @@ DataPointsRESTfulController >> createPointsBasedOn: anHttpRequest within: aConte
 		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
 ]
 
-{ #category : #'private - accessing' }
-DataPointsRESTfulController >> currentDateTime [
-
-	^ self timeSystem dateTime
-]
-
 { #category : #'private - systems' }
 DataPointsRESTfulController >> dataManagementSystem [
 
@@ -48,6 +42,12 @@ DataPointsRESTfulController >> dataManagementSystem [
 DataPointsRESTfulController >> dataPointsKey [
 
 	^ #data_points
+]
+
+{ #category : #'private - accessing' }
+DataPointsRESTfulController >> dateTime [
+
+	^ self timeSystem dateTime
 ]
 
 { #category : #initialization }

@@ -4,26 +4,26 @@ Class {
 	#category : #'Cosmos-Actions-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 
 	^ (October first , 2014) atNoon
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
 
 	^ Action
 		named: 'Send text message to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
+		evaluating: [ "do nothing" ]
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 ActionManagementSystemUserStoryTest >> sendYOToFran [
 
 	^ Action
 		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ "do nothing" ])
+		evaluating: [ "do nothing" ]
 ]
 
 { #category : #'private - running' }
@@ -31,6 +31,7 @@ ActionManagementSystemUserStoryTest >> setUpRequirements [
 
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self octoberFirstOf2014AtNoon));
+		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: (TimestampingSystem new);
@@ -49,13 +50,13 @@ ActionManagementSystemUserStoryTest >> testDeregistration [
 
 	| action |
 
-	action := self sendYOToFran.	
-		
+	action := self sendYOToFran.
+
 	self actionManagementSystem register: action.
 	self
-		assert: self actionManagementSystem actions
-		hasTheSameElementsInTheSameOrderThat: {action}.
-		
+		assertCollection: self actionManagementSystem actions
+		hasSameElements: {action}.
+
 	self actionManagementSystem deregister: action.
 	self assert: self actionManagementSystem actions isEmpty
 ]
@@ -106,7 +107,7 @@ ActionManagementSystemUserStoryTest >> testQueringRegisteredActions [
 
 	self
 		assert: self actionManagementSystem actions
-		hasTheSameElementsInTheSameOrderThat:
+		hasSameElementsInOrderAs:
 			{action.
 			anotherAction}
 ]

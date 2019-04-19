@@ -1,6 +1,9 @@
 Class {
 	#name : #TriggerManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
+	#instVars : [
+		'pendingActionsQueue'
+	],
 	#category : #'Cosmos-Triggers-Tests-SystemModel'
 }
 
@@ -21,7 +24,7 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		evaluating: (EvaluateBlockPolicy for: [ "triggered := true" ])
+		evaluating: [ "do nothing" ]
 ]
 
 { #category : #accessing }
@@ -57,6 +60,13 @@ TriggerManagementSystemUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
 ]
 
 { #category : #running }
+TriggerManagementSystemUserStoryTest >> setUp [
+
+	pendingActionsQueue := AtomicSharedQueue new.
+	super setUp
+]
+
+{ #category : #running }
 TriggerManagementSystemUserStoryTest >> setUpRequirements [
 
 	self
@@ -65,7 +75,7 @@ TriggerManagementSystemUserStoryTest >> setUpRequirements [
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TimestampingSystem new;
-		registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: (TriggerManagementSystem enqueuingActionsInto: pendingActionsQueue)
 ]
 
 { #category : #accessing }
@@ -96,8 +106,8 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromPeriodicallyTrigge
 	self triggerManagementSystem register: trigger.
 	
 	self
-		assert: self triggerManagementSystem triggers
-		hasTheSameElementsInTheSameOrderThat: {trigger}.
+		assertCollection: self triggerManagementSystem triggers
+		hasSameElements: {trigger}.
 		
 	self triggerManagementSystem deregister: trigger.
 	
@@ -113,8 +123,8 @@ TriggerManagementSystemUserStoryTest >> testDeregistrationFromTriggeredAfterData
 	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream.
 	self triggerManagementSystem register: trigger.
 	self
-		assert: self triggerManagementSystem triggers
-		hasTheSameElementsInTheSameOrderThat: {trigger}.
+		assertCollection: self triggerManagementSystem triggers
+		hasSameElements: {trigger}.
 
 	self triggerManagementSystem deregister: trigger.
 
@@ -127,7 +137,7 @@ TriggerManagementSystemUserStoryTest >> testMedataRegistrationOnTriggerRegistrat
 	| dataStream metadata trigger |
 
 	dataStream := self temperatureStream.
-	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream .
+	trigger := self setTriggeredToTrueAfterDataPointRegistrationOn: dataStream.
 
 	self assert: (self metadataSystem metadataFor: trigger) isEmpty.
 	self triggerManagementSystem register: trigger.
@@ -144,7 +154,7 @@ TriggerManagementSystemUserStoryTest >> testMedataRegistrationOnTriggerRegistrat
 			(Metadata
 				attaching: self systemDateTime
 				as: #update_timestamp
-				of: trigger)} asOrderedCollection 
+				of: trigger)} asOrderedCollection
 ]
 
 { #category : #tests }
@@ -169,7 +179,10 @@ TriggerManagementSystemUserStoryTest >> testRegistrationToBePeriodicallyTriggere
 
 	self
 		withTheOnlyOneIn: self triggerManagementSystem triggers
-		do: [ :foundTrigger | self assert: foundTrigger name equals: 'Set triggered to true every 5 minutes' ]
+		do: [ :foundTrigger | 
+			self
+				assert: foundTrigger name
+				equals: 'Set triggered to true every 5 minutes' ]
 ]
 
 { #category : #tests }

@@ -9,21 +9,18 @@ Class {
 	#name : #TriggerManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'triggers',
 		'triggersToTriggerPeriodically',
-		'triggersToTriggerAfterDataPointRegistration'
+		'triggersToTriggerAfterDataPointRegistration',
+		'actionTriggers',
+		'pendingActionsQueue'
 	],
 	#category : #'Cosmos-Triggers-SystemModel'
 }
 
-{ #category : #'events handling' }
-TriggerManagementSystem >> dataPointRegisteredOn: anEvent [
-
-	(self triggersToTriggerAfterDataPointRegistrationOn: anEvent dataStream)
-		do: [ :trigger | 
-			trigger
-				ifSatisfiedOn: self triggeringContext
-				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
+{ #category : #'instance creation' }
+TriggerManagementSystem class >> enqueuingActionsInto: aPendingActionsQueue [
+		
+	^ self new initializeEnqueuingActionsInto: aPendingActionsQueue 
 ]
 
 { #category : #installing }
@@ -39,22 +36,45 @@ TriggerManagementSystem >> deregister: anActionTrigger [
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> deregister: aTrigger accordingTo: aTriggeringPolicy [ 
+TriggerManagementSystem >> deregister: anActionTrigger accordingTo: aTriggeringPolicy [ 
 
-	aTriggeringPolicy deregister: aTrigger from: self.
-	triggers remove: aTrigger
+	aTriggeringPolicy deregister: anActionTrigger from: self.
+	actionTriggers remove: anActionTrigger
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> deregister: aTrigger fromTriggeredPeriodicallyEvery: aTimePeriod [ 
+TriggerManagementSystem >> deregister: anActionTrigger fromTriggeredPeriodicallyEvery: aTimePeriod [ 
 
-	(self triggersToTriggerPeriodicallyEvery: aTimePeriod) remove: aTrigger 
+	(self triggersToTriggerPeriodicallyEvery: aTimePeriod) remove: anActionTrigger 
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> deregister: aTrigger toStopTriggeringAfterDataPointRegistrationOn: aDataStream [ 
+TriggerManagementSystem >> deregister: anActionTrigger toStopTriggeringAfterDataPointRegistrationOn: aDataStream [ 
 	
-	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: aTrigger 	
+	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream) remove: anActionTrigger 	
+]
+
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> do: aBlock withSatisfiedTriggersWithin: aTriggeringContext afterDataPointWasRegisteredOn: aDataStream [
+
+	(self triggersToTriggerAfterDataPointRegistrationOn: aDataStream)
+		do:
+			[ :actionTrigger | actionTrigger do: aBlock ifSatisfiedWithin: aTriggeringContext ]
+]
+
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> do: aBlock withSatisfiedTriggersWithin: aTriggeringContext havingPassed: aTimePeriod [
+
+	(self triggersToTriggerPeriodicallyEvery: aTimePeriod)
+		do:
+			[ :actionTrigger | actionTrigger do: aBlock ifSatisfiedWithin: aTriggeringContext ]
+]
+
+{ #category : #'private - events handling' }
+TriggerManagementSystem >> enqueue: anAction [
+
+	pendingActionsQueue enqueue: anAction
+	
 ]
 
 { #category : #'private - systems' }
@@ -64,13 +84,21 @@ TriggerManagementSystem >> eventNotificationSystem [
 ]
 
 { #category : #'events handling' }
-TriggerManagementSystem >> havePassed: aTickEvent [
-	
-	(self triggersToTriggerPeriodicallyEvery: aTickEvent timePeriod)
-		do: [ :trigger | 
-			trigger
-				ifSatisfiedOn: self triggeringContext
-				withActionDo: [ :action | self notifyEvaluationOf: action ] ]
+TriggerManagementSystem >> handleDataPointRegistrationOn: anEvent [
+
+	self
+		do: [ :action | self enqueue: action ]
+		withSatisfiedTriggersWithin: self triggeringContext
+		afterDataPointWasRegisteredOn: anEvent dataStream
+]
+
+{ #category : #'events handling' }
+TriggerManagementSystem >> handleTickOn: anEvent [
+
+	self
+		do: [ :action | self enqueue: action ]
+		withSatisfiedTriggersWithin: self triggeringContext
+		havingPassed: anEvent timePeriod
 ]
 
 { #category : #'private - systems' }
@@ -86,10 +114,12 @@ TriggerManagementSystem >> implementedInterfaces [
 ]
 
 { #category : #initialization }
-TriggerManagementSystem >> initialize [
-
-	super initialize.
-	triggers := OrderedCollection new.
+TriggerManagementSystem >> initializeEnqueuingActionsInto: aPendingActionsQueue [ 
+	
+	self initialize.
+	pendingActionsQueue := aPendingActionsQueue.
+	
+	actionTriggers := OrderedCollection new.
 	triggersToTriggerAfterDataPointRegistration := Dictionary new.
 	triggersToTriggerPeriodically := Dictionary new
 ]
@@ -100,48 +130,45 @@ TriggerManagementSystem >> name [
 	^ 'Trigger Management'
 ]
 
-{ #category : #'events handling' }
-TriggerManagementSystem >> notifyEvaluationOf: action [
-
-	^ self eventNotificationSystem notifySubscribersTo: (EvaluateActionEvent of: action)
-]
-
 { #category : #managing }
 TriggerManagementSystem >> register: anActionTrigger [
 
 	self
 		triggerNamed: anActionTrigger name
-		ifFound:
-			[ :trigger | ConflictingObjectFound signal: 'Trigger with that name already exists in system' ]
-		ifNone: [ self register: anActionTrigger accordingTo: anActionTrigger triggeringPolicy ]
+		ifFound: [ :trigger | 
+			ConflictingObjectFound
+				signal: 'Trigger with that name already exists in system' ]
+		ifNone: [ self
+				register: anActionTrigger
+				accordingTo: anActionTrigger triggeringPolicy ]
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> register: aTrigger accordingTo: aTriggeringPolicy [
+TriggerManagementSystem >> register: anActionTrigger accordingTo: aTriggeringPolicy [
 
-	triggers add: aTrigger.
-	aTriggeringPolicy register: aTrigger to: self.
+	actionTriggers add: anActionTrigger.
+	aTriggeringPolicy register: anActionTrigger to: self.
 
-	self registerIdentifierFor: aTrigger.
-	self registerTimestampFor: aTrigger
+	self registerIdentifierFor: anActionTrigger.
+	self registerTimestampFor: anActionTrigger
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> register: aTrigger toTriggerAfterDataPointRegistrationOn: aDataStream [
+TriggerManagementSystem >> register: anActionTrigger toTriggerAfterDataPointRegistrationOn: aDataStream [
 
 	triggersToTriggerAfterDataPointRegistration 
 		at: aDataStream 
-		ifPresent: [ :registeredTriggers | registeredTriggers add: aTrigger ] 
-		ifAbsentPut: (OrderedCollection with: aTrigger)
+		ifPresent: [ :registeredTriggers | registeredTriggers add: anActionTrigger ] 
+		ifAbsentPut: [ OrderedCollection with: anActionTrigger ] 
 ]
 
 { #category : #'private - managing' }
-TriggerManagementSystem >> register: aTrigger toTriggerPeriodicallyEvery: aTimePeriod [
+TriggerManagementSystem >> register: anActionTrigger toTriggerPeriodicallyEvery: aTimePeriod [
 
 	triggersToTriggerPeriodically
 		at: aTimePeriod
-		ifPresent: [ :registeredTriggers | registeredTriggers add: aTrigger ]
-		ifAbsentPut: (OrderedCollection with: aTrigger)
+		ifPresent: [ :registeredTriggers | registeredTriggers add: anActionTrigger ]
+		ifAbsentPut: [ OrderedCollection with: anActionTrigger ]
 ]
 
 { #category : #'private - managing' }
@@ -156,30 +183,30 @@ TriggerManagementSystem >> registerTimestampFor: anActionTrigger [
 	self timestampingSystem registerModificationFor: anActionTrigger
 ]
 
-{ #category : #'starting - stopping' }
-TriggerManagementSystem >> startUp [
+{ #category : #'private - controlling' }
+TriggerManagementSystem >> startUpWhenStopped [
 
-	super startUp.
-	self subscribeToDataPointRegistrationEvents .
-	self subscribeToTickEvents 
+	super startUpWhenStopped.
+	self subscribeToDataPointRegistrationEvents.
+	self subscribeToTickEvents
 ]
 
-{ #category : #'private - subscribing' }
+{ #category : #'private - events handling' }
 TriggerManagementSystem >> subscribeToDataPointRegistrationEvents [
 
 	self eventNotificationSystem
 		subscribe: self
 		to: DataPointRegistrationEvent
-		toBeNotifiedSending: #dataPointRegisteredOn:
+		toBeNotifiedSending: #handleDataPointRegistrationOn:
 ]
 
-{ #category : #'private - subscribing' }
+{ #category : #'private - events handling' }
 TriggerManagementSystem >> subscribeToTickEvents [
 
 	self eventNotificationSystem
 		subscribe: self
 		to: TickEvent
-		toBeNotifiedSending: #havePassed:
+		toBeNotifiedSending: #handleTickOn:
 ]
 
 { #category : #'private - systems' }
@@ -199,14 +226,14 @@ TriggerManagementSystem >> triggerIdentifiedBy: anIdentifier [
 
 	^ self identifierSystem
 		objectIdentifiedBy: anIdentifier
-		ifNone: [ ObjectNotFound signal: 'Trigger with that identifier not found' ]
+		ifNone: [ ObjectNotFound signal: 'Action trigger with that identifier not found' ]
 ]
 
 { #category : #'private - querying' }
 TriggerManagementSystem >> triggerNamed: aName ifFound: aFoundBlock ifNone: aNoneBlock [
 
-	^ triggers
-		detect: [ :trigger | trigger name = aName ]
+	^ actionTriggers
+		detect: [ :actionTrigger | actionTrigger name = aName ]
 		ifFound: aFoundBlock
 		ifNone: aNoneBlock
 ]
@@ -220,7 +247,7 @@ TriggerManagementSystem >> triggeringContext [
 { #category : #querying }
 TriggerManagementSystem >> triggers [
 
-	^ triggers copy
+	^ actionTriggers copy
 ]
 
 { #category : #'private - querying' }

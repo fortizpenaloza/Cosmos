@@ -14,9 +14,9 @@ SendHttpRequestPolicy class >> sending: aRequest [
 ]
 
 { #category : #evaluating }
-SendHttpRequestPolicy >> evaluateWith: aConfiguration [
+SendHttpRequestPolicy >> evaluateWithin: anEvaluationContext [
 
-	aConfiguration httpClient
+	anEvaluationContext httpClient
 		request: requestToSend;
 		get
 ]

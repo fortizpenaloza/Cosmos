@@ -13,9 +13,7 @@ TriggerDecoderTest >> setUp [
 
 	self actionManagementSystem
 		register:
-			(Action
-				named: 'Set triggered to true'
-				evaluating: (EvaluateBlockPolicy for: [ "Do nothing" ]))
+			(Action named: 'Set triggered to true' evaluating: [ "Do nothing" ])
 ]
 
 { #category : #'private - running' }
@@ -28,8 +26,7 @@ TriggerDecoderTest >> setUpRequirements [
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: DataStreamManagementSystem new;
-		registerSubsystem: ActionManagementSystem new;
-		registerSubsystem: TriggerManagementSystem new
+		registerSubsystem: ActionManagementSystem new
 ]
 
 { #category : #'private - accessing' }

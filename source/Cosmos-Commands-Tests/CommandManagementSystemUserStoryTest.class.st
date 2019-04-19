@@ -124,7 +124,7 @@ CommandManagementSystemUserStoryTest >> testQueryingCommands [
 
 	self
 		assert: self commandManagementSystem commands
-		hasTheSameElementsInTheSameOrderThat:
+		hasSameElementsInOrderAs:
 			(OrderedCollection
 				with: turnOnLedWithMediumPriority
 				with: turnOnLedWithLowPriority
@@ -147,7 +147,7 @@ CommandManagementSystemUserStoryTest >> testQueryingPrioritizedCommands [
 
 	self
 		assert: self commandManagementSystem prioritizedCommands
-		hasTheSameElementsInTheSameOrderThat:
+		hasSameElementsInOrderAs:
 			(OrderedCollection
 				with: turnOnLedWithHighPriority
 				with: turnOnLedWithMediumPriority

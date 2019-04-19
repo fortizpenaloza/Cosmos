@@ -48,26 +48,24 @@ ActionsRESTfulControllerTest >> registerAddDNSZone [
 
 	action := Action
 		named: 'Add DNS zone'
-		evaluating:
-			(SendHttpRequestPolicy
-				sending:
-					(ZnRequest new
-						requestLine:
-							(ZnRequestLine empty
-								method: #POST;
-								uri:
-									'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records'
-										asZnUrl;
-								version: ZnConstants defaultHTTPVersion;
-								yourself);
-						headers:
-							(ZnHeaders
-								withAll:
-									{('X-Auth-Email' -> 'patchinko@gmail.com').
-									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
-										asDictionary);
-						entity: (ZnEntity json: '{"isEnabled":true}');
-						yourself)).
+		sending:
+			(ZnRequest new
+				requestLine:
+					(ZnRequestLine empty
+						method: #POST;
+						uri:
+							'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records'
+								asZnUrl;
+						version: ZnConstants defaultHTTPVersion;
+						yourself);
+				headers:
+					(ZnHeaders
+						withAll:
+							{('X-Auth-Email' -> 'patchinko@gmail.com').
+							('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
+								asDictionary);
+				entity: (ZnEntity json: '{"isEnabled":true}');
+				yourself).
 
 	self actionManagementSystem register: action
 ]
@@ -79,25 +77,23 @@ ActionsRESTfulControllerTest >> registerGetDNSZones [
 
 	action := Action
 		named: 'Get DNS zones'
-		evaluating:
-			(SendHttpRequestPolicy
-				sending:
-					(ZnRequest new
-						requestLine:
-							(ZnRequestLine empty
-								method: #GET;
-								uri:
-									'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records'
-										asZnUrl;
-								version: ZnConstants defaultHTTPVersion;
-								yourself);
-						headers:
-							(ZnHeaders
-								withAll:
-									{('X-Auth-Email' -> 'patchinko@gmail.com').
-									('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
-										asDictionary);
-						yourself)).
+		sending:
+			(ZnRequest new
+				requestLine:
+					(ZnRequestLine empty
+						method: #GET;
+						uri:
+							'https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records'
+								asZnUrl;
+						version: ZnConstants defaultHTTPVersion;
+						yourself);
+				headers:
+					(ZnHeaders
+						withAll:
+							{('X-Auth-Email' -> 'patchinko@gmail.com').
+							('X-Auth-Key' -> '93b0b7a99ad1fc123d0d2b6508849db7e64')}
+								asDictionary);
+				yourself).
 
 	self actionManagementSystem register: action
 ]
@@ -135,6 +131,7 @@ ActionsRESTfulControllerTest >> setUpRequirements [
 	
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
+		registerSubsystem: EventNotificationSystem new;
 		registerSubsystem: MetadataSystem new;
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: (IdentifierSystem using: self identifierProvider);

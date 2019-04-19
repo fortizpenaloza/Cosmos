@@ -1,68 +1,120 @@
 Class {
 	#name : #ActionEvaluatorTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-ActionEvaluator-Tests'
+	#instVars : [
+		'evaluator',
+		'wasEvaluated',
+		'timeSource',
+		'pendingActionsQueue',
+		'actionEvaluationsQueue'
+	],
+	#category : #'Cosmos-ActionEvaluator-Tests'
 }
 
-{ #category : #tests }
-ActionEvaluatorTest >> testActionBlockEvaluation [
+{ #category : #running }
+ActionEvaluatorTest >> setUp [
 
-	| evaluated |
+	super setUp.
 
-	evaluated := false.
-	self deny: evaluated.
+	wasEvaluated := false.
+	pendingActionsQueue := AtomicSharedQueue new.
+	actionEvaluationsQueue := AtomicSharedQueue new.
 
-	ActionEvaluator new
-		evaluate:
-			(Action
-				named: 'Send YO to Fran'
-				evaluating: (EvaluateBlockPolicy for: [ evaluated := true ])).
-
-	self assert: evaluated
-]
-
-{ #category : #tests }
-ActionEvaluatorTest >> testActionEvaluationTroughtEventNotification [
-
-	| actionEvaluator action actionWasEvaluated |
-	
-	actionWasEvaluated := false.
-	action := Action
-		named: 'Send YO to Fran'
-		evaluating: (EvaluateBlockPolicy for: [ actionWasEvaluated := true ]).
-	actionEvaluator := ActionEvaluator new.
-	
-	self deny: actionWasEvaluated.
-	
-	actionEvaluator evaluateOn: (EvaluateActionEvent of: action).
-
-	self assert: actionWasEvaluated
-]
-
-{ #category : #tests }
-ActionEvaluatorTest >> testActionHTTPRequestEvaluation [
-
-	| evaluated actionEvaluationConfiguration evaluator request |
-
-	evaluated := false.
-	self deny: evaluated.
-
-	actionEvaluationConfiguration := PluggableMockObject new
-		respondTo: #httpClient
-		with: [ PluggableMockObject new
-				respondTo: #request: with: [  ];
-				respondTo: #get with: [ evaluated := true ] ].
+	timeSource := SystemTimeSource new.
 
 	evaluator := ActionEvaluator
-		configuredBy: actionEvaluationConfiguration.
-	request := ZnRequest get: 'http://zn.stfx.eu/zn/small.html'.
+		evaluatingActionsFrom: pendingActionsQueue
+		using: (ActionEvaluatorConfiguration workingWith: timeSource)
+		registeringEvaluationsInto: actionEvaluationsQueue
+]
 
-	self deny: evaluated.
+{ #category : #running }
+ActionEvaluatorTest >> tearDown [ 
 
-	evaluator
-		evaluate:
-			(Action
-				named: 'Send YO to Fran'
-				evaluating: (SendHttpRequestPolicy sending: request)).
-	self assert: evaluated
+	evaluator stop
+]
+
+{ #category : #tests }
+ActionEvaluatorTest >> testEvaluateBlock [
+
+	self
+		deny: wasEvaluated;
+		assert: pendingActionsQueue isEmpty;
+		assert: actionEvaluationsQueue isEmpty.
+
+	pendingActionsQueue
+		enqueue: (Action named: 'Send YO to Fran' evaluating: [ wasEvaluated := true ]).
+
+	self
+		assert: pendingActionsQueue size equals: 1;
+		assert: actionEvaluationsQueue isEmpty.
+
+	evaluator start.
+
+	self
+		wait: 10 milliSeconds
+		andDo: [ self
+				assert: wasEvaluated;
+				assert: pendingActionsQueue isEmpty;
+				assert: actionEvaluationsQueue size equals: 1 ]
+]
+
+{ #category : #tests }
+ActionEvaluatorTest >> testSendHttpRequest [
+
+	self
+		withServerDo: [ :server | 
+			server
+				onRequestRespond: [ :request | 
+					wasEvaluated := true.
+					ZnResponse noContent ].
+
+			self
+				deny: wasEvaluated;
+				assert: pendingActionsQueue isEmpty;
+				assert: actionEvaluationsQueue isEmpty.
+
+			pendingActionsQueue
+				enqueue:
+					(Action
+						named: 'Send YO to Fran'
+						sending: (ZnRequest get: server localUrl)).
+
+			self
+				assert: pendingActionsQueue size equals: 1;
+				assert: actionEvaluationsQueue isEmpty.
+
+			evaluator start.
+
+			self
+				wait: 100 milliSeconds
+				andDo: [ self
+						assert: wasEvaluated;
+						assert: pendingActionsQueue isEmpty;
+						assert: actionEvaluationsQueue size equals: 1 ] ]
+]
+
+{ #category : #'tests support' }
+ActionEvaluatorTest >> wait: aDuration andDo: aBlock [
+
+	(Delay forDuration: aDuration) wait.
+	aBlock value
+]
+
+{ #category : #'tests support' }
+ActionEvaluatorTest >> withServerDo: aBlock [
+
+	| server |
+
+	server := ZnServer on: 1700 + 32 atRandom.
+	[ server start.
+
+	self
+		assert: server isRunning & server isListening
+		description:
+			('Failed to start server on port {1}. Is there one already?'
+				format: {server port}).
+				
+	aBlock cull: server ]
+		ensure: [ server stop ]
 ]

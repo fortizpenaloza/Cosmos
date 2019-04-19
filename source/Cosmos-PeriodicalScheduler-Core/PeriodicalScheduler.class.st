@@ -57,13 +57,13 @@ PeriodicalScheduler >> schedule: aTask toBeExecutedEvery: aTimePeriod [
 	
 ]
 
-{ #category : #'starting-stopping' }
+{ #category : #controlling }
 PeriodicalScheduler >> start [
 
 	scheduledTasks do: [ :scheduledTask | self schedule: scheduledTask ]
 ]
 
-{ #category : #'starting-stopping' }
+{ #category : #controlling }
 PeriodicalScheduler >> stop [
 
 	runningProcesses do: [ :process | process terminate ]

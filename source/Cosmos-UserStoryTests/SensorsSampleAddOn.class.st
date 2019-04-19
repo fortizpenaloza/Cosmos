@@ -13,16 +13,16 @@ SensorsSampleAddOn class >> on: aCosmosSystem [
 	^self new initializeOn: aCosmosSystem 
 ]
 
-{ #category : #accessing }
-SensorsSampleAddOn >> currentDateTime [
-
-	^ self timeSystem dateTime
-]
-
 { #category : #'private - systems' }
 SensorsSampleAddOn >> dataManagementSystem [
 
 	^ cosmos >> #DataStreamManagementSystemInterface
+]
+
+{ #category : #accessing }
+SensorsSampleAddOn >> dateTime [
+
+	^ self timeSystem dateTime
 ]
 
 { #category : #initialization }
@@ -46,7 +46,7 @@ SensorsSampleAddOn >> registerAtmosphoricPressureStreamWithOneDataPoint [
 	self registerStreamNamed: 'Pressure'.
 	
 	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 1016)
+		register: (DataPoint on: self dateTime holding: 1016)
 		toStreamNamed: 'Pressure'
 ]
 
@@ -71,15 +71,15 @@ SensorsSampleAddOn >> registerTemperatureStreamWithSomeDataPoints [
 	self registerStreamNamed: 'Temperature'.
 
 	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 15.5)
+		register: (DataPoint on: self dateTime holding: 15.5)
 		toStreamNamed: 'Temperature'.
 
 	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 16)
+		register: (DataPoint on: self dateTime holding: 16)
 		toStreamNamed: 'Temperature'.
 		
 	self dataManagementSystem
-		register: (DataPoint on: self currentDateTime holding: 16.5)
+		register: (DataPoint on: self dateTime holding: 16.5)
 		toStreamNamed: 'Temperature'
 ]
 

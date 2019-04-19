@@ -3,10 +3,39 @@ Class {
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'triggered',
-		'timeSource'
+		'timeSource',
+		'pendingActionsQueue',
+		'actionEvaluationsQueue'
 	],
 	#category : #'Cosmos-Tests'
 }
+
+{ #category : #'private - systems' }
+CosmosUserStoryTest >> actionEvaluationSystem [
+	
+	^ rootSystem >> #ActionEvaluationSystemInterface
+]
+
+{ #category : #tests }
+CosmosUserStoryTest >> assertActionWasEvaluated [
+
+	self
+		assert: triggered;
+		assert: pendingActionsQueue isEmpty;
+		deny: actionEvaluationsQueue isEmpty.
+
+	(Delay forDuration: 10 milliSeconds) wait.
+
+	self
+		assert: triggered;
+		assert: pendingActionsQueue isEmpty;
+		assert: actionEvaluationsQueue isEmpty.
+
+	self
+		withTheOnlyOneIn: self actionEvaluationSystem actionEvaluations
+		do:
+			[ :actionEvaluation | self assert: actionEvaluation action equals: self setTriggeredToTrue ]
+]
 
 { #category : #'private - accessing' }
 CosmosUserStoryTest >> eightPM [
@@ -14,13 +43,18 @@ CosmosUserStoryTest >> eightPM [
 	^ TimeOfDay hours: 20
 ]
 
-{ #category : #'action evaluation' }
-CosmosUserStoryTest >> evaluateActionOn: anEvaluateActionEvent [
+{ #category : #'private - action evaluation' }
+CosmosUserStoryTest >> evaluate [
 
-	ActionEvaluator new evaluate: anEvaluateActionEvent action
+	| nextAction |
+
+	nextAction := pendingActionsQueue dequeue.
+	nextAction evaluateWithin: self.
+	actionEvaluationsQueue
+		enqueue: (ActionEvaluation of: nextAction on: self systemDateTime)
 ]
 
-{ #category : #systems }
+{ #category : #'private - systems' }
 CosmosUserStoryTest >> eventNotificationSystem [
 
 	^ rootSystem >> #EventNotificationSystemInterface
@@ -58,7 +92,7 @@ CosmosUserStoryTest >> setTriggeredToTrue [
 
 	^ Action
 		named: 'Set triggered to true'
-		evaluating: (EvaluateBlockPolicy for: [ triggered := true ])
+		evaluating: [ triggered := true ]
 ]
 
 { #category : #'private - accessing' }
@@ -96,6 +130,8 @@ CosmosUserStoryTest >> setTriggeredToTrueEveryFiveMinutes [
 { #category : #running }
 CosmosUserStoryTest >> setUp [
 	
+	pendingActionsQueue := AtomicSharedQueue new.
+	actionEvaluationsQueue := AtomicSharedQueue new.
 	super setUp. 
 	triggered := false.
 ]
@@ -103,7 +139,7 @@ CosmosUserStoryTest >> setUp [
 { #category : #running }
 CosmosUserStoryTest >> setUpRequirements [
 
-	timeSource := FixedTimeSource on: self systemDateTime .
+	timeSource := FixedTimeSource on: self systemDateTime.
 
 	self
 		registerSubsystem: (TimeSystem using: timeSource);
@@ -113,16 +149,8 @@ CosmosUserStoryTest >> setUpRequirements [
 		registerSubsystem: TimestampingSystem new;
 		registerSubsystem: DataStreamManagementSystem new;
 		registerSubsystem: ActionManagementSystem new;
-		registerSubsystem: TriggerManagementSystem new
-]
-
-{ #category : #'private - accessing' }
-CosmosUserStoryTest >> suscribeToEvaluateActionEvent [
-
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:
+		registerSubsystem: (ActionEvaluationSystem registeringFrom: actionEvaluationsQueue);
+		registerSubsystem: (TriggerManagementSystem enqueuingActionsInto: pendingActionsQueue)
 ]
 
 { #category : #'private - accessing' }
@@ -150,8 +178,6 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesDataStream
 
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
-	self suscribeToEvaluateActionEvent.
-
 	trigger := ActionTrigger
 		named: 'Set triggered to true after data point registration'
 		triggering: self setTriggeredToTrue
@@ -161,47 +187,54 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesDataStream
 				of: dataStream
 				isLessThan: 11).
 	self triggerManagementSystem register: trigger.
-
-	self deny: triggered.
+	self
+		deny: triggered;
+		assert: pendingActionsQueue isEmpty.
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 12)
 		toStreamNamed: dataStream name.
-	self deny: triggered.
+	self
+		deny: triggered;
+		assert: pendingActionsQueue isEmpty.
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 10)
 		toStreamNamed: dataStream name.
-	self assert: triggered
+	self
+		deny: triggered;
+		deny: pendingActionsQueue isEmpty.
+		
+	self evaluate.
+	self assertActionWasEvaluated
 ]
 
 { #category : #tests }
 CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutes [
 
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
-
 	self triggerManagementSystem register: self setTriggeredToTrueEveryFiveMinutes.
-	self deny: triggered.
+	self
+		deny: triggered;
+		assert: pendingActionsQueue isEmpty.
+
 	self eventNotificationSystem
 		notifySubscribersTo: (TickEvent of: self oneMinute).
+	self
+		deny: triggered;
+		assert: pendingActionsQueue isEmpty.
 
-	self deny: triggered.
 	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self fiveMinutes).
-		
-	self assert: triggered
+		notifySubscribersTo: (TickEvent of: self fiveMinutes).	
+	self
+		deny: triggered;
+		deny: pendingActionsQueue isEmpty.
+	
+	self evaluate.
+	self assertActionWasEvaluated
 ]
 
 { #category : #tests }
 CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotBeenUpdated [
 
 	| dataStream condition |
-
-	self eventNotificationSystem
-		subscribe: self
-		to: EvaluateActionEvent
-		toBeNotifiedSending: #evaluateActionOn:.
 
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
@@ -224,7 +257,11 @@ CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotB
 
 	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
 	self eventNotificationSystem notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self assert: triggered
+	self deny: triggered.
+	
+
+	self evaluate.
+	self assertActionWasEvaluated
 ]
 
 { #category : #tests }
@@ -232,7 +269,6 @@ CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataSt
 
 	| dataStream condition |
 
-	self suscribeToEvaluateActionEvent.
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
 
@@ -274,7 +310,10 @@ CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataSt
 		toStreamNamed: dataStream name.
 	self eventNotificationSystem
 		notifySubscribersTo: (TickEvent of: self tenMinutes).
-	self assert: triggered
+	self deny: triggered.
+	
+	self evaluate.
+	self assertActionWasEvaluated
 ]
 
 { #category : #tests }
@@ -282,7 +321,6 @@ CosmosUserStoryTest >> testTriggeringOnDataPointRegistration [
 
 	| dataStream |
 
-	self suscribeToEvaluateActionEvent.
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
 
@@ -293,5 +331,8 @@ CosmosUserStoryTest >> testTriggeringOnDataPointRegistration [
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 12)
 		toStreamNamed: dataStream name.
-	self assert: triggered
+	self deny: triggered.
+	
+	self evaluate.
+	self assertActionWasEvaluated
 ]
