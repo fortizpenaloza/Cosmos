@@ -187,7 +187,6 @@ TriggerManagementSystem >> registerTimestampFor: anActionTrigger [
 TriggerManagementSystem >> startUpWhenStopped [
 
 	super startUpWhenStopped.
-
 	self subscribeToDataPointRegistrationEvents.
 	self subscribeToTickEvents
 ]
