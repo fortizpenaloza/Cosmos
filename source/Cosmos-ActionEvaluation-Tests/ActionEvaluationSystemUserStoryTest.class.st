@@ -20,14 +20,6 @@ ActionEvaluationSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 ]
 
 { #category : #'private - accessing' }
-ActionEvaluationSystemUserStoryTest >> sendTextMessageToFran [
-
-	^ Action
-		named: 'Send text message to Fran'
-		evaluating: [ "do nothing" ]
-]
-
-{ #category : #'private - accessing' }
 ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 
 	^ Action named: 'Send YO to Fran' evaluating: [ "Send YO to Fran" ]
@@ -51,6 +43,14 @@ ActionEvaluationSystemUserStoryTest >> setUpRequirements [
 ActionEvaluationSystemUserStoryTest >> tearDown [ 
 
 	rootSystem shutDown  
+]
+
+{ #category : #tests }
+ActionEvaluationSystemUserStoryTest >> testAccessing [
+
+	self
+		assert: self actionEvaluationSystem name
+		equals: 'Action Evaluation'
 ]
 
 { #category : #tests }
