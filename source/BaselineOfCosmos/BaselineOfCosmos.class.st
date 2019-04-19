@@ -40,7 +40,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Commands') ];
 		group: 'API' with: 'Cosmos-API-Commands';
 		package: 'Cosmos-API-Actions'
-			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions') ];
+			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Actions' 'Cosmos-ActionEvaluation') ];
 		group: 'API' with: 'Cosmos-API-Actions';
 		package: 'Cosmos-API-Triggers'
 			with: [ spec requires: #('Cosmos-API-Common' 'Cosmos-Triggers') ];
@@ -125,6 +125,8 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 		group: 'Model' with: 'Cosmos-Commands';
 		package: 'Cosmos-Actions' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Actions';
+		package: 'Cosmos-ActionEvaluation' with: [ spec requires: 'Kepler' ];
+		group: 'Model' with: 'Cosmos-ActionEvaluation';
 		package: 'Cosmos-PeriodicalScheduler-Core';
 		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
 		package: 'Cosmos-ActionEvaluator';
@@ -161,6 +163,9 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-Actions-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Actions' 'Cosmos-UserStoryTests') ];
 		group: 'Model-Tests' with: 'Cosmos-Actions-Tests';
+		package: 'Cosmos-ActionEvaluation-Tests'
+			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-ActionEvaluation' 'Cosmos-UserStoryTests') ];
+		group: 'Model-Tests' with: 'Cosmos-ActionEvaluation-Tests';
 		package: 'Cosmos-PeriodicalScheduler-Tests'
 			with: [ spec requires: #('Cosmos-PeriodicalScheduler-Core') ];
 		group: 'Model-Tests' with: 'Cosmos-PeriodicalScheduler-Tests';
