@@ -11,14 +11,6 @@ ActionManagementSystemUserStoryTest >> octoberFirstOf2014AtNoon [
 ]
 
 { #category : #accessing }
-ActionManagementSystemUserStoryTest >> sendTextMessageToFran [
-
-	^ Action
-		named: 'Send text message to Fran'
-		evaluating: [ "do nothing" ]
-]
-
-{ #category : #accessing }
 ActionManagementSystemUserStoryTest >> sendYOToFran [
 
 	^ Action
