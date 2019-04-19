@@ -42,17 +42,14 @@ HTTPRequestDecoder >> decode: aKey from: aDictionary using: aDecoder ifAbsent: a
 { #category : #'private - decoders' }
 HTTPRequestDecoder >> entityDecoder [
 
-	^ [ :rawEntity | 
-	ZnStringEntity
-		with: (rawEntity at: #contents)
-		ofType: (rawEntity at: #contentType) asMediaType ]
+	^ [ :rawEntity | ZnEntity with: rawEntity ]
 ]
 
 { #category : #decoding }
 HTTPRequestDecoder >> entityFrom: aRawRequest [
 
 	^ self
-		decode: #entity
+		decode: #body
 		from: aRawRequest
 		using: self entityDecoder
 		ifAbsent: ZnEntity new
