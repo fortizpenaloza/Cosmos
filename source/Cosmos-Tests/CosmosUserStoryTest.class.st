@@ -18,9 +18,9 @@ CosmosUserStoryTest >> eightPM [
 CosmosUserStoryTest >> evaluateActionOn: anEvaluateActionEvent [
 
 	(ActionEvaluator
-		evaluatingAll: nil
+		evaluatingActionsFrom: nil
 		using: nil
-		registeringEvaluationsOn: (ActionEvaluatorConfiguration workingWith: rootSystem))
+		registeringEvaluationsInto: (ActionEvaluatorConfiguration workingWith: rootSystem))
 		evaluate: anEvaluateActionEvent action
 ]
 

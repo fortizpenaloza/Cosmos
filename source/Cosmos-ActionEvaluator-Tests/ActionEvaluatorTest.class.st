@@ -6,8 +6,8 @@ Class {
 		'wasEvaluated',
 		'timeSource',
 		'pendingActions',
-		'evaluatedActions',
-		'pendingEvaluationActions'
+		'pendingActionsQueue',
+		'actionEvaluationsQueue'
 	],
 	#category : #'Cosmos-ActionEvaluator-Tests'
 }
@@ -18,15 +18,15 @@ ActionEvaluatorTest >> setUp [
 	super setUp.
 
 	wasEvaluated := false.
-	pendingEvaluationActions := AtomicSharedQueue new.
-	evaluatedActions := AtomicSharedQueue new.
+	pendingActionsQueue := AtomicSharedQueue new.
+	actionEvaluationsQueue := AtomicSharedQueue new.
 
 	timeSource := SystemTimeSource new.
 
 	evaluator := ActionEvaluator
-		evaluatingAll: pendingEvaluationActions
+		evaluatingActionsFrom: pendingActionsQueue
 		using: (ActionEvaluatorConfiguration workingWith: timeSource)
-		registeringEvaluationsOn: evaluatedActions
+		registeringEvaluationsInto: actionEvaluationsQueue
 ]
 
 { #category : #running }
@@ -40,15 +40,15 @@ ActionEvaluatorTest >> testEvaluateBlock [
 
 	self
 		deny: wasEvaluated;
-		assert: pendingEvaluationActions isEmpty;
-		assert: evaluatedActions isEmpty.
+		assert: pendingActionsQueue isEmpty;
+		assert: actionEvaluationsQueue isEmpty.
 
-	pendingEvaluationActions
+	pendingActionsQueue
 		enqueue: (Action named: 'Send YO to Fran' evaluating: [ wasEvaluated := true ]).
 
 	self
-		assert: pendingEvaluationActions size equals: 1;
-		assert: evaluatedActions isEmpty.
+		assert: pendingActionsQueue size equals: 1;
+		assert: actionEvaluationsQueue isEmpty.
 
 	evaluator start.
 
@@ -56,8 +56,8 @@ ActionEvaluatorTest >> testEvaluateBlock [
 		wait: 10 milliSeconds
 		andDo: [ self
 				assert: wasEvaluated;
-				assert: pendingEvaluationActions isEmpty;
-				assert: evaluatedActions size equals: 1 ]
+				assert: pendingActionsQueue isEmpty;
+				assert: actionEvaluationsQueue size equals: 1 ]
 ]
 
 { #category : #tests }
@@ -72,18 +72,18 @@ ActionEvaluatorTest >> testSendHttpRequest [
 
 			self
 				deny: wasEvaluated;
-				assert: pendingEvaluationActions isEmpty;
-				assert: evaluatedActions isEmpty.
+				assert: pendingActionsQueue isEmpty;
+				assert: actionEvaluationsQueue isEmpty.
 
-			pendingEvaluationActions
+			pendingActionsQueue
 				enqueue:
 					(Action
 						named: 'Send YO to Fran'
 						sending: (ZnRequest get: server localUrl)).
 
 			self
-				assert: pendingEvaluationActions size equals: 1;
-				assert: evaluatedActions isEmpty.
+				assert: pendingActionsQueue size equals: 1;
+				assert: actionEvaluationsQueue isEmpty.
 
 			evaluator start.
 
@@ -91,8 +91,8 @@ ActionEvaluatorTest >> testSendHttpRequest [
 				wait: 100 milliSeconds
 				andDo: [ self
 						assert: wasEvaluated;
-						assert: pendingEvaluationActions isEmpty;
-						assert: evaluatedActions size equals: 1 ] ]
+						assert: pendingActionsQueue isEmpty;
+						assert: actionEvaluationsQueue size equals: 1 ] ]
 ]
 
 { #category : #'tests support' }

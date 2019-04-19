@@ -2,8 +2,6 @@ Class {
 	#name : #ActionEvaluationSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
-		'evaluatedActions',
-		'pendingEvaluationActions',
 		'actionEvaluations'
 	],
 	#category : #'Cosmos-ActionEvaluation-Tests'
@@ -38,9 +36,7 @@ ActionEvaluationSystemUserStoryTest >> sendYOToFran [
 { #category : #running }
 ActionEvaluationSystemUserStoryTest >> setUp [
 
-	pendingEvaluationActions := AtomicSharedQueue new.
 	actionEvaluations := AtomicSharedQueue new.
-
 	super setUp
 ]
 
@@ -48,10 +44,7 @@ ActionEvaluationSystemUserStoryTest >> setUp [
 ActionEvaluationSystemUserStoryTest >> setUpRequirements [
 
 	self
-		registerSubsystem:
-			(ActionEvaluationSystem
-				registeringAll: actionEvaluations
-				addingPendingActionsTo: pendingEvaluationActions)
+		registerSubsystem: (ActionEvaluationSystem registeringFrom: actionEvaluations)
 ]
 
 { #category : #running }
@@ -63,21 +56,17 @@ ActionEvaluationSystemUserStoryTest >> tearDown [
 { #category : #tests }
 ActionEvaluationSystemUserStoryTest >> testQueringActionEvaluationSummaries [
 
-	| action anotherAction |
+	| action |
 
 	action := self sendYOToFran.
-	self actionEvaluationSystem evaluate: action.
-
-	anotherAction := self sendTextMessageToFran.
-	self actionEvaluationSystem evaluate: anotherAction.
+	actionEvaluations
+		enqueue: (ActionEvaluation of: action on: self octoberFirstOf2014AtNoon).
 
 	self
-		assert: pendingEvaluationActions size equals: 2;
 		assert: self actionEvaluationSystem actionEvaluationSummaries isEmpty.
 
-	self actionEvaluationSystem
-		register: (ActionEvaluation of: action on: self octoberFirstOf2014AtNoon).
-
+	(Delay forDuration: 10 milliSeconds) wait. 
+	
 	self
 		withTheOnlyOneIn: self actionEvaluationSystem actionEvaluationSummaries
 		do: [ :summary | 

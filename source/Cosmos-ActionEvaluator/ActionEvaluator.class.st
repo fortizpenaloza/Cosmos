@@ -8,20 +8,19 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'configuration',
-		'dequeuingProcess',
-		'pendingEvaluationActions',
-		'actionEvaluations'
+		'actionEvaluationsQueue',
+		'pendingActionsDequeuingProcess'
 	],
 	#category : #'Cosmos-ActionEvaluator'
 }
 
 { #category : #'instance creation' }
-ActionEvaluator class >> evaluatingAll: anActionCollection using: aConfiguration registeringEvaluationsOn: anActionEvaluationCollection [
+ActionEvaluator class >> evaluatingActionsFrom: aPendingActionsQueue using: aConfiguration registeringEvaluationsInto: anActionEvaluationsQueue [
 
 	^ self new
-		initializeEvaluatingAll: anActionCollection
+		initializeEvaluatingActionsFrom: aPendingActionsQueue
 		using: aConfiguration
-		registeringEvaluationsOn: anActionEvaluationCollection
+		registeringEvaluationsInto: anActionEvaluationsQueue
 ]
 
 { #category : #'private - accessing' }
@@ -30,52 +29,34 @@ ActionEvaluator >> dateTime [
 	^ configuration dateTime
 ]
 
-{ #category : #'private - accessing' }
-ActionEvaluator >> dequeuingProcess [
-
-	[ | nextAction |
-
-	[ nextAction := pendingEvaluationActions dequeue ]
-		whileNotNil: [ self evaluate: nextAction ] ] repeat
-]
-
 { #category : #evaluating }
 ActionEvaluator >> evaluate: anAction [
 
 	anAction evaluateWithin: configuration.
-	actionEvaluations
+	actionEvaluationsQueue
 		enqueue: (ActionEvaluation of: anAction on: self dateTime)
 ]
 
 { #category : #initialization }
-ActionEvaluator >> initializeDequeuingProcess [
-
-	dequeuingProcess := [ self dequeuingProcess ] newProcess.
-
-	dequeuingProcess
-		name: 'Action dequeuing process';
-		priority: Processor userBackgroundPriority + 1
-]
-
-{ #category : #initialization }
-ActionEvaluator >> initializeEvaluatingAll: anActionCollection using: aConfiguration registeringEvaluationsOn: anActionEvaluationCollection [
+ActionEvaluator >> initializeEvaluatingActionsFrom: aPendingActionsQueue using: aConfiguration registeringEvaluationsInto: anActionEvaluationsQueue [
 
 	configuration := aConfiguration.
-	pendingEvaluationActions := anActionCollection.
-	actionEvaluations := anActionEvaluationCollection.
-	
-	self flag: 'rename to show pendingActions'.
-	self initializeDequeuingProcess
+	pendingActionsDequeuingProcess := DequeuingProcess
+		named: 'Pending actions dequeuing process'
+		from: aPendingActionsQueue
+		applying: [ :action | self evaluate: action ].
+
+	actionEvaluationsQueue := anActionEvaluationsQueue
 ]
 
 { #category : #controlling }
 ActionEvaluator >> start [
 
-	dequeuingProcess resume
+	pendingActionsDequeuingProcess resume
 ]
 
 { #category : #controlling }
 ActionEvaluator >> stop [
 
-	dequeuingProcess terminate
+	pendingActionsDequeuingProcess terminate
 ]

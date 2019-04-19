@@ -2,46 +2,35 @@ Class {
 	#name : #ActionEvaluationSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'evaluationSummaries',
-		'dequeuingProcess',
 		'actionEvaluations',
-		'pendingEvaluationActions',
-		'actionEvaluationQueue'
+		'actionEvaluationsSummaries',
+		'actionEvaluationsDequeuingProcess'
 	],
 	#category : #'Cosmos-ActionEvaluation'
 }
 
 { #category : #'instance creation' }
-ActionEvaluationSystem class >> registeringAll: anActionEvaluationCollection addingPendingActionsTo: anActionCollection [
+ActionEvaluationSystem class >> registeringFrom: anActionEvaluationsQueue [
 
-	^ self new initializeRegisteringAll: anActionEvaluationCollection
+	^ self new initializeRegisteringFrom: anActionEvaluationsQueue
 ]
 
-{ #category : #managing }
+{ #category : #querying }
 ActionEvaluationSystem >> actionEvaluationSummaries [
 	
-	^ evaluationSummaries values
+	^ actionEvaluationsSummaries values
+]
+
+{ #category : #querying }
+ActionEvaluationSystem >> actionEvaluations [
+
+	^ actionEvaluations copy 
 ]
 
 { #category : #installing }
 ActionEvaluationSystem >> dependencies [
 
 	^ #()
-]
-
-{ #category : #accessing }
-ActionEvaluationSystem >> dequeuingProcess [
-
-	[ | nextActionEvaluation |
-
-	[ nextActionEvaluation := actionEvaluationQueue dequeue ]
-		whileNotNil: [ self register: nextActionEvaluation ] ] repeat
-]
-
-{ #category : #evaluating }
-ActionEvaluationSystem >> evaluate: anAction [ 
-	
-	pendingEvaluationActions enqueue: anAction
 ]
 
 { #category : #installing }
@@ -51,27 +40,28 @@ ActionEvaluationSystem >> implementedInterfaces [
 ]
 
 { #category : #initialization }
-ActionEvaluationSystem >> initializeDequeuingProcess [
+ActionEvaluationSystem >> initializeDequeuingProcessFrom: anActionEvaluationQueue [
 
-	dequeuingProcess := [ self dequeuingProcess ] newProcess.
-
-	dequeuingProcess
-		name: 'Action evaluation dequeuing process';
-		priority: Processor userBackgroundPriority + 1
+	actionEvaluationsDequeuingProcess := DequeuingProcess
+		named: 'Action evaluation dequeuing'
+		from: anActionEvaluationQueue
+		applying: [ :actionEvaluation | self register: actionEvaluation ]
 ]
 
 { #category : #initialization }
-ActionEvaluationSystem >> initializeRegisteringAll: anActionEvaluationCollection [
+ActionEvaluationSystem >> initializeRegisteringFrom: anActionEvaluationsQueue [
 
 	self initialize.
-
-	self flag: 'borrar la primera y renombrar la segunda, es un proceso'.
-	actionEvaluationQueue := anActionEvaluationCollection.
+	self initializeDequeuingProcessFrom: anActionEvaluationsQueue.
 
 	actionEvaluations := OrderedCollection new.
-	evaluationSummaries := Dictionary new.
-	
-	self initializeDequeuingProcess
+	actionEvaluationsSummaries := Dictionary new
+]
+
+{ #category : #'private - managing' }
+ActionEvaluationSystem >> initializeSummaryFor: anActionEvaluation [
+
+	^ ActionEvaluationSummary of: anActionEvaluation 
 ]
 
 { #category : #accessing }
@@ -84,27 +74,29 @@ ActionEvaluationSystem >> name [
 ActionEvaluationSystem >> register: anActionEvaluation [
 
 	actionEvaluations add: anActionEvaluation.
+	self registerToSummary: anActionEvaluation
+]
 
-	evaluationSummaries
-		at: anActionEvaluation action 
+{ #category : #'private - managing' }
+ActionEvaluationSystem >> registerToSummary: anActionEvaluation [
+
+	actionEvaluationsSummaries
+		at: anActionEvaluation action
 		ifPresent:
-			[ :summary | summary registerEvaluationOn: anActionEvaluation evaluationDateTime ]
-		ifAbsentPut:
-			(ActionEvaluationSummary
-				of: anActionEvaluation action
-				lastEvaluatedOn: anActionEvaluation evaluationDateTime
-				totaling: 1)
+			[ :summary | summary synchronizeWith: anActionEvaluation evaluationDateTime ]
+		ifAbsentPut: [ self initializeSummaryFor: anActionEvaluation ]
 ]
 
 { #category : #'private - controlling' }
 ActionEvaluationSystem >> shutDownWhenStarted [
 
 	super shutDownWhenStarted.
-	dequeuingProcess terminate
+	actionEvaluationsDequeuingProcess stop
 ]
 
 { #category : #'private - controlling' }
 ActionEvaluationSystem >> startUpWhenStopped [
 
-	super startUpWhenStopped
+	super startUpWhenStopped.
+	actionEvaluationsDequeuingProcess start
 ]

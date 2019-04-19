@@ -15,7 +15,7 @@ EvaluateActionEvent class >> of: anAction [
 
 { #category : #accessing }
 EvaluateActionEvent >> action [
-
+	self flag: 'matar esto'.
 	^ action
 ]
 

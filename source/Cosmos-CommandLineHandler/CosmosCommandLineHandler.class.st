@@ -82,9 +82,9 @@ CosmosCommandLineHandler >> basicActivate [
 CosmosCommandLineHandler >> buildActionEvaluator [
 
 	ActionEvaluator
-		evaluatingAll: nil
+		evaluatingActionsFrom: nil
 		using: nil
-		registeringEvaluationsOn: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
+		registeringEvaluationsInto: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
 ]
 
 { #category : #'private - building cosmos system' }

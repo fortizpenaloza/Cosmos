@@ -10,18 +10,31 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionEvaluationSummary class >> of: anAction lastEvaluatedOn: aDateTime totaling: anEvaluationCount [
+ActionEvaluationSummary class >> of: anActionEvaluation [
 
-	^ self new
-		initializeOf: anAction
-		lastEvaluatedOn: aDateTime
-		totaling: anEvaluationCount
+	^ self
+		of: anActionEvaluation action
+		lastEvaluatedOn: anActionEvaluation evaluationDateTime
+]
+
+{ #category : #'instance creation' }
+ActionEvaluationSummary class >> of: anAction lastEvaluatedOn: aDateTime [
+
+	^ self new initializeOf: anAction lastEvaluatedOn: aDateTime
 ]
 
 { #category : #accessing }
 ActionEvaluationSummary >> action [
 
 	^ action
+]
+
+{ #category : #'private - updating' }
+ActionEvaluationSummary >> assertActionMatch: anActionEvaluation [
+
+	action = anActionEvaluation action
+		ifFalse: [ ConflictingObjectFound
+				signal: 'Action summary does not belong to this action' ]
 ]
 
 { #category : #accessing }
@@ -31,11 +44,11 @@ ActionEvaluationSummary >> evaluationCount [
 ]
 
 { #category : #initialization }
-ActionEvaluationSummary >> initializeOf: anAction lastEvaluatedOn: aDateTime totaling: anEvaluationCount [
+ActionEvaluationSummary >> initializeOf: anAction lastEvaluatedOn: aDateTime [
 
 	action :=  anAction.
 	lastEvaluation :=  aDateTime.
-	evaluationCount :=  anEvaluationCount
+	evaluationCount :=  1
 	
 
 	
@@ -48,8 +61,10 @@ ActionEvaluationSummary >> lastEvaluation [
 ]
 
 { #category : #updating }
-ActionEvaluationSummary >> registerEvaluationOn: aDateTime [
+ActionEvaluationSummary >> synchronizeWith: anActionEvaluation [
 
-	lastEvaluation := aDateTime.
+	self assertActionMatch: anActionEvaluation.
+
+	lastEvaluation := anActionEvaluation evaluationDateTime.
 	evaluationCount := evaluationCount + 1
 ]
