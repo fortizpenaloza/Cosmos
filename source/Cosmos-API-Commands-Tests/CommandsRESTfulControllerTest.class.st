@@ -214,7 +214,7 @@ CommandsRESTfulControllerTest >> testGetCommand [
 		assert: response code equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response entityTag equals: '"2cc1a5913c9c7a9cd2e624a950abdf7896918b0a"' asETag;
-		withJsonFromContentsIn: response contents
+		withJSONFromContentsIn: response contents
 			do: [ :json | 
 			self
 				assert: json priority equals: 1;

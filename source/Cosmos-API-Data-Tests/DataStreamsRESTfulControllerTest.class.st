@@ -262,7 +262,7 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
-		withJsonFromContentsIn: response contents
+		withJSONFromContentsIn: response contents
 			do: [ :json | 
 			self
 				assert: json name equals: 'Temperature';
@@ -290,7 +290,7 @@ DataStreamsRESTfulControllerTest >> testGetDataStreamDataPoints [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		withJsonFromContentsIn: response
+		withJSONFromContentsIn: response
 			do: [ :json | 
 			self assert: json size equals: 3.
 			self

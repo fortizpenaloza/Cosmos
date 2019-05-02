@@ -18,7 +18,7 @@ SendHttpRequestPolicy >> evaluateWithin: anEvaluationContext [
 
 	anEvaluationContext httpClient
 		request: requestToSend;
-		get
+		execute
 ]
 
 { #category : #initialization }

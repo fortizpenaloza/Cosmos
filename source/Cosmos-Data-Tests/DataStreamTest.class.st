@@ -89,3 +89,12 @@ DataStreamTest >> testInstanceCreationAndAccessing [
 		assert: dataStream name equals: 'Temperature';
 		assert: dataStream dataPoints isEmpty
 ]
+
+{ #category : #tests }
+DataStreamTest >> testInstanceCreationFailsWithEmptyName [
+
+	self
+		should: [ DataStream named: '' ]
+		raise: InstanceCreationFailed
+		withMessageText: 'Data stream name must not be empty'
+]

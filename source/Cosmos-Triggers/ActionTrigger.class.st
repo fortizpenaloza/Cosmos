@@ -11,7 +11,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+ActionTrigger class >> assertIsNotEmpty: aName [
+
+	AssertionChecker
+		enforce: [ aName notEmpty ]
+		because: 'Action trigger name must not be empty'
+		raising: InstanceCreationFailed
+]
+
+{ #category : #'instance creation' }
 ActionTrigger class >> named: aName triggering: anAction accordingTo: aTriggeringPolicy ifSatisfies: aTriggeringCondition [
+
+	self assertIsNotEmpty: aName.
 
 	^ self new
 		initializeNamed: aName

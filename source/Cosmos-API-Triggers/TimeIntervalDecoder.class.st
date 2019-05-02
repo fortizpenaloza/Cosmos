@@ -11,5 +11,6 @@ TimeIntervalDecoder >> decode: aJSON [
 
 	timeOfDayDecoder := ISO8601TimeOfDayDecoder usingExtendedFormat.
 
-	^ (timeOfDayDecoder decode: aJSON start) to: (timeOfDayDecoder decode: aJSON stop)
+	^ ((timeOfDayDecoder decode: aJSON start) to: (timeOfDayDecoder decode: aJSON stop))
+		asTimeSpan
 ]
