@@ -38,7 +38,11 @@ CosmosAPITest >> setUp [
 			(#serverUrl -> self baseUrl)}
 		installing:
 			{(DataStreamsRESTfulController workingWith: rootSystem).
-			(DataPointsRESTfulController workingWith: rootSystem)}.
+			(DataPointsRESTfulController workingWith: rootSystem).
+			(CommandsRESTfulController workingWith: rootSystem).
+			(ActionsRESTfulController workingWith: rootSystem).
+			(ActionEvaluationsRESTfulController workingWith: rootSystem).
+			(TriggersRESTfulController workingWith: rootSystem)}.
 
 	api
 		install;
