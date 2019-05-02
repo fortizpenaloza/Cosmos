@@ -325,7 +325,7 @@ TriggersRESTfulControllerTest >> testGetTrigger [
 		assert: response status equals: 200;
 		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
 		assert: response entityTag equals: '"8fdd7769a8b44bd63f4b962583f13ef90e551344"' asETag;
-		withJsonFromContentsIn: response contents
+		withJSONFromContentsIn: response contents
 			do: [ :json | 
 				self assert: json name equals: 'Set triggered to true after data point registration';
 				assert: json action equals: 'Set triggered to true';
@@ -351,7 +351,7 @@ TriggersRESTfulControllerTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDa
 		assert: response status equals: 200;
 		assert: response contentType asZnMimeType equals: self applicationJsonVersion1dot0dot0MediaType.
 	self
-		withJsonFromContentsIn: response
+		withJSONFromContentsIn: response
 		do: [ :json | 
 			self
 				withTheOnlyOneIn: json

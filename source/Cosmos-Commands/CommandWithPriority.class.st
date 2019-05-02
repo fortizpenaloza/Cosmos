@@ -9,7 +9,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+CommandWithPriority class >> assertIsInteger: aPriority [
+
+	AssertionChecker
+		enforce: [ aPriority isInteger ]
+		because: [ 'A command''s priority must be an integer' ]
+		raising: InstanceCreationFailed
+]
+
+{ #category : #'instance creation' }
 CommandWithPriority class >> holding: aCommand and: aPriority [
+
+	self assertIsInteger: aPriority.
 
 	^ self new initializeHolding: aCommand and: aPriority
 ]

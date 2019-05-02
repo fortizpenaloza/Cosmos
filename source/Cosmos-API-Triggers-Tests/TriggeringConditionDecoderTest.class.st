@@ -146,6 +146,5 @@ TriggeringConditionDecoderTest >> testTimeIntervalTriggeringCondition [
 	condition := (TriggeringConditionDecoder using: rootSystem)
 		decode: (NeoJSONObject fromString: json).
 
-
 	self assert: (condition isKindOf: TimeIntervalTriggeringCondition)
 ]

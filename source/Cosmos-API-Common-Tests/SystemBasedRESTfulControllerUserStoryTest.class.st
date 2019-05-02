@@ -92,7 +92,7 @@ SystemBasedRESTfulControllerUserStoryTest >> urlForResourceIdentifiedBy: anIdent
 ]
 
 { #category : #'private - support' }
-SystemBasedRESTfulControllerUserStoryTest >> withJsonFromContentsIn: httpResponse do: aBlock [
+SystemBasedRESTfulControllerUserStoryTest >> withJSONFromContentsIn: httpResponse do: aBlock [
 
 	aBlock value: (NeoJSONObject fromString: httpResponse contents)
 ]

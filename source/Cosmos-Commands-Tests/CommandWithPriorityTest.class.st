@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #tests }
+CommandWithPriorityTest >> testInstaceCreationFailsWithNonIntegerPriority [
+
+	self
+		should: [ CommandWithPriority holding: 'TURN_LED_ON' and: 1.1 ]
+		raise: InstanceCreationFailed
+		withMessageText: 'A command''s priority must be an integer'.
+
+	self
+		should: [ CommandWithPriority holding: 'TURN_LED_ON' and: 'a' ]
+		raise: InstanceCreationFailed
+		withMessageText: 'A command''s priority must be an integer'
+]
+
+{ #category : #tests }
 CommandWithPriorityTest >> testInstanceCreationAndAccessing [
 
 	| commandWithPriority |
