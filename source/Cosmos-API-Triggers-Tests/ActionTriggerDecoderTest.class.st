@@ -1,11 +1,11 @@
 Class {
-	#name : #TriggerDecoderTest,
+	#name : #ActionTriggerDecoderTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
 { #category : #running }
-TriggerDecoderTest >> setUp [
+ActionTriggerDecoderTest >> setUp [
 
 	super setUp.
 
@@ -17,7 +17,7 @@ TriggerDecoderTest >> setUp [
 ]
 
 { #category : #'private - running' }
-TriggerDecoderTest >> setUpRequirements [
+ActionTriggerDecoderTest >> setUpRequirements [
 
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
@@ -30,7 +30,7 @@ TriggerDecoderTest >> setUpRequirements [
 ]
 
 { #category : #'private - accessing' }
-TriggerDecoderTest >> systemDateTime [
+ActionTriggerDecoderTest >> systemDateTime [
 
 	^ DateTime
 		date: October first , 2014
@@ -38,8 +38,48 @@ TriggerDecoderTest >> systemDateTime [
 		zone: TimeZones buenosAires
 ]
 
-{ #category : #running }
-TriggerDecoderTest >> testDecodingTrigger [
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingOpenRoofDuringAnInterval [
+
+	self
+		withTriggerFrom: '{"name":"CloseRoofBetweenHours","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"1 seconds"},"conditions":[{"type":"time_interval","time_interval":{"start":"22:00:01","stop":"20:59:59"}}]}'
+		do: [ :trigger | 
+			self
+				assert: trigger name equals: 'CloseRoofBetweenHours';
+				assert:
+					(trigger triggeringPolicy
+						isKindOf: PeriodicalTriggeringPolicy) ]
+]
+
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingOpenRoofDuringAnIntervalIfNotRaining [
+
+	self
+		withTriggerFrom: '{"name":"OpenRoofBetweenHoursIfNotRaining","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[{"type":"time_interval","time_interval":{"start":"21:00:00","stop":"22:00:00"}},{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":"=","value":"0"}}]}'
+		do: [ :trigger | 
+			self
+				assert: trigger name equals: 'OpenRoofBetweenHoursIfNotRaining';
+				assert:
+					(trigger triggeringPolicy
+						isKindOf: PeriodicalTriggeringPolicy) ]
+]
+
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingPeriodicalActionTrigger [
+
+	self
+		withTriggerFrom: '{"name":"CloseRoofOnlyIfRaining","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"1 seconds"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":"=","value":"1"}}]}
+'
+		do: [ :trigger | 
+			self
+				assert: trigger name equals: 'CloseRoofOnlyIfRaining';
+				assert:
+					(trigger triggeringPolicy
+						isKindOf: PeriodicalTriggeringPolicy) ]
+]
+
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingTrigger [
 
 	self
 		withTriggerFrom:
@@ -52,12 +92,12 @@ TriggerDecoderTest >> testDecodingTrigger [
 						isKindOf: DataPointRegistrationTriggeringPolicy) ]
 ]
 
-{ #category : #running }
-TriggerDecoderTest >> testDecodingTriggerFailsIfActionNotFound [
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingTriggerFailsIfActionNotFound [
 
 	| decoder |
 
-	decoder := TriggerDecoder using: rootSystem.
+	decoder := ActionTriggerDecoder using: rootSystem.
 	self
 		should: [ decoder
 				decode:
@@ -76,12 +116,12 @@ TriggerDecoderTest >> testDecodingTriggerFailsIfActionNotFound [
 		withMessageText: 'Action named ''Bleh'' not found'
 ]
 
-{ #category : #running }
-TriggerDecoderTest >> testDecodingTriggerFailsIfDataStreamOnPolicyNotFound [
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingTriggerFailsIfDataStreamOnPolicyNotFound [
 
 	| decoder |
 
-	decoder := TriggerDecoder using: rootSystem.
+	decoder := ActionTriggerDecoder using: rootSystem.
 	self
 		should: [ decoder
 				decode:
@@ -100,12 +140,12 @@ TriggerDecoderTest >> testDecodingTriggerFailsIfDataStreamOnPolicyNotFound [
 		withMessageText: 'Data stream named ''pH'' not found'
 ]
 
-{ #category : #running }
-TriggerDecoderTest >> testDecodingTriggerFailsIfKeyIsMissing [
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingTriggerFailsIfKeyIsMissing [
 
 	| decoder |
 
-	decoder := TriggerDecoder using: rootSystem.
+	decoder := ActionTriggerDecoder using: rootSystem.
 	self
 		should: [ decoder
 				decode:
@@ -133,8 +173,8 @@ TriggerDecoderTest >> testDecodingTriggerFailsIfKeyIsMissing [
 		withMessageText: 'time_interval is mandatory and must be present'
 ]
 
-{ #category : #running }
-TriggerDecoderTest >> testDecodingTriggerWithIntervalWithoutSeconds [
+{ #category : #tests }
+ActionTriggerDecoderTest >> testDecodingTriggerWithIntervalWithoutSeconds [
 
 	self
 		withTriggerFrom: '{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 4:14PM and 4:18PM","action":"Set triggered to true","policy":{"type":"data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"time_interval","time_interval":{"start":"16:14","stop":"16:18"}}]}'
@@ -147,12 +187,12 @@ TriggerDecoderTest >> testDecodingTriggerWithIntervalWithoutSeconds [
 ]
 
 { #category : #'tests support' }
-TriggerDecoderTest >> withTriggerFrom: aString do: aBlock [
+ActionTriggerDecoderTest >> withTriggerFrom: aString do: aBlock [
 
-	| decoder trigger |
+	| trigger |
 
-	decoder := TriggerDecoder using: rootSystem.
-	trigger := decoder decode: (NeoJSONObject fromString: aString).
+	trigger := (ActionTriggerDecoder using: rootSystem)
+		decode: (NeoJSONObject fromString: aString).
 
 	aBlock value: trigger
 ]

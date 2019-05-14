@@ -56,7 +56,7 @@ HTTPRequestDecoder >> entityFrom: aRawRequest ofType: aMediaType [
 		decode: #body
 		from: aRawRequest
 		using: (self entityDecoderOfType: aMediaType)
-		ifAbsent: ZnEntity new
+		ifAbsent: nil
 ]
 
 { #category : #'private - decoders' }

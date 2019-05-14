@@ -256,15 +256,7 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 		createTriggerBasedOn:
 			(self
 				requestToCreateTriggerFrom:
-					'{
-	"name" : "Set triggered to true periodically every 5 minutes",
-	"action" : "Set triggered to true",
-	"policy" : {
-		"type" : "periodical",
-		"time_interval" : "5 minutes"
-	},
-	"conditions" : [ ]
-}')
+					'{"name":"Set triggered to true periodically every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}')
 		within: self httpRequestContext.
 
 	self
@@ -278,6 +270,37 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 		triggerNamed: 'Set triggered to true periodically every 5 minutes'
 		ifFound:
 			[ :trigger | self assert: trigger name equals: 'Set triggered to true periodically every 5 minutes' ]
+		ifNone: [ self fail ]
+]
+
+{ #category : #tests }
+TriggersRESTfulControllerTest >> testCreatePeriodicalTriggerWithConditions [
+
+	| response |
+
+	self triggerManagementSystem
+		triggerNamed: 'Set triggered to true periodically every 5 minutes'
+		ifFound: [ :trigger | self fail ]
+		ifNone: [ "do nothing" ].
+
+	response := resourceController
+		createTriggerBasedOn:
+			(self
+				requestToCreateTriggerFrom:
+					'{"name":"OpenRoofBetweenHoursIfNotRaining","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[{"type":"time_interval","time_interval":{"start":"21:00:00","stop":"22:00:00"}},{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":"=","value":"0"}}]}')
+		within: self httpRequestContext.
+
+	self
+		assert: response isSuccess;
+		assert: response code equals: 201;
+		assert: response location
+			equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858';
+		assert: response contentType equals: self textPlainMediaType.
+
+	self triggerManagementSystem
+		triggerNamed: 'OpenRoofBetweenHoursIfNotRaining'
+		ifFound:
+			[ :trigger | self assert: trigger name equals: 'OpenRoofBetweenHoursIfNotRaining' ]
 		ifNone: [ self fail ]
 ]
 

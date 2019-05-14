@@ -160,30 +160,7 @@ ActionsRESTfulControllerTest >> testCreateAction [
 
 	self assert: self actionManagementSystem actions isEmpty.
 	
-	json := '{
-  "name": "Add DNS zone",
-  "http_request": {
-    "request_line": {
-      "method": "POST",
-      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
-      "version": "HTTP/1.1"
-    },
-    "headers": [
-      {
-        "key": "X-Auth-Email",
-        "value": "patchinko@gmail.com"
-      },
-      {
-        "key": "X-Auth-Key",
-        "value": "93b0b7a99ad1fc123d0d2b6508849db7e6414"
-      }
-    ],
-	 "entity": { 
-		 "contentType": "application/json",
-		 "contents": "{\"isEnabled\": true}"
-	 }
-  }
-}'.
+	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[{"key":"content-type","value":"application/json"}],"body":"{\"command\":\"Open Sprinkler\",\"priority\":30}"}}'.
 
 	response := resourceController
 		createActionBasedOn: (self requestToCreateActionFrom: json)
@@ -199,7 +176,7 @@ ActionsRESTfulControllerTest >> testCreateAction [
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | self assert: action name equals: 'Add DNS zone' ]
+		do: [ :action | self assert: action name equals: 'OpenSprinkler' ]
 ]
 
 { #category : #tests }
@@ -208,27 +185,8 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutEntity [
 	| response json |
 
 	self assert: self actionManagementSystem actions isEmpty.
-	
-	json := '{
-  "name": "List DNS records",
-  "http_request": {
-    "request_line": {
-      "method": "GET",
-      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
-      "version": "HTTP/1.1"
-    },
-    "headers": [
-      {
-        "key": "X-Auth-Email",
-        "value": "patchinko@gmail.com"
-      },
-      {
-        "key": "X-Auth-Key",
-        "value": "93b0b7a99ad1fc123d0d2b6508849db7e6414"
-      }
-    ]
-  }
-}'.
+
+	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[]}}'.
 
 	response := resourceController
 		createActionBasedOn: (self requestToCreateActionFrom: json)
@@ -244,7 +202,7 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutEntity [
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | self assert: action name equals: 'List DNS records' ]
+		do: [ :action | self assert: action name equals: 'OpenSprinkler' ]
 ]
 
 { #category : #tests }
@@ -254,20 +212,7 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutHeaders [
 
 	self assert: self actionManagementSystem actions isEmpty.
 	
-	json := '{
-  "name": "List DNS records",
-  "http_request": {
-    "request_line": {
-      "method": "GET",
-      "url": "https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records",
-      "version": "HTTP/1.1"
-    },
-    "entity": { 
-		 "contentType": "application/json",
-		 "contents": "{\"isEnabled\": true}"
-	 }
-  }
-}'.
+	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[{"key":"content-type","value":"application/json"}],"body":"{\"command\":\"Open Sprinkler\",\"priority\":30}"}}'.
 
 	response := resourceController
 		createActionBasedOn: (self requestToCreateActionFrom: json)
@@ -283,7 +228,7 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutHeaders [
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | self assert: action name equals: 'List DNS records' ]
+		do: [ :action | self assert: action name equals: 'OpenSprinkler' ]
 ]
 
 { #category : #tests }
