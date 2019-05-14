@@ -63,3 +63,23 @@ HTTPRequestDecoderTest >> testDecodingWithHeader [
 		assert: httpRequest headers contentLength equals: 42;
 		assert: httpRequest contents equals: '{"command":"Open Sprinkler","priority":30}'
 ]
+
+{ #category : #tests }
+HTTPRequestDecoderTest >> testDecodingWithoutEntity [
+
+	| json rawAction httpRequest |
+
+	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[]}}'.
+
+	rawAction := NeoJSONObject fromString: json.
+
+	httpRequest := HTTPRequestDecoder new
+		decode: (rawAction at: #http_request).
+
+	self
+		assert: httpRequest method equals: #POST;
+		assert: httpRequest url
+			equals: 'http://localhost:8090/commands' asUrl;
+		assert: httpRequest entity isNil;
+		assert: httpRequest headers isEmpty
+]

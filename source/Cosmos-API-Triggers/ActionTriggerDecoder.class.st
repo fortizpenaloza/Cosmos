@@ -1,5 +1,5 @@
 Class {
-	#name : #TriggerDecoder,
+	#name : #ActionTriggerDecoder,
 	#superclass : #Decoder,
 	#instVars : [
 		'cosmos'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-TriggerDecoder class >> using: aCosmosSystem [
+ActionTriggerDecoder class >> using: aCosmosSystem [
 	
 	^ self new initializeUsing: aCosmosSystem 
 ]
 
 { #category : #'private - decoders' }
-TriggerDecoder >> actionDecoder [
+ActionTriggerDecoder >> actionDecoder [
 
 	^ WellKnownObjectDecoder
 		querying: cosmos >> #ActionManagementSystemInterface
@@ -22,7 +22,7 @@ TriggerDecoder >> actionDecoder [
 ]
 
 { #category : #'private - decoding' }
-TriggerDecoder >> actionFrom: aRawTrigger [
+ActionTriggerDecoder >> actionFrom: aRawTrigger [
 
 	^ self 
 		decode: #action 
@@ -31,7 +31,7 @@ TriggerDecoder >> actionFrom: aRawTrigger [
 ]
 
 { #category : #decoding }
-TriggerDecoder >> decode: aRawTrigger [
+ActionTriggerDecoder >> decode: aRawTrigger [
 
 	| action triggeringPolicy triggeringCondition |
 
@@ -46,39 +46,20 @@ TriggerDecoder >> decode: aRawTrigger [
 		ifSatisfies: triggeringCondition
 ]
 
-{ #category : #'private - decoding' }
-TriggerDecoder >> decode: aKey from: aDictionary using: aDecoder [
-
-	^ self
-		decode: aKey
-		from: aDictionary
-		using: aDecoder
-		ifAbsent: [ KeyNotFound signal: ('<1s> is mandatory and must be present' expandMacrosWith: aKey) ]
-]
-
-{ #category : #'private - decoding' }
-TriggerDecoder >> decode: aKey from: aDictionary using: aDecoder ifAbsent: aBlock [
-
-	^ aDictionary
-		at: aKey
-		ifPresent: [ :rawData | aDecoder decode: rawData ]
-		ifAbsent: aBlock
-]
-
 { #category : #'instance creation' }
-TriggerDecoder >> initializeUsing: aCosmosSystem [
+ActionTriggerDecoder >> initializeUsing: aCosmosSystem [
 	
 	cosmos := aCosmosSystem
 ]
 
 { #category : #'private - decoders' }
-TriggerDecoder >> triggeringConditionDecoder [
+ActionTriggerDecoder >> triggeringConditionDecoder [
 
 	^ TriggeringConditionDecoder using: cosmos
 ]
 
 { #category : #'private - decoding' }
-TriggerDecoder >> triggeringConditionFrom: aRawTrigger [
+ActionTriggerDecoder >> triggeringConditionFrom: aRawTrigger [
 
 	^ self
 		decode: #conditions
@@ -87,13 +68,13 @@ TriggerDecoder >> triggeringConditionFrom: aRawTrigger [
 ]
 
 { #category : #'private - decoders' }
-TriggerDecoder >> triggeringPolicyDecoder [
+ActionTriggerDecoder >> triggeringPolicyDecoder [
 
 	^ TriggeringPolicyDecoder using: cosmos 
 ]
 
 { #category : #'private - decoding' }
-TriggerDecoder >> triggeringPolicyFrom: aDictionary [ 
+ActionTriggerDecoder >> triggeringPolicyFrom: aDictionary [ 
 	
 	^ self 
 		decode: #policy 

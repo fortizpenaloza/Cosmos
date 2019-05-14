@@ -7,10 +7,34 @@ Class {
 { #category : #decoding }
 TimeIntervalDecoder >> decode: aJSON [
 
-	| timeOfDayDecoder |
+	| start timeOfDayDecoder stop |
 
-	timeOfDayDecoder := ISO8601TimeOfDayDecoder usingExtendedFormat.
+	start := self startFrom: aJSON.
+	stop := self stopFrom: aJSON.
 
-	^ ((timeOfDayDecoder decode: aJSON start) to: (timeOfDayDecoder decode: aJSON stop))
-		asTimeSpan
+	^ (start to: stop) asTimeSpan
+]
+
+{ #category : #'private - decoding' }
+TimeIntervalDecoder >> startFrom: aRawTimeInterval [
+	
+	^ self 
+		decode: #start 
+		from: aRawTimeInterval 
+		using: self timeOfDayDecoder 
+]
+
+{ #category : #'private - decoding' }
+TimeIntervalDecoder >> stopFrom: aRawTimeInterval [
+	
+	^ self 
+		decode: #stop 
+		from: aRawTimeInterval 
+		using: self timeOfDayDecoder 
+]
+
+{ #category : #'private - decoders' }
+TimeIntervalDecoder >> timeOfDayDecoder [
+
+	^ ISO8601TimeOfDayDecoder usingExtendedFormat
 ]
