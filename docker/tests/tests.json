@@ -73,7 +73,7 @@
 							"raw": "{\n   \"name\":\"temperature\"\n}"
 						},
 						"url": {
-							"raw": "http://{{url}}/data-streams",
+							"raw": "{{url}}/data-streams",
 							"protocol": "http",
 							"host": [
 								"{{url}}"
@@ -100,7 +100,7 @@
 									"raw": "{\n\t\"name\": \"temperature\"\n}"
 								},
 								"url": {
-									"raw": "http://{{url}}/data-streams",
+									"raw": "{{url}}/data-streams",
 									"protocol": "http",
 									"host": [
 										"{{url}}"
@@ -132,7 +132,7 @@
 									"raw": "{\n   \"name\":\"temperature\"\n}"
 								},
 								"url": {
-									"raw": "http://{{url}}/data-streams",
+									"raw": "{{url}}/data-streams",
 									"protocol": "http",
 									"host": [
 										"{{url}}"

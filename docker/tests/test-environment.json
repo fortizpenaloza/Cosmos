@@ -1,6 +1,6 @@
 {
 	"id": "f0ba6f86-f7a5-46b6-a322-3f813105116e",
-	"name": "local",
+	"name": "ci-test",
 	"values": [
 		{
 			"key": "url",
