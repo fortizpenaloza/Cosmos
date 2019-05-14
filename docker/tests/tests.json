@@ -74,7 +74,6 @@
 						},
 						"url": {
 							"raw": "{{url}}/data-streams",
-							"protocol": "http",
 							"host": [
 								"{{url}}"
 							],
@@ -101,7 +100,6 @@
 								},
 								"url": {
 									"raw": "{{url}}/data-streams",
-									"protocol": "http",
 									"host": [
 										"{{url}}"
 									],
@@ -133,7 +131,6 @@
 								},
 								"url": {
 									"raw": "{{url}}/data-streams",
-									"protocol": "http",
 									"host": [
 										"{{url}}"
 									],
