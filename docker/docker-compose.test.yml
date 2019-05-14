@@ -1,0 +1,12 @@
+version: '3'
+
+services: 
+  sut:
+    image: postman/newman:4-alpine
+    command: run tests.json --reporters cli --environment test-environment.json
+    volumes: 
+      - ./tests:/etc/newman
+
+  cosmos: 
+    build: .
+
