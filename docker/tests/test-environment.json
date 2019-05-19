@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
 	"id": "b96c862d-bea8-4508-98de-63b488e1dc29",
 	"name": "tests",
-=======
-	"id": "f0ba6f86-f7a5-46b6-a322-3f813105116e",
-	"name": "ci-test",
->>>>>>> d84b2088274febab9893ec83520c43e9f2199a23
 	"values": [
 		{
 			"key": "cosmos_url",
