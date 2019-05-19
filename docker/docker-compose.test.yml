@@ -6,6 +6,8 @@ services:
     command: run tests.json --reporters cli --environment test-environment.json
     volumes: 
       - ./tests:/etc/newman
+    depends_on:
+      - cosmos
 
   cosmos: 
     build: .

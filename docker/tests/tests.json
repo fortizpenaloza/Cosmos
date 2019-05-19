@@ -13,6 +13,7 @@
 					"name": "Delete an existing stream",
 					"item": [
 						{
+<<<<<<< HEAD
 							"name": "Create a Humidity data stream",
 							"event": [
 								{
@@ -46,6 +47,71 @@
 										"type": "text/javascript"
 									}
 								}
+=======
+							"listen": "test",
+							"script": {
+								"id": "1ea089c0-c6c9-480e-abde-b981e84a1e50",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Status code name has string\", function () {",
+									"    pm.response.to.have.status(\"Created\");",
+									"});",
+									"",
+									"var schema = {",
+									"  \"items\": {",
+									"    \"type\": \"boolean\"",
+									"  }",
+									"};",
+									"",
+									"var data1 = [true, false];",
+									"var data2 = [true, 123];",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  pm.expect(tv4.validate(data1, schema)).to.be.true;",
+									"  pm.expect(tv4.validate(data2, schema)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5a2b2030-a573-4ae8-8308-2d41bcddbfb3",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"name\":\"temperature\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/data-streams",
+							"host": [
+								"{{url}}"
+>>>>>>> d84b2088274febab9893ec83520c43e9f2199a23
 							],
 							"request": {
 								"method": "POST",
@@ -62,7 +128,11 @@
 									"raw": "{\n   \"name\":\"Humidity\"\n}"
 								},
 								"url": {
+<<<<<<< HEAD
 									"raw": "{{cosmos_url}}/data-streams",
+=======
+									"raw": "{{url}}/data-streams",
+>>>>>>> d84b2088274febab9893ec83520c43e9f2199a23
 									"host": [
 										"{{cosmos_url}}"
 									],
@@ -101,7 +171,11 @@
 									"raw": ""
 								},
 								"url": {
+<<<<<<< HEAD
 									"raw": "{{cosmos_url}}/data-streams/{{latest_uuid}}",
+=======
+									"raw": "{{url}}/data-streams",
+>>>>>>> d84b2088274febab9893ec83520c43e9f2199a23
 									"host": [
 										"{{cosmos_url}}"
 									],
