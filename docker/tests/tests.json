@@ -1,294 +1,142 @@
 {
 	"info": {
-		"_postman_id": "f932ce90-746a-2bce-3bd1-de3c550a955c",
-		"name": "Cosmos",
-		"description": "The Cosmos API allows you to access all your data with ease.\n\nThe easiest way to get started with the API is to click the Run in Postman button present at the top of the documentation page and use the Postman App to send requests.\n\nOverview\n=============\t\n\n\nAuthetication\n===============\n",
+		"_postman_id": "0a536315-1a96-4943-8ca9-30bdd82a864b",
+		"name": "Cosmos Tests",
+		"description": "Cosmos API tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Data",
+			"name": "Data streams",
 			"item": [
 				{
-					"name": "Create a data stream",
+					"name": "Delete an existing stream",
+					"item": [
+						{
+							"name": "Create a Humidity data stream",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d61d082b-331e-4aff-acf9-d42071ed8711",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Location header is present\", function () {",
+											"    pm.response.to.have.header(\"Location\");",
+											"});",
+											"",
+											"const url = require('url');",
+											"const path = require('path');",
+											"const created_location = url.parse(pm.response.headers.get(\"location\"));",
+											"pm.variables.set('latest_uuid', path.basename(created_location.path));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "2511cd8c-93d6-4d3d-b08d-111f600ce9c8",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"name\":\"Humidity\"\n}"
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/data-streams",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"data-streams"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Humidity data stream",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f274543a-8b8f-44f7-8974-dd0107f4c070",
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.not.have.body;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/data-streams/{{latest_uuid}}",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"data-streams",
+										"{{latest_uuid}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create a Temperature data stream",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ea089c0-c6c9-480e-abde-b981e84a1e50",
+								"id": "54d84253-b488-4881-a6cd-7e4a4c79cba6",
 								"exec": [
-									"pm.test(\"Body matches string\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
 									"});",
 									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Location header is present\", function () {",
+									"    pm.response.to.have.header(\"Location\");",
 									"});",
-									"",
-									"pm.test(\"Status code name has string\", function () {",
-									"    pm.response.to.have.status(\"Created\");",
-									"});",
-									"",
-									"var schema = {",
-									"  \"items\": {",
-									"    \"type\": \"boolean\"",
-									"  }",
-									"};",
-									"",
-									"var data1 = [true, false];",
-									"var data2 = [true, 123];",
-									"",
-									"pm.test('Schema is valid', function() {",
-									"  pm.expect(tv4.validate(data1, schema)).to.be.true;",
-									"  pm.expect(tv4.validate(data2, schema)).to.be.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "5a2b2030-a573-4ae8-8308-2d41bcddbfb3",
-								"exec": [
 									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"name\":\"temperature\"\n}"
-						},
-						"url": {
-							"raw": "http://{{url}}/data-streams",
-							"protocol": "http",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"data-streams"
-							]
-						},
-						"description": "To register a data stream you should provide a blah"
-					},
-					"response": [
-						{
-							"name": "Registering a data stream fails when a stream with that name alrealy exists",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"name\": \"temperature\"\n}"
-								},
-								"url": {
-									"raw": "http://{{url}}/data-streams",
-									"protocol": "http",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"data-streams"
-									]
-								}
-							},
-							"status": "Conflict",
-							"code": 409,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n\t\"error\": \"\",\n\t\"message\": \"A data stream with that name already exists in system\"\n}"
-						},
-						{
-							"name": "Registering a data stream named temperature",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n   \"name\":\"temperature\"\n}"
-								},
-								"url": {
-									"raw": "http://{{url}}/data-streams",
-									"protocol": "http",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"data-streams"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n\t\"name\" : \"temperature\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Get all data streams",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/data-streams",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"data-streams"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get a single data stream",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/data-streams/{{uid}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"data-streams",
-								"{{uid}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get data points from data stream",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/data-streams/{{uuid}}/data-points",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"data-streams",
-								"{{uuid}}",
-								"data-points"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create data points (bulk)",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "5eb12db5-c79b-40d1-a9f7-13d5cd681714",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"disabled": false
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n  {\n    \"data_stream\": \"temperature\",\n    \"value\": 40\n  }\n]"
-						},
-						"url": {
-							"raw": "{{url}}/data-points",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"data-points"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "Testing"
-		},
-		{
-			"name": "Triggers",
-			"item": [
-				{
-					"name": "Get action triggers",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/triggers",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"triggers"
-							]
-						},
-						"description": "Query registered triggers"
-					},
-					"response": []
-				},
-				{
-					"name": "Create an action trigger",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -301,108 +149,49 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Always set triggered to true\",\n    \"action\": \"Set triggered to true\",\n    \"policy\": {\n        \"type\": \"data_point_registration\",\n        \"data_stream\": \"Temperature\"\n    },\n    \"conditions\": []\n}"
+							"raw": "{\n   \"name\":\"Temperature\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/triggers",
+							"raw": "{{cosmos_url}}/data-streams",
 							"host": [
-								"{{url}}"
+								"{{cosmos_url}}"
 							],
 							"path": [
-								"triggers"
+								"data-streams"
 							]
 						}
 					},
-					"response": [
+					"response": []
+				},
+				{
+					"name": "Get all data streams",
+					"event": [
 						{
-							"name": "Create action trigger with empty condition",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
+							"listen": "test",
+							"script": {
+								"id": "df3f7238-67ca-4483-a4c5-d7963f5a3bfb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json;version=1.0.0\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json;version=1.0.0\");",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var dataStream = jsonData.first();",
+									"    pm.expect(dataStream.name).to.eql(\"Temperature\");",
+									"    pm.expect(dataStream.current_value).to.eql(\"N/A\");",
+									"    pm.expect(dataStream.last_update).to.eql(\"N/A\");",
+									"});"
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Always set triggered to true\",\n    \"action\": \"Set triggered to true\",\n    \"policy\": {\n        \"type\": \"data_point_registration\",\n        \"data_stream\": \"Temperature\"\n    },\n    \"conditions\": []\n}"
-								},
-								"url": {
-									"raw": "{{url}}/triggers",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"triggers"
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": null,
-							"cookie": [],
-							"body": "{\n    \"name\": \"Always set triggered to true\",\n    \"action\": \"Set triggered to true\",\n    \"policy\": {\n        \"type\": \"data_point_registration\",\n        \"data_stream\": \"Temperature\"\n    },\n    \"conditions\": []\n}"
-						},
-						{
-							"name": "Create trigger data stream current value ",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Always set triggered to true\",\n    \"action\": \"Set triggered to true\",\n    \"policy\": {\n        \"type\": \"data_point_registration\",\n        \"data_stream\": \"Temperature\"\n    },\n    \"conditions\": [\n        {\n            \"type\": \"data_stream_current_value\",\n            \"data_stream\": \"Temperature\",\n            \"condition\": {\n                \"operator\": \">\",\n                \"value\": 54\n            }\n        }\n    ]\n}"
-								},
-								"url": {
-									"raw": "{{url}}/triggers",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"triggers"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
+								"type": "text/javascript"
+							}
 						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Actions",
-			"item": [
-				{
-					"name": "Delete action",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {},
-						"url": {
-							"raw": "{{url}}/actions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"actions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get registered actions",
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -411,271 +200,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/actions",
+							"raw": "{{cosmos_url}}/data-streams",
 							"host": [
-								"{{url}}"
+								"{{cosmos_url}}"
 							],
 							"path": [
-								"actions"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Query registered actions",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{url}}/actions",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"actions"
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": null,
-							"cookie": [],
-							"body": "[ \n\t{\n\t    \"name\": \"List DNS records\",\n\t    \"http_request\": {\n\t        \"request_line\": {\n\t            \"method\": \"GET\",\n\t            \"url\": \"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records\",\n\t            \"version\": \"HTTP/1.1\"\n\t        },\n\t        \"headers\": [\n\t            {\n\t                \"key\": \"X-Auth-Email\",\n\t                \"value\": \"patchinko@gmail.com\"\n\t            },\n\t            {\n\t                \"key\": \"X-Auth-Key\",\n\t                \"value\": \"93b0b7a99ad1fc123d0d2b6508849db7e6414\"\n\t            }\n\t        ]\n\t    }\n\t}\n]"
-						}
-					]
-				},
-				{
-					"name": "Get actions evaluation statistics",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/actions/evaluation-stats",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"actions",
-								"evaluation-stats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create action",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": "Optional"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/actions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"actions"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Register \"List DNS\" action",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\t\"name\" : \"List DNS records\",\r\t\"http_request\" : { \r\t\t\"request_line\" : { \r\t\t\t\"method\" : \"GET\",\r\t\t\t\"url\" : \"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records\",\r\t\t\t\"version\" : \"HTTP/1.1\"\r\t\t},\r\t\t\"headers\" : [\r\t\t\t{\r\t\t\t\t\"key\" : \"X-Auth-Email\",\r\t\t\t\t\"value\" : \"patchinko@gmail.com\"\r\t\t\t},\r\t\t\t{\r\t\t\t\t\"key\" : \"X-Auth-Key\",\r\t\t\t\t\"value\" : \"93b0b7a99ad1fc123d0d2b6508849db7e6414\"\r\t\t\t}\r\t\t]\r\t}\r}"
-								},
-								"url": {
-									"raw": "{{url}}/actions",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"actions"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Commands",
-			"item": [
-				{
-					"name": "Get commands",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/commands",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"commands"
-							]
-						},
-						"description": "Get enqueue commands along with its priorities."
-					},
-					"response": []
-				},
-				{
-					"name": "Create a command with low priority",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"command\" : \"TURN_OFF_LED\",\n\t\"priority\" : 100\n}"
-						},
-						"url": {
-							"raw": "{{url}}/commands",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"commands"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Dequeue next command",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/commands/dequeue",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"commands",
-								"dequeue"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Dequeue next command as text/plain",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "text/plain",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/commands/dequeue",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"commands",
-								"dequeue"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a command",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/commands/086fe5bd-0f35-0d00-8a1c-b4230bf9adb8",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"commands",
-								"086fe5bd-0f35-0d00-8a1c-b4230bf9adb8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get prioritized commands",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/priotized-commands",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"priotized-commands"
+								"data-streams"
 							]
 						}
 					},
@@ -688,7 +218,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "56ff1add-0b48-4e36-b912-49e38ff68dc5",
+				"id": "6b49f19e-01d1-4785-bcb2-a13ddbd69fa5",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -698,12 +228,20 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "b71e4c0a-810f-4a88-9498-d7e8ba67620f",
+				"id": "8d5c485b-039c-436f-a62e-77912710dce7",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d376b720-eb5e-416c-872d-4a1831aa7a44",
+			"key": "latest_uuid",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

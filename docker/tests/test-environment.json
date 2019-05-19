@@ -1,21 +1,14 @@
 {
-	"id": "f0ba6f86-f7a5-46b6-a322-3f813105116e",
-	"name": "local",
+	"id": "b96c862d-bea8-4508-98de-63b488e1dc29",
+	"name": "tests",
 	"values": [
 		{
-			"key": "url",
-			"value": "http://cosmos:8090",
-			"enabled": true
-		},
-		{
-			"key": "uuid",
-			"value": "4ffbff8b-9c3f-0d00-bdbd-482504a01069",
-			"type": "text",
-			"description": "",
+			"key": "cosmos_url",
+			"value": "http://localhost:8090",
 			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2019-05-14T16:44:47.038Z",
+	"_postman_exported_at": "2019-05-19T15:00:56.861Z",
 	"_postman_exported_using": "Postman/6.7.4"
 }
