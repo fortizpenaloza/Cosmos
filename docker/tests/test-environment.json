@@ -4,7 +4,7 @@
 	"values": [
 		{
 			"key": "cosmos_url",
-			"value": "http://localhost:8090",
+			"value": "http://cosmos:8090",
 			"enabled": true
 		}
 	],
