@@ -70,21 +70,23 @@ CosmosCommandLineHandler >> baseUrl [
 CosmosCommandLineHandler >> basicActivate [
 
 	self
+		logInfo: 'Preparing for headless mode by suspending UI process'
+			during: [ self suspendUIProcess ];
 		logInfo: 'Creating pending evaluation actions queue'
 			during: [ pendingActionsQueue := AtomicSharedQueue new ];
 		logInfo: 'Creating action evaluation queue'
 			during: [ actionEvaluationsQueue := AtomicSharedQueue new ];
-		logInfo: 'Building and starting cosmos' 
+		logInfo: 'Building and starting cosmos'
 			during: [ self buildAndStartCosmos ];
-		logInfo: 'Building and starting RESTful API' 
+		logInfo: 'Building and starting RESTful API'
 			during: [ self buildAndStartCosmosAPI ];
-		logInfo: 'Building and starting the periodical scheduler'
+		logInfo: 'Building and starting a periodical scheduler'
 			during: [ self buildAndStartScheduler ];
-		logInfo: 'Building and starting the action evaluator'
+		logInfo: 'Building and starting an action evaluator'
 			during: [ self buildAndStartActionEvaluator ]
 ]
 
-{ #category : #activation }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartActionEvaluator [
 
 	| evaluator |
@@ -145,7 +147,7 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 		start
 ]
 
-{ #category : #'private - building scheduler' }
+{ #category : #'private - activation' }
 CosmosCommandLineHandler >> buildAndStartScheduler [
 
 	| scheduler  |
@@ -214,6 +216,15 @@ CosmosCommandLineHandler >> port [
 CosmosCommandLineHandler >> setAllowedCrossOriginResourseSharingOn: api [
 
 	api beCORSAwareAllowing: self allowedOrigins
+]
+
+{ #category : #'private - activation' }
+CosmosCommandLineHandler >> suspendUIProcess [
+
+	(Process allSubInstances reject: #isTerminated)
+		detect: [ :process | process name includesSubstring: 'UI Process' ]
+		ifFound: [ :process | process suspend ].
+	Processor activeProcess suspend
 ]
 
 { #category : #'private - accessing' }
