@@ -1,0 +1,247 @@
+{
+	"info": {
+		"_postman_id": "0a536315-1a96-4943-8ca9-30bdd82a864b",
+		"name": "Cosmos Tests",
+		"description": "Cosmos API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Data streams",
+			"item": [
+				{
+					"name": "Delete an existing stream",
+					"item": [
+						{
+							"name": "Create a Humidity data stream",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d61d082b-331e-4aff-acf9-d42071ed8711",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Location header is present\", function () {",
+											"    pm.response.to.have.header(\"Location\");",
+											"});",
+											"",
+											"const url = require('url');",
+											"const path = require('path');",
+											"const created_location = url.parse(pm.response.headers.get(\"location\"));",
+											"pm.variables.set('latest_uuid', path.basename(created_location.path));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "2511cd8c-93d6-4d3d-b08d-111f600ce9c8",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"name\":\"Humidity\"\n}"
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/data-streams",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"data-streams"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Humidity data stream",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f274543a-8b8f-44f7-8974-dd0107f4c070",
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.not.have.body;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/data-streams/{{latest_uuid}}",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"data-streams",
+										"{{latest_uuid}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create a Temperature data stream",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "54d84253-b488-4881-a6cd-7e4a4c79cba6",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Location header is present\", function () {",
+									"    pm.response.to.have.header(\"Location\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"name\":\"Temperature\"\n}"
+						},
+						"url": {
+							"raw": "{{cosmos_url}}/data-streams",
+							"host": [
+								"{{cosmos_url}}"
+							],
+							"path": [
+								"data-streams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all data streams",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "df3f7238-67ca-4483-a4c5-d7963f5a3bfb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json;version=1.0.0\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json;version=1.0.0\");",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var dataStream = jsonData.first();",
+									"    pm.expect(dataStream.name).to.eql(\"Temperature\");",
+									"    pm.expect(dataStream.current_value).to.eql(\"N/A\");",
+									"    pm.expect(dataStream.last_update).to.eql(\"N/A\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{cosmos_url}}/data-streams",
+							"host": [
+								"{{cosmos_url}}"
+							],
+							"path": [
+								"data-streams"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6b49f19e-01d1-4785-bcb2-a13ddbd69fa5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8d5c485b-039c-436f-a62e-77912710dce7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "98eb9c07-d37f-4b6f-aea6-880a6c29a19f",
+			"key": "latest_uuid",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
