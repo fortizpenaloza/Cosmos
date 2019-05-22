@@ -83,7 +83,9 @@ CosmosCommandLineHandler >> basicActivate [
 		logInfo: 'Building and starting the periodical scheduler'
 			during: [ self buildAndStartScheduler ];
 		logInfo: 'Building and starting the action evaluator'
-			during: [ self buildAndStartActionEvaluator ]
+			during: [ self buildAndStartActionEvaluator ];
+		logInfo: 'Just testing'
+			during: [ 	"Processor activeProcess suspend" ]
 ]
 
 { #category : #'private - activation' }
@@ -223,8 +225,7 @@ CosmosCommandLineHandler >> suspendUIProcess [
 
 	(Process allSubInstances reject: #isTerminated)
 		detect: [ :process | process name includesSubstring: 'UI Process' ]
-		ifFound: [ :process | process suspend ].
-	Processor activeProcess suspend
+		ifFound: [ :process | process suspend ]
 ]
 
 { #category : #'private - accessing' }
