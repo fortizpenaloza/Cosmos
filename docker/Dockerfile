@@ -24,5 +24,5 @@ RUN chown -R pharo:pharo /opt/cosmos
 
 USER pharo
 
-CMD ["/opt/pharo/pharo", "Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
+CMD ["/opt/pharo/pharo", "Pharo.image", "cosmos", "--suspend-ui", "--port=8090", "--allowed-origins=http://localhost:7080"]
 
