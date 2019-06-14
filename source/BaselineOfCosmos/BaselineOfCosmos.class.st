@@ -144,9 +144,6 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 	spec
 		package: 'Cosmos-Tests';
 		group: 'Model-Tests' with: 'Cosmos-Tests';
-		package: 'Cosmos-UserStoryTests'
-			with: [ spec requires: #('Cosmos-Model' 'Kepler-SUnit') ];
-		group: 'Model-Tests' with: 'Cosmos-UserStoryTests';
 		package: 'Cosmos-Identifier-Tests'
 			with: [ spec requires: 'Cosmos-Identifier' ];
 		group: 'Model-Tests' with: 'Cosmos-Identifier-Tests';
@@ -156,6 +153,9 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-Timestamping-Tests'
 			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Timestamping') ];
 		group: 'Model-Tests' with: 'Cosmos-Timestamping-Tests';
+		package: 'Cosmos-UserStoryTests'
+			with: [ spec requires: #('Model' 'Kepler-SUnit') ];
+		group: 'Model-Tests' with: 'Cosmos-UserStoryTests';
 		package: 'Cosmos-Data-Tests'
 			with: [ spec
 				requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
