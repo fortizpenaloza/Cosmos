@@ -145,7 +145,7 @@ BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
 		package: 'Cosmos-Tests';
 		group: 'Model-Tests' with: 'Cosmos-Tests';
 		package: 'Cosmos-Identifier-Tests'
-			with: [ spec requires: 'Cosmos-Identifier' ];
+			with: [ spec requires: #('Kepler-SUnit' 'Cosmos-Identifier') ];
 		group: 'Model-Tests' with: 'Cosmos-Identifier-Tests';
 		package: 'Cosmos-Metadata-Tests'
 			with: [ spec requires: 'Cosmos-Metadata' ];
