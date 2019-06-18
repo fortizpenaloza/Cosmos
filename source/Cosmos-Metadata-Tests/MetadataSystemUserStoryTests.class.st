@@ -5,21 +5,21 @@ Class {
 }
 
 { #category : #accessing }
+MetadataSystemUserStoryTests >> describedObject [
+
+	^ #describedObject 
+]
+
+{ #category : #accessing }
 MetadataSystemUserStoryTests >> identifier [
 
-	^ UUID new
+	^ UUID fromString: 'ab203809-4537-0d00-96a8-67bd07fa2cfc'
 ]
 
 { #category : #running }
 MetadataSystemUserStoryTests >> setUpRequirements [
 
 	self registerSubsystem: MetadataSystem new
-]
-
-{ #category : #accessing }
-MetadataSystemUserStoryTests >> temperatureStream [
-
-	^ DataStream named: 'Temperature'
 ]
 
 { #category : #tests }
@@ -37,13 +37,13 @@ MetadataSystemUserStoryTests >> testMetadataRegistration [
 	metadata := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperatureStream.
+		of: self describedObject.
 
 	self
-		assert: (self metadataSystem metadataFor: self temperatureStream) isEmpty.
+		assert: (self metadataSystem metadataFor: self describedObject) isEmpty.
 	self metadataSystem register: metadata.
 	self
-		withTheOnlyOneIn: (self metadataSystem metadataFor: self temperatureStream)
+		withTheOnlyOneIn: (self metadataSystem metadataFor: self describedObject)
 		do: [ :foundMetadata | self assert: foundMetadata equals: metadata ]
 ]
 
@@ -55,7 +55,7 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 	metadata := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperatureStream.
+		of: self describedObject.
 
 	self metadataSystem register: metadata.
 	self
@@ -67,23 +67,24 @@ MetadataSystemUserStoryTests >> testMetadataRegistrationFailsWhenAlreadyExists [
 MetadataSystemUserStoryTests >> testQueryingAllMetadata [
 
 	| identifier registrationTimestamp |
-	
-	self assert: (self metadataSystem metadataFor: self temperatureStream) isEmpty.
+
+	self
+		assert: (self metadataSystem metadataFor: self describedObject) isEmpty.
 
 	identifier := Metadata
 		attaching: self identifier
 		as: #identifier
-		of: self temperatureStream.
+		of: self describedObject.
 
 	registrationTimestamp := Metadata
 		attaching: (December tenth , 2016) atMidnight
 		as: #registration_timestamp
-		of: self temperatureStream.
+		of: self describedObject.
 
 	self metadataSystem register: identifier.
 	self metadataSystem register: registrationTimestamp.
 	self
-		assert: (self metadataSystem metadataFor: self temperatureStream)
+		assert: (self metadataSystem metadataFor: self describedObject)
 		equals:
 			{identifier.
 			registrationTimestamp} asOrderedCollection
@@ -99,7 +100,7 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 	metadata := Metadata
 		attaching: identifier
 		as: #identifier
-		of: self temperatureStream.
+		of: self describedObject.
 
 	self metadataSystem register: metadata.
 	self
@@ -108,7 +109,7 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObject [
 				describedObjectBy: identifier
 				as: #identifier
 				ifNone: [ self fail ])
-		equals: self temperatureStream
+		equals: self describedObject
 ]
 
 { #category : #tests }
@@ -116,7 +117,10 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObjectFails [
 
 	| metadata |
 
-	metadata := Metadata attaching: 'celsius' as: #unit_singular of: self temperatureStream.
+	metadata := Metadata
+		attaching: 'celsius'
+		as: #unit_singular
+		of: self describedObject.
 
 	self metadataSystem register: metadata.
 
@@ -126,4 +130,38 @@ MetadataSystemUserStoryTests >> testQueryingDescribedObjectFails [
 				as: #unit_singular
 				ifNone: [ Error signal ] ]
 		raise: Error
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testQueryingSpecificMetadata [
+
+	| identifier |
+
+	self
+		assert: (self metadataSystem metadataFor: self describedObject) isEmpty.
+
+	identifier := Metadata
+		attaching: self identifier
+		as: #identifier
+		of: self describedObject.
+
+	self metadataSystem register: identifier.
+		
+	self
+		assert: (self metadataSystem dataDescribing: #identifier of: self describedObject)
+		equals: self identifier
+]
+
+{ #category : #tests }
+MetadataSystemUserStoryTests >> testQueryingSpecificMetadataFailsIfNotFound [
+
+	self
+		assert: (self metadataSystem metadataFor: self describedObject) isEmpty.
+
+	self
+		should: [ self metadataSystem
+				dataDescribing: #identifier
+				of: self describedObject ]
+		raise: ObjectNotFound 
+		withMessageText: 'Data describing #identifier aspect of #describedObject not found'
 ]

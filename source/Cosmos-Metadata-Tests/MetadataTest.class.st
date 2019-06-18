@@ -5,9 +5,9 @@ Class {
 }
 
 { #category : #accessing }
-MetadataTest >> temperatureStream [
+MetadataTest >> describedObject [
 
-	^ DataStream named: 'Temperature'
+	^ #describedObject 
 ]
 
 { #category : #tests }
@@ -15,20 +15,20 @@ MetadataTest >> testHash [
 
 	| metadata equivalentMetadata differentMetadata |
 
-	metadata := Metadata 
+	metadata := Metadata
 		attaching: 'celsius'
-		as: #unit_name 
-		of: self temperatureStream.
+		as: #unit_name
+		of: self describedObject.
 
 	equivalentMetadata := Metadata
 		attaching: 'celsius'
 		as: #unit_name
-		of: self temperatureStream.
+		of: self describedObject.
 
 	differentMetadata := Metadata
 		attaching: 'Fahrenheit'
 		as: #unit_name
-		of: self temperatureStream.
+		of: self describedObject.
 
 	self
 		assert: metadata hash equals: equivalentMetadata hash;
@@ -43,9 +43,9 @@ MetadataTest >> testInstanceCreationAndAccessing [
 	metadata := Metadata
 		attaching: 'celsius'
 		as: #unit_name
-		of: self temperatureStream.
+		of: self describedObject.
 	self
-		assert: metadata describedObject equals: self temperatureStream;
+		assert: metadata describedObject equals: self describedObject;
 		assert: metadata aspect equals: #unit_name;
 		assert: metadata data equals: 'celsius'
 ]
@@ -58,7 +58,7 @@ MetadataTest >> testPrintOn [
 	metadata := Metadata
 		attaching: 'celsius'
 		as: #unit_name
-		of: self temperatureStream.
+		of: self describedObject.
 	self
 		assert: metadata printString
 		equals:
