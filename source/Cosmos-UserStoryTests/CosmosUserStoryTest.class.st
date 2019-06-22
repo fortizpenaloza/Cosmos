@@ -7,7 +7,7 @@ Class {
 		'pendingActionsQueue',
 		'actionEvaluationsQueue'
 	],
-	#category : #'Cosmos-Tests'
+	#category : #'Cosmos-UserStoryTests'
 }
 
 { #category : #'private - systems' }
