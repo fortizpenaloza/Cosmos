@@ -1,5 +1,5 @@
 # Stage 1, load the project on a clean pharo image
-FROM basmalltalk/docker-pharo:6.1-image as imagebuilder
+FROM basmalltalk/pharo:6.1-image as imagebuilder
 
 USER root
 WORKDIR /opt/pharo
@@ -24,5 +24,5 @@ RUN chown -R pharo:pharo /opt/cosmos
 
 USER pharo
 
-CMD ["/opt/pharo/pharo", "Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
+CMD ["pharo", "Pharo.image", "cosmos", "--port=8090", "--allowed-origins=http://localhost:7080"]
 
