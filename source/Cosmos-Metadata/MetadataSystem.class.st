@@ -26,9 +26,15 @@ MetadataSystem >> assertIsNotAlreadyRegistered: metadata [
 MetadataSystem >> dataDescribing: anAspect of: anObject [
 
 	^ self
-		oneMetadataFilteredBy: [ :metadata | metadata aspect = anAspect and: [ metadata describedObject = anObject ] ]
+		oneMetadataFilteredBy: [ :metadata | 
+			metadata aspect = anAspect
+				and: [ metadata describedObject = anObject ] ]
 		ifFound: [ :metadata | metadata data ]
-		ifNone: [ ObjectNotFound signal: 'lala' ]
+		ifNone: [ ObjectNotFound
+				signal:
+					('Data describing <1p> aspect of <2p> not found'
+						expandMacrosWith: anAspect
+						with: anObject) ]
 ]
 
 { #category : #installing }

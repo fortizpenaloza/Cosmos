@@ -11,24 +11,19 @@ BaselineOfCosmos >> baseline: spec [
 	spec
 		for: #pharo
 		do: [ self
-				setUpDependencies: spec;
-				describeCosmosDependeciesOn: spec;
-				describeCodeQualityDependenciesOn: spec;
-				describeToolsDependeciesOn: spec.
+				setUpDependeciesOn: spec;
+				setUpPackageDependeciesOn: spec;
+				setUpGroupsOn: spec ]
+]
 
-			spec
-				group: 'Deployment' with: #('Model' 'API' 'CommandLineHandler');
-				group: 'Tests'
-					with:
-					#('Model-Tests' 'API-Tests' 'CommandLineHandler-Tests' 'Code-Quality-Tests');
-				group: 'Tools' with: #('Cosmos-Tools');
-				group: 'CI' with: #('Tests');
-				group: 'Development' with: #('Tests' 'Tools');
-				group: 'default' with: #('Development') ]
+{ #category : #accessing }
+BaselineOfCosmos >> projectClass [
+
+	^ MetacelloCypressBaselineProject
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeAPIDependenciesOn: spec [
+BaselineOfCosmos >> setUpAPIDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-API-Common' with: [ spec requires: 'Stargate' ];
@@ -48,7 +43,7 @@ BaselineOfCosmos >> describeAPIDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
+BaselineOfCosmos >> setUpAPITestsDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-API-Common-Tests'
@@ -69,7 +64,7 @@ BaselineOfCosmos >> describeAPITestsDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeCodeQualityDependenciesOn: spec [
+BaselineOfCosmos >> setUpCodeQualityDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Code-Quality-Tests';
@@ -77,7 +72,7 @@ BaselineOfCosmos >> describeCodeQualityDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
+BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
@@ -86,7 +81,7 @@ BaselineOfCosmos >> describeCommandLineHandlerDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeCommandLineHandlerTestsDependenciesOn: spec [
+BaselineOfCosmos >> setUpCommandLineHandlerTestsDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler-Tests'
@@ -96,19 +91,67 @@ BaselineOfCosmos >> describeCommandLineHandlerTestsDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeCosmosDependeciesOn: spec [
+BaselineOfCosmos >> setUpCosmosDependeciesOn: spec [
 
 	self
-		describeModelDependenciesOn: spec;
-		describeAPIDependenciesOn: spec;
-		describeCommandLineHandlerDependenciesOn: spec;
-		describeModelTestsDependenciesOn: spec;
-		describeAPITestsDependenciesOn: spec;
-		describeCommandLineHandlerTestsDependenciesOn: spec
+		setUpModelDependenciesOn: spec;
+		setUpAPIDependenciesOn: spec;
+		setUpCommandLineHandlerDependenciesOn: spec;
+		setUpModelTestsDependenciesOn: spec;
+		setUpAPITestsDependenciesOn: spec;
+		setUpCommandLineHandlerTestsDependenciesOn: spec
+]
+
+{ #category : #dependencies }
+BaselineOfCosmos >> setUpDependeciesOn: aSpec [
+
+	aSpec
+		baseline: 'Kepler'
+			with: [ aSpec
+				repository: 'github://ba-st/Kepler:v4/source';
+				loads: #('Deployment') ];
+		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ aSpec loads: 'Dependent-SUnit-Extensions' ];
+		project: 'Kepler-Tools' copyFrom: 'Kepler' with: [ aSpec loads: 'Tools' ].
+		
+	aSpec
+		baseline: 'Stargate'
+		with: [ aSpec
+				repository: 'github://ba-st/Stargate:v1/source';
+				loads: 'Deployment' ];
+		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ aSpec loads: 'Tools' ].
+			
+		
+	aSpec
+		baseline: 'ApplicationStarter'
+			with: [ aSpec
+				repository: 'github://ba-st/ApplicationStarter:v1/source';
+				loads: 'Deployment' ];
+		import: 'ApplicationStarter'.
+
+	aSpec
+		baseline: 'Roassal2'
+			with: [ aSpec
+				repository: 'github://ObjectProfile/Roassal2/src';
+				loads: #('Minimal') ];
+		import: 'Roassal2'
+]
+
+{ #category : #groups }
+BaselineOfCosmos >> setUpGroupsOn: spec [
+
+	^ spec
+		group: 'Deployment' with: #('Model' 'API' 'CommandLineHandler');
+		group: 'Tests'
+			with:
+			#('Model-Tests' 'API-Tests' 'CommandLineHandler-Tests' 'Code-Quality-Tests');
+		group: 'Tools' with: #('Cosmos-Tools');
+		group: 'CI' with: #('Tests');
+		group: 'Development' with: #('Tests' 'Tools');
+		group: 'default' with: #('Development')
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeModelDependenciesOn: spec [
+BaselineOfCosmos >> setUpModelDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Metadata' with: [ spec requires: 'Kepler' ];
@@ -123,14 +166,16 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 			with:
 				[ spec requires: #('Kepler' 'Cosmos-Identifier' 'Cosmos-Timestamping') ];
 		group: 'Model' with: 'Cosmos-Data';
-		package: 'Cosmos-Triggers' with: [ spec requires: 'Kepler' ];
+		package: 'Cosmos-Triggers'
+			with: [ spec
+				requires: #('Kepler' 'Cosmos-Data' 'Cosmos-Identifier' 'Cosmos-Timestamping') ];
 		group: 'Model' with: 'Cosmos-Triggers';
 		package: 'Cosmos-Commands' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Commands';
 		package: 'Cosmos-Actions' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Actions';
 		package: 'Cosmos-ActionEvaluation'
-			with: [ spec requires: 'Kepler' ];
+			with: [ spec requires: #('Kepler' 'Cosmos-Identifier' 'Cosmos-Timestamping') ];
 		group: 'Model' with: 'Cosmos-ActionEvaluation';
 		package: 'Cosmos-PeriodicalScheduler-Core';
 		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
@@ -139,95 +184,64 @@ BaselineOfCosmos >> describeModelDependenciesOn: spec [
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeModelTestsDependenciesOn: spec [
+BaselineOfCosmos >> setUpModelTestsDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-Tests';
 		group: 'Model-Tests' with: 'Cosmos-Tests';
-		package: 'Cosmos-Identifier-Tests'
-			with: [ spec requires: 'Cosmos-Identifier' ];
-		group: 'Model-Tests' with: 'Cosmos-Identifier-Tests';
 		package: 'Cosmos-Metadata-Tests'
-			with: [ spec requires: 'Cosmos-Metadata' ];
+			with: [ spec requires: #('Kepler-SUnit' 'Cosmos-Metadata') ];
 		group: 'Model-Tests' with: 'Cosmos-Metadata-Tests';
+		package: 'Cosmos-Identifier-Tests'
+			with: [ spec requires: #('Kepler-SUnit' 'Cosmos-Identifier') ];
+		group: 'Model-Tests' with: 'Cosmos-Identifier-Tests';
 		package: 'Cosmos-Timestamping-Tests'
-			with: [ spec requires: #('Cosmos-Tests' 'Cosmos-Timestamping') ];
+			with: [ spec requires: #('Kepler-SUnit' 'Cosmos-Timestamping') ];
 		group: 'Model-Tests' with: 'Cosmos-Timestamping-Tests';
-		package: 'Cosmos-UserStoryTests'
-			with: [ spec requires: #('Model' 'Kepler-SUnit') ];
-		group: 'Model-Tests' with: 'Cosmos-UserStoryTests';
 		package: 'Cosmos-Data-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Data' 'Cosmos-UserStoryTests') ];
+				requires: #('Kepler-SUnit' 'Cosmos-Data') ];
 		group: 'Model-Tests' with: 'Cosmos-Data-Tests';
 		package: 'Cosmos-Triggers-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Triggers' 'Cosmos-UserStoryTests') ];
+				requires: #('Kepler-SUnit' 'Cosmos-Triggers') ];
 		group: 'Model-Tests' with: 'Cosmos-Triggers-Tests';
 		package: 'Cosmos-Commands-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Commands' 'Cosmos-UserStoryTests') ];
+				requires: #('Kepler-SUnit' 'Cosmos-Commands' 'Cosmos-UserStoryTests') ];
 		group: 'Model-Tests' with: 'Cosmos-Commands-Tests';
 		package: 'Cosmos-Actions-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-Actions' 'Cosmos-UserStoryTests') ];
+				requires: #('Kepler-SUnit' 'Cosmos-Actions') ];
 		group: 'Model-Tests' with: 'Cosmos-Actions-Tests';
 		package: 'Cosmos-ActionEvaluation-Tests'
 			with: [ spec
-				requires: #('Cosmos-Tests' 'Cosmos-ActionEvaluation' 'Cosmos-UserStoryTests') ];
+				requires: #('Kepler-SUnit' 'Cosmos-ActionEvaluation') ];
 		group: 'Model-Tests' with: 'Cosmos-ActionEvaluation-Tests';
 		package: 'Cosmos-PeriodicalScheduler-Tests'
 			with: [ spec requires: #('Cosmos-PeriodicalScheduler-Core') ];
 		group: 'Model-Tests' with: 'Cosmos-PeriodicalScheduler-Tests';
 		package: 'Cosmos-ActionEvaluator-Tests'
 			with: [ spec requires: #('Cosmos-ActionEvaluator') ];
-		group: 'Model-Tests' with: 'Cosmos-ActionEvaluator-Tests'
+		group: 'Model-Tests' with: 'Cosmos-ActionEvaluator-Tests';
+		package: 'Cosmos-UserStoryTests'
+			with: [ spec requires: #('Model' 'Kepler-SUnit') ];
+		group: 'Model-Tests' with: 'Cosmos-UserStoryTests'
 ]
 
 { #category : #'private - baselines' }
-BaselineOfCosmos >> describeToolsDependeciesOn: spec [
+BaselineOfCosmos >> setUpPackageDependeciesOn: aSpec [
+
+	self
+		setUpCosmosDependeciesOn: aSpec;
+		setUpCodeQualityDependenciesOn: aSpec;
+		setUpToolsDependeciesOn: aSpec
+]
+
+{ #category : #'private - baselines' }
+BaselineOfCosmos >> setUpToolsDependeciesOn: spec [
 
 	spec
 		package: 'Cosmos-Tools'
 		with: [ spec requires: #('Roassal2' 'Kepler-Tools' 'Stargate-Tools') ]
-]
-
-{ #category : #accessing }
-BaselineOfCosmos >> projectClass [
-
-	^ MetacelloCypressBaselineProject
-]
-
-{ #category : #dependencies }
-BaselineOfCosmos >> setUpDependencies: spec [
-
-	spec
-		baseline: 'Kepler'
-			with: [ spec
-				repository: 'github://ba-st/Kepler:v4/source';
-				loads: #('Deployment') ];
-		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
-		project: 'Kepler-Tools' copyFrom: 'Kepler' with: [ spec loads: 'Tools' ].
-		
-	spec
-		baseline: 'Stargate'
-		with: [ spec
-				repository: 'github://ba-st/Stargate:v1/source';
-				loads: 'Deployment' ];
-		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
-			
-		
-	spec
-		baseline: 'ApplicationStarter'
-			with: [ spec
-				repository: 'github://ba-st/ApplicationStarter:v1/source';
-				loads: 'Deployment' ];
-		import: 'ApplicationStarter'.
-
-	spec
-		baseline: 'Roassal2'
-			with: [ spec
-				repository: 'github://ObjectProfile/Roassal2/src';
-				loads: #('Minimal') ];
-		import: 'Roassal2'
 ]

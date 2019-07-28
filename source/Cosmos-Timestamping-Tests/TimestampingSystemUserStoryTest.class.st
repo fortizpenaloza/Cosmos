@@ -31,12 +31,11 @@ TimestampingSystemUserStoryTest >> testAccessing [
 
 { #category : #tests }
 TimestampingSystemUserStoryTest >> testQueryingTimestampFailsIfNotRegistered [
-	
-	self flag: 'Improve error handling'.
+
 	self
 		should: [ self timestampingSystem lastModificationOf: #notRegisteredObject ]
 		raise: ObjectNotFound
-		withMessageText: 'lala'
+		withMessageText: 'Data describing #update_timestamp aspect of #notRegisteredObject not found'
 ]
 
 { #category : #tests }
