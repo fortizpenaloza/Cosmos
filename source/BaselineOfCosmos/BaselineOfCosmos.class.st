@@ -4,6 +4,14 @@ Class {
 	#category : #BaselineOfCosmos
 }
 
+{ #category : #'private - baselines building' }
+BaselineOfCosmos >> add: aPackageName asModelRequiring: requiredPackageNames to: spec [
+
+	spec
+		package: aPackageName with: [ spec requires: requiredPackageNames ];
+		group: 'Model' with: aPackageName
+]
+
 { #category : #baselines }
 BaselineOfCosmos >> baseline: spec [
 
@@ -153,12 +161,13 @@ BaselineOfCosmos >> setUpGroupsOn: spec [
 { #category : #'private - baselines' }
 BaselineOfCosmos >> setUpModelDependenciesOn: spec [
 
+	self
+		add: 'Cosmos-Metadata' asModelRequiring: 'Kepler' to: spec;
+		add: 'Cosmos-Timestamping'
+			asModelRequiring: #('Kepler' 'Cosmos-Metadata')
+			to: spec.
+
 	spec
-		package: 'Cosmos-Metadata' with: [ spec requires: 'Kepler' ];
-		group: 'Model' with: 'Cosmos-Metadata';
-		package: 'Cosmos-Timestamping'
-			with: [ spec requires: #('Kepler' 'Cosmos-Metadata') ];
-		group: 'Model' with: 'Cosmos-Timestamping';
 		package: 'Cosmos-Identifier'
 			with: [ spec requires: #('Kepler' 'Cosmos-Metadata') ];
 		group: 'Model' with: 'Cosmos-Identifier';
@@ -175,7 +184,8 @@ BaselineOfCosmos >> setUpModelDependenciesOn: spec [
 		package: 'Cosmos-Actions' with: [ spec requires: 'Kepler' ];
 		group: 'Model' with: 'Cosmos-Actions';
 		package: 'Cosmos-ActionEvaluation'
-			with: [ spec requires: #('Kepler' 'Cosmos-Identifier' 'Cosmos-Timestamping') ];
+			with:
+				[ spec requires: #('Kepler' 'Cosmos-Identifier' 'Cosmos-Timestamping') ];
 		group: 'Model' with: 'Cosmos-ActionEvaluation';
 		package: 'Cosmos-PeriodicalScheduler-Core';
 		group: 'Model' with: 'Cosmos-PeriodicalScheduler-Core';
@@ -187,8 +197,8 @@ BaselineOfCosmos >> setUpModelDependenciesOn: spec [
 BaselineOfCosmos >> setUpModelTestsDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-Tests';
-		group: 'Model-Tests' with: 'Cosmos-Tests';
+		package: 'Cosmos-SUnit-Model';
+		group: 'Model-Tests' with: 'Cosmos-SUnit-Model';
 		package: 'Cosmos-Metadata-Tests'
 			with: [ spec requires: #('Kepler-SUnit' 'Cosmos-Metadata') ];
 		group: 'Model-Tests' with: 'Cosmos-Metadata-Tests';
@@ -208,11 +218,11 @@ BaselineOfCosmos >> setUpModelTestsDependenciesOn: spec [
 		group: 'Model-Tests' with: 'Cosmos-Triggers-Tests';
 		package: 'Cosmos-Commands-Tests'
 			with: [ spec
-				requires: #('Kepler-SUnit' 'Cosmos-Commands' 'Cosmos-UserStoryTests') ];
+				requires: #('Cosmos-SUnit-Model' 'Kepler-SUnit' 'Cosmos-Commands' 'Cosmos-UserStoryTests') ];
 		group: 'Model-Tests' with: 'Cosmos-Commands-Tests';
 		package: 'Cosmos-Actions-Tests'
 			with: [ spec
-				requires: #('Kepler-SUnit' 'Cosmos-Actions') ];
+				requires: #('Cosmos-SUnit-Model' 'Kepler-SUnit' 'Cosmos-Actions') ];
 		group: 'Model-Tests' with: 'Cosmos-Actions-Tests';
 		package: 'Cosmos-ActionEvaluation-Tests'
 			with: [ spec
