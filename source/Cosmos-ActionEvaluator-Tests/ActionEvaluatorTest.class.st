@@ -53,7 +53,7 @@ ActionEvaluatorTest >> testEvaluateBlock [
 
 	self
 		wait: 10 milliSeconds
-		andDo: [ self
+		thenDo: [ self
 				assert: wasEvaluated;
 				assert: pendingActionsQueue isEmpty;
 				assert: actionEvaluationsQueue size equals: 1 ]
@@ -88,14 +88,14 @@ ActionEvaluatorTest >> testSendHttpRequest [
 
 			self
 				wait: 100 milliSeconds
-				andDo: [ self
+				thenDo: [ self
 						assert: wasEvaluated;
 						assert: pendingActionsQueue isEmpty;
 						assert: actionEvaluationsQueue size equals: 1 ] ]
 ]
 
 { #category : #'tests support' }
-ActionEvaluatorTest >> wait: aDuration andDo: aBlock [
+ActionEvaluatorTest >> wait: aDuration thenDo: aBlock [
 
 	(Delay forDuration: aDuration) wait.
 	aBlock value
