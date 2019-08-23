@@ -83,7 +83,7 @@ ActionEvaluationSystem >> registerToSummary: anActionEvaluation [
 	actionEvaluationSummaries
 		at: anActionEvaluation action
 		ifPresent:
-			[ :summary | summary synchronizeWith: anActionEvaluation evaluationDateTime ]
+			[ :summary | summary synchronizeWith: anActionEvaluation ]
 		ifAbsentPut: [ self initializeSummaryFor: anActionEvaluation ]
 ]
 

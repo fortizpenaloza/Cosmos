@@ -7,7 +7,7 @@ Class {
 { #category : #decoding }
 TimeIntervalDecoder >> decode: aJSON [
 
-	| start timeOfDayDecoder stop |
+	| start stop |
 
 	start := self startFrom: aJSON.
 	stop := self stopFrom: aJSON.

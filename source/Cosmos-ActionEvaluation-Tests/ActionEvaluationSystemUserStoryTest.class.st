@@ -67,7 +67,7 @@ ActionEvaluationSystemUserStoryTest >> testQueringActionEvaluationSummaries [
 
 	self
 		wait: 10 milliSeconds
-		andDo: [ self
+		thenDo: [ self
 				withTheOnlyOneIn: self actionEvaluationSystem actionEvaluationSummaries
 				do: [ :summary | 
 					self
@@ -78,7 +78,7 @@ ActionEvaluationSystemUserStoryTest >> testQueringActionEvaluationSummaries [
 ]
 
 { #category : #'tests support' }
-ActionEvaluationSystemUserStoryTest >> wait: aDuration andDo: aBlock [
+ActionEvaluationSystemUserStoryTest >> wait: aDuration thenDo: aBlock [
 
 	(Delay forDuration: aDuration) wait.
 	aBlock value

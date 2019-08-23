@@ -42,14 +42,14 @@ DequeuingProcessTest >> testDequeueing [
 [ dequeuingProcess start.
 	self
 		wait: 10 milliSeconds
-		andDo: [ self
+		thenDo: [ self
 				assert: queue isEmpty;
 				assert: wasDequeued ] ]
 		ensure: [ dequeuingProcess stop ]
 ]
 
 { #category : #'tests support' }
-DequeuingProcessTest >> wait: aDuration andDo: aBlock [
+DequeuingProcessTest >> wait: aDuration thenDo: aBlock [
 
 	(Delay forDuration: aDuration) wait.
 	aBlock value
