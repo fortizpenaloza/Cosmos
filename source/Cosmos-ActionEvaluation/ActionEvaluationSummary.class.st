@@ -10,17 +10,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-ActionEvaluationSummary class >> of: anActionEvaluation [
+ActionEvaluationSummary class >> for: anActionEvaluation [
 
-	^ self
-		of: anActionEvaluation action
-		lastEvaluatedOn: anActionEvaluation evaluationDateTime
-]
-
-{ #category : #'instance creation' }
-ActionEvaluationSummary class >> of: anAction lastEvaluatedOn: aDateTime [
-
-	^ self new initializeOf: anAction lastEvaluatedOn: aDateTime
+	^ self new initializeFor: anActionEvaluation
 ]
 
 { #category : #accessing }
@@ -44,14 +36,11 @@ ActionEvaluationSummary >> evaluationCount [
 ]
 
 { #category : #initialization }
-ActionEvaluationSummary >> initializeOf: anAction lastEvaluatedOn: aDateTime [
+ActionEvaluationSummary >> initializeFor: anActionEvaluation [
 
-	action :=  anAction.
-	lastEvaluation :=  aDateTime.
-	evaluationCount :=  1
-	
-
-	
+	action := anActionEvaluation action.
+	lastEvaluation := anActionEvaluation evaluationDateTime.
+	evaluationCount := 1
 ]
 
 { #category : #accessing }
@@ -61,7 +50,7 @@ ActionEvaluationSummary >> lastEvaluation [
 ]
 
 { #category : #updating }
-ActionEvaluationSummary >> synchronizeWith: anActionEvaluation [
+ActionEvaluationSummary >> updateWith: anActionEvaluation [
 
 	self assertActionMatch: anActionEvaluation.
 

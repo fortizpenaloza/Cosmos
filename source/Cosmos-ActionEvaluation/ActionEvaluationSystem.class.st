@@ -58,12 +58,6 @@ ActionEvaluationSystem >> initializeRegisteringFrom: anActionEvaluationsQueue [
 	actionEvaluationSummaries := Dictionary new
 ]
 
-{ #category : #'private - managing' }
-ActionEvaluationSystem >> initializeSummaryFor: anActionEvaluation [
-
-	^ ActionEvaluationSummary of: anActionEvaluation 
-]
-
 { #category : #accessing }
 ActionEvaluationSystem >> name [
 
@@ -82,9 +76,8 @@ ActionEvaluationSystem >> registerToSummary: anActionEvaluation [
 
 	actionEvaluationSummaries
 		at: anActionEvaluation action
-		ifPresent:
-			[ :summary | summary synchronizeWith: anActionEvaluation ]
-		ifAbsentPut: [ self initializeSummaryFor: anActionEvaluation ]
+		ifPresent: [ :summary | summary updateWith: anActionEvaluation ]
+		ifAbsentPut: [ ActionEvaluationSummary for: anActionEvaluation ]
 ]
 
 { #category : #'private - controlling' }

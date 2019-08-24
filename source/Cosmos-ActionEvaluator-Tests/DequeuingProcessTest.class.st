@@ -29,23 +29,24 @@ DequeuingProcessTest >> testDequeueing [
 	| dequeuingProcess |
 
 	self assertQueueHasOneElement.
-	
+
 	dequeuingProcess := DequeuingProcess
 		named: 'Test process'
 		from: queue
 		applying: [ :element | wasDequeued := true ].
-	
+
 	self
 		deny: queue isEmpty;
 		deny: wasDequeued.
-	
-[ dequeuingProcess start.
-	self
-		wait: 10 milliSeconds
-		thenDo: [ self
+
+	[ 
+		dequeuingProcess start.
+		self
+			wait: 10 milliSeconds
+			thenDo: [ self
 				assert: queue isEmpty;
-				assert: wasDequeued ] ]
-		ensure: [ dequeuingProcess stop ]
+				assert: wasDequeued ] 
+	] ensure: [ dequeuingProcess stop ]
 ]
 
 { #category : #'tests support' }

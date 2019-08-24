@@ -191,20 +191,6 @@ CosmosCommandLineHandler >> logPrefix [
 ]
 
 { #category : #'private - accessing' }
-CosmosCommandLineHandler >> periodicalScheduler [
-
-	| schedulerClass |
-
-	self flag: 'hack due to a bad deprecation from pharo, remove after drop support to Pharo 6.x'.
-	
-	(Smalltalk hasClassNamed: #DelaySpinScheduler)
-		ifTrue: [ schedulerClass := Smalltalk classNamed: #DelaySpinScheduler ]
-		ifFalse: [ schedulerClass := Smalltalk classNamed: #DelaySemaphoreScheduler ].
-
-	^ PeriodicalScheduler workingWith: schedulerClass new
-]
-
-{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'
