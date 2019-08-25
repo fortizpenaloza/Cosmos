@@ -61,8 +61,9 @@ BaselineOfCosmos >> baseline: spec [
 		do: [ self
 				setUpDependeciesOn: spec;
 				setUpPackageDependeciesOn: spec;
-				setUpCompatibilityPackagesOn: spec;
-				setUpGroupsOn: spec ]
+				setUpGroupsOn: spec ].
+
+	self setUpCompatibilityPackagesOn: spec
 ]
 
 { #category : #accessing }
