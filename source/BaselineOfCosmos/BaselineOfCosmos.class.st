@@ -146,13 +146,13 @@ BaselineOfCosmos >> setUpCompatibilityPackagesOn: spec [
 		for: #'pharo6.x'
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler-Pharo6';
-				group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler-Pharo6'
+				group: 'Deployment' with: 'Cosmos-CommandLineHandler-Pharo6'
 			].
 	spec
 		for: #'pharo7.x'
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler-Pharo7';
-				group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler-Pharo7'
+				group: 'Deployment' with: 'Cosmos-CommandLineHandler-Pharo7'
 			]
 ]
 
