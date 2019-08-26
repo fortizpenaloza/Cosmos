@@ -63,13 +63,13 @@ BaselineOfCosmos >> baseline: spec [
 				setUpPackageDependeciesOn: spec ].
 			
 	spec
-		for: #'pharo6.x'
+		for: #'pharo6'
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler-Pharo6';
 				group: 'CommandLineHandler'
 					with: 'Cosmos-CommandLineHandler-Pharo6' ].
 	spec
-		for: #'pharo7.x'
+		for: #'pharo7'
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler-Pharo7';
 				group: 'CommandLineHandler'
