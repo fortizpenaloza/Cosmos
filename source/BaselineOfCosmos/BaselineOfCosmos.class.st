@@ -122,13 +122,13 @@ BaselineOfCosmos >> setUpCodeQualityDependenciesOn: spec [
 BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 
 	spec
-		package: 'Cosmos-CommandLineHandler'
-			with: [ spec requires: 'ApplicationStarter' ];
-		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'.
-
-	spec
 		for: #'pharo6.x'
 		do: [ spec
+				package: 'Cosmos-CommandLineHandler'
+					with: [ spec requires: 'ApplicationStarter' ];
+				group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'.
+
+			spec
 				package: 'Cosmos-CommandLineHandler-Pharo6'
 					with: [ spec requires: 'Cosmos-CommandLineHandler' ];
 				group: 'CommandLineHandler'
@@ -137,6 +137,10 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 	spec
 		for: #'pharo7.x'
 		do: [ spec
+				package: 'Cosmos-CommandLineHandler'
+					with: [ spec requires: 'ApplicationStarter' ];
+				group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'.
+			spec
 				package: 'Cosmos-CommandLineHandler-Pharo7'
 					with: [ spec requires: 'Cosmos-CommandLineHandler' ];
 				group: 'CommandLineHandler'
@@ -151,12 +155,6 @@ BaselineOfCosmos >> setUpCommandLineHandlerTestsDependenciesOn: spec [
 			with: [ spec requires: 'Cosmos-CommandLineHandler' ];
 		group: 'CommandLineHandler-Tests'
 			with: 'Cosmos-CommandLineHandler-Tests'
-]
-
-{ #category : #'private - baselines' }
-BaselineOfCosmos >> setUpCompatibilityPackagesOn: spec [
-
-	
 ]
 
 { #category : #'private - baselines' }
