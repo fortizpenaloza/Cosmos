@@ -44,7 +44,7 @@ ActionEvaluationSummaryTest >> testInstanceCreationAndAccessing [
 	| summary |
 
 	summary := ActionEvaluationSummary
-		of: self doNothingOnOctoberFirstOf2014AtNoon.
+		for: self doNothingOnOctoberFirstOf2014AtNoon.
 
 	self
 		assert: summary action equals: self doNothing;
@@ -59,7 +59,7 @@ ActionEvaluationSummaryTest >> testUpdate [
 	| summary |
 
 	summary := ActionEvaluationSummary
-		of: self doNothingOnOctoberFirstOf2014AtNoon.
+		for: self doNothingOnOctoberFirstOf2014AtNoon.
 
 	self
 		assert: summary action equals: self doNothing;
@@ -67,7 +67,7 @@ ActionEvaluationSummaryTest >> testUpdate [
 			equals: self octoberFirstOf2014AtNoon;
 		assert: summary evaluationCount equals: 1.
 
-	summary synchronizeWith: self doNothingOnOctoberThirdOf2014AtMidnight.
+	summary updateWith: self doNothingOnOctoberThirdOf2014AtMidnight.
 
 	self
 		assert: summary action equals: self doNothing;
@@ -82,7 +82,7 @@ ActionEvaluationSummaryTest >> testUpdatingFailsIfActionDoesNotMatch [
 	| summary |
 
 	summary := ActionEvaluationSummary
-		of: self doNothingOnOctoberFirstOf2014AtNoon.
+		for: self doNothingOnOctoberFirstOf2014AtNoon.
 
 	self
 		assert: summary action equals: self doNothing;
@@ -92,7 +92,7 @@ ActionEvaluationSummaryTest >> testUpdatingFailsIfActionDoesNotMatch [
 
 	self
 		should: [ summary
-				synchronizeWith:
+				updateWith:
 					(ActionEvaluation
 						of: self wrongAction
 						on: self octoberThirdOf2014AtMidnight) ]
