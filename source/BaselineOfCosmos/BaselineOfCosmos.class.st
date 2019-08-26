@@ -135,7 +135,7 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 					with: [ spec requires: 'Cosmos-CommandLineHandler' ] ].
 
 	spec
-		for: #'pharo7.x'
+		for: #(#'pharo7.x' #'pharo8.x')
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler'
 					with: [ spec includes: 'Cosmos-CommandLineHandler-Pharo7' ];
