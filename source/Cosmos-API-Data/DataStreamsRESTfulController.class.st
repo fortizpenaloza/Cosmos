@@ -40,12 +40,12 @@ DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aCont
 
 	ZnResponse noContent ]
 		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+		do: [ :signal | HTTPClientError notFound signal: signal messageText ]
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType [
-
+DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType within: aContext [ 
+	
 	^ ZnETag
 		with:
 			(SHA1 new
@@ -123,7 +123,7 @@ DataStreamsRESTfulController >> lastModificationOf: aDataStream [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> locationOf: aDataStream [
+DataStreamsRESTfulController >> locationOf: aDataStream within: aContext [ 
 
 	| baseUrl |
 
@@ -135,10 +135,10 @@ DataStreamsRESTfulController >> locationOf: aDataStream [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> mediaControlsFor: dataStream [
+DataStreamsRESTfulController >> mediaControlsFor: dataStream within: aContext [
 
-	^ (super mediaControlsFor: dataStream)
-		, {('data_points' -> ((self locationOf: dataStream) / 'data-points' asUrl))}
+	^ (super mediaControlsFor: dataStream within: aContext)
+		, {('data_points' -> ((self locationOf: dataStream within: aContext) / 'data-points' asUrl))}
 ]
 
 { #category : #'private - accessing' }

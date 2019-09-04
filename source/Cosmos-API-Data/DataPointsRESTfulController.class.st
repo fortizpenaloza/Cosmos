@@ -21,15 +21,15 @@ DataPointsRESTfulController >> createPointsBasedOn: anHttpRequest within: aConte
 	^ [ self
 		withCreatedResourceDo: [ :rawData | 
 			rawData
-				do:
-					[ :rawDataPoint | self dataManagementSystem 
-						register: rawDataPoint value 
+				do: [ :rawDataPoint | 
+					self dataManagementSystem
+						register: rawDataPoint value
 						toStreamNamed: rawDataPoint key ] ]
 		decodedUsing: self dataPointsKey
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError badRequest signal: signal messageText ]
 ]
 
 { #category : #'private - systems' }
@@ -57,7 +57,7 @@ DataPointsRESTfulController >> initializeWorkingWith: aCosmosSystem [
 ]
 
 { #category : #'private - accessing' }
-DataPointsRESTfulController >> locationOf: aCollection [ 
+DataPointsRESTfulController >> locationOf: aCollection within: aContext [ 
 	
 	^ 'multiple'
 ]

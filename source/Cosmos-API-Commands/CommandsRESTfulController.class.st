@@ -68,7 +68,7 @@ CommandsRESTfulController >> dequeueCommandBasedOn: anHttpRequest within: aConte
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulController >> entityTagOf: aCommandWithPriority encodedAs: aMediaType [
+CommandsRESTfulController >> entityTagOf: aCommandWithPriority encodedAs: aMediaType within: aContext [ 
 
 	^ ZnETag
 		with:
@@ -127,7 +127,7 @@ CommandsRESTfulController >> lastModificationOf: aCommandWithPriority [
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulController >> locationOf: aCommandWithPriority [
+CommandsRESTfulController >> locationOf: aCommandWithPriority within: aContext [ 
 
 	| baseUrl |
 

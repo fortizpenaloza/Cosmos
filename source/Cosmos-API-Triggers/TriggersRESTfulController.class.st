@@ -40,8 +40,8 @@ TriggersRESTfulController >> deleteTriggerBasedOn: anHttpRequest within: aContex
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> entityTagOf: anActionTrigger encodedAs: aMediaType [ 
-	
+TriggersRESTfulController >> entityTagOf: anActionTrigger encodedAs: aMediaType within: aRequestContext [
+
 	^ ZnETag
 		with:
 			(SHA1 new
@@ -97,7 +97,7 @@ TriggersRESTfulController >> lastModificationOf: anActionTrigger [
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> locationOf: anActionTrigger [
+TriggersRESTfulController >> locationOf: anActionTrigger within: aRequestContext [
 
 	| baseUrl |
 
@@ -105,7 +105,8 @@ TriggersRESTfulController >> locationOf: anActionTrigger [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^  baseUrl / self specification endpoint / (self identifierOf: anActionTrigger) asString 
+	^ baseUrl / self specification endpoint
+		/ (self identifierOf: anActionTrigger) asString
 ]
 
 { #category : #'private - accessing' }
