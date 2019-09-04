@@ -22,7 +22,7 @@ DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aCont
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError badRequest signal: signal messageText ]
 ]
 
 { #category : #'private - systems' }

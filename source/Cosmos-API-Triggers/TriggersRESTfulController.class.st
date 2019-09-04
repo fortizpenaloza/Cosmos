@@ -26,7 +26,7 @@ TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContex
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError badRequest signal: signal messageText ]
 ]
 
 { #category : #API }

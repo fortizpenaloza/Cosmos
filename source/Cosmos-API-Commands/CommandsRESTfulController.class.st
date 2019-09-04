@@ -54,7 +54,7 @@ CommandsRESTfulController >> deleteCommandBasedOn: anHttpRequest within: aContex
 
 		ZnResponse noContent ]
 			on: ObjectNotFound
-			do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+			do: [ :signal | HTTPClientError notFound signal: signal messageText ]
 ]
 
 { #category : #API }
