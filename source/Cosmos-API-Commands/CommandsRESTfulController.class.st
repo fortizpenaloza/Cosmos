@@ -54,7 +54,7 @@ CommandsRESTfulController >> deleteCommandBasedOn: anHttpRequest within: aContex
 
 		ZnResponse noContent ]
 			on: ObjectNotFound
-			do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+			do: [ :signal | HTTPClientError notFound signal: signal messageText ]
 ]
 
 { #category : #API }
@@ -68,7 +68,7 @@ CommandsRESTfulController >> dequeueCommandBasedOn: anHttpRequest within: aConte
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulController >> entityTagOf: aCommandWithPriority encodedAs: aMediaType [
+CommandsRESTfulController >> entityTagOf: aCommandWithPriority encodedAs: aMediaType within: aContext [ 
 
 	^ ZnETag
 		with:
@@ -127,7 +127,7 @@ CommandsRESTfulController >> lastModificationOf: aCommandWithPriority [
 ]
 
 { #category : #'private - accessing' }
-CommandsRESTfulController >> locationOf: aCommandWithPriority [
+CommandsRESTfulController >> locationOf: aCommandWithPriority within: aContext [ 
 
 	| baseUrl |
 
@@ -148,6 +148,12 @@ CommandsRESTfulController >> provideHypermediaPolicy [
 CommandsRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+CommandsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }

@@ -22,7 +22,7 @@ DataStreamsRESTfulController >> createStreamBasedOn: anHttpRequest within: aCont
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError badRequest signal: signal messageText ]
 ]
 
 { #category : #'private - systems' }
@@ -40,12 +40,12 @@ DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aCont
 
 	ZnResponse noContent ]
 		on: ObjectNotFound
-		do: [ :signal | HTTPClientError signalNotFound: signal messageText ]
+		do: [ :signal | HTTPClientError notFound signal: signal messageText ]
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType [
-
+DataStreamsRESTfulController >> entityTagOf: aDataStream encodedAs: aMediaType within: aContext [ 
+	
 	^ ZnETag
 		with:
 			(SHA1 new
@@ -123,7 +123,7 @@ DataStreamsRESTfulController >> lastModificationOf: aDataStream [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> locationOf: aDataStream [
+DataStreamsRESTfulController >> locationOf: aDataStream within: aContext [ 
 
 	| baseUrl |
 
@@ -135,10 +135,10 @@ DataStreamsRESTfulController >> locationOf: aDataStream [
 ]
 
 { #category : #'private - accessing' }
-DataStreamsRESTfulController >> mediaControlsFor: dataStream [
+DataStreamsRESTfulController >> mediaControlsFor: dataStream within: aContext [
 
-	^ (super mediaControlsFor: dataStream)
-		, {('data_points' -> ((self locationOf: dataStream) / 'data-points' asUrl))}
+	^ (super mediaControlsFor: dataStream within: aContext)
+		, {('data_points' -> ((self locationOf: dataStream within: aContext) / 'data-points' asUrl))}
 ]
 
 { #category : #'private - accessing' }
@@ -151,6 +151,12 @@ DataStreamsRESTfulController >> provideHypermediaPolicy [
 DataStreamsRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }

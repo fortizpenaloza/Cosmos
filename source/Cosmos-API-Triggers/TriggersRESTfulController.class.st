@@ -26,7 +26,7 @@ TriggersRESTfulController >> createTriggerBasedOn: anHttpRequest within: aContex
 		basedOn: anHttpRequest
 		within: aContext ]
 		on: InstanceCreationFailed
-		do: [ :signal | HTTPClientError signalBadRequest: signal messageText ]
+		do: [ :signal | HTTPClientError badRequest signal: signal messageText ]
 ]
 
 { #category : #API }
@@ -40,8 +40,8 @@ TriggersRESTfulController >> deleteTriggerBasedOn: anHttpRequest within: aContex
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> entityTagOf: anActionTrigger encodedAs: aMediaType [ 
-	
+TriggersRESTfulController >> entityTagOf: anActionTrigger encodedAs: aMediaType within: aRequestContext [
+
 	^ ZnETag
 		with:
 			(SHA1 new
@@ -97,7 +97,7 @@ TriggersRESTfulController >> lastModificationOf: anActionTrigger [
 ]
 
 { #category : #'private - accessing' }
-TriggersRESTfulController >> locationOf: anActionTrigger [
+TriggersRESTfulController >> locationOf: anActionTrigger within: aRequestContext [
 
 	| baseUrl |
 
@@ -105,7 +105,8 @@ TriggersRESTfulController >> locationOf: anActionTrigger [
 		withContentDo: [ :theBaseUrl | theBaseUrl ]
 		ifUnused: [ '' asZnUrl ].
 
-	^  baseUrl / self specification endpoint / (self identifierOf: anActionTrigger) asString 
+	^ baseUrl / self specification endpoint
+		/ (self identifierOf: anActionTrigger) asString
 ]
 
 { #category : #'private - accessing' }
@@ -118,6 +119,12 @@ TriggersRESTfulController >> provideHypermediaPolicy [
 TriggersRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }

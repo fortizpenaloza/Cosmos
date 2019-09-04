@@ -46,7 +46,7 @@ ActionsRESTfulController >> deleteActionBasedOn: anHttpRequest within: aContext 
 ]
 
 { #category : #'private - accessing' }
-ActionsRESTfulController >> entityTagOf: anAction encodedAs: aMediaType [
+ActionsRESTfulController >> entityTagOf: anAction encodedAs: aMediaType within: aContext [ 
 
 	^ ZnETag
 		with:
@@ -103,7 +103,7 @@ ActionsRESTfulController >> lastModificationOf: anAction [
 ]
 
 { #category : #'private - accessing' }
-ActionsRESTfulController >> locationOf: anAction [
+ActionsRESTfulController >> locationOf: anAction within: aContext [ 
 
 	| baseUrl |
 
@@ -124,6 +124,12 @@ ActionsRESTfulController >> provideHypermediaPolicy [
 ActionsRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+ActionsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }
