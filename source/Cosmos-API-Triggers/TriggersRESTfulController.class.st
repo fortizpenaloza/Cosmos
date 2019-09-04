@@ -121,6 +121,12 @@ TriggersRESTfulController >> providePaginationPolicy [
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
+{ #category : #'private - accessing' }
+TriggersRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
+]
+
 { #category : #specification }
 TriggersRESTfulController >> specification [
 	
