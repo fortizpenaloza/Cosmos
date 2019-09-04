@@ -153,6 +153,12 @@ DataStreamsRESTfulController >> providePaginationPolicy [
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
+{ #category : #'private - accessing' }
+DataStreamsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
+]
+
 { #category : #specification }
 DataStreamsRESTfulController >> specification [
 

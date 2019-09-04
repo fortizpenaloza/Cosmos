@@ -62,6 +62,12 @@ DataPointsRESTfulController >> locationOf: aCollection within: aContext [
 	^ 'multiple'
 ]
 
+{ #category : #'private - accessing' }
+DataPointsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
+]
+
 { #category : #specification }
 DataPointsRESTfulController >> specification [
 

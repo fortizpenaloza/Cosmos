@@ -150,6 +150,12 @@ CommandsRESTfulController >> providePaginationPolicy [
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
 ]
 
+{ #category : #'private - accessing' }
+CommandsRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerDoNotRespondCreatedEntityPolicy for: self
+]
+
 { #category : #specification }
 CommandsRESTfulController >> specification [
 
