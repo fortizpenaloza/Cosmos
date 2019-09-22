@@ -488,12 +488,6 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 ]
 
 { #category : #'private - media types' }
-TriggersRESTfulControllerTest >> textPlainMediaType [
-
-	^ 'text/plain;charset=utf-8' asMediaType
-]
-
-{ #category : #'private - media types' }
 TriggersRESTfulControllerTest >> triggerVersion1dot0dot0MediaType [
 	
 	^ resourceController triggerVersion1dot0dot0MediaType 

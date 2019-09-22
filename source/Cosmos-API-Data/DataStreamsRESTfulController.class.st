@@ -116,18 +116,8 @@ DataStreamsRESTfulController >> declareGetDataPointsRoute [
 		evaluating: [ :httpRequest :requestContext | self getPointsBasedOn: httpRequest within: requestContext ]
 ]
 
-{ #category : #API }
-DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aContext [
-
-	^ self requestHandler
-		from: anHttpRequest
-		within: aContext
-		get: [ :id | self dataManagementSystem streamIdentifiedBy: id ]
-		thenDo: [ :dataStream | self dataManagementSystem deregister: dataStream ]
-]
-
 { #category : #routes }
-DataStreamsRESTfulController >> getDataStreamRoute [
+DataStreamsRESTfulController >> declareGetDataStreamRoute [
 
 	^ RouteSpecification
 		handling: #GET
@@ -136,12 +126,22 @@ DataStreamsRESTfulController >> getDataStreamRoute [
 ]
 
 { #category : #routes }
-DataStreamsRESTfulController >> getDataStreamsRoute [
+DataStreamsRESTfulController >> declareGetDataStreamsRoute [
 
 	^ RouteSpecification
 		handling: #GET
 		at: self endpoint
 		evaluating: [ :httpRequest :requestContext | self getStreamsBasedOn: httpRequest within: requestContext ]
+]
+
+{ #category : #API }
+DataStreamsRESTfulController >> deleteStreamBasedOn: anHttpRequest within: aContext [
+
+	^ self requestHandler
+		from: anHttpRequest
+		within: aContext
+		get: [ :id | self dataManagementSystem streamIdentifiedBy: id ]
+		thenDo: [ :dataStream | self dataManagementSystem deregister: dataStream ]
 ]
 
 { #category : #API }
