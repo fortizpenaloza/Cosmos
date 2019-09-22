@@ -7,7 +7,7 @@ Class {
 { #category : #'private - media types' }
 DataPointsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
 
-	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
+	^ resourceController applicationJSONVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - accessing' }
@@ -103,11 +103,11 @@ DataPointsRESTfulControllerTest >> testCreateDataPoints [
 				requestToCreateDataPointsFrom:
 					'[
 			{
-				"data_stream" : "Temperature",
+				"dataStream" : "Temperature",
 				"value" : 24
 			},
 			{
-				"data_stream" : "Pressure",
+				"dataStream" : "Pressure",
 				"value" : 89
 			}
 		]')
@@ -116,7 +116,7 @@ DataPointsRESTfulControllerTest >> testCreateDataPoints [
 	self
 		assert: response isSuccess;
 		assert: response status equals: 201;
-		assert: response location equals: 'multiple';
+		assert: response location equals: 'https://tests.cosmos.com/data-points';
 		assert: response hasEntity;
 		assert: temperature currentValue equals: 24;
 		assert: pressure currentValue equals: 89
@@ -128,19 +128,20 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithMalf
 	self
 		should: [ resourceController
 				createPointsBasedOn:
-					(self
+					( self
 						requestToCreateDataPointsFrom:
 							'{
-  "data_stream": "xxx",
+  "dataStream": "xxx",
   "value": 24
-}')
-				within: self httpRequestContext ]
-		raise: HTTPClientError
+}' )
+				within: self httpRequestContext
+			]
+		raise: HTTPClientError badRequest 
 		withExceptionDo: [ :signal | 
 			self
-				assert: signal messageText
-					equals: '[ expected';
-				assert: signal code equals: 400 ]
+				assert: signal messageText equals: '[ expected';
+				assert: signal code equals: 400
+			]
 ]
 
 { #category : #tests }
@@ -149,25 +150,26 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotV
 	self
 		should: [ resourceController
 				createPointsBasedOn:
-					(self
+					( self
 						requestToCreateDataPointsFrom:
 							'[
 			{
-				"data_stream" : "xxx",
+				"dataStream" : "xxx",
 				"value" : 24
 			},
 			{
-				"data_stream" : "Pressure",
+				"dataStream" : "Pressure",
 				"value" : 89
 			}
-		]')
-				within: self httpRequestContext ]
-		raise: HTTPClientError
+		]' )
+				within: self httpRequestContext
+			]
+		raise: HTTPClientError badRequest 
 		withExceptionDo: [ :signal | 
 			self
-				assert: signal messageText
-					equals: 'Data stream named ''xxx'' not found';
-				assert: signal code equals: 400 ]
+				assert: signal messageText equals: 'Data stream named ''xxx'' not found';
+				assert: signal code equals: 400
+			]
 ]
 
 { #category : #tests }
@@ -189,10 +191,10 @@ DataPointsRESTfulControllerTest >> testCreatingDataPointsGivesBadRequestWithNotV
 			}
 		]')
 				within: self httpRequestContext ]
-		raise: HTTPClientError
+		raise: HTTPClientError badRequest 
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText
-					equals: 'key #data_stream not found in Dictionary';
+					equals: 'key #dataStream not found in Dictionary';
 				assert: signal code equals: 400 ]
 ]

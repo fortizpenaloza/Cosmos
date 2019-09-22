@@ -17,8 +17,17 @@ DataStreamManagementSystem >> assertIsNotAlreadyRegistered: aDataStream [
 
 	AssertionChecker
 		refuse: [ dataStreams includes: aDataStream ]
-		because: 'A data stream with that name already exists in system'
+		because: ( 'A data stream named <1p> already exists in system' expandMacrosWith: aDataStream name )
 		raising: ConflictingObjectFound
+]
+
+{ #category : #'private - preconditions' }
+DataStreamManagementSystem >> assertIsRegistered: aDataStream [
+
+	AssertionChecker
+		enforce: [ dataStreams includes: aDataStream ]
+		because: ( 'A data stream named <1p> not exists in system' expandMacrosWith: aDataStream name )
+		raising: ObjectNotFound
 ]
 
 { #category : #installing }
@@ -83,19 +92,13 @@ DataStreamManagementSystem >> register: aDataStream [
 	^ aDataStream
 ]
 
-{ #category : #'private - managing' }
+{ #category : #managing }
 DataStreamManagementSystem >> register: aDataPoint to: aDataStream [
+
+	self assertIsRegistered: aDataStream.
 
 	aDataStream add: aDataPoint.
 	self notifyDataPointWasRegisteredOn: aDataStream
-]
-
-{ #category : #managing }
-DataStreamManagementSystem >> register: aDataPoint toStreamNamed: aName [
-
-	self
-		withStreamNamed: aName
-		do: [ :dataStream | self register: aDataPoint to: dataStream ]
 ]
 
 { #category : #'private - managing' }
@@ -111,6 +114,12 @@ DataStreamManagementSystem >> registerTimestampFor: aDataStream [
 ]
 
 { #category : #querying }
+DataStreamManagementSystem >> signalNotFoundNamed: aName [
+
+	^ ObjectNotFound signal: ( 'Data stream named <1p> not found' expandMacrosWith: aName )
+]
+
+{ #category : #querying }
 DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 
 	^ self identifierSystem
@@ -121,7 +130,9 @@ DataStreamManagementSystem >> streamIdentifiedBy: anIdentifier [
 { #category : #querying }
 DataStreamManagementSystem >> streamNamed: aName [
 
-	^ self withStreamNamed: aName do: [ :stream | stream ]
+	^ dataStreams
+		detect: [ :dataStream | dataStream name = aName ]
+		ifNone: [ self signalNotFoundNamed: aName ]
 ]
 
 { #category : #querying }
@@ -134,13 +145,4 @@ DataStreamManagementSystem >> streams [
 DataStreamManagementSystem >> timestampingSystem [
 	
 	^ self >> #TimestampingSystemInterface
-]
-
-{ #category : #querying }
-DataStreamManagementSystem >> withStreamNamed: aName do: aFoundBlock [
-
-	^ dataStreams
-		detect: [ :dataStream | dataStream name = aName ]
-		ifFound: [ :dataStream | aFoundBlock value: dataStream ]
-		ifNone: [ ObjectNotFound signal: ('Data stream named <1p> not found' expandMacrosWith: aName) ]
 ]

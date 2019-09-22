@@ -42,9 +42,9 @@ DataStreamManagementSystemUserStoryTests >> testDataPointRegistration [
 
 	dataStream := self temperatureStream.
 	self dataManagementSystem register: dataStream.
-	
+
 	dataPoint := DataPoint on: self octoberFirstOf2014AtNoon holding: 10.
-	self dataManagementSystem register: dataPoint toStreamNamed: dataStream name.
+	self dataManagementSystem register: dataPoint to: dataStream.
 
 	self
 		withTheOnlyOneIn: dataStream dataPoints
@@ -56,10 +56,11 @@ DataStreamManagementSystemUserStoryTests >> testDataPointRegistrationFailsIfStre
 
 	self
 		should: [ self dataManagementSystem
-				register: (DataPoint on: self octoberFirstOf2014AtNoon holding: 10)
-				toStreamNamed: 'Wrong name' ]
+				register: ( DataPoint on: self octoberFirstOf2014AtNoon holding: 10 )
+				to: ( DataStream named: 'Wrong name' )
+			]
 		raise: ObjectNotFound
-		withMessageText: 'Data stream named ''Wrong name'' not found'
+		withMessageText: 'A data stream named ''Wrong name'' not exists in system'
 ]
 
 { #category : #tests }
@@ -100,7 +101,7 @@ DataStreamManagementSystemUserStoryTests >> testDataStreamRegistrationFailsIfAlr
 		should:
 			[ self dataManagementSystem register: self temperatureStream ]
 		raise: ConflictingObjectFound
-		withMessageText: 'A data stream with that name already exists in system'
+		withMessageText: 'A data stream named ''Temperature'' already exists in system'
 ]
 
 { #category : #tests }
@@ -139,19 +140,6 @@ DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByIdentifier [
 	self
 		assert: (self dataManagementSystem streamIdentifiedBy: self currentIdentifier)
 		equals: dataStream
-]
-
-{ #category : #tests }
-DataStreamManagementSystemUserStoryTests >> testQueryingDataStreamByName [
-
-	| dataStream |
-
-	dataStream := self temperatureStream.
-
-	self dataManagementSystem register: dataStream.
-	self dataManagementSystem
-		withStreamNamed: 'Temperature'
-		do: [ :foundDataStream | self assert: foundDataStream equals: dataStream ]
 ]
 
 { #category : #tests }

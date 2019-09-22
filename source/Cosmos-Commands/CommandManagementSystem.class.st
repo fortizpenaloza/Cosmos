@@ -28,14 +28,6 @@ CommandManagementSystem >> dependencies [
 	^ #(#TimestampingSystemInterface #IdentifierSystemInterface)
 ]
 
-{ #category : #managing }
-CommandManagementSystem >> dequeueCommand [
-
-	^ [ commands remove: self dequeuedCommand ]
-		on: CollectionIsEmpty
-		do: [ :signal | ObjectNotFound signal: 'Command not found' ]
-]
-
 { #category : #'private - managing' }
 CommandManagementSystem >> dequeuedCommand [
 
@@ -79,6 +71,14 @@ CommandManagementSystem >> initialize [
 CommandManagementSystem >> name [ 
 	
 	^ 'Command Management'
+]
+
+{ #category : #managing }
+CommandManagementSystem >> nextCommand [
+
+	^ [ commands remove: self dequeuedCommand ]
+		on: CollectionIsEmpty
+		do: [ :signal | ObjectNotFound signal: 'Command not found' ]
 ]
 
 { #category : #querying }

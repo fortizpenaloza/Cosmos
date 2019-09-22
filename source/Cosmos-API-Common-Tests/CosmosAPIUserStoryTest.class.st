@@ -1,5 +1,5 @@
 Class {
-	#name : #CosmosAPITest,
+	#name : #CosmosAPIUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#instVars : [
 		'api'
@@ -8,41 +8,57 @@ Class {
 }
 
 { #category : #'private - accessing' }
-CosmosAPITest >> baseUrl [
+CosmosAPIUserStoryTest >> baseUrl [
 
 	^ 'http://localhost' asUrl port: self port
 ]
 
+{ #category : #running }
+CosmosAPIUserStoryTest >> checkPortAvailability [
+
+	[ | socket |
+
+	socket := ZnNetworkingUtils serverSocketOn: self port.
+	socket close
+	]
+		on: Error
+		do: [ :error | self fail: ( 'Port <1p> is not available' expandMacrosWith: self port ) ]
+]
+
 { #category : #'private - accessing' }
-CosmosAPITest >> newClient [
+CosmosAPIUserStoryTest >> newClient [
 
 	^ ZnClient new
 		beOneShot;
+		enforceHttpSuccess: true;
 		yourself
 ]
 
 { #category : #'private - accessing' }
-CosmosAPITest >> port [
+CosmosAPIUserStoryTest >> port [
 
 	^ 9999
 ]
 
 { #category : #running }
-CosmosAPITest >> setUp [
+CosmosAPIUserStoryTest >> setUp [
 
 	super setUp.
+	self checkPortAvailability.
+
 	api := HTTPBasedRESTfulAPI
 		configuredBy:
-			{(#port -> self port).
-			(#debugMode -> true).
-			(#serverUrl -> self baseUrl)}
+			{( #port -> self port ).
+			( #serverUrl -> self baseUrl )}
 		installing:
-			{(DataStreamsRESTfulController workingWith: rootSystem).
-			(DataPointsRESTfulController workingWith: rootSystem).
-			(CommandsRESTfulController workingWith: rootSystem).
-			(ActionsRESTfulController workingWith: rootSystem).
-			(ActionEvaluationsRESTfulController workingWith: rootSystem).
-			(TriggersRESTfulController workingWith: rootSystem)}.
+			{( DataStreamsRESTfulController workingWith: rootSystem ).
+			( DataPointsRESTfulController workingWith: rootSystem ).
+			( CommandsRESTfulController workingWith: rootSystem ).
+			( ActionsRESTfulController workingWith: rootSystem ).
+			( ActionEvaluationsRESTfulController workingWith: rootSystem ).
+			( TriggersRESTfulController workingWith: rootSystem )}.
+
+	api on: Error addErrorHandler: [ :error :request | self fail ].
 
 	api
 		install;
@@ -50,7 +66,7 @@ CosmosAPITest >> setUp [
 ]
 
 { #category : #running }
-CosmosAPITest >> setUpRequirements [
+CosmosAPIUserStoryTest >> setUpRequirements [
 
 	self
 		registerSubsystem: (TimeSystem using: (FixedTimeSource on: self systemDateTime));
@@ -62,7 +78,7 @@ CosmosAPITest >> setUpRequirements [
 ]
 
 { #category : #'private - accessing' }
-CosmosAPITest >> systemDateTime [
+CosmosAPIUserStoryTest >> systemDateTime [
 
 	^ DateTime 
 		date: October first , 2014 
@@ -71,7 +87,7 @@ CosmosAPITest >> systemDateTime [
 ]
 
 { #category : #running }
-CosmosAPITest >> tearDown [
+CosmosAPIUserStoryTest >> tearDown [
 
 	api ifNotNil: [ api stop ].
 	api := nil.
@@ -79,7 +95,7 @@ CosmosAPITest >> tearDown [
 ]
 
 { #category : #running }
-CosmosAPITest >> testCORSHeadersWhenNoAllowedOriginMatches [
+CosmosAPIUserStoryTest >> testCORSHeadersWhenNoAllowedOriginMatches [
 
 	| response |
 
@@ -100,7 +116,7 @@ CosmosAPITest >> testCORSHeadersWhenNoAllowedOriginMatches [
 ]
 
 { #category : #running }
-CosmosAPITest >> testCORSHeadersWhenOriginIsAllowed [
+CosmosAPIUserStoryTest >> testCORSHeadersWhenOriginIsAllowed [
 
 	| response |
 

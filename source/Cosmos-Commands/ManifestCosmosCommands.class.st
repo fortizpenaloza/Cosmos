@@ -11,5 +11,5 @@ ManifestCosmosCommands class >> initialize [
 	Kepler
 		registerInterfaceAt: #CommandManagementSystemInterface
 		named: 'Command Management System Interface'
-		declaring: #(#register: #deregister: #dequeueCommand #commands)
+		declaring: #(#register: #deregister: #nextCommand #commands)
 ]

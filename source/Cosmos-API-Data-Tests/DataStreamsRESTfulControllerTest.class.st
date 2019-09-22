@@ -4,10 +4,16 @@ Class {
 	#category : #'Cosmos-API-Data-Tests'
 }
 
-{ #category : #'private - media types' }
-DataStreamsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
+{ #category : #tests }
+DataStreamsRESTfulControllerTest >> assertDataStreamCreated [
 
-	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
+	| dataStream |
+
+	dataStream := self dataManagementSystem streamNamed: 'pH'.
+
+	self
+		assert: dataStream name equals: 'pH';
+		assert: dataStream dataPoints isEmpty
 ]
 
 { #category : #'private - accessing' }
@@ -16,10 +22,22 @@ DataStreamsRESTfulControllerTest >> baseUrl [
 	^ 'https://tests.cosmos.com' asZnUrl
 ]
 
+{ #category : #'private - media types' }
+DataStreamsRESTfulControllerTest >> dataPointVersion1dot0dot0MediaType [
+	
+	^ resourceController dataPointVersion1dot0dot0MediaType
+]
+
+{ #category : #'private - media types' }
+DataStreamsRESTfulControllerTest >> dataStreamVersion1dot0dot0MediaType [
+
+	^ resourceController dataStreamVersion1dot0dot0MediaType
+]
+
 { #category : #'private - expected results' }
 DataStreamsRESTfulControllerTest >> dataStreamsAsJSON [
 
-	^ '[{"name":"Temperature","current_value":16.5,"last_update":"2014-10-01T12:00:00-03:00","links":{"data_points":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Pressure","current_value":1016,"last_update":"2014-10-01T12:00:00-03:00","links":{"data_points":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}},{"name":"Humidity","current_value":"N/A","last_update":"N/A","links":{"data_points":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc"}}]'
+	^ '{"items":[{"name":"Temperature","currentValue":16.5,"lastUpdate":"2014-10-01T12:00:00-03:00","links":{"dataPoints":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Pressure","currentValue":1016,"lastUpdate":"2014-10-01T12:00:00-03:00","links":{"dataPoints":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}},{"name":"Humidity","currentValue":"N/A","lastUpdate":"N/A","links":{"dataPoints":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc/data-points","self":"https://tests.cosmos.com/data-streams/6fbb430b-4537-0d00-96aa-582b07fa2cfc"}}],"links":{"self":"https://tests.cosmos.com/data-streams"}}'
 ]
 
 { #category : #'private - accessing' }
@@ -47,9 +65,7 @@ DataStreamsRESTfulControllerTest >> identifierSequence [
 { #category : #'private - requests' }
 DataStreamsRESTfulControllerTest >> requestToCreateDataStreamFrom: aJSON [
 
-	^ self
-		requestToPost: aJSON
-		as: self applicationJsonVersion1dot0dot0MediaType
+	^ self requestToPost: aJSON as: self dataStreamVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
@@ -147,23 +163,17 @@ DataStreamsRESTfulControllerTest >> testCreateDataStream [
 	| response |
 
 	response := resourceController
-		createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"pH"}')
+		createStreamBasedOn: ( self requestToCreateDataStreamFrom: '{"name":"pH"}' )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assertUrl: response location
-			equals:
-			'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
-		assert: response contentType equals: self textPlainMediaType.
-
-	self dataManagementSystem
-		withStreamNamed: 'pH'
-		do: [ :dataStream | 
-			self
-				assert: dataStream name equals: 'pH';
-				assert: dataStream dataPoints isEmpty ]
+			equals: 'https://tests.cosmos.com/data-streams/62ede40b-4537-0d00-96ab-a32d07fa2cfc';
+		assert: response contentType equals: self dataStreamVersion1dot0dot0MediaType.
+		
+	self assertDataStreamCreated
 ]
 
 { #category : #tests }
@@ -199,13 +209,16 @@ DataStreamsRESTfulControllerTest >> testCreatingDataStreamFailsIfAlreadyExists [
 
 	self
 		should: [ resourceController
-				createStreamBasedOn: (self requestToCreateDataStreamFrom: '{"name":"Temperature"}')
-				within: self httpRequestContext ]
+				createStreamBasedOn: ( self requestToCreateDataStreamFrom: '{"name":"Temperature"}' )
+				within: self httpRequestContext
+			]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
-				assert: signal messageText equals: 'A data stream with that name already exists in system';
-				assert: signal code equals: 409 ]
+				assert: signal messageText
+					equals: 'A data stream named ''Temperature'' already exists in system';
+				assert: signal code equals: 409
+			]
 ]
 
 { #category : #tests }
@@ -213,17 +226,13 @@ DataStreamsRESTfulControllerTest >> testDeleteDataStream [
 
 	| response |
 
-	self assert: (self dataManagementSystem withStreamNamed: 'Temperature' do: [ :dataStream | true ]).
+	self shouldnt: [ self dataManagementSystem streamNamed: 'Temperature' ] raise: ObjectNotFound.
 
 	response := resourceController
-		deleteStreamBasedOn: (self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier)
+		deleteStreamBasedOn: ( self requestToDeleteStreamIdentifiedBy: self temperatureStreamIdentifier )
 		within: self httpRequestContext.
 
-	self
-		should: [ self dataManagementSystem
-				withStreamNamed: 'Temperature'
-				do: [ :dataStream | ] ]
-		raise: ObjectNotFound.
+	self should: [ self dataManagementSystem streamNamed: 'Temperature' ] raise: ObjectNotFound.
 
 	self
 		assert: response isSuccess;
@@ -252,26 +261,27 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 
 	response := resourceController
 		getStreamBasedOn:
-			(self
+			( self
 				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
+				accepting: self dataStreamVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
+		assert: response contentType equals: self dataStreamVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag;
 		withJSONFromContentsIn: response contents
 			do: [ :json | 
 			self
 				assert: json name equals: 'Temperature';
-				assert: json current_value equals: 16.5;
-				assert: json last_update equals: self dateTimeFormattedAsISO8601;
+				assert: json currentValue equals: 16.5;
+				assert: json lastUpdate equals: self dateTimeFormattedAsISO8601;
 				assertUrl: json links self
 					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-				assertUrl: json links data_points
-					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points' ]
+				assertUrl: json links dataPoints
+					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points'
+			]
 ]
 
 { #category : #tests }
@@ -281,21 +291,22 @@ DataStreamsRESTfulControllerTest >> testGetDataStreamDataPoints [
 
 	response := resourceController
 		getPointsBasedOn:
-			(self
+			( self
 				requestToGetDataPointsOfDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
+				accepting: self dataPointVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response contentType equals: self dataPointVersion1dot0dot0MediaType;
 		withJSONFromContentsIn: response
 			do: [ :json | 
 			self assert: json size equals: 3.
 			self
 				assert: json first timestamp equals: self dateTimeFormattedAsISO8601;
-				assert: json first value equals: 16.5 ]
+				assert: json first value equals: 16.5
+			]
 ]
 
 { #category : #tests }
@@ -304,13 +315,13 @@ DataStreamsRESTfulControllerTest >> testGetDataStreams [
 	| response |
 
 	response := resourceController
-		getStreamsBasedOn: (self requestToGetDataStreamsAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		getStreamsBasedOn: ( self requestToGetDataStreamsAccepting: self dataStreamVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response contentType equals: self dataStreamVersion1dot0dot0MediaType;
 		assert: response contents equals: self dataStreamsAsJSON
 ]
 
@@ -321,27 +332,27 @@ DataStreamsRESTfulControllerTest >> testGetNotModifiedWhenValidETag [
 
 	response := resourceController
 		getStreamBasedOn:
-			(self
+			( self
 				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
+				accepting: self dataStreamVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag.
-		
-		response := resourceController
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag.
+
+	response := resourceController
 		getStreamBasedOn:
-			(self
+			( self
 				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType
-				conditionalTo: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag)
+				accepting: self dataStreamVersion1dot0dot0MediaType
+				conditionalTo: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag )
 		within: self httpRequestContext.
-		
+
 	self
 		assert: response status equals: 304;
-		assert: response entityTag equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag
 ]
 
 { #category : #tests }
@@ -350,15 +361,15 @@ DataStreamsRESTfulControllerTest >> testGettingDataStreamWithWrongIdentifierGive
 	self
 		should: [ resourceController
 				getStreamBasedOn:
-					(self
-						requestToGetDataStreamIdentifiedBy: 1
-						accepting: self applicationJsonVersion1dot0dot0MediaType)
-				within: self httpRequestContext ]
+					( self requestToGetDataStreamIdentifiedBy: 1 accepting: self dataStreamVersion1dot0dot0MediaType )
+				within: self httpRequestContext
+			]
 		raise: HTTPClientError
 		withExceptionDo: [ :signal | 
 			self
 				assert: signal messageText equals: 'Data stream with that identifier not found';
-				assert: signal code equals: 404 ]
+				assert: signal code equals: 404
+			]
 ]
 
 { #category : #'private - media types' }

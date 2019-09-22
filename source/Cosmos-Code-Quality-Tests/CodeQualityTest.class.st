@@ -1,7 +1,7 @@
 Class {
 	#name : #CodeQualityTest,
 	#superclass : #TestCase,
-	#category : 'Cosmos-Code-Quality-Tests'
+	#category : #'Cosmos-Code-Quality-Tests'
 }
 
 { #category : #'tests support' }
@@ -74,7 +74,13 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
 		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new asRBRule
-		onDeclaredPackagesExcluding: ResourceRESTfulControllerSpecification subclasses
+		onDeclaredPackagesExcluding:
+			{ActionEvaluationsRESTfulController.
+			DataPointsRESTfulController.
+			ActionsRESTfulController.
+			DataStreamsRESTfulController.
+			TriggersRESTfulController.
+			CommandsRESTfulController}
 ]
 
 { #category : #tests }

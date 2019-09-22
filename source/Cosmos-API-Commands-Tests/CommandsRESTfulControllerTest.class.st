@@ -4,16 +4,16 @@ Class {
 	#category : #'Cosmos-API-Commands-Tests'
 }
 
-{ #category : #'private - media types' }
-CommandsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
-
-	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
-]
-
 { #category : #'private - accessing' }
 CommandsRESTfulControllerTest >> baseUrl [
 
 	^ 'https://tests.cosmos.com' asZnUrl
+]
+
+{ #category : #'media types' }
+CommandsRESTfulControllerTest >> commandVersion1dot0dot0MediaType [
+	
+	^ resourceController commandVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - accessing' }
@@ -34,7 +34,7 @@ CommandsRESTfulControllerTest >> identifierSequence [
 { #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToCreateCommandFrom: aJSON [
 
-	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
+	^ self requestToPost: aJSON as: self commandVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
@@ -48,8 +48,7 @@ CommandsRESTfulControllerTest >> requestToDeleteCommandIdentifiedBy: anIdentifie
 { #category : #'private - requests' }
 CommandsRESTfulControllerTest >> requestToDequeueCommandAccepting: aMediaType [
 
-	^ (ZnRequest post: 'http://COSMOS_URL/commands/dequeue')
-		setAccept: aMediaType
+	^ ( ZnRequest post: 'http://COSMOS_URL/commands/dequeue' ) setAccept: aMediaType
 ]
 
 { #category : #'private - requests' }
@@ -130,7 +129,7 @@ CommandsRESTfulControllerTest >> testCreateCommand [
 		assert: response location
 			equals:
 			'https://tests.cosmos.com/commands/4ffbff8b-9c3f-0d00-bdbd-482504a01069';
-		assert: response contentType equals: self textPlain.
+		assert: response contentType equals: self commandVersion1dot0dot0MediaType.
 
 	self assert: self commandManagementSystem commands size equals: 4.
 	commandWithPriority := self commandManagementSystem commands last.
@@ -164,20 +163,18 @@ CommandsRESTfulControllerTest >> testDequeueCommandEncodedAsJson [
 	| response |
 
 	response := resourceController
-		dequeueCommandBasedOn:
-			(self
-				requestToDequeueCommandAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		nextCommandBasedOn: ( self requestToDequeueCommandAccepting: self commandVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
-		assert: response contentType
-			equals: self applicationJsonVersion1dot0dot0MediaType.
+		assert: response contentType equals: self commandVersion1dot0dot0MediaType.
 
 	self
 		assert: response contents
-		equals: '{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}}'
+		equals:
+			'{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}}'
 ]
 
 { #category : #tests }
@@ -186,7 +183,7 @@ CommandsRESTfulControllerTest >> testDequeueCommandEncodedAsPlainText [
 	| response |
 
 	response := resourceController
-		dequeueCommandBasedOn: (self requestToDequeueCommandAccepting: self textPlain)
+		nextCommandBasedOn: ( self requestToDequeueCommandAccepting: self textPlain )
 		within: self httpRequestContext.
 
 	self
@@ -204,23 +201,24 @@ CommandsRESTfulControllerTest >> testGetCommand [
 
 	response := resourceController
 		getCommandBasedOn:
-			(self
+			( self
 				requestToGetCommandIdentifiedBy: self turnOnLedWithHighestPriorityIndentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
+				accepting: self commandVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"2cc1a5913c9c7a9cd2e624a950abdf7896918b0a"' asETag;
+		assert: response contentType equals: self commandVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"7434c0390aedccd0d9ecdaf0432beaeee244a0c0"' asETag;
 		withJSONFromContentsIn: response contents
 			do: [ :json | 
 			self
 				assert: json priority equals: 1;
 				assert: json command equals: 'TURN_ON_LED';
 				assert: json links self
-					equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc' ]
+					equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc'
+			]
 ]
 
 { #category : #tests }
@@ -229,16 +227,16 @@ CommandsRESTfulControllerTest >> testGetCommands [
 	| response |
 
 	response := resourceController
-		getCommandsBasedOn: (self requestToGetCommandsAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		getCommandsBasedOn: ( self requestToGetCommandsAccepting: self commandVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
+		assert: response contentType equals: self commandVersion1dot0dot0MediaType;
 		assert: response contents
 			equals:
-			'[{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}},{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}}]'
+			'{"items":[{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}},{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}}],"links":{"self":"https://tests.cosmos.com/commands"}}'
 ]
 
 { #category : #tests }
@@ -247,13 +245,10 @@ CommandsRESTfulControllerTest >> testGetPrioritizedCommands [
 	| response orderingPolicy mediaType |
 
 	orderingPolicy := 'priority'.
-	mediaType := self applicationJsonVersion1dot0dot0MediaType.
+	mediaType := self commandVersion1dot0dot0MediaType.
 
 	response := resourceController
-		getCommandsBasedOn:
-			(self
-				requestToGetCommandsOrderedAccoringTo: orderingPolicy
-				accepting: mediaType)
+		getCommandsBasedOn: ( self requestToGetCommandsOrderedAccoringTo: orderingPolicy accepting: mediaType )
 		within: self httpRequestContext.
 
 	self
@@ -262,7 +257,7 @@ CommandsRESTfulControllerTest >> testGetPrioritizedCommands [
 		assert: response contentType equals: mediaType;
 		assert: response contents
 			equals:
-			'[{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}},{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}]'
+			'{"items":[{"command":"TURN_ON_LED","priority":100,"links":{"self":"https://tests.cosmos.com/commands/a3ad3f02-7137-0d00-ad4c-8ce2051f8f4c"}},{"command":"TURN_OFF_LED","priority":50,"links":{"self":"https://tests.cosmos.com/commands/7606aa4d-6c37-0d00-8b3a-dd4a01b794dc"}},{"command":"TURN_ON_LED","priority":1,"links":{"self":"https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc"}}],"links":{"self":"https://tests.cosmos.com/commands"}}'
 ]
 
 { #category : #'private - media types' }
