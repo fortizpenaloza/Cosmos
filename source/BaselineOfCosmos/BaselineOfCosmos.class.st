@@ -179,7 +179,7 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 	aSpec
 		baseline: 'Stargate'
 		with: [ aSpec
-				repository: 'github://ba-st/Stargate:v2/source';
+				repository: 'github://ba-st/Stargate:v3/source';
 				loads: 'Deployment' ];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ aSpec loads: 'Tools' ].
 			
