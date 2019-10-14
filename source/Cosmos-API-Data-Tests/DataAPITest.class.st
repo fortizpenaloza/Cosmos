@@ -18,26 +18,6 @@ DataAPITest >> controllersToInstall [
 	dataPointsController}
 ]
 
-{ #category : #tests }
-DataAPITest >> createDataStreamAndWithLocationDo: aBlock [ 
-
-	| response |
-
-	response := self newClient
-		url: self baseUrl / dataStreamsController endpoint;
-		entity: ( ZnEntity with: '{"name":"pH"}' ofType: self dataStreamVersion1dot0dot0MediaType );
-		post;
-		response.
-
-	aBlock value: (response headers at: #location)
-]
-
-{ #category : #'private - media types' }
-DataAPITest >> dataStreamVersion1dot0dot0MediaType [
-
-	^ dataStreamsController dataStreamVersion1dot0dot0MediaType
-]
-
 { #category : #running }
 DataAPITest >> setUpRequirements [
 
@@ -72,7 +52,7 @@ DataAPITest >> testCORSAwareRoutes [
 		assert: ( response headers at: 'Access-Control-Allow-Methods' ) equals: 'POST'.
 
 	self
-		createDataStreamAndWithLocationDo: [ :location | 
+		withCreatedDataStreamLocationDo: [ :location | 
 			response := self newClient
 				url: location;
 				headerAt: 'Access-Control-Request-Method' put: 'DELETE';
@@ -93,16 +73,12 @@ DataAPITest >> testCORSAwareRoutes [
 { #category : #tests }
 DataAPITest >> testCreateDataStream [
 
-	| response |
-
-	response := self newClient
-		url: self baseUrl / dataStreamsController endpoint;
-		entity: ( ZnEntity with: '{"name":"pH"}' ofType: self dataStreamVersion1dot0dot0MediaType );
-		post;
-		response.
 	self
-		assert: response isSuccess;
-		assert: response code equals: 201
+		withCreatedDataStreamResponseDo: [ :response | 
+			self
+				assert: response isSuccess;
+				assert: response code equals: 201
+			]
 ]
 
 { #category : #tests }
@@ -111,7 +87,7 @@ DataAPITest >> testDeleteDataStream [
 	| response |
 
 	self
-		createDataStreamAndWithLocationDo: [ :location | 
+		withCreatedDataStreamLocationDo: [ :location | 
 			response := self newClient
 				url: location;
 				delete;
@@ -130,7 +106,7 @@ DataAPITest >> testGetDataStream [
 	| response |
 
 	self
-		createDataStreamAndWithLocationDo: [ :location | 
+		withCreatedDataStreamLocationDo: [ :location | 
 			response := self newClient
 				url: location;
 				get;
@@ -158,4 +134,24 @@ DataAPITest >> testGetDataStreams [
 		assert: response code equals: 200;
 		assert: response hasEntity
 		
+]
+
+{ #category : #'tests - support' }
+DataAPITest >> withCreatedDataStreamLocationDo: aBlock [
+
+	self withCreatedDataStreamResponseDo: [ :response | aBlock value: response location ]
+]
+
+{ #category : #'tests - support' }
+DataAPITest >> withCreatedDataStreamResponseDo: aBlock [
+
+	| response |
+
+	response := self newClient
+		url: self baseUrl / dataStreamsController endpoint;
+		entity: ( ZnEntity with: '{"name":"pH"}' ofType: dataStreamsController dataStreamVersion1dot0dot0MediaType );
+		post;
+		response.
+
+	aBlock value: response
 ]
