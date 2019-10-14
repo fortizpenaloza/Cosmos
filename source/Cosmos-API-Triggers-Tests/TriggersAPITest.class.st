@@ -40,21 +40,13 @@ TriggersAPITest >> setUpRequirements [
 { #category : #tests }
 TriggersAPITest >> testCreateTrigger [
 
-	| response |
-
-	response := self newClient
-		url: self baseUrl / triggersController endpoint;
-		entity:
-			( ZnEntity
-				with:
-					'{"name":"Set triggered to true periodically every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}'
-				ofType: triggersController triggerVersion1dot0dot0MediaType );
-		post;
-		response.
-		
 	self
-		assert: response isSuccess;
-		assert: response code equals: 201
+		withCreatedTriggerResponseDo: [ :response | 
+			self
+				assert: response isSuccess;
+				assert: response code equals: 201;
+				assert: response hasEntity
+			]
 ]
 
 { #category : #tests }
@@ -62,14 +54,17 @@ TriggersAPITest >> testDeleteTrigger [
 
 	| response |
 
-	self withCreatedTriggerLocationDo: [ :location | 
-		
-		response := self newClient 
-			url: location;
-			delete;
-			response.
-			
-		self assert: response code equals: 204 ]
+	self
+		withCreatedTriggerLocationDo: [ :location | 
+			response := self newClient
+				url: location;
+				delete;
+				response.
+
+			self assert: response isSuccess; 
+				assert: response code equals: 204;
+				deny: response hasEntity
+			]
 ]
 
 { #category : #tests }
@@ -107,16 +102,26 @@ TriggersAPITest >> testGetTriggers [
 		assert: response hasEntity
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'tests - support' }
 TriggersAPITest >> withCreatedTriggerLocationDo: aBlock [
+	
+	self withCreatedTriggerResponseDo: [ :response | aBlock value: response location ]
+]
+
+{ #category : #'tests - support' }
+TriggersAPITest >> withCreatedTriggerResponseDo: aBlock [ 
 
 	| response |
 
 	response := self newClient
 		url: self baseUrl / triggersController endpoint;
-		entity: ( ZnEntity with: '{"name":"Set triggered to true periodically every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}' ofType: triggersController triggerVersion1dot0dot0MediaType );
+		entity:
+			( ZnEntity
+				with:
+					'{"name":"Set triggered to true periodically every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[]}'
+				ofType: triggersController triggerVersion1dot0dot0MediaType );
 		post;
 		response.
-
-	aBlock value: response location
+	
+	aBlock value: response
 ]

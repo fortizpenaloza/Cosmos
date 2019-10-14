@@ -53,10 +53,10 @@ ActionsAPITest >> testCreateAction [
 { #category : #tests }
 ActionsAPITest >> testDeleteAction [
 
-	| response |
-
 	self
 		withCreatedActionLocationDo: [ :location | 
+			| response |
+
 			response := self newClient
 				url: location;
 				delete;
@@ -64,7 +64,9 @@ ActionsAPITest >> testDeleteAction [
 
 			self
 				assert: response isSuccess;
-				assert: response code equals: 204 ]
+				assert: response code equals: 204;
+				deny: response hasEntity
+			]
 ]
 
 { #category : #tests }
@@ -101,7 +103,7 @@ ActionsAPITest >> testGetActions [
 		assert: response hasEntity
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'tests - support' }
 ActionsAPITest >> withCreatedActionLocationDo: aBlock [
 
 	|response |
