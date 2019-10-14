@@ -123,7 +123,7 @@ ActionsRESTfulController >> declareGetActionRoute [
 
 	^ ( RouteSpecification
 		handling: #GET
-		at: self endpoint
+		at: self identifierTemplate 
 		evaluating: [ :httpRequest :requestContext | self getActionBasedOn: httpRequest within: requestContext ] )
 		asCorsAware
 ]
