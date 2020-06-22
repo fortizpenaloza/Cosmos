@@ -135,7 +135,7 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 					with: [ spec requires: 'Cosmos-CommandLineHandler' ] ].
 
 	spec
-		for: #(#'pharo7.x' #'pharo8.x')
+		for: #(#'pharo7.x' #'pharo8.x' #'pharo9.x')
 		do: [ spec
 				package: 'Cosmos-CommandLineHandler'
 					with: [ spec includes: 'Cosmos-CommandLineHandler-Pharo7' ];
@@ -296,5 +296,11 @@ BaselineOfCosmos >> setUpToolsDependeciesOn: spec [
 
 	spec
 		package: 'Cosmos-Tools'
-		with: [ spec requires: #('Roassal2' 'Kepler-Tools' 'Stargate-Tools') ]
+		with: [ spec requires: #('Stargate-Tools') ].
+	
+	spec
+		for: #'pharo8.x pharo9.x'
+		do: [ spec 
+			package: 'Cosmos-Tools' 
+			with: [ spec requires: #('Kepler-Tools') ] ]
 ]
