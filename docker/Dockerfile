@@ -28,4 +28,4 @@ USER pharo
 VOLUME /opt/cosmos/logs
 
 
-CMD ["./start.sh"]
+ENTRYPOINT ["./start.sh"]
