@@ -22,7 +22,7 @@ COPY --from=imagebuilder /opt/pharo/Pharo*.sources ./
 COPY start.sh ./start.sh
 
 RUN mkdir logs
-RUN chown -R pharo:pharo /opt/cosmos
+RUN chown -R pharo:users /opt/cosmos
 
 USER pharo
 VOLUME /opt/cosmos/logs
