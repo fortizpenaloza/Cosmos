@@ -19,6 +19,7 @@ WORKDIR /opt/cosmos
 COPY --from=imagebuilder /opt/pharo/Pharo.image .
 COPY --from=imagebuilder /opt/pharo/Pharo.changes .
 COPY --from=imagebuilder /opt/pharo/Pharo*.sources ./
+COPY start.sh ./start.sh
 
 RUN mkdir logs
 RUN chown -R pharo:pharo /opt/cosmos
