@@ -19,13 +19,16 @@ WORKDIR /opt/cosmos
 COPY --from=imagebuilder /opt/pharo/Pharo.image .
 COPY --from=imagebuilder /opt/pharo/Pharo.changes .
 COPY --from=imagebuilder /opt/pharo/Pharo*.sources ./
-COPY start.sh ./start.sh
 
+# Copy start script 
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
+# Setup directories  
 RUN mkdir logs
 RUN chown -R pharo:users /opt/cosmos
 
 USER pharo
 VOLUME /opt/cosmos/logs
-
 
 ENTRYPOINT ["./start.sh"]
