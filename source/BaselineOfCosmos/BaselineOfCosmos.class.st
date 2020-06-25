@@ -192,11 +192,11 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 		import: 'ApplicationStarter'.
 
 	aSpec
-		baseline: 'Roassal2'
+		baseline: 'Roassal3'
 			with: [ aSpec
-				repository: 'github://ObjectProfile/Roassal2/src';
-				loads: #('Minimal') ];
-		import: 'Roassal2'
+				repository: 'github://ObjectProfile/Roassal3';
+				loads: #('Core') ];
+		import: 'Roassal3'
 ]
 
 { #category : #groups }
@@ -295,12 +295,8 @@ BaselineOfCosmos >> setUpPackageDependeciesOn: aSpec [
 BaselineOfCosmos >> setUpToolsDependeciesOn: spec [
 
 	spec
-		package: 'Cosmos-Tools'
-		with: [ spec requires: #('Stargate-Tools') ].
-	
-	spec
 		for: #'pharo8.x pharo9.x'
 		do: [ spec 
 			package: 'Cosmos-Tools' 
-			with: [ spec requires: #('Kepler-Tools') ] ]
+			with: [ spec requires: #('Roassal3' 'Kepler-Tools' 'Stargate-Tools') ] ]
 ]
