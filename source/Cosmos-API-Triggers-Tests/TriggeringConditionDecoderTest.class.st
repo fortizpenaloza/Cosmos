@@ -7,6 +7,12 @@ Class {
 	#category : #'Cosmos-API-Triggers-Tests'
 }
 
+{ #category : #'tests support' }
+TriggeringConditionDecoderTest >> dateTime [
+
+	^ October first , 2014 atTimeOfDay: ( TimeOfDay hours: 12 minutes: 6 )
+]
+
 { #category : #running }
 TriggeringConditionDecoderTest >> setUp [
 
@@ -46,38 +52,38 @@ TriggeringConditionDecoderTest >> testAndCompositeTriggeringCondition [
 
 	self
 		withTriggeringConditionFrom:
-			'[{"type":"time_interval","time_interval":{"start":"20:00","stop":"21:00"}},{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":54}}]'
-		do:
-			[ :condition | self assert: (condition isKindOf: AndCompositeTriggeringCondition) ]
+			'[{"type":"time_interval","time_interval":{"start":"20:00","stop":"22:00"}},{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":16}}]'
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: AndCompositeTriggeringCondition );
+				assert: ( condition isSatisfiedOn: self )
+			]
 ]
 
 { #category : #tests }
 TriggeringConditionDecoderTest >> testDataStreamCurrentValueTriggeringCondition [
 
-	| json condition |
-
-	json := '[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":54}}]'.
-
-	condition := (TriggeringConditionDecoder using: rootSystem)
-		decode: (NeoJSONObject fromString: json).
-
-
 	self
-		assert: (condition isKindOf: DataStreamCurrentValueTriggeringCondition)
+		withTriggeringConditionFrom:
+			'[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":16}}]'
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: DataStreamCurrentValueTriggeringCondition );
+				assert: ( condition isSatisfiedOn: self )
+			]
 ]
 
 { #category : #tests }
 TriggeringConditionDecoderTest >> testDataStreamHasNotBeenUpdatedTriggeringCondition [
 
-	| json condition |
-
-	json := '[{"type":"data_stream_has_not_been_updated","data_stream":"Temperature","time_period":"5 minutes"}]'.
-
-	condition := (TriggeringConditionDecoder using: rootSystem)
-		decode: (NeoJSONObject fromString: json).
-
 	self
-		assert: (condition isKindOf: DataStreamHasNotBeenUpdatedTriggeringCondition)
+		withTriggeringConditionFrom:
+			'[{"type":"data_stream_has_not_been_updated","data_stream":"Temperature","time_period":"5 minutes"}]'
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: DataStreamHasNotBeenUpdatedTriggeringCondition );
+				assert: ( condition isSatisfiedOn: self )
+			]
 ]
 
 { #category : #tests }
@@ -85,21 +91,37 @@ TriggeringConditionDecoderTest >> testEmptyCollectionGivesAlwasyTriggeringCondit
 
 	self
 		withTriggeringConditionFrom: '[]'
-		do:
-			[ :condition | self assert: (condition isKindOf: AlwaysTriggeringCondition) ]
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: AlwaysTriggeringCondition );
+				assert: ( condition isSatisfiedOn: self )
+			]
 ]
 
 { #category : #tests }
 TriggeringConditionDecoderTest >> testTimeIntervalTriggeringCondition [
 
-	| json condition |
+	self
+		withTriggeringConditionFrom: '[{"type":"time_interval","time_interval":{"start":"20:00","stop":"22:00"}}]'
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: TimeIntervalTriggeringCondition );
+				assert: ( condition isSatisfiedOn: self )
+			].
 
-	json := '[{"type":"time_interval","time_interval":{"start":"20:00","stop":"21:00"}}]'.
+	self
+		withTriggeringConditionFrom: '[{"type":"time_interval","time_interval":{"start":"22:00","stop":"20:00"}}]'
+		do: [ :condition | 
+			self
+				assert: ( condition isKindOf: TimeIntervalTriggeringCondition );
+				deny: ( condition isSatisfiedOn: self )
+			]
+]
 
-	condition := (TriggeringConditionDecoder using: rootSystem)
-		decode: (NeoJSONObject fromString: json).
+{ #category : #'tests support' }
+TriggeringConditionDecoderTest >> timeOfDay [
 
-	self assert: (condition isKindOf: TimeIntervalTriggeringCondition)
+	^ TimeOfDay hours: 21
 ]
 
 { #category : #'tests support' }
