@@ -50,6 +50,24 @@ ArithmeticConditionDecoderTest >> testEquals [
 ]
 
 { #category : #tests }
+ArithmeticConditionDecoderTest >> testEqualsToNil [
+
+	| condition json |
+
+	json := '{
+	"operator": "=",
+	"value": null
+}'.
+
+	condition := ArithmeticConditionDecoder new decode: (self encodeAsJson: json).
+
+	self
+		assert: (condition isSatisfiedBy: nil);
+		deny: (condition isSatisfiedBy: 0);
+		deny: (condition isSatisfiedBy: 'hola')
+]
+
+{ #category : #tests }
 ArithmeticConditionDecoderTest >> testFailedIfOperatorNotFound [
 
 	| json |

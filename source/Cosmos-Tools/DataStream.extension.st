@@ -4,39 +4,28 @@ Extension { #name : #DataStream }
 DataStream >> gtInspectorDataPointsIn: composite [
 
 	<gtInspectorPresentationOrder: 40>
-	composite roassal2
-		title: 'Graph';
-		initializeView: [ RTGrapher new ];
-		painting: [ :grapher | 
-			| oldest dataSet average |
+	composite roassal3
+		title: [ 'Chart' ];
+		initializeCanvas: [ | x y chart |
 
-			oldest := dataPoints minFor: #timestamp.
+			y := dataPoints collect: #value.
+			x := dataPoints
+				collect:
+					[ :dataPoint | ( ( dataPoint timestamp absoluteDistanceTo: self unixTime ) convertTo: TimeUnits second ) amount ].
 
-			dataSet := RTData new.
-			dataSet interaction popupText: [ :dataPoint | dataPoint value ].
-			dataSet points: self dataPoints.
-			dataSet connectColor: Color red.
+			chart := RSChart new
+				addPlot: ( RSLinePlot new x: x y: y );
+				ylabel: 'value';
+				xlabel: 'time';
+				addDecoration: RSVerticalTick new;
+				build.
 
-			dataSet
-				x: [ :dataPoint | 
-					| distance |
+			chart canvas
+			]
+]
 
-					distance := oldest timestamp distanceTo: dataPoint timestamp.
-					(distance convertTo: TimeUnits second) amount ].
-			dataSet y: #value.
+{ #category : #'*Cosmos-Tools' }
+DataStream >> unixTime [
 
-			average := RTAverageDecorator new.
-			average withLabel: [ :aValue | 'average = ' , aValue asFloat asString ].
-
-			grapher add: dataSet.
-			grapher addDecorator: average.
-			grapher extent: 400 @ 200.
-			grapher axisY noDecimal.
-			grapher axisX
-				numberOfTicks: 4;
-				labelConversion: [ :distance | 
-					| label |
-
-					label := oldest timestamp next: (TimeUnits second with: distance).
-					label timeOfDay ] ]
+	^ ( January first , 1970 ) atMidnight
 ]

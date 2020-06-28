@@ -12,7 +12,7 @@ TimeIntervalDecoder >> decode: aJSON [
 	start := self startFrom: aJSON.
 	stop := self stopFrom: aJSON.
 
-	^ (start to: stop) asTimeSpan
+	^ start to: stop
 ]
 
 { #category : #'private - decoding' }
