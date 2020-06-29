@@ -9,7 +9,7 @@ Class {
 	#category : #'Cosmos-PeriodicalScheduler-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PeriodicalScheduler class >> usingDefaultScheduler [
 
 	^ self workingWithOptional: Optional unused
@@ -21,7 +21,7 @@ PeriodicalScheduler class >> workingWith: aDelayScheduler [
 	^ self workingWithOptional: ( Optional containing: aDelayScheduler )
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PeriodicalScheduler class >> workingWithOptional: aDelaySchedulerOptional [
 
 	^ self new initializeWorkingWith: aDelaySchedulerOptional
