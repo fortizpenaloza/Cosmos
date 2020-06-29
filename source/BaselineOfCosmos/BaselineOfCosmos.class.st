@@ -295,7 +295,7 @@ BaselineOfCosmos >> setUpPackageDependeciesOn: aSpec [
 BaselineOfCosmos >> setUpToolsDependeciesOn: spec [
 
 	spec
-		for: #'pharo8.x pharo9.x'
+		for: #(#'pharo8.x' #'pharo9.x')
 		do: [ spec 
 			package: 'Cosmos-Tools' 
 			with: [ spec requires: #('Roassal3' 'Kepler-Tools' 'Stargate-Tools') ] ]

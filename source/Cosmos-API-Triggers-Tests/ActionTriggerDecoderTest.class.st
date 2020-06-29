@@ -39,6 +39,44 @@ ActionTriggerDecoderTest >> systemDateTime [
 ]
 
 { #category : #tests }
+ActionTriggerDecoderTest >> testDecodingArithmeticConditionIsEqualsToNil [
+
+	self
+		withTriggerFrom: '{
+    "name": "Set triggered to true when temperature is higher than 24 and humidity higher than nil",
+    "action": "Set triggered to true",
+    "policy": {
+        "type": "data_point_registration",
+        "data_stream": "Humidity"
+    },
+    "conditions": [
+        {
+            "type": "data_stream_current_value",
+            "data_stream": "Humidity",
+            "condition": {
+                "operator": "=",
+                "value": null
+            }
+        },
+        {
+            "type": "data_stream_current_value",
+            "data_stream": "Temperature",
+            "condition": {
+                "operator": ">",
+                "value": 24
+            }
+        }
+    ]
+}'
+		do: [ :trigger | 
+			self
+				assert: trigger name equals: 'Set triggered to true when temperature is higher than 24 and humidity higher than nil';
+				assert:
+					(trigger triggeringPolicy
+						isKindOf: DataPointRegistrationTriggeringPolicy) ]
+]
+
+{ #category : #tests }
 ActionTriggerDecoderTest >> testDecodingOpenRoofDuringAnInterval [
 
 	self
