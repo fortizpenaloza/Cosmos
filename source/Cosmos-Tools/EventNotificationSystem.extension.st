@@ -7,7 +7,7 @@ EventNotificationSystem >> gtInspectorSubscriptionsIn: aCompositePresentation [
 	aCompositePresentation list
 		title: [ 'Subscribers' translated ];
 		display: [ subscriptions ];
-		format: [ :subscription | subscription subscriber ];
+		format: [ :subscription | subscription subscriber name ];
 		when: [ subscriptions isNotEmpty ];
-		tags: [ :subscription | subscription eventType ]
+		tags: [ :subscription | subscription eventType name ]
 ]
