@@ -59,6 +59,19 @@ TimeIntervalTriggeringConditionTest >> testIsSafistied [
 ]
 
 { #category : #tests }
+TimeIntervalTriggeringConditionTest >> testIsSafistiedUsingMilliseconds [
+
+	| condition |
+
+	condition := TimeIntervalTriggeringCondition
+		checkingCurrentTimeIsBetween: ( self eightPM to: self tenPM ).
+
+	timeOfDay := TimeOfDay hours: 20 minutes: 2 seconds: 30 milliseconds: 237.
+	self assert: ( condition isSatisfiedOn: self ).
+
+]
+
+{ #category : #tests }
 TimeIntervalTriggeringConditionTest >> testIsSafistiedWhenSpansBeforeMidnigth [ 
 
 	| condition |
