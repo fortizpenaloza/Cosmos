@@ -104,12 +104,6 @@ CosmosUserStoryTest >> oneMinute [
 	^ TimeUnits minute with: 1
 ]
 
-{ #category : #tests }
-CosmosUserStoryTest >> register: aDataPoint to: aStream [
-
-	self dataManagementSystem register: aDataPoint toStreamNamed: aStream name
-]
-
 { #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrue [
 
@@ -204,8 +198,8 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 	isCoolingOn := DataStream named: 'is_cooling_on'.
 	self dataManagementSystem register: isCoolingOn.
 
-	self register: ( DataPoint on: self systemDateTime holding: 23 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 23 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	trigger := ActionTrigger
 		named: 'Set triggered to true when temperature is higher than 24'
@@ -219,18 +213,18 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 
 	self assertPendingActionIsEmpty.
 
-	self register: ( DataPoint on: self systemDateTime holding: 24 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: 24 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 	self assertPendingActionIsEmpty.
-	self register: ( DataPoint on: self systemDateTime holding: 25 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 25 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self assertPendingActionsNotEmpty.
 	self evaluate.
 	self assertActionWasEvaluated.
 
-	self register: ( DataPoint on: self systemDateTime holding: 26 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 26 ) to: temperature.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self
 		assert: triggered;
@@ -239,8 +233,8 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 		
 	self evaluate.
 
-	self register: ( DataPoint on: self systemDateTime holding: 27 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 27 ) to: temperature.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self assert: pendingActionsQueue isEmpty
 ]
