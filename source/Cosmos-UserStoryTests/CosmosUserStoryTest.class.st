@@ -37,6 +37,23 @@ CosmosUserStoryTest >> assertActionWasEvaluated [
 			[ :actionEvaluation | self assert: actionEvaluation action equals: self setTriggeredToTrue ]
 ]
 
+{ #category : #tests }
+CosmosUserStoryTest >> assertPendingActionIsEmpty [
+
+	self
+		assert: pendingActionsQueue isEmpty.
+	self deny: triggered
+]
+
+{ #category : #tests }
+CosmosUserStoryTest >> assertPendingActionsNotEmpty [
+
+	self
+		deny: triggered;
+		deny: pendingActionsQueue isEmpty;
+		assert: pendingActionsQueue size equals: 1
+]
+
 { #category : #'private - accessing' }
 CosmosUserStoryTest >> eightPM [
 	
@@ -85,6 +102,12 @@ CosmosUserStoryTest >> octoberFirstOf2014AtNoon [
 CosmosUserStoryTest >> oneMinute [
 
 	^ TimeUnits minute with: 1
+]
+
+{ #category : #tests }
+CosmosUserStoryTest >> register: aDataPoint to: aStream [
+
+	self dataManagementSystem register: aDataPoint toStreamNamed: aStream name
 ]
 
 { #category : #'private - accessing' }
@@ -169,6 +192,57 @@ CosmosUserStoryTest >> temperatureStream [
 CosmosUserStoryTest >> tenMinutes [
 
 	^ TimeUnits minute with: 10
+]
+
+{ #category : #tests }
+CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeDataStreamCurrentValueCondition [
+
+	| temperature isCoolingOn trigger |
+
+	temperature := self temperatureStream.
+	self dataManagementSystem register: temperature.
+	isCoolingOn := DataStream named: 'is_cooling_on'.
+	self dataManagementSystem register: isCoolingOn.
+
+	self register: ( DataPoint on: self systemDateTime holding: 23 ) to: temperature.
+	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+
+	trigger := ActionTrigger
+		named: 'Set triggered to true when temperature is higher than 24'
+		triggering: self setTriggeredToTrue
+		accordingTo: ( DataPointRegistrationTriggeringPolicy on: temperature )
+		ifSatisfies:
+			( AndCompositeTriggeringCondition
+				with: ( DataStreamCurrentValueTriggeringCondition of: temperature isGreaterThan: 24 )
+				with: ( DataStreamCurrentValueTriggeringCondition of: isCoolingOn isEqualTo: 0 ) ).
+	self triggerManagementSystem register: trigger.
+
+	self assertPendingActionIsEmpty.
+
+	self register: ( DataPoint on: self systemDateTime holding: 24 ) to: temperature.
+	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self assertPendingActionIsEmpty.
+	self register: ( DataPoint on: self systemDateTime holding: 25 ) to: temperature.
+	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+
+	self assertPendingActionsNotEmpty.
+	self evaluate.
+	self assertActionWasEvaluated.
+
+	self register: ( DataPoint on: self systemDateTime holding: 26 ) to: temperature.
+	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+
+	self
+		assert: triggered;
+		deny: pendingActionsQueue isEmpty;
+		assert: pendingActionsQueue size equals: 1.
+		
+	self evaluate.
+
+	self register: ( DataPoint on: self systemDateTime holding: 27 ) to: temperature.
+	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+
+	self assert: pendingActionsQueue isEmpty
 ]
 
 { #category : #tests }

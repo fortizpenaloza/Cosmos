@@ -7,13 +7,19 @@ Class {
 	#instVars : [
 		'timeOfDay'
 	],
-	#category : 'Cosmos-Triggers-Tests-Model'
+	#category : #'Cosmos-Triggers-Tests-Model'
 }
 
 { #category : #accessing }
 TimeIntervalTriggeringConditionTest >> eightPM [
 
 	^ TimeOfDay hours: 20
+]
+
+{ #category : #accessing }
+TimeIntervalTriggeringConditionTest >> ninePM [
+
+		^ TimeOfDay hours: 21
 ]
 
 { #category : #accessing }
@@ -34,22 +40,59 @@ TimeIntervalTriggeringConditionTest >> testIsSafistied [
 	| condition |
 
 	condition := TimeIntervalTriggeringCondition
-		checkingCurrentTimeIsBetween: (self eightPM to: self tenPM).
+		checkingCurrentTimeIsBetween: ( self eightPM to: self tenPM ).
+
+	timeOfDay := self eightPM.
+	self assert: ( condition isSatisfiedOn: self ).
+
+	timeOfDay := self sevenPM.
+	self deny: ( condition isSatisfiedOn: self ).
+
+	timeOfDay := TimeOfDay hours: 20 minutes: 01.
+	self assert: ( condition isSatisfiedOn: self ).
+
+	timeOfDay := self tenPM.
+	self assert: ( condition isSatisfiedOn: self ).
+
+	timeOfDay := TimeOfDay hours: 22 minutes: 00 seconds: 01.
+	self deny: ( condition isSatisfiedOn: self )
+]
+
+{ #category : #tests }
+TimeIntervalTriggeringConditionTest >> testIsSafistiedUsingMilliseconds [
+
+	| condition |
+
+	condition := TimeIntervalTriggeringCondition
+		checkingCurrentTimeIsBetween: ( self eightPM to: self tenPM ).
+
+	timeOfDay := TimeOfDay hours: 20 minutes: 2 seconds: 30 milliseconds: 237.
+	self assert: ( condition isSatisfiedOn: self ).
+
+]
+
+{ #category : #tests }
+TimeIntervalTriggeringConditionTest >> testIsSafistiedWhenSpansBeforeMidnigth [ 
+
+	| condition |
+
+	condition := TimeIntervalTriggeringCondition
+		checkingCurrentTimeIsBetween: (self tenPM to: self eightPM).
 
 	timeOfDay := self eightPM.
 	self assert: (condition isSatisfiedOn: self).
 
-	timeOfDay := self sevenPM.
+	timeOfDay := self ninePM.
 	self deny: (condition isSatisfiedOn: self).
 
 	timeOfDay := TimeOfDay hours: 20 minutes: 01.
-	self assert: (condition isSatisfiedOn: self).
+	self deny: (condition isSatisfiedOn: self).
 
 	timeOfDay := self tenPM.
 	self assert: (condition isSatisfiedOn: self).
 
 	timeOfDay := TimeOfDay hours: 22 minutes: 00 seconds: 01.
-	self deny: (condition isSatisfiedOn: self)
+	self assert: (condition isSatisfiedOn: self)
 ]
 
 { #category : #accessing }

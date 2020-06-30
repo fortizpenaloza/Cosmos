@@ -2,17 +2,29 @@ Class {
 	#name : #PeriodicalScheduler,
 	#superclass : #Object,
 	#instVars : [
-		'delayScheduler',
 		'scheduledTasks',
-		'runningProcesses'
+		'runningProcesses',
+		'delaySchedulerOptional'
 	],
-	#category : 'Cosmos-PeriodicalScheduler-Core'
+	#category : #'Cosmos-PeriodicalScheduler-Core'
 }
 
 { #category : #'instance creation' }
-PeriodicalScheduler class >> workingWith: aDelayScheduler [ 
+PeriodicalScheduler class >> usingDefaultScheduler [
 
-	^self new initializeWorkingWith: aDelayScheduler 
+	^ self workingWithOptional: Optional unused
+]
+
+{ #category : #'instance creation' }
+PeriodicalScheduler class >> workingWith: aDelayScheduler [
+
+	^ self workingWithOptional: ( Optional containing: aDelayScheduler )
+]
+
+{ #category : #'instance creation' }
+PeriodicalScheduler class >> workingWithOptional: aDelaySchedulerOptional [
+
+	^ self new initializeWorkingWith: aDelaySchedulerOptional
 ]
 
 { #category : #scheduling }
@@ -22,9 +34,9 @@ PeriodicalScheduler >> durationFrom: aTimePeriod [
 ]
 
 { #category : #'initialize-release' }
-PeriodicalScheduler >> initializeWorkingWith: aDelayScheduler [ 
+PeriodicalScheduler >> initializeWorkingWith: aDelaySchedulerOptional [ 
 
-	delayScheduler := aDelayScheduler.
+	delaySchedulerOptional := aDelaySchedulerOptional.
 	scheduledTasks := OrderedCollection new.
 	runningProcesses := WeakSet new.
 ]
@@ -33,20 +45,23 @@ PeriodicalScheduler >> initializeWorkingWith: aDelayScheduler [
 PeriodicalScheduler >> schedule: aScheduledTask [
 
 	| process |
+
 	process := [ | delay |
-		delay := Delay forDuration: (self durationFrom: aScheduledTask timePeriod).
-		delayScheduler schedule: delay.
-		delay wait.
-		aScheduledTask execute.
-		self schedule: aScheduledTask ] newProcess.
-	
+
+	delay := Delay forDuration: ( self durationFrom: aScheduledTask timePeriod ).
+	delaySchedulerOptional withContentDo: [ :delayScheduler | delayScheduler schedule: delay ].
+	delay wait.
+	aScheduledTask execute.
+	self schedule: aScheduledTask
+	] newProcess.
+
 	runningProcesses add: process.
-	
+
 	process
 		name: aScheduledTask name;
 		priority: Processor lowestPriority;
 		resume.
-	
+
 	^ process
 ]
 

@@ -27,5 +27,13 @@ TimeIntervalTriggeringCondition >> initializeCheckingCurrentTimeIsBetween: aTime
 { #category : #testing }
 TimeIntervalTriggeringCondition >> isSatisfiedOn: aContext [
 
-	^ timeInterval includes: aContext timeOfDay
+	| timeOfDay |
+
+	timeOfDay := aContext timeOfDay.
+	^ timeInterval
+		includes:
+			( TimeOfDay
+				hours: timeOfDay hours amount
+				minutes: timeOfDay minutes amount
+				seconds: timeOfDay seconds amount )
 ]
