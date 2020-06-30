@@ -54,7 +54,7 @@
 										"key": "Content-Type",
 										"name": "Content-Type",
 										"type": "text",
-										"value": "application/json"
+										"value": "application/vnd.cosmos.data-stream+json;version=1.0.0"
 									}
 								],
 								"body": {
@@ -96,10 +96,6 @@
 							"request": {
 								"method": "DELETE",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{cosmos_url}}/data-streams/{{latest_uuid}}",
 									"host": [
@@ -143,8 +139,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/vnd.cosmos.data-stream+json;version=1.0.0",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -177,15 +173,19 @@
 									"",
 									"pm.test(\"Content-Type is application/json;version=1.0.0\", function () {",
 									"    pm.response.to.have.header(\"Content-Type\");",
-									"    pm.response.to.have.header(\"Content-Type\", \"application/json;version=1.0.0\");",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/vnd.cosmos.data-stream+json;version=1.0.0\");",
 									"});",
 									"",
-									"pm.test(\"Your test name\", function () {",
+									"pm.test(\"Data Stream is Temperature\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    var dataStream = jsonData.first();",
+									"    pm.expect(jsonData.items).to.have.lengthOf(1);",
+									"    ",
+									"    var dataStream = jsonData.items.first();",
 									"    pm.expect(dataStream.name).to.eql(\"Temperature\");",
-									"    pm.expect(dataStream.current_value).to.eql(\"N/A\");",
-									"    pm.expect(dataStream.last_update).to.eql(\"N/A\");",
+									"    pm.expect(dataStream.currentValue).to.eql(\"N/A\");",
+									"    pm.expect(dataStream.lastUpdate).to.eql(\"N/A\");",
+									"    pm.expect(dataStream.links).to.have.property('dataPoints');",
+									"    pm.expect(dataStream.links).to.have.property('self');",
 									"});"
 								],
 								"type": "text/javascript"
@@ -195,10 +195,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{cosmos_url}}/data-streams",
 							"host": [
@@ -212,6 +208,123 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Triggers",
+			"item": [
+				{
+					"name": "Create a trigger",
+					"item": [
+						{
+							"name": "Create an action",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "60358856-7956-44fd-b94d-5c672684a8e4",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Location header is present\", function () {",
+											"    pm.response.to.have.header(\"Location\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/vnd.cosmos.action+json;version=1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Open sprinkler\",\n    \"http_request\": {\n        \"request_line\": {\n            \"url\": \"http://localhost:8090/commands\",\n            \"method\": \"POST\",\n            \"version\": \"HTTP/1.1\"\n        },\n        \"headers\": [\n            {\n                \"key\": \"content-type\",\n                \"value\": \"application/json\"\n            }\n        ],\n        \"body\": \"{\\\"command\\\":\\\"Open Sprinkler\\\",\\\"priority\\\":30}\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/actions",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"actions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Trigger",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ab7627a0-f55c-4fbf-ba40-099cfdd09b34",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Location header is present\", function () {",
+											"    pm.response.to.have.header(\"Location\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/vnd.cosmos.trigger+json;version=1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Open sprinkler every 5 minutes\",\n    \"action\": \"Open sprinkler\",\n    \"policy\": {\n        \"type\": \"periodical\",\n        \"time_interval\": \"5 minutes\"\n    },\n    \"conditions\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{cosmos_url}}/triggers",
+									"host": [
+										"{{cosmos_url}}"
+									],
+									"path": [
+										"triggers"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -238,7 +351,7 @@
 	],
 	"variable": [
 		{
-			"id": "98eb9c07-d37f-4b6f-aea6-880a6c29a19f",
+			"id": "dc94529d-32a1-4361-af93-d42e06e595e2",
 			"key": "latest_uuid",
 			"value": "",
 			"type": "string"

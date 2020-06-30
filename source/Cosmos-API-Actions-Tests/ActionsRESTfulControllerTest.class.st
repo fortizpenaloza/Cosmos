@@ -5,9 +5,9 @@ Class {
 }
 
 { #category : #'private - media types' }
-ActionsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
+ActionsRESTfulControllerTest >> actionVersion1dot0dot0MediaType [
 
-	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
+	^ resourceController actionVersion1dot0dot0MediaType 
 ]
 
 { #category : #'private - accessing' }
@@ -101,7 +101,7 @@ ActionsRESTfulControllerTest >> registerGetDNSZones [
 { #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToCreateActionFrom: aJSON [
 
-	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType 
+	^ self requestToPost: aJSON as: self actionVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
@@ -121,7 +121,7 @@ ActionsRESTfulControllerTest >> requestToGetActionIdentifiedBy: anIdentifier acc
 { #category : #'private - requests' }
 ActionsRESTfulControllerTest >> requestToGetActions [
 
-	^ self requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType
+	^ self requestToGetResourcesAccepting: self actionVersion1dot0dot0MediaType
 ]
 
 { #category : #running }
@@ -172,7 +172,7 @@ ActionsRESTfulControllerTest >> testCreateAction [
 		assert: response location
 			equals:
 			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-		assert: response contentType equals: self textPlainMediaType.
+		assert: response contentType equals: self actionVersion1dot0dot0MediaType.
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
@@ -186,23 +186,22 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutEntity [
 
 	self assert: self actionManagementSystem actions isEmpty.
 
-	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[]}}'.
+	json := '{"name":"Get commands","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"GET","version":"HTTP/1.1"},"headers":[{"key":"accept","value":"application/json"}]}}'.
 
 	response := resourceController
-		createActionBasedOn: (self requestToCreateActionFrom: json)
+		createActionBasedOn: ( self requestToCreateActionFrom: json )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 201;
 		assert: response location
-			equals:
-			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-		assert: response contentType equals: self textPlainMediaType.
+			equals: 'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+		assert: response contentType equals: self actionVersion1dot0dot0MediaType.
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
-		do: [ :action | self assert: action name equals: 'OpenSprinkler' ]
+		do: [ :action | self assert: action name equals: 'Get commands' ]
 ]
 
 { #category : #tests }
@@ -212,7 +211,7 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutHeaders [
 
 	self assert: self actionManagementSystem actions isEmpty.
 	
-	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"headers":[{"key":"content-type","value":"application/json"}],"body":"{\"command\":\"Open Sprinkler\",\"priority\":30}"}}'.
+	json := '{"name":"OpenSprinkler","http_request":{"request_line":{"url":"http://localhost:8090/commands","method":"POST","version":"HTTP/1.1"},"body":"{\"command\":\"Open Sprinkler\",\"priority\":30}"}}'.
 
 	response := resourceController
 		createActionBasedOn: (self requestToCreateActionFrom: json)
@@ -224,7 +223,7 @@ ActionsRESTfulControllerTest >> testCreateActionWithoutHeaders [
 		assert: response location
 			equals:
 			'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc';
-		assert: response contentType equals: self textPlainMediaType.
+		assert: response contentType equals: self actionVersion1dot0dot0MediaType.
 
 	self
 		withTheOnlyOneIn: self actionManagementSystem actions
@@ -258,16 +257,16 @@ ActionsRESTfulControllerTest >> testGetAction [
 		getActionBasedOn:
 			(self
 				requestToGetActionIdentifiedBy: self getDNSZonesIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
+				accepting: self actionVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType
-			equals: self applicationJsonVersion1dot0dot0MediaType;
+			equals: self actionVersion1dot0dot0MediaType;
 		assert: response entityTag
-			equals: '"2e7eccc8701bd15953f68d2dce8b8fa2d68575ee"' asETag;
+			equals: '"157f5e37dd384bad597fad6d9b1df6e4bac6f3bc"' asETag;
 		withJSONFromContentsIn: response contents
 			do: [ :json | 
 			self
@@ -295,11 +294,5 @@ ActionsRESTfulControllerTest >> testGetActions [
 		assert: response code equals: 200;
 		assert: response contents
 			equals:
-			'[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Add DNS zone","http_request":{"request_line":{"method":"POST","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"Content-Type","value":"application/json"},{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"Content-Length","value":"18"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}],"entity":{"contentType":"application/json","contents":"{\"isEnabled\":true}"}},"links":{"self":"https://tests.cosmos.com/actions/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}}]'
-]
-
-{ #category : #'private - media types' }
-ActionsRESTfulControllerTest >> textPlainMediaType [
-
-	^ 'text/plain;charset=utf-8' asMediaType
+			'{"items":[{"name":"Get DNS zones","http_request":{"request_line":{"method":"GET","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}]},"links":{"self":"https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc"}},{"name":"Add DNS zone","http_request":{"request_line":{"method":"POST","url":"https://api.cloudflare.com/client/v4/zones/77527abc25e3d9004fd943209c925e4e/dns_records","version":"HTTP/1.1"},"headers":[{"key":"Content-Type","value":"application/json"},{"key":"X-Auth-Email","value":"patchinko@gmail.com"},{"key":"Content-Length","value":"18"},{"key":"X-Auth-Key","value":"93b0b7a99ad1fc123d0d2b6508849db7e64"}],"entity":{"contentType":"application/json","contents":"{\"isEnabled\":true}"}},"links":{"self":"https://tests.cosmos.com/actions/c3e53a0a-4537-0d00-96a9-ad5f07fa2cfc"}}],"links":{"self":"https://tests.cosmos.com/actions"}}'
 ]

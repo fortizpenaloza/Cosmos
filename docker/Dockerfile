@@ -5,7 +5,7 @@ USER root
 WORKDIR /opt/pharo
 
 COPY load-project.st .
-RUN chown -R pharo:pharo /opt/pharo
+RUN chown -R pharo:users /opt/pharo
 USER pharo
 RUN ./pharo Pharo.image st load-project.st --save --quit
 

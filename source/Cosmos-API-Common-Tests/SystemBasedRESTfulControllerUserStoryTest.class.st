@@ -65,7 +65,7 @@ SystemBasedRESTfulControllerUserStoryTest >> requestToPost: aRepresentation as: 
 { #category : #'private - accessing' }
 SystemBasedRESTfulControllerUserStoryTest >> resourceUrl [
 
-	^ self baseUrl / resourceController specification endpoint
+	^ self baseUrl / resourceController endpoint
 	
 
 ]

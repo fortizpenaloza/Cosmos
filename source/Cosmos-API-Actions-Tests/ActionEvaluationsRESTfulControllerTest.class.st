@@ -8,15 +8,21 @@ Class {
 }
 
 { #category : #'private - accessing' }
+ActionEvaluationsRESTfulControllerTest >> actionEvaluationSummaryVersion1dot0dot0MediaType [
+
+	^ resourceController actionEvaluationSummaryVersion1dot0dot0MediaType 
+]
+
+{ #category : #'private - accessing' }
 ActionEvaluationsRESTfulControllerTest >> actionEvaluationSystem [
 
 	^ rootSystem >> #ActionEvaluationSystemInterface
 ]
 
 { #category : #'private - accessing' }
-ActionEvaluationsRESTfulControllerTest >> applicationJsonVersion1dot0dot0MediaType [
+ActionEvaluationsRESTfulControllerTest >> actionEvaluationVersion1dot0dot0MediaType [
 
-	^ resourceController specification applicationJsonVersion1dot0dot0MediaType 
+	^ resourceController actionEvaluationVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - accessing' }
@@ -92,7 +98,7 @@ ActionEvaluationsRESTfulControllerTest >> testGetActionEvaluationSummaries [
 	response := resourceController
 		getActionEvaluationSummariesBasedOn:
 			(self
-				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
+				requestToGetResourcesAccepting: self actionEvaluationSummaryVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
@@ -112,7 +118,7 @@ ActionEvaluationsRESTfulControllerTest >> testGetActionEvaluationSummariesEmpty 
 	response := resourceController
 		getActionEvaluationSummariesBasedOn:
 			(self
-				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
+				requestToGetResourcesAccepting: self actionEvaluationSummaryVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
@@ -134,7 +140,7 @@ ActionEvaluationsRESTfulControllerTest >> testGetActionEvaluations [
 	response := resourceController
 		getActionEvaluationsBasedOn:
 			(self
-				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
+				requestToGetResourcesAccepting: self actionEvaluationVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self
@@ -154,7 +160,7 @@ ActionEvaluationsRESTfulControllerTest >> testGetActionEvaluationsEmpty [
 	response := resourceController
 		getActionEvaluationsBasedOn:
 			(self
-				requestToGetResourcesAccepting: self applicationJsonVersion1dot0dot0MediaType)
+				requestToGetResourcesAccepting: self actionEvaluationVersion1dot0dot0MediaType)
 		within: self httpRequestContext.
 
 	self

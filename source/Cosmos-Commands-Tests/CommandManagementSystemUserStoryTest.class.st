@@ -43,11 +43,11 @@ CommandManagementSystemUserStoryTest >> testDequeueCommandFollowsPriorities [
 	self commandManagementSystem register: turnLedOnWithHighestPriority.
 
 	self
-		assert: self commandManagementSystem dequeueCommand
+		assert: self commandManagementSystem nextCommand
 			equals: turnLedOnWithHighestPriority;
-		assert: self commandManagementSystem dequeueCommand
+		assert: self commandManagementSystem nextCommand
 			equals: turnLedOnWithMediumPriority;
-		assert: self commandManagementSystem dequeueCommand
+		assert: self commandManagementSystem nextCommand
 			equals: turnLedOnWithLowestPriority
 ]
 
@@ -57,7 +57,7 @@ CommandManagementSystemUserStoryTest >> testDequeueingCommandOnEmptySystemGivesO
 	self assert: self commandManagementSystem commands isEmpty.
 
 	self
-		should: [ self commandManagementSystem dequeueCommand ]
+		should: [ self commandManagementSystem nextCommand ]
 		raise: ObjectNotFound 
 		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Command not found' ]
 ]

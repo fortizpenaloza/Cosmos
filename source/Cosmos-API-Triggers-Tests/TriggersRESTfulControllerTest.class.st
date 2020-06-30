@@ -93,7 +93,7 @@ TriggersRESTfulControllerTest >> registerSetTriggeredToTruePeriodicallyEveryFive
 { #category : #'private - requests' }
 TriggersRESTfulControllerTest >> requestToCreateTriggerFrom: aJSON [
 
-	^ self requestToPost: aJSON as: self applicationJsonVersion1dot0dot0MediaType
+	^ self requestToPost: aJSON as: self triggerVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - requests' }
@@ -226,7 +226,7 @@ TriggersRESTfulControllerTest >> testCreateOnDataPointRegistrationTrigger [
 	},
 	"conditions" : [ ]
 }'
-						type: self applicationJsonVersion1dot0dot0MediaType))
+						type: self triggerVersion1dot0dot0MediaType))
 		within: self httpRequestContext.
 
 	self
@@ -264,7 +264,7 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTrigger [
 		assert: response code equals: 201;
 		assert: response location
 			equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858';
-		assert: response contentType equals: self textPlainMediaType.
+		assert: response contentType equals: self triggerVersion1dot0dot0MediaType .
 
 	self triggerManagementSystem
 		triggerNamed: 'Set triggered to true periodically every 5 minutes'
@@ -295,7 +295,7 @@ TriggersRESTfulControllerTest >> testCreatePeriodicalTriggerWithConditions [
 		assert: response code equals: 201;
 		assert: response location
 			equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858';
-		assert: response contentType equals: self textPlainMediaType.
+		assert: response contentType equals: self triggerVersion1dot0dot0MediaType.
 
 	self triggerManagementSystem
 		triggerNamed: 'OpenRoofBetweenHoursIfNotRaining'
@@ -346,8 +346,8 @@ TriggersRESTfulControllerTest >> testGetTrigger [
 	self
 		assert: response isSuccess ;
 		assert: response status equals: 200;
-		assert: response contentType equals: self applicationJsonVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"8fdd7769a8b44bd63f4b962583f13ef90e551344"' asETag;
+		assert: response contentType equals: self triggerVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"874cf4881943777c5c5115e63e143642a472c87f"' asETag;
 		withJSONFromContentsIn: response contents
 			do: [ :json | 
 				self assert: json name equals: 'Set triggered to true after data point registration';
@@ -372,12 +372,12 @@ TriggersRESTfulControllerTest >> testGetTriggerIncludesSetTriggeredToTrueAfterDa
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType asZnMimeType equals: self applicationJsonVersion1dot0dot0MediaType.
+		assert: response contentType asZnMimeType equals: self triggerVersion1dot0dot0MediaType.
 	self
 		withJSONFromContentsIn: response
 		do: [ :json | 
 			self
-				withTheOnlyOneIn: json
+				withTheOnlyOneIn: json items
 				do: [ :rawTrigger | 
 					self
 						assert: rawTrigger name
@@ -404,7 +404,7 @@ TriggersRESTfulControllerTest >> testGetTriggers [
 	self
 		assert: response
 		wasSuccessfulWithContentEqualsTo:
-			'[{"name":"Set triggered to true after data point registration","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}},{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/1a8f38f0-7e37-0d00-9bcd-a0b00988c858"}}]'
+			'{"items":[{"name":"Set triggered to true after data point registration","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}},{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/1a8f38f0-7e37-0d00-9bcd-a0b00988c858"}}],"links":{"self":"https://tests.cosmos.com/triggers"}}'
 ]
 
 { #category : #tests }
@@ -431,14 +431,14 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 	self registerSetTriggeredToTrueAfterDataPointGreaterThanElevenWasRegisteredOnTemperature.
 
 	response := resourceController
-		getTriggersBasedOn: (self requestToGetTriggersAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		getTriggersBasedOn: ( self requestToGetTriggersAccepting: self applicationJsonVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			'[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}}],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}]'
+			'{"items":[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}}],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}],"links":{"self":"https://tests.cosmos.com/triggers"}}'
 ]
 
 { #category : #tests }
@@ -448,25 +448,25 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesSetTriggeredToTrueA
 
 	self triggerManagementSystem
 		register:
-			(ActionTrigger
+			( ActionTrigger
 				named:
 					'Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM'
 				triggering: self setTriggeredToTrue
-				accordingTo: (DataPointRegistrationTriggeringPolicy on: self temperatureStream)
+				accordingTo: ( DataPointRegistrationTriggeringPolicy on: self temperatureStream )
 				ifSatisfies:
-					(AndCompositeTriggeringCondition
-						with: (DataStreamCurrentValueTriggeringCondition of: self temperatureStream isGreaterThan: 11)
-						with: (TimeIntervalTriggeringCondition checkingCurrentTimeIsBetween: (self eightPM to: self ninePM)))).
+					( AndCompositeTriggeringCondition
+						with: ( DataStreamCurrentValueTriggeringCondition of: self temperatureStream isGreaterThan: 11 )
+						with: ( TimeIntervalTriggeringCondition checkingCurrentTimeIsBetween: ( self eightPM to: self ninePM ) ) ) ).
 
 	response := resourceController
-		getTriggersBasedOn: (self requestToGetTriggersAccepting: self applicationJsonVersion1dot0dot0MediaType)
+		getTriggersBasedOn: ( self requestToGetTriggersAccepting: self applicationJsonVersion1dot0dot0MediaType )
 		within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			'[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}},{"type":"time_interval","from":"20:00:00","to":"21:00:00"}],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}]'
+			'{"items":[{"name":"Set triggered to true after a data point greater than 11 was registered on Temperature if current time is between 8PM and 9PM","action":"Set triggered to true","policy":{"type":"on_data_point_registration","data_stream":"Temperature"},"conditions":[{"type":"data_stream_current_value","data_stream":"Temperature","condition":{"operator":">","value":11}},{"type":"time_interval","from":"20:00:00","to":"21:00:00"}],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}],"links":{"self":"https://tests.cosmos.com/triggers"}}'
 ]
 
 { #category : #tests }
@@ -484,11 +484,11 @@ TriggersRESTfulControllerTest >> testQueryingTriggersIncludesTriggeredToTruePeri
 		assert: response isSuccess;
 		assert: response contents
 			equals:
-			'[{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}]'
+			'{"items":[{"name":"Set triggered to true every 5 minutes","action":"Set triggered to true","policy":{"type":"periodical","time_interval":"5 minutes"},"conditions":[],"links":{"self":"https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858"}}],"links":{"self":"https://tests.cosmos.com/triggers"}}'
 ]
 
 { #category : #'private - media types' }
-TriggersRESTfulControllerTest >> textPlainMediaType [
-
-	^ 'text/plain;charset=utf-8' asMediaType
+TriggersRESTfulControllerTest >> triggerVersion1dot0dot0MediaType [
+	
+	^ resourceController triggerVersion1dot0dot0MediaType 
 ]

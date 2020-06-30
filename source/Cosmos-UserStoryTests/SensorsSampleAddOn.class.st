@@ -43,11 +43,11 @@ SensorsSampleAddOn >> install [
 { #category : #'private - installing' }
 SensorsSampleAddOn >> registerAtmosphoricPressureStreamWithOneDataPoint [
 
-	self registerStreamNamed: 'Pressure'.
-	
-	self dataManagementSystem
-		register: (DataPoint on: self dateTime holding: 1016)
-		toStreamNamed: 'Pressure'
+	| pressure |
+
+	pressure := self registerStreamNamed: 'Pressure'.
+
+	self dataManagementSystem register: ( DataPoint on: self dateTime holding: 1016 ) to: pressure
 ]
 
 { #category : #'private - installing' }
@@ -59,28 +59,21 @@ SensorsSampleAddOn >> registerHumidityStreamWithoutDataPoints [
 { #category : #'private - installing' }
 SensorsSampleAddOn >> registerStreamNamed: aName [
 
-	| dataStream |
-
-	dataStream := DataStream named: aName.
-	self dataManagementSystem register: dataStream
+	^ self dataManagementSystem register: ( DataStream named: aName )
 ]
 
 { #category : #'private - installing' }
 SensorsSampleAddOn >> registerTemperatureStreamWithSomeDataPoints [
 
-	self registerStreamNamed: 'Temperature'.
+	| temperature |
 
-	self dataManagementSystem
-		register: (DataPoint on: self dateTime holding: 15.5)
-		toStreamNamed: 'Temperature'.
+	temperature := self registerStreamNamed: 'Temperature'.
 
-	self dataManagementSystem
-		register: (DataPoint on: self dateTime holding: 16)
-		toStreamNamed: 'Temperature'.
-		
-	self dataManagementSystem
-		register: (DataPoint on: self dateTime holding: 16.5)
-		toStreamNamed: 'Temperature'
+	self dataManagementSystem register: ( DataPoint on: self dateTime holding: 15.5 ) to: temperature.
+
+	self dataManagementSystem register: ( DataPoint on: self dateTime holding: 16 ) to: temperature.
+
+	self dataManagementSystem register: ( DataPoint on: self dateTime holding: 16.5 ) to: temperature
 ]
 
 { #category : #'private - systems' }

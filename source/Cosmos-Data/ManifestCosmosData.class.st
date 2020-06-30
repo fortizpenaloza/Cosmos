@@ -14,5 +14,5 @@ ManifestCosmosData class >> initialize [
 	Kepler
 		registerInterfaceAt: #DataStreamManagementSystemInterface
 		named: 'Data Stream Management System Interface'
-		declaring: #(#register: #deregister: #register:toStreamNamed: #streamIdentifiedBy: #streams)
+		declaring: #(#register: #deregister: #register:to: #streamIdentifiedBy: #streams)
 ]

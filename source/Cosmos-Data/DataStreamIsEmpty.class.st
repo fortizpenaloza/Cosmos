@@ -14,9 +14,3 @@ DataStreamIsEmpty class >> signalAll: failureExplanations [
 		tag: failureExplanations;
 		signal: ('. ' join: failureExplanations)
 ]
-
-{ #category : #'private-testing' }
-DataStreamIsEmpty >> isResumable [
-
-	^ true
-]

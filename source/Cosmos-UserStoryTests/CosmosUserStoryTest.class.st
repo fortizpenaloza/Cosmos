@@ -104,12 +104,6 @@ CosmosUserStoryTest >> oneMinute [
 	^ TimeUnits minute with: 1
 ]
 
-{ #category : #tests }
-CosmosUserStoryTest >> register: aDataPoint to: aStream [
-
-	self dataManagementSystem register: aDataPoint toStreamNamed: aStream name
-]
-
 { #category : #'private - accessing' }
 CosmosUserStoryTest >> setTriggeredToTrue [
 
@@ -204,8 +198,8 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 	isCoolingOn := DataStream named: 'is_cooling_on'.
 	self dataManagementSystem register: isCoolingOn.
 
-	self register: ( DataPoint on: self systemDateTime holding: 23 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 23 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	trigger := ActionTrigger
 		named: 'Set triggered to true when temperature is higher than 24'
@@ -219,18 +213,18 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 
 	self assertPendingActionIsEmpty.
 
-	self register: ( DataPoint on: self systemDateTime holding: 24 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: 24 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 	self assertPendingActionIsEmpty.
-	self register: ( DataPoint on: self systemDateTime holding: 25 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 25 ) to: temperature.
+	self dataManagementSystem register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self assertPendingActionsNotEmpty.
 	self evaluate.
 	self assertActionWasEvaluated.
 
-	self register: ( DataPoint on: self systemDateTime holding: 26 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 26 ) to: temperature.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self
 		assert: triggered;
@@ -239,8 +233,8 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesCompositeD
 		
 	self evaluate.
 
-	self register: ( DataPoint on: self systemDateTime holding: 27 ) to: temperature.
-	self register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: 27 ) to: temperature.
+	self dataManagementSystem  register: ( DataPoint on: self systemDateTime holding: triggered asBit ) to: isCoolingOn.
 
 	self assert: pendingActionsQueue isEmpty
 ]
@@ -255,28 +249,25 @@ CosmosUserStoryTest >> testTriggerOnDataPointRegistrationWhenSatisfiesDataStream
 	trigger := ActionTrigger
 		named: 'Set triggered to true after data point registration'
 		triggering: self setTriggeredToTrue
-		accordingTo: (DataPointRegistrationTriggeringPolicy on: dataStream)
-		ifSatisfies:
-			(DataStreamCurrentValueTriggeringCondition
-				of: dataStream
-				isLessThan: 11).
+		accordingTo: ( DataPointRegistrationTriggeringPolicy on: dataStream )
+		ifSatisfies: ( DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11 ).
 	self triggerManagementSystem register: trigger.
 	self
 		deny: triggered;
 		assert: pendingActionsQueue isEmpty.
 	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
+		register: ( DataPoint on: self systemDateTime holding: 12 )
+		to: dataStream.
 	self
 		deny: triggered;
 		assert: pendingActionsQueue isEmpty.
 	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
+		register: ( DataPoint on: self systemDateTime holding: 10 )
+		to: dataStream.
 	self
 		deny: triggered;
 		deny: pendingActionsQueue isEmpty.
-		
+
 	self evaluate.
 	self assertActionWasEvaluated
 ]
@@ -322,7 +313,7 @@ CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesIfDataStreamHasNotB
 
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
+		to: dataStream.
 	self deny: triggered.
 
 	timeSource setTimeTo: (timeSource dateTime timeOfDay next: self fiveMinutes).
@@ -347,45 +338,36 @@ CosmosUserStoryTest >> testTriggerPeriodicallyEveryTenMinutesWhenSatisfiesDataSt
 	self dataManagementSystem register: dataStream.
 
 	condition := AndCompositeTriggeringCondition
-		with:
-			(DataStreamCurrentValueTriggeringCondition
-				of: dataStream
-				isLessThan: 11)
-		with:
-			(TimeIntervalTriggeringCondition
-				checkingCurrentTimeIsBetween: (self eightPM to: self ninePM)).
+		with: ( DataStreamCurrentValueTriggeringCondition of: dataStream isLessThan: 11 )
+		with: ( TimeIntervalTriggeringCondition checkingCurrentTimeIsBetween: ( self eightPM to: self ninePM ) ).
 
 	self triggerManagementSystem
-		register: (self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition).
+		register: ( self setTriggeredToTrueEvery: self tenMinutes ifSatisfies: condition ).
 
 	self deny: triggered.
 
 	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
+		register: ( DataPoint on: self systemDateTime holding: 10 )
+		to: dataStream.
+	self eventNotificationSystem notifySubscribersTo: ( TickEvent of: self tenMinutes ).
 	self deny: triggered.
 
 	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
+		register: ( DataPoint on: self systemDateTime holding: 12 )
+		to: dataStream.
+	self eventNotificationSystem notifySubscribersTo: ( TickEvent of: self tenMinutes ).
 	self deny: triggered.
 
 	timeSource setTimeTo: self eightPM.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
+	self eventNotificationSystem notifySubscribersTo: ( TickEvent of: self tenMinutes ).
 	self deny: triggered.
 
 	self dataManagementSystem
-		register: (DataPoint on: self systemDateTime holding: 10)
-		toStreamNamed: dataStream name.
-	self eventNotificationSystem
-		notifySubscribersTo: (TickEvent of: self tenMinutes).
+		register: ( DataPoint on: self systemDateTime holding: 10 )
+		to: dataStream.
+	self eventNotificationSystem notifySubscribersTo: ( TickEvent of: self tenMinutes ).
 	self deny: triggered.
-	
+
 	self evaluate.
 	self assertActionWasEvaluated
 ]
@@ -404,7 +386,7 @@ CosmosUserStoryTest >> testTriggeringOnDataPointRegistration [
 	self deny: triggered.
 	self dataManagementSystem
 		register: (DataPoint on: self systemDateTime holding: 12)
-		toStreamNamed: dataStream name.
+		to: dataStream.
 	self deny: triggered.
 	
 	self evaluate.
