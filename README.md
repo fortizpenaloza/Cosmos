@@ -45,4 +45,3 @@ To load the project in a Pharo image, or declare it as a dependency of your own 
 ## Contributing
 
 Check the [Contribution Guidelines](CONTRIBUTING.md)
-
