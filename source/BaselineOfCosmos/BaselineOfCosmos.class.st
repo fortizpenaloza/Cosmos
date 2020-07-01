@@ -123,7 +123,7 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
-			with: [ spec requires: 'ApplicationStarter' ];
+			with: [ spec requires: 'Launchpad' ];
 		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'.
 
 	spec
@@ -185,11 +185,11 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 			
 		
 	aSpec
-		baseline: 'ApplicationStarter'
+		baseline: 'Launchpad'
 			with: [ aSpec
-				repository: 'github://ba-st/ApplicationStarter:v1/source';
+				repository: 'github://ba-st/Launchpad:v3/source';
 				loads: 'Deployment' ];
-		import: 'ApplicationStarter'.
+		import: 'Launchpad'.
 
 	aSpec
 		baseline: 'Roassal3'
