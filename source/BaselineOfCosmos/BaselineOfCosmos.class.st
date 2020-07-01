@@ -187,7 +187,7 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 	aSpec
 		baseline: 'ApplicationStarter'
 			with: [ aSpec
-				repository: 'github://ba-st/ApplicationStarter:v1/source';
+				repository: 'github://ba-st/ApplicationStarter:v2/source';
 				loads: 'Deployment' ];
 		import: 'ApplicationStarter'.
 
