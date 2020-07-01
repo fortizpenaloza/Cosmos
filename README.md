@@ -9,8 +9,10 @@ Cosmos is a Internet of Things (IoT) platform completly written in Smalltalk.
 [Report a defect](https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Bug) |
 [Request feature](https://github.com/iot-uca/back-end/issues/new?labels=Type%3A+Development)
 
-[![Build Status](https://travis-ci.org/iot-uca/back-end.svg?branch=master)](https://travis-ci.org/iot-uca/back-end)
-[![Coverage Status](https://coveralls.io/repos/github/iot-uca/back-end/badge.svg?branch=master)](https://coveralls.io/github/iot-uca/back-end?branch=master)
+[![Build Status](https://github.com/cosmos-st/back-end/workflows/Build/badge.svg?branch=release-candidate)](https://github.com/cosmos-st/back-end/actions?query=workflow%3ABuild)
+[![Coverage Status](https://codecov.io/github/cosmos-st/back-end/coverage.svg?branch=release-candidate)](https://codecov.io/gh/cosmos-st/back-end/branch/release-candidate)
+[![Pharo 7.0](https://img.shields.io/badge/Pharo-7.0-informational)](https://pharo.org)
+[![Pharo 8.0](https://img.shields.io/badge/Pharo-8.0-informational)](https://pharo.org)
 
 > *Name origin*: [Cosmos](https://en.wikipedia.org/wiki/Cosmos) is used at times when the universe is regarded as a complex and orderly system or entity; the opposite of chaos.
 
