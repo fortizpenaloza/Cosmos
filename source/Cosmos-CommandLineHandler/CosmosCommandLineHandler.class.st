@@ -25,7 +25,7 @@ Examples:
 "
 Class {
 	#name : #CosmosCommandLineHandler,
-	#superclass : #ApplicationStarterCommandLineHandler,
+	#superclass : #LaunchpadCommandLineHandler,
 	#instVars : [
 		'cosmos',
 		'pendingActionsQueue',
