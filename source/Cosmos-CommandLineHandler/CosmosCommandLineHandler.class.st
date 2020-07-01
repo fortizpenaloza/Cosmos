@@ -46,12 +46,10 @@ CosmosCommandLineHandler class >> description [
 	^ 'Cosmos command line handler'
 ]
 
-{ #category : #'private - building cosmos API' }
-CosmosCommandLineHandler >> addDumpStackErrorHandlerOn: api [
+{ #category : #'private - accessing' }
+CosmosCommandLineHandler class >> logPrefix [
 
-	api
-		on: self exceptionsToHandle
-		addErrorHandler: [ :signal :request | self dumpStackAndReport: signal ]
+	^ 'cosmos'
 ]
 
 { #category : #'private - accessing' }
@@ -70,17 +68,17 @@ CosmosCommandLineHandler >> baseUrl [
 CosmosCommandLineHandler >> basicActivate [
 
 	self
-		logInfo: 'Creating pending evaluation actions queue'
+		logAsInfo: 'Creating pending evaluation actions queue'
 			during: [ pendingActionsQueue := AtomicSharedQueue new ];
-		logInfo: 'Creating action evaluation queue'
+		logAsInfo: 'Creating action evaluation queue'
 			during: [ actionEvaluationsQueue := AtomicSharedQueue new ];
-		logInfo: 'Building and starting cosmos' 
+		logAsInfo: 'Building and starting cosmos' 
 			during: [ self buildAndStartCosmos ];
-		logInfo: 'Building and starting RESTful API' 
+		logAsInfo: 'Building and starting RESTful API' 
 			during: [ self buildAndStartCosmosAPI ];
-		logInfo: 'Building and starting the periodical scheduler'
+		logAsInfo: 'Building and starting the periodical scheduler'
 			during: [ self buildAndStartScheduler ];
-		logInfo: 'Building and starting the action evaluator'
+		logAsInfo: 'Building and starting the action evaluator'
 			during: [ self buildAndStartActionEvaluator ]
 ]
 
@@ -135,10 +133,13 @@ CosmosCommandLineHandler >> buildAndStartCosmosAPI [
 			(CommandsRESTfulController workingWith: cosmos).
 			(ActionsRESTfulController workingWith: cosmos).
 			(ActionEvaluationsRESTfulController workingWith: cosmos).
-			(TriggersRESTfulController workingWith: cosmos)}.
-
-	self addDumpStackErrorHandlerOn: api.
-	self setAllowedCrossOriginResourseSharingOn: api.
+			(TriggersRESTfulController workingWith: cosmos)}..
+			
+	api
+		on: self exceptionsToHandle
+		addErrorHandler: [ :signal :request | self class dumpStackAndReport: signal ].
+		
+	api beCORSAwareAllowing: self allowedOrigins.
 
 	api
 		install;
@@ -184,22 +185,16 @@ CosmosCommandLineHandler >> hostname [
 	^ self configuration at: 'hostname'
 ]
 
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> logPrefix [
+{ #category : #logging }
+CosmosCommandLineHandler >> logAsInfo: aMessage during: aBlock [
 
-	^ 'cosmos'
+	CurrentLogger value logAsInfo: aMessage during: aBlock
 ]
 
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'
-]
-
-{ #category : #'private - building cosmos API' }
-CosmosCommandLineHandler >> setAllowedCrossOriginResourseSharingOn: api [
-
-	api beCORSAwareAllowing: self allowedOrigins
 ]
 
 { #category : #'private - accessing' }
