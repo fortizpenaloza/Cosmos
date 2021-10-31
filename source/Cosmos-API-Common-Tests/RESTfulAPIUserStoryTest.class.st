@@ -70,7 +70,7 @@ RESTfulAPIUserStoryTest >> setUpAPIServer [
 		installing: self controllersToInstall.
 	api
 		on: Error
-		addErrorHandler: [ :error :request | Processor activeProcess debug: error signalerContext title: 'lets see' ].
+		addErrorHandler: [ :error :request | Processor activeProcess newDebugSessionNamed: 'Let''s see' startedAt: error signalerContext ].
 	api
 		install;
 		start

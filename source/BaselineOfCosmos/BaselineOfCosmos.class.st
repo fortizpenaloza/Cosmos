@@ -123,24 +123,8 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
-			with: [ spec requires: 'Launchpad' ];
-		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'.
-
-	spec
-		for: #'pharo6.x'
-		do: [ spec
-				package: 'Cosmos-CommandLineHandler'
-					with: [ spec includes: 'Cosmos-CommandLineHandler-Pharo6' ];
-				package: 'Cosmos-CommandLineHandler-Pharo6'
-					with: [ spec requires: 'Cosmos-CommandLineHandler' ] ].
-
-	spec
-		for: #(#'pharo7.x' #'pharo8.x' #'pharo9.x')
-		do: [ spec
-				package: 'Cosmos-CommandLineHandler'
-					with: [ spec includes: 'Cosmos-CommandLineHandler-Pharo7' ];
-				package: 'Cosmos-CommandLineHandler-Pharo7'
-					with: [ spec requires: 'Cosmos-CommandLineHandler' ] ]
+		with: [ spec requires: #( 'Cosmos-PeriodicalScheduler-Core' 'Launchpad' ) ];
+		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'
 ]
 
 { #category : #'private - baselines' }
@@ -183,20 +167,11 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 				loads: 'Deployment' ];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ aSpec loads: 'Tools' ].
 			
-		
 	aSpec
 		baseline: 'Launchpad'
 			with: [ aSpec
 				repository: 'github://ba-st/Launchpad:v3/source';
-				loads: 'Deployment' ];
-		import: 'Launchpad'.
-
-	aSpec
-		baseline: 'Roassal3'
-			with: [ aSpec
-				repository: 'github://ObjectProfile/Roassal3';
-				loads: #('Core') ];
-		import: 'Roassal3'
+				loads: 'Deployment' ]
 ]
 
 { #category : #groups }
@@ -294,9 +269,5 @@ BaselineOfCosmos >> setUpPackageDependeciesOn: aSpec [
 { #category : #'private - baselines' }
 BaselineOfCosmos >> setUpToolsDependeciesOn: spec [
 
-	spec
-		for: #(#'pharo8.x' #'pharo9.x')
-		do: [ spec 
-			package: 'Cosmos-Tools' 
-			with: [ spec requires: #('Roassal3' 'Kepler-Tools' 'Stargate-Tools') ] ]
+	spec package: 'Cosmos-Tools' with: [ spec requires: #( 'Kepler-Tools' 'Stargate-Tools' ) ]
 ]
