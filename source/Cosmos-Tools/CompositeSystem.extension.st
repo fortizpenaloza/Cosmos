@@ -1,12 +1,16 @@
 Extension { #name : #CompositeSystem }
 
 { #category : #'*Cosmos-Tools' }
-CompositeSystem >> gtInspectorSystemsIn: aCompositePresentation [
+CompositeSystem >> inspectSubsystems [
 
-	<gtInspectorPresentationOrder: 40>
-	aCompositePresentation list
-		title: [ 'Subsystems' translated ];
-		display: [ subsystems ];
-		when: [ subsystems isNotEmpty ];
-		tags: [ :system | system implementedInterfaces ]
+	<inspectorPresentationOrder: 40 title: 'Subsystems'>
+	^ SpTablePresenter new
+		items: subsystems;
+		addColumn: (SpStringTableColumn 
+			title: 'Name' 
+			evaluated: [ :subsystem | subsystem name ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Implemented interfaces'
+			evaluated: [ :subsystem | subsystem implementedInterfaces]);
+		yourself.
 ]
