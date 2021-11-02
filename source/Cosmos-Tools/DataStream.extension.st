@@ -1,27 +1,27 @@
 Extension { #name : #DataStream }
 
 { #category : #'*Cosmos-Tools' }
-DataStream >> gtInspectorDataPointsIn: composite [
+DataStream >> inspectionDataPoints [
 
-	<gtInspectorPresentationOrder: 40>
-	composite roassal3
-		title: [ 'Chart' ];
-		initializeCanvas: [ | x y chart |
+	<inspectorPresentationOrder: 40 title: 'Chart'>
+	| x y chart |
 
-			y := dataPoints collect: #value.
-			x := dataPoints
-				collect:
-					[ :dataPoint | ( ( dataPoint timestamp absoluteDistanceTo: self unixTime ) convertTo: TimeUnits second ) amount ].
+	x := dataPoints collect: [ :dataPoint | 
+		     ( ( dataPoint timestamp absoluteDistanceTo: self unixTime ) convertTo: TimeUnits second )
+			     amount ].
 
-			chart := RSChart new
-				addPlot: ( RSLinePlot new x: x y: y );
-				ylabel: 'value';
-				xlabel: 'time';
-				addDecoration: RSVerticalTick new;
-				build.
+	y := dataPoints collect: #value.
 
-			chart canvas
-			]
+	chart := RSChart new
+		         addPlot: ( RSLinePlot new x: x y: y );
+		         ylabel: 'value';
+		         xlabel: 'time';
+		         addDecoration: RSVerticalTick new;
+		         build.
+
+	^ SpRoassal3InspectorPresenter new
+		  canvas: chart canvas;
+		  yourself
 ]
 
 { #category : #'*Cosmos-Tools' }

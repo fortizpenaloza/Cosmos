@@ -1,13 +1,16 @@
 Extension { #name : #EventNotificationSystem }
 
 { #category : #'*Cosmos-Tools' }
-EventNotificationSystem >> gtInspectorSubscriptionsIn: aCompositePresentation [
+EventNotificationSystem >> inspectSubscriptions [
 
-	<gtInspectorPresentationOrder: 40>
-	aCompositePresentation list
-		title: [ 'Subscribers' translated ];
-		display: [ subscriptions ];
-		format: [ :subscription | subscription subscriber name ];
-		when: [ subscriptions isNotEmpty ];
-		tags: [ :subscription | subscription eventType name ]
+	<inspectorPresentationOrder: 40 title: 'Subscriptions'>
+	^ SpTablePresenter new
+		items: subscriptions;
+		addColumn: (SpStringTableColumn 
+			title: 'Subscriber' 
+			evaluated: [ :subscription | subscription subscriber name ]);
+		addColumn: (SpStringTableColumn 
+			title: 'Event type'
+			evaluated: [ :subscription | subscription eventType name]);
+		yourself.
 ]

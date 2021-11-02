@@ -192,6 +192,12 @@ CosmosCommandLineHandler >> logAsInfo: aMessage during: aBlock [
 ]
 
 { #category : #'private - accessing' }
+CosmosCommandLineHandler >> periodicalScheduler [
+
+	^ PeriodicalScheduler usingDefaultScheduler
+]
+
+{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'

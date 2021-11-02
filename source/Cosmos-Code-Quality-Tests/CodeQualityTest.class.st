@@ -22,21 +22,13 @@ CodeQualityTest >> assertThereWasNoIssuesRunning: aRule onDeclaredPackagesExclud
 { #category : #accessing }
 CodeQualityTest >> descriptionFrom: ruleCheckingResult [
 
-	| writeStream |
+	| formatter |
 
-	writeStream := WriteStream on: String new. 
-	ruleCheckingResult
-		classesAndSelectorsDo: [ :class :selector | 
-			writeStream
-				nextPutAll: class asString;
-				nextPutAll: '->';
-				nextPutAll: selector asString;
-				yourself ].
-			
-	^ '<1s> (<2p>): <3s>'
-		expandMacrosWith: ruleCheckingResult label
-		with: ruleCheckingResult problemCount
-		with: writeStream contents
+	formatter := CollectionFormatter separatingWith: Character cr
+		             applyingToEach: [ :element | 
+		             '<1s> on [<2s>]' expandMacrosWith: element title with: element entity name ].
+
+	^ formatter format: ruleCheckingResult
 ]
 
 { #category : #accessing }
@@ -49,23 +41,27 @@ CodeQualityTest >> packagesToBeChecked [
 { #category : #'tests support' }
 CodeQualityTest >> resultAfterRunning: aRule on: aPackageSet excluding: aClassSet [
 
-	| allClassesWithoutExcluded |
+	| runner environment allClassesWithoutExcluded |
 
-	allClassesWithoutExcluded := (aPackageSet flatCollect: #classes)
-		difference: aClassSet.
+	allClassesWithoutExcluded := ( aPackageSet flatCollect: #classes ) difference: aClassSet.
 
-	^ (RBSmalllintChecker
-		runRule: aRule
-		onEnvironment:
-			(RBPackageEnvironment packages: aPackageSet)
-				& (RBClassEnvironment classes: allClassesWithoutExcluded)) result
+	environment := ( RBPackageEnvironment packages: aPackageSet )
+	               & ( RBClassEnvironment classes: allClassesWithoutExcluded ).
+
+	runner := ReSmalllintChecker new.
+	runner
+		rule: { aRule };
+		environment: environment;
+		run.
+
+	^ runner criticsOf: aRule
 ]
 
 { #category : #tests }
 CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 
 	self
-		assertThereWasNoIssuesRunning: RBOnlyReadOrWrittenVariableRule new
+		assertThereWasNoIssuesRunning: ReIvarNeitherReadNorWrittenRule new
 		onDeclaredPackagesExcluding: #()
 ]
 
@@ -73,21 +69,22 @@ CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 CodeQualityTest >> testMessageImplementedButNotSent [
 
 	self
-		assertThereWasNoIssuesRunning: RBImplementedNotSentRule new asRBRule
+		assertThereWasNoIssuesRunning: ReImplementedNotSentRule new
 		onDeclaredPackagesExcluding:
 			{ActionEvaluationsRESTfulController.
 			DataPointsRESTfulController.
 			ActionsRESTfulController.
 			DataStreamsRESTfulController.
 			TriggersRESTfulController.
-			CommandsRESTfulController}
+			CommandsRESTfulController.
+			TriggerManagementSystem}
 ]
 
 { #category : #tests }
 CodeQualityTest >> testMessageSentButNotImplemented [
 
 	self
-		assertThereWasNoIssuesRunning: RBSentNotImplementedRule new asRBRule
+		assertThereWasNoIssuesRunning: ReSentNotImplementedRule new
 		onDeclaredPackagesExcluding:
 			{TriggersRESTfulControllerTest.
 			DataStreamsRESTfulControllerTest.
@@ -99,7 +96,7 @@ CodeQualityTest >> testMessageSentButNotImplemented [
 CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 
 	self
-		assertThereWasNoIssuesRunning: RBSelfSentNotImplementedRule new asRBRule
+		assertThereWasNoIssuesRunning: ReSelfSentNotImplementedRule new
 		onDeclaredPackagesExcluding: #()
 ]
 
@@ -107,7 +104,7 @@ CodeQualityTest >> testMessageSentToSelfButNotImplemented [
 CodeQualityTest >> testMessagesMustBeCategorized [
 
 	self
-		assertThereWasNoIssuesRunning: RBUnclassifiedMethodsRule new asRBRule
+		assertThereWasNoIssuesRunning: ReUnclassifiedMethodsRule new
 		onDeclaredPackagesExcluding: #()
 ]
 
@@ -115,6 +112,6 @@ CodeQualityTest >> testMessagesMustBeCategorized [
 CodeQualityTest >> testSubclassReponsibilityImplementedInLeafClases [
 
 	self
-		assertThereWasNoIssuesRunning: RBSubclassResponsibilityNotDefinedRule new asRBRule
+		assertThereWasNoIssuesRunning: ReSubclassResponsibilityNotDefinedRule new
 		onDeclaredPackagesExcluding: #()
 ]
