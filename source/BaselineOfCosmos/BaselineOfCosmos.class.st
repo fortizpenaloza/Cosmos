@@ -58,10 +58,24 @@ BaselineOfCosmos >> baseline: spec [
 	<baseline>
 	spec
 		for: #pharo
-		do: [ self
+		do: [ 
+			
+			spec preLoadDoIt: #'preload:package:'.
+							
+			self
 				setUpDependeciesOn: spec;
 				setUpPackageDependeciesOn: spec;
 				setUpGroupsOn: spec ]
+]
+
+{ #category : #actions }
+BaselineOfCosmos >> preload: loader package: packageSpec [
+
+	Metacello new
+		baseline: 'Buoy';
+		repository: 'github://ba-st/Buoy:v6';
+		onConflictUseLoaded;
+		load: 'Development'
 ]
 
 { #category : #accessing }
@@ -151,13 +165,6 @@ BaselineOfCosmos >> setUpCosmosDependeciesOn: spec [
 
 { #category : #dependencies }
 BaselineOfCosmos >> setUpDependeciesOn: aSpec [
-
-	aSpec baseline: 'Buoy' with: [ 
-		aSpec
-			repository: 'github://ba-st/Buoy:v6';
-			onConflictUseIncoming;
-			loads: 'Deployment'
-		].
 
 	aSpec
 		baseline: 'Kepler' with: [ 
