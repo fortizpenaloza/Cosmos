@@ -333,29 +333,29 @@ TriggersRESTfulControllerTest >> testGetTrigger [
 
 	| response |
 
-	self
-		registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
+	self registerSetTriggeredToTrueAfterDataPointWasRegisteredOnTemperature.
 
 	response := resourceController
-		getTriggerBasedOn:
-			(self
-				requestToGetTriggerIdentifiedBy: self setTriggeredToTrueIdentifier
-				accepting: self applicationJsonVersion1dot0dot0MediaType)
-		within: self httpRequestContext.
+		            getTriggerBasedOn: ( self
+				              requestToGetTriggerIdentifiedBy: self setTriggeredToTrueIdentifier
+				              accepting: self applicationJsonVersion1dot0dot0MediaType )
+		            within: self httpRequestContext.
 
 	self
-		assert: response isSuccess ;
+		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType equals: self triggerVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"874cf4881943777c5c5115e63e143642a472c87f"' asETag;
-		withJSONFromContentsIn: response contents
-			do: [ :json | 
-				self assert: json name equals: 'Set triggered to true after data point registration';
+		assert: response entityTag equals: '"874cf4881943777c5c5115e63e143642a472c87f"' asEntityTag;
+		withJSONFromContentsIn: response contents do: [ :json | 
+			self
+				assert: json name equals: 'Set triggered to true after data point registration';
 				assert: json action equals: 'Set triggered to true';
 				assert: json policy type equals: 'on_data_point_registration';
 				assert: json policy data_stream equals: 'Temperature';
 				assert: json conditions isEmpty;
-				assert: json links self equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858']
+				assert: json links self
+				equals: 'https://tests.cosmos.com/triggers/98c4eaee-7e37-0d00-9bcc-cab60988c858'
+			]
 ]
 
 { #category : #tests }

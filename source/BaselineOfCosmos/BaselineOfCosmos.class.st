@@ -123,7 +123,7 @@ BaselineOfCosmos >> setUpCommandLineHandlerDependenciesOn: spec [
 
 	spec
 		package: 'Cosmos-CommandLineHandler'
-		with: [ spec requires: #( 'Cosmos-PeriodicalScheduler-Core' 'Launchpad' ) ];
+		with: [ spec requires: #( 'Cosmos-PeriodicalScheduler-Core' 'Launchpad-Deployment' ) ];
 		group: 'CommandLineHandler' with: 'Cosmos-CommandLineHandler'
 ]
 
@@ -169,9 +169,9 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 			
 	aSpec
 		baseline: 'Launchpad'
-			with: [ aSpec
-				repository: 'github://ba-st/Launchpad:v3/source';
-				loads: 'Deployment' ]
+			with: [ aSpec repository: 'github://ba-st/Launchpad:v4' ];
+			project: 'Launchpad-Deployment'
+			copyFrom: 'Launchpad' with: [ aSpec loads: 'Deployment' ].
 ]
 
 { #category : #groups }

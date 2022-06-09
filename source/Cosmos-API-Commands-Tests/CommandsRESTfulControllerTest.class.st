@@ -200,24 +200,22 @@ CommandsRESTfulControllerTest >> testGetCommand [
 	| response |
 
 	response := resourceController
-		getCommandBasedOn:
-			( self
-				requestToGetCommandIdentifiedBy: self turnOnLedWithHighestPriorityIndentifier
-				accepting: self commandVersion1dot0dot0MediaType )
-		within: self httpRequestContext.
+		            getCommandBasedOn: ( self
+				              requestToGetCommandIdentifiedBy: self turnOnLedWithHighestPriorityIndentifier
+				              accepting: self commandVersion1dot0dot0MediaType )
+		            within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response code equals: 200;
 		assert: response contentType equals: self commandVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"7434c0390aedccd0d9ecdaf0432beaeee244a0c0"' asETag;
-		withJSONFromContentsIn: response contents
-			do: [ :json | 
+		assert: response entityTag equals: '"7434c0390aedccd0d9ecdaf0432beaeee244a0c0"' asEntityTag;
+		withJSONFromContentsIn: response contents do: [ :json | 
 			self
 				assert: json priority equals: 1;
 				assert: json command equals: 'TURN_ON_LED';
 				assert: json links self
-					equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc'
+				equals: 'https://tests.cosmos.com/commands/af1ac24c-6c37-0d00-8b39-e65c01b794dc'
 			]
 ]
 

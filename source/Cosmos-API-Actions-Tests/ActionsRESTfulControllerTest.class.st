@@ -254,26 +254,22 @@ ActionsRESTfulControllerTest >> testGetAction [
 		registerAddDNSZone.
 
 	response := resourceController
-		getActionBasedOn:
-			(self
-				requestToGetActionIdentifiedBy: self getDNSZonesIdentifier
-				accepting: self actionVersion1dot0dot0MediaType)
-		within: self httpRequestContext.
+		            getActionBasedOn: ( self
+				              requestToGetActionIdentifiedBy: self getDNSZonesIdentifier
+				              accepting: self actionVersion1dot0dot0MediaType )
+		            within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response contentType
-			equals: self actionVersion1dot0dot0MediaType;
-		assert: response entityTag
-			equals: '"157f5e37dd384bad597fad6d9b1df6e4bac6f3bc"' asETag;
-		withJSONFromContentsIn: response contents
-			do: [ :json | 
+		assert: response contentType equals: self actionVersion1dot0dot0MediaType;
+		assert: response entityTag equals: '"157f5e37dd384bad597fad6d9b1df6e4bac6f3bc"' asEntityTag;
+		withJSONFromContentsIn: response contents do: [ :json | 
 			self
 				assert: json name equals: 'Get DNS zones';
 				assert: json links self
-					equals:
-					'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc' ];
+				equals: 'https://tests.cosmos.com/actions/ab203809-4537-0d00-96a8-67bd07fa2cfc'
+			];
 		assert: response contents equals: self getDNSZonesAsJSON
 ]
 

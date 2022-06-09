@@ -260,27 +260,25 @@ DataStreamsRESTfulControllerTest >> testGetDataStream [
 	| response |
 
 	response := resourceController
-		getStreamBasedOn:
-			( self
-				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self dataStreamVersion1dot0dot0MediaType )
-		within: self httpRequestContext.
+		            getStreamBasedOn: ( self
+				              requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				              accepting: self dataStreamVersion1dot0dot0MediaType )
+		            within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType equals: self dataStreamVersion1dot0dot0MediaType;
-		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag;
-		withJSONFromContentsIn: response contents
-			do: [ :json | 
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asEntityTag;
+		withJSONFromContentsIn: response contents do: [ :json | 
 			self
 				assert: json name equals: 'Temperature';
 				assert: json currentValue equals: 16.5;
 				assert: json lastUpdate equals: self dateTimeFormattedAsISO8601;
 				assertUrl: json links self
-					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc';
+				equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc';
 				assertUrl: json links dataPoints
-					equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points'
+				equals: 'https://tests.cosmos.com/data-streams/ab203809-4537-0d00-96a8-67bd07fa2cfc/data-points'
 			]
 ]
 
@@ -331,28 +329,26 @@ DataStreamsRESTfulControllerTest >> testGetNotModifiedWhenValidETag [
 	| response |
 
 	response := resourceController
-		getStreamBasedOn:
-			( self
-				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self dataStreamVersion1dot0dot0MediaType )
-		within: self httpRequestContext.
+		            getStreamBasedOn: ( self
+				              requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				              accepting: self dataStreamVersion1dot0dot0MediaType )
+		            within: self httpRequestContext.
 
 	self
 		assert: response isSuccess;
 		assert: response status equals: 200;
-		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag.
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asEntityTag.
 
 	response := resourceController
-		getStreamBasedOn:
-			( self
-				requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
-				accepting: self dataStreamVersion1dot0dot0MediaType
-				conditionalTo: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag )
-		within: self httpRequestContext.
+		            getStreamBasedOn: ( self
+				              requestToGetDataStreamIdentifiedBy: self temperatureStreamIdentifier
+				              accepting: self dataStreamVersion1dot0dot0MediaType
+				              conditionalTo: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asEntityTag )
+		            within: self httpRequestContext.
 
 	self
 		assert: response status equals: 304;
-		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asETag
+		assert: response entityTag equals: '"e6e4252fb2798ed7fe0058785a535db2a2ff7d06"' asEntityTag
 ]
 
 { #category : #tests }
