@@ -74,7 +74,7 @@ BaselineOfCosmos >> preload: loader package: packageSpec [
 	Metacello new
 		baseline: 'Buoy';
 		repository: 'github://ba-st/Buoy:v6';
-		onDowngradeUseIncoming;
+		onConflictUseLoaded;
 		load: 'Deployment'
 ]
 
