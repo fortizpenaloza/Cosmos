@@ -152,26 +152,33 @@ BaselineOfCosmos >> setUpCosmosDependeciesOn: spec [
 { #category : #dependencies }
 BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 
+	aSpec baseline: 'Buoy' with: [ 
+		aSpec
+			repository: 'github://ba-st/Buoy:v6';
+			onConflictUseIncoming;
+			loads: 'Deployment'
+		].
+
 	aSpec
-		baseline: 'Kepler'
-			with: [ aSpec
+		baseline: 'Kepler' with: [ 
+			aSpec
 				repository: 'github://ba-st/Kepler:v4/source';
-				loads: #('Deployment') ];
+				loads: #( 'Deployment' )
+			];
 		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ aSpec loads: 'Dependent-SUnit-Extensions' ];
 		project: 'Kepler-Tools' copyFrom: 'Kepler' with: [ aSpec loads: 'Tools' ].
-		
+
 	aSpec
-		baseline: 'Stargate'
-		with: [ aSpec
+		baseline: 'Stargate' with: [ 
+			aSpec
 				repository: 'github://ba-st/Stargate:v3/source';
-				loads: 'Deployment' ];
+				loads: 'Deployment'
+			];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ aSpec loads: 'Tools' ].
-			
+
 	aSpec
-		baseline: 'Launchpad'
-			with: [ aSpec repository: 'github://ba-st/Launchpad:v4' ];
-			project: 'Launchpad-Deployment'
-			copyFrom: 'Launchpad' with: [ aSpec loads: 'Deployment' ].
+		baseline: 'Launchpad' with: [ aSpec repository: 'github://ba-st/Launchpad:v4' ];
+		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ aSpec loads: 'Deployment' ]
 ]
 
 { #category : #groups }
