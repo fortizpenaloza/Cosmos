@@ -57,6 +57,12 @@ BaselineOfCosmos >> baseline: spec [
 
 	<baseline>
 	spec for: #pharo do: [ 
+			Metacello new
+		baseline: 'Buoy';
+		repository: 'github://ba-st/Buoy:v6';
+		onConflictUseLoaded;
+		lock;
+		load: 'Deployment'.
 		spec postLoadDoIt: #postload:package:.
 		self
 			setUpDependeciesOn: spec;
