@@ -56,26 +56,18 @@ BaselineOfCosmos >> add: aPackage toModelTestsRequiring: aRequiredPakageSet on: 
 BaselineOfCosmos >> baseline: spec [
 
 	<baseline>
-	spec
-		for: #pharo
-		do: [ 
-			
-			spec preLoadDoIt: #'preload:package:'.
-							
-			self
-				setUpDependeciesOn: spec;
-				setUpPackageDependeciesOn: spec;
-				setUpGroupsOn: spec ]
-]
-
-{ #category : #actions }
-BaselineOfCosmos >> preload: loader package: packageSpec [
-
 	Metacello new
 		baseline: 'Buoy';
 		repository: 'github://ba-st/Buoy:v6';
 		onConflictUseLoaded;
-		load: 'Deployment'
+		load: 'Deployment'.
+
+	spec for: #pharo do: [ 
+		self
+			setUpDependeciesOn: spec;
+			setUpPackageDependeciesOn: spec;
+			setUpGroupsOn: spec
+		]
 ]
 
 { #category : #accessing }
