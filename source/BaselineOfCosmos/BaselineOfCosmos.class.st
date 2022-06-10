@@ -72,6 +72,7 @@ BaselineOfCosmos >> postload: loader package: packageSpec [
 		baseline: 'Buoy';
 		repository: 'github://ba-st/Buoy:v6';
 		onConflictUseLoaded;
+		lock;
 		load: 'Deployment'
 ]
 
