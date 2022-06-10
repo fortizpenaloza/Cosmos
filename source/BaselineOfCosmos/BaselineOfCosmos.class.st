@@ -57,29 +57,24 @@ BaselineOfCosmos >> baseline: spec [
 
 	<baseline>
 	spec for: #pharo do: [ 
-			Metacello new
+	
+	Metacello new
 		baseline: 'Buoy';
 		repository: 'github://ba-st/Buoy:v6';
-		onConflictUseLoaded;
 		lock;
 		load: 'Deployment'.
-		spec postLoadDoIt: #postload:package:.
+		
+	Metacello new
+		baseline: 'Hyperspace';
+		repository: 'github://ba-st/Hyperspace:v4';
+		lock;
+		load: 'Deployment'.
+		
 		self
 			setUpDependeciesOn: spec;
 			setUpPackageDependeciesOn: spec;
 			setUpGroupsOn: spec
 		]
-]
-
-{ #category : #actions }
-BaselineOfCosmos >> postload: loader package: packageSpec [
-
-	Metacello new
-		baseline: 'Buoy';
-		repository: 'github://ba-st/Buoy:v6';
-		onConflictUseLoaded;
-		lock;
-		load: 'Deployment'
 ]
 
 { #category : #accessing }
