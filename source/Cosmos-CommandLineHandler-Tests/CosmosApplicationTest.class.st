@@ -16,10 +16,18 @@ CosmosApplicationTest >> runCase [
 	self shouldnt: [ super runCase ] raise: Exit
 ]
 
+{ #category : #tests }
+CosmosApplicationTest >> setUp [ 
+
+	super setUp.
+	CosmosApplication logsDirectory ensureCreateDirectory 
+]
+
 { #category : #running }
 CosmosApplicationTest >> tearDown [ 
 
 	application ifNotNil: #stop.
+	CosmosApplication logsDirectory ensureDeleteAll.  
 	super tearDown
 ]
 
