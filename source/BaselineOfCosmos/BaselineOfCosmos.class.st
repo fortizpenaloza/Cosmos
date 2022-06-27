@@ -62,7 +62,7 @@ BaselineOfCosmos >> baseline: spec [
 		baseline: 'Buoy';
 		repository: 'github://ba-st/Buoy:v6';
 		lock;
-		load: 'Deployment'.
+		load: { 'Deployment'. 'Dependent-SUnit-Extensions' }.
 		
 	Metacello new
 		baseline: 'Hyperspace';
