@@ -53,6 +53,15 @@ CodeQualityTest >> resultAfterRunning: aRule on: aPackageSet excluding: aClassSe
 		rule: { aRule };
 		environment: environment;
 		run.
+		
+	Transcript show: '-------- ACA -----------';
+	show: (runner criticsOf: aRule);
+	cr;
+	show: (runner falsePositiveOf: aRule).
+	
+	( Smalltalk 
+		at: #ManifestCosmosAPITriggersTests 
+		ifAbsent: [ Transcript show: 'No esta el manifesto' ] ) isKindOf: PackageManifest class.
 
 	^ ( ( runner criticsOf: aRule ) difference: ( runner falsePositiveOf: aRule ) )
 		  ifEmpty: [ #(  ) ]
