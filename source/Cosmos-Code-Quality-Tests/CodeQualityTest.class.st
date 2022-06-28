@@ -54,7 +54,9 @@ CodeQualityTest >> resultAfterRunning: aRule on: aPackageSet excluding: aClassSe
 		environment: environment;
 		run.
 
-	^ runner criticsOf: aRule
+	^ ( ( runner criticsOf: aRule ) difference: ( runner falsePositiveOf: aRule ) )
+		  ifEmpty: [ #(  ) ]
+		  ifNotEmpty: [ runner criticsOf: aRule ]
 ]
 
 { #category : #tests }
@@ -83,10 +85,7 @@ CodeQualityTest >> testMessageImplementedButNotSent [
 { #category : #tests }
 CodeQualityTest >> testMessageSentButNotImplemented [
 
-	self
-		assertThereWasNoIssuesRunning: ReSentNotImplementedRule new
-		onDeclaredPackagesExcluding:
-			{TriggersRESTfulControllerTest.
+	self assertThereWasNoIssuesRunning: ReSentNotImplementedRule new onDeclaredPackagesExcluding: { 
 			DataStreamsRESTfulControllerTest.
 			CommandsRESTfulControllerTest.
 			ActionsRESTfulControllerTest }
