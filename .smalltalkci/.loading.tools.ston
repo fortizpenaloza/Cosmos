@@ -3,14 +3,11 @@ SmalltalkCISpec {
     SCIMetacelloLoadSpec {
       #baseline : 'Cosmos',
       #directory : '../source',
-      #load : [ 'Development' ],
+      #load : [ 'Tools' ],
       #platforms : [ #pharo ]
     }
   ],
   #testing : {
-    #coverage : {
-      #packages : [ 'Cosmos*' ],
-      #format: #lcov
-    }
+    #failOnZeroTests : false
   }
 }
