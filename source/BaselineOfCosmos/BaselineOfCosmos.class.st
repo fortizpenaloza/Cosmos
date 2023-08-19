@@ -170,7 +170,7 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 	aSpec
 		baseline: 'Launchpad'
 			with: [ aSpec
-				repository: 'github://ba-st/Launchpad:v3/source';
+				repository: 'github://ba-st/Launchpad:v4/source';
 				loads: 'Deployment' ]
 ]
 
