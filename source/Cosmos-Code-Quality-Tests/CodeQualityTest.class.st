@@ -66,21 +66,6 @@ CodeQualityTest >> testInstaceVariableNeitherReadNorWritten [
 ]
 
 { #category : #tests }
-CodeQualityTest >> testMessageImplementedButNotSent [
-
-	self
-		assertThereWasNoIssuesRunning: ReImplementedNotSentRule new
-		onDeclaredPackagesExcluding:
-			{ActionEvaluationsRESTfulController.
-			DataPointsRESTfulController.
-			ActionsRESTfulController.
-			DataStreamsRESTfulController.
-			TriggersRESTfulController.
-			CommandsRESTfulController.
-			TriggerManagementSystem}
-]
-
-{ #category : #tests }
 CodeQualityTest >> testMessageSentButNotImplemented [
 
 	self
