@@ -155,7 +155,7 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 	aSpec
 		baseline: 'Kepler'
 			with: [ aSpec
-				repository: 'github://ba-st/Kepler:v4/source';
+				repository: 'github://ba-st/Kepler:v5/source';
 				loads: #('Deployment') ];
 		project: 'Kepler-SUnit' copyFrom: 'Kepler' with: [ aSpec loads: 'Dependent-SUnit-Extensions' ];
 		project: 'Kepler-Tools' copyFrom: 'Kepler' with: [ aSpec loads: 'Tools' ].
@@ -163,7 +163,7 @@ BaselineOfCosmos >> setUpDependeciesOn: aSpec [
 	aSpec
 		baseline: 'Stargate'
 		with: [ aSpec
-				repository: 'github://ba-st/Stargate:v3/source';
+				repository: 'github://ba-st/Stargate:v8/source';
 				loads: 'Deployment' ];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ aSpec loads: 'Tools' ].
 			
