@@ -25,7 +25,7 @@ Examples:
 "
 Class {
 	#name : #CosmosCommandLineHandler,
-	#superclass : #LaunchpadCommandLineHandler,
+	#superclass : #AnObsoleteLaunchpadCommandLineHandler,
 	#instVars : [
 		'cosmos',
 		'pendingActionsQueue',
@@ -64,121 +64,6 @@ CosmosCommandLineHandler >> baseUrl [
 	^ ('http://' , self hostname) asUrl port: self port
 ]
 
-{ #category : #activation }
-CosmosCommandLineHandler >> basicActivate [
-
-	self
-		logAsInfo: 'Creating pending evaluation actions queue'
-			during: [ pendingActionsQueue := AtomicSharedQueue new ];
-		logAsInfo: 'Creating action evaluation queue'
-			during: [ actionEvaluationsQueue := AtomicSharedQueue new ];
-		logAsInfo: 'Building and starting cosmos' 
-			during: [ self buildAndStartCosmos ];
-		logAsInfo: 'Building and starting RESTful API' 
-			during: [ self buildAndStartCosmosAPI ];
-		logAsInfo: 'Building and starting the periodical scheduler'
-			during: [ self buildAndStartScheduler ];
-		logAsInfo: 'Building and starting the action evaluator'
-			during: [ self buildAndStartActionEvaluator ]
-]
-
-{ #category : #activation }
-CosmosCommandLineHandler >> buildAndStartActionEvaluator [
-
-	| evaluator |
-
-	evaluator := ActionEvaluator
-		evaluatingActionsFrom: pendingActionsQueue
-		using: (ActionEvaluatorConfiguration workingWith: SystemTimeSource new)
-		registeringEvaluationsInto: actionEvaluationsQueue.
-
-	evaluator start
-	
-
-]
-
-{ #category : #'private - building cosmos system' }
-CosmosCommandLineHandler >> buildAndStartCosmos [
-
-	cosmos := CompositeSystem new.
-
-	cosmos
-		register: (TimeSystem using: SystemTimeSource new);
-		register: EventNotificationSystem new;
-		register: MetadataSystem new;
-		register: (IdentifierSystem using: UUIDProvider new);
-		register: TimestampingSystem new;
-		register: DataStreamManagementSystem new;
-		register: (TriggerManagementSystem enqueuingActionsInto: pendingActionsQueue);
-		register: ActionManagementSystem new;
-		register: (ActionEvaluationSystem registeringFrom: actionEvaluationsQueue);
-		register: CommandManagementSystem new.
-		
-	cosmos startUp
-]
-
-{ #category : #'private - building cosmos API' }
-CosmosCommandLineHandler >> buildAndStartCosmosAPI [
-
-	| api |
-
-	api := HTTPBasedRESTfulAPI
-		configuredBy:
-			{(#port -> self port).
-			(#debugMode -> self isDebugModeEnabled).
-			(#serverUrl -> self baseUrl)}
-		installing:
-			{(DataStreamsRESTfulController workingWith: cosmos).
-			(DataPointsRESTfulController workingWith: cosmos).
-			(CommandsRESTfulController workingWith: cosmos).
-			(ActionsRESTfulController workingWith: cosmos).
-			(ActionEvaluationsRESTfulController workingWith: cosmos).
-			(TriggersRESTfulController workingWith: cosmos)}..
-			
-	api
-		on: self exceptionsToHandle
-		addErrorHandler: [ :signal :request | self class dumpStackAndReport: signal ].
-		
-	api beCORSAwareAllowing: self allowedOrigins.
-
-	api
-		install;
-		start
-]
-
-{ #category : #'private - building scheduler' }
-CosmosCommandLineHandler >> buildAndStartScheduler [
-
-	| scheduler  |
-
-	scheduler := self periodicalScheduler.
-	
-	self timePeriodsToSchedule
-		do: [ :timePeriod | | task |
-
-			task := Task
-				named: ('Notify every <1p>' expandMacrosWith: timePeriod)
-				do: [ (cosmos systemImplementing: #EventNotificationSystemInterface)
-						notifySubscribersTo: (TickEvent of: timePeriod) ].
-
-			scheduler schedule: task toBeExecutedEvery: timePeriod ].
-		
-	scheduler start
-]
-
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> configurationDefinition [
-
-	^ OrderedCollection new
-		add: (OptionalArgument named: 'hostname' defaultingTo: 'localhost');
-		add: (OptionalArgument named: 'port' defaultingTo: 57001 convertingWith: #asNumber);
-		add:
-			(MandatoryArgument
-				named: 'allowed-origins'
-				convertingWith: [ :string | ((string substrings: ',') collect: #trim) collect: #asUrl ]);
-		asArray
-]
-
 { #category : #'private - accessing' }
 CosmosCommandLineHandler >> hostname [
 
@@ -192,22 +77,7 @@ CosmosCommandLineHandler >> logAsInfo: aMessage during: aBlock [
 ]
 
 { #category : #'private - accessing' }
-CosmosCommandLineHandler >> periodicalScheduler [
-
-	^ PeriodicalScheduler usingDefaultScheduler
-]
-
-{ #category : #'private - accessing' }
 CosmosCommandLineHandler >> port [
 
 	^ self configuration at: 'port'
-]
-
-{ #category : #'private - accessing' }
-CosmosCommandLineHandler >> timePeriodsToSchedule [
-
-	^ {(TimeUnits second with: 10).
-	(TimeUnits minute with: 1).
-	(TimeUnits minute with: 10).
-	(TimeUnits hour with: 1)}
 ]

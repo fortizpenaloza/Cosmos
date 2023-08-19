@@ -4,7 +4,9 @@ SmalltalkCISpec {
       #baseline : 'Cosmos',
       #directory : '../source',
       #load : [ 'Development' ],
-      #platforms : [ #pharo ]
+      #platforms : [ #pharo ],
+      #onConflict : #useIncoming,
+      #onUpgrade : #useIncoming
     }
   ],
   #testing : {
