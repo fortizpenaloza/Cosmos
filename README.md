@@ -9,9 +9,12 @@ and act on them defining a set of rules.
 when the universe is regarded as a complex and orderly system or entity;
 the opposite of chaos.
 
-[![Unit Tests](https://github.com/cosmos-st/back-end/workflows/Build/badge.svg?branch=release-candidate)](https://github.com/cosmos-st/back-end/actions?query=workflow%3ABuild)
-[![Coverage Status](https://codecov.io/github/cosmos-st/back-end/coverage.svg?branch=release-candidate)](https://codecov.io/gh/cosmos-st/back-end/branch/release-candidate)
-[![Pharo 9.0](https://img.shields.io/badge/Pharo-9.0-informational)](https://pharo.org)
+[![Pharo - Unit Tests](https://github.com/fortizpenaloza/Cosmos/actions/workflows/unit-tests.yml/badge.svg?branch=release-candidate)](https://github.com/fortizpenaloza/Cosmos/actions/workflows/unit-tests.yml)
+[![Coverage Status](https://codecov.io/github/fortizpenaloza/Cosmos/coverage.svg?branch=release-candidate)](https://codecov.io/gh/fortizpenaloza/Cosmos/branch/release-candidate)
+[![Baseline Groups](https://github.com/fortizpenaloza/Cosmos/actions/workflows/loading-groups.yml/badge.svg)](https://github.com/fortizpenaloza/Cosmos/actions/workflows/loading-groups.yml)
+[![Markdown Lint](https://github.com/fortizpenaloza/Cosmos/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/fortizpenaloza/Cosmos/actions/workflows/markdown-lint.yml)
+[![Pharo 10](https://img.shields.io/badge/Pharo-10-informational)](https://pharo.org)
+[![Pharo 11](https://img.shields.io/badge/Pharo-11-informational)](https://pharo.org)
 
 Quick links
 
