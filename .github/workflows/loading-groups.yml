@@ -1,7 +1,5 @@
 name: Baseline groups
-
 on: [ push, pull_request, workflow_dispatch ]
-
 jobs:
    group-loading:
     runs-on: ubuntu-latest
