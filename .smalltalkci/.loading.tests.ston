@@ -9,8 +9,8 @@ SmalltalkCISpec {
   ],
   #testing : {
     #coverage : {
-      #packages : ['Cosmos*' ],
-      #format: lcov
+      #packages : [ 'Cosmos*' ],
+      #format: #lcov
     }
   }
 }
